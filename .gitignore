@@ -1,3 +1,8 @@
+# Auto-generated files
+*.pyc
+outputs*
+outputs/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
