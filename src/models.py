@@ -13,6 +13,29 @@ import torch
 from torch.autograd import Variable
 from torch import nn
 
-def build_model():
-  raise NotImplementedError("Bite me!")
+
+class Encoder(nn.Module):
+  def __init__(self, *args, **kwargs):
+    raise NotImplementedError("Bite me!")
+
+  def forward(self, source_indices, source_lengths, *args, **kwargs):
+    """Performs a forward pass.
+
+    Args:
+      source_indices: Torch Tensor of size [batch_size, max_len]
+    """
+    raise NotImplementedError("Bite me!")
+
+
+class Decoder(nn.Module):
+  def __init__(self, *args, **kwargs):
+    raise NotImplementedError("Bite me!")
+
+  def forward(self, source_states):
+    """Performs a forward pass.
+
+    Args:
+      source_states: Torch Tensor of size [batch_size, max_len]
+    """
+    raise NotImplementedError("Bite me!")
 

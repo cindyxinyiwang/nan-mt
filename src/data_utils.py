@@ -17,6 +17,7 @@ from torch.autograd import Variable
 import numpy as np
 
 from hparams import Iwslt16EnDeBpe16Params
+from hparams import Iwslt16EnDeBpe32Params
 from hparams import Iwslt16EnDeTinyParams
 
 class DataLoader(object):

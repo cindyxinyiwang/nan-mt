@@ -1,4 +1,5 @@
 # Auto-generated files
+*.swp
 *.pyc
 outputs*
 outputs/*
