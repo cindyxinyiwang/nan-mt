@@ -6,9 +6,7 @@ import os
 import sys
 import time
 
-import torch
-
-user_flags = []
+from datetime import datetime
 
 class Logger(object):
   def __init__(self, output_file):

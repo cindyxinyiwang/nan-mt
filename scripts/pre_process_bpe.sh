@@ -1,6 +1,6 @@
 #!/bin/bash
 
-vocab_size=32000
+vocab_size=16000
 
 languages=("en" "de")
 file_names=(
@@ -16,8 +16,8 @@ for language in ${languages[@]}
 do
   echo "Training BPE on train.$language"
   spm_train \
-    --input="data/en-de/train.$language" \
-    --model_prefix="data/en-de/$language.bpe.${vocab_size}" \
+    --input="data/raw/en-de/train.$language" \
+    --model_prefix="data/bpe_16k/en-de/$language.bpe.${vocab_size}" \
     --vocab_size=${vocab_size} \
     --model_type="bpe"
 
@@ -26,10 +26,10 @@ do
     echo "Generating BPE for ${file_name}.$language"
     spm_encode \
       --extra_options="eos" \
-      --model="data/en-de/$language.bpe.${vocab_size}.model" \
+      --model="data/bpe_16k/en-de/$language.bpe.${vocab_size}.model" \
       --output_format="piece" \
-      < "data/en-de/${file_name}.$language" \
-      > "data/en-de/${file_name}.bpe.$language"
+      < "data/raw/en-de/${file_name}.$language" \
+      > "data/bpe_16k/en-de/${file_name}.bpe.$language"
   done
 done
 

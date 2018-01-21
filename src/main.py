@@ -9,7 +9,16 @@ import os
 import sys
 import time
 
+import numpy as np
+
 import torch
+import torch.nn as nn
+from torch.autograd import Variable
+
+from data_utils import DataLoader
+
+from hparams import Iwslt16EnDeBpe16Params
+from hparams import Iwslt16EnDeTinyParams
 
 from utils import *
 
@@ -19,16 +28,59 @@ parser.add_argument("--reset_output_dir", type=bool, default="reset_output_dir",
                     help="delete output directory if it exists")
 parser.add_argument("--output_dir", type=str, default="outputs",
                     help="path to output directory")
-parser.add_argument("--data_dir", type=str, default="data",
-                    help="path to data directory")
-parser.add_argument("--data_file", type=str, default="data.pkl",
+parser.add_argument("--log_every", type=int, default="50",
                     help="name of pre-processed file")
+
 
 args = parser.parse_args()
 
 
 def train():
-  raise NotImplementedError("Bite me!")
+  hparams = Iwslt16EnDeTinyParams()
+  data = DataLoader()
+
+  # TODO(hyhieu,cindyxinyiwang): build models here!
+
+  # train loop
+  print("-" * 80)
+  print("Start training")
+  for epoch in range(hparams.num_epochs):
+    start_time = time.time()
+    step = 0
+    target_words = 0
+
+    # training activities
+    while True:
+      (x_train, x_len), (y_train, y_len), end_of_epoch = data.next_train()
+      target_words += np.sum(y_len.data.cpu().numpy())
+
+      # TODO(hyhieu,cindyxinyiwang): forward, backward, update, etc.
+
+      step += 1
+      if step % args.log_every == 0:
+        curr_time = time.time()
+        elapsed = (curr_time - start_time) / 60.0
+        log_string = "step={0:<5d}".format(step)
+        log_string += " mins={0:<5.2f}".format(elapsed)
+        log_string += " wpm={0:<5.2f}".format(target_words / elapsed)
+        print(log_string)
+
+      if end_of_epoch:
+        break
+
+    # End-of-Epoch activites, e.g: compute PPL, BLEU, etc.
+    while True:
+      (x_valid, x_len), (y_valid, y_len), end_of_epoch = data.next_valid()
+
+      # TODO(hyhieu,cindyxinyiwang): Beam search, BLEU, PPL, etc.
+
+      if end_of_epoch:
+        break
+
+    curr_time = time.time()
+    log_string = "epoch={0:<3d}".format(epoch + 1)
+    log_string += " mins={0:<.2f}".format((curr_time - start_time) / 60.0)
+    print(log_string)
 
 
 def main():
@@ -45,10 +97,6 @@ def main():
   log_file = os.path.join(args.output_dir, "stdout")
   print("Logging to {}".format(log_file))
   sys.stdout = Logger(log_file)
-
-  print("-" * 80)
-  data_file = os.path.join(args.data_dir, args.data_file)
-  print("Reading data from file {}".format(data_file))
 
   train()
 
