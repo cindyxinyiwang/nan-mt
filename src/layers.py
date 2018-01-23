@@ -58,6 +58,7 @@ class MultiHeadAttn(nn.Module):
 		self.proj = nn.Linear(n_head*d_v, dim, bias=True)
 
 		self.dropout = nn.Dropout(dropout)
+		self.layer_norm = LayerNormalization(dim)
 
 		init.xavier_normal(self.w_q)
 		init.xavier_normal(self.w_k)
@@ -65,7 +66,8 @@ class MultiHeadAttn(nn.Module):
 		init.xavier_normal(self.proj.weight)
 
 	def forward(self, q, k, v, attn_mask=None):
-
+		residual = q 
+		
 		batch_size, len_q, dim = q.size()
 		batch_size, len_k, dim = k.size()
 		batch_size, len_v, dim = v.size()
@@ -88,7 +90,7 @@ class MultiHeadAttn(nn.Module):
 		outputs = self.proj(outputs).view(batch_size, len_q, -1) # (batch_size, len_q, dim)
 		outputs = self.dropout(outputs)
 
-		return outputs
+		return self.layer_norm(outputs + residual)
 
 class PositionwiseFF(nn.Module):
 	def __init__(self, d_hid, d_inner, dropout=0.1):
@@ -97,12 +99,14 @@ class PositionwiseFF(nn.Module):
 		self.w_2 = nn.Conv1d(d_inner, d_hid, 1)
 		self.dropout = nn.Dropout(dropout)
 		self.relu = nn.ReLU()
+		self.layer_norm = LayerNormalization(d_hid)
 
 	def forward(self, x):
+		residual = x
 		output = self.relu(self.w_1(x.transpose(1, 2)))
 		output = self.w_2(output).transpose(2, 1)
 		output = self.dropout(output)
-		return output
+		return self.layer_norm(output + residual)
 
 class EncoderLayer(nn.Module):
 	'''

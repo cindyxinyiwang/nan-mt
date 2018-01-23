@@ -36,7 +36,7 @@ class Encoder(nn.Module):
 
     self.layer_stack = nn.ModuleList([EncoderLayer(dim, d_inner, n_head, d_k, d_v, dropout=dropout) for _ in range(n_layers)])
 
-  def forward(self, source_indices, source_lengths, *args, **kwargs):
+  def forward(self, source_indices, source_lengths, attn_mask=None, *args, **kwargs):
     """Performs a forward pass.
 
     Args:
@@ -52,7 +52,7 @@ class Encoder(nn.Module):
 
     enc_output = enc_input
     for enc_layer in self.layer_stack:
-      enc_output = enc_layer(enc_output)
+      enc_output = enc_layer(enc_output, attn_mask=attn_mask)
     return enc_output
 
 class Decoder(nn.Module):
