@@ -54,9 +54,12 @@ class Iwslt16EnDeBpe16Params(object):
   unk = "<unk>"
   bos = "<s>"
   eos = "</s>"
+  pad = "<blank>"
   unk_id = 15997
   eos_id = 15998
   bos_id = 15999
+  pad_id = 0
+  max_len = 80
 
   cuda = True
   batch_size = 32
@@ -70,4 +73,5 @@ class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
   train_limit = 1000
   batch_size = 32
   num_epochs = 5
+  cuda = False
 

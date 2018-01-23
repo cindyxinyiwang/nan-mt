@@ -47,7 +47,8 @@ class DataLoader(object):
 
     (self.target_word_to_index,
      self.target_index_to_word) = self._build_vocab(self.hparams.target_vocab)
-
+    # TODO: set up max_seq_len and pad sentences longer than this
+    self.max_seq_len = 80
     # train data
     self.x_train, self.y_train = self._build_parallel(self.hparams.source_train,
                                                       self.hparams.target_train)
@@ -147,23 +148,30 @@ class DataLoader(object):
 
     if padding_side == "left":
       padded_sentences = [
-        ([self.hparams.bos_id] * (max_len - len(sentence))) + sentence
+        ([self.hparams.pad_id] * (max_len - len(sentence))) + sentence
+        for sentence in sentences]
+      padded_pos = [
+        [self.hparams.pad_id] * (max_len - len(sentence)) + [i for i in range(len(sentence))]
         for sentence in sentences]
     elif padding_side == "right":
       padded_sentences = [
-        sentence + ([self.hparams.eos_id] * (max_len - len(sentence)))
+        sentence + ([self.hparams.pad_id] * (max_len - len(sentence)))
+        for sentence in sentences]
+      padded_pos = [
+        [i for i in range(len(sentence)) + [self.hparams.pad_id] * (max_len - len(sentence))]
         for sentence in sentences]
     else:
       raise ValueError("Unknown padding_side '{0}'".format(padding_side))
     padded_sentences = Variable(
       torch.LongTensor(padded_sentences), volatile=volatile)
-    lengths = Variable(torch.LongTensor(lengths), volatile=volatile)
+    #lengths = Variable(torch.LongTensor(lengths), volatile=volatile)
+    padded_pos = Variable(torch.LongTensor(padded_pos), volatile=volatile)
 
     if self.hparams.cuda:
       padded_sentences = padded_sentences.cuda()
       lengths = lengths.cuda()
 
-    return padded_sentences, lengths
+    return padded_sentences, padded_pos
 
   def _shuffle(self, verbose=False):
     """Shuffle (x_train, y_train)."""
@@ -199,6 +207,9 @@ class DataLoader(object):
 
       source_indices, target_indices = [], []
       source_tokens = source_line.split(" ")
+      target_tokens = target_line.split(" ")
+      if len(source_tokens) > self.hparams.max_len or len(target_tokens) > self.hparams.max_len:
+        continue
       for source_token in source_tokens:
         source_token = source_token.strip()
         if source_token not in self.source_word_to_index:
@@ -206,7 +217,6 @@ class DataLoader(object):
         source_index = self.source_word_to_index[source_token]
         source_indices.append(source_index)
 
-      target_tokens = target_line.split(" ")
       for target_token in target_tokens:
         target_token = target_token.strip()
         if target_token not in self.target_word_to_index:

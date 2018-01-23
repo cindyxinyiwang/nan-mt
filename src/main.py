@@ -21,6 +21,7 @@ from hparams import Iwslt16EnDeBpe16Params
 from hparams import Iwslt16EnDeTinyParams
 
 from utils import *
+from models import *
 
 parser = argparse.ArgumentParser(description="Neural MT")
 
@@ -40,7 +41,9 @@ def train():
   data = DataLoader()
 
   # TODO(hyhieu,cindyxinyiwang): build models here!
-
+  model = Transformer(n_src_vocab=len(data.source_word_to_index), 
+                      n_trg_vocab=len(data.target_word_to_index),
+                      hparams=hparams)
   # train loop
   print("-" * 80)
   print("Start training")
@@ -55,7 +58,7 @@ def train():
       target_words += np.sum(y_len.data.cpu().numpy())
 
       # TODO(hyhieu,cindyxinyiwang): forward, backward, update, etc.
-
+      model.forward(x_train, x_len, y_train, y_len)
       step += 1
       if step % args.log_every == 0:
         curr_time = time.time()
