@@ -67,6 +67,9 @@ class Iwslt16EnDeBpe16Params(object):
   batch_size = 32
   num_epochs = 50
 
+  embedding_size = 256
+  hidden_size = 256
+
 
 class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
   """Shrinks Iwslt16EnDeBpe16Params for sanity check."""
@@ -76,4 +79,7 @@ class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
   batch_size = 32
   num_epochs = 5
   cuda = True
+
+  embedding_size = 16
+  hidden_size = 8
 

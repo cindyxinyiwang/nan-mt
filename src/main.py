@@ -56,13 +56,12 @@ def train():
     # training activities
     while True:
       ((x_train, x_mask, x_pos_emb_indices),
-       (y_train, y_mask, y_pos_emb_indices),
-       end_of_epoch) = data.next_train()
+       (y_train, y_mask, y_pos_emb_indices), end_of_epoch) = data.next_train()
       target_words += np.sum(y_mask.data.cpu().numpy())
 
       # TODO(hyhieu,cindyxinyiwang): forward, backward, update, etc.
-      # model.forward(x_train, x_mask, x_pos_emb_indices,
-      #               y_train, y_mask, y_pos_emb_indices)
+      model.forward(x_train, x_mask, x_pos_emb_indices,
+                    y_train, y_mask, y_pos_emb_indices)
 
       step += 1
       if step % args.log_every == 0:
@@ -79,8 +78,7 @@ def train():
     # End-of-Epoch activites, e.g: compute PPL, BLEU, etc.
     while True:
       ((x_valid, x_mask, x_pos_emb_indices),
-       (y_valid, y_mask, y_pos_emb_indices),
-       end_of_epoch) = data.next_train()
+       (y_valid, y_mask, y_pos_emb_indices), end_of_epoch) = data.next_train()
 
       # TODO(hyhieu,cindyxinyiwang): Beam search, BLEU, PPL, etc.
 

@@ -10,6 +10,7 @@ import sys
 import time
 
 import torch
+import torch.nn.init as init
 from torch.autograd import Variable
 from torch import nn
 import numpy as np
@@ -24,31 +25,26 @@ class Encoder(nn.Module):
     self.n_max_seq = hparams.max_len
     self.dim = dim
 
-    self.position_enc = nn.Embedding(self.n_max_seq+1, d_word_vec, padding_idx=hparams.pad_id)  # index 0 as padding pos
-    # init sinusoid position encoding
-    position_enc = np.array([[pos / np.power(10000, 2 * (j // 2) / d_word_vec) for j in range(d_word_vec)]
-                            if pos != 0 else np.zeros(d_word_vec) for pos in range(self.n_max_seq+1)])
-    position_enc[1:, 0::2] = np.sin(position_enc[1:, 0::2])
-    position_enc[1:, 1::2] = np.cos(position_enc[1:, 1::2])
-    self.position_enc.weight.data = torch.from_numpy(position_enc).type(torch.FloatTensor)
-
+    self.pos_emb = PositionalEmbedding(hparams)
     self.src_word_emb = nn.Embedding(n_src_vocab, d_word_vec, padding_idx=hparams.pad_id)
 
     self.layer_stack = nn.ModuleList([EncoderLayer(dim, d_inner, n_head, d_k, d_v, dropout=dropout) for _ in range(n_layers)])
 
-  def forward(self, source_indices, source_lengths, attn_mask=None, *args, **kwargs):
+  def forward(self, x_train, x_mask, x_pos_emb_indices, attn_mask=None, *args, **kwargs):
     """Performs a forward pass.
 
     Args:
       source_indices: Torch Tensor of size [batch_size, max_len]
       source_lengths: position encoding
     """
-    #raise NotImplementedError("Bite me!")
-    #print(len(source_indices), len(source_lengths))
-    #print(source_lengths)
-    #source_pos = [ [i for i in range(l)] for l in source_lengths]
-    enc_input = self.src_word_emb(source_indices)
-    enc_input += self.position_enc(source_lengths)
+
+    print("HERE 1")
+    enc_input = self.src_word_emb(x_train)
+    print("HERE 2")
+    enc_input += self.pos_emb(x_pos_emb_indices, x_mask)
+
+    # TODO(hyhieu): continue here
+    sys.exit(0)
 
     enc_output = enc_input
     for enc_layer in self.layer_stack:
@@ -77,9 +73,9 @@ class Transformer(nn.Module):
     self.dropout = nn.Dropout(dropout)
     assert dim == d_word_vec
 
-  def forward(self, src_seq, src_len, trg_seq, trg_len):
+  def forward(self, x_train, x_mask, x_pos_emb_indices,
+              y_train, y_mask, y_pos_emb_indices):
 
-    enc_output = self.encoder(src_seq, src_len)
-
+    enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
 
 
