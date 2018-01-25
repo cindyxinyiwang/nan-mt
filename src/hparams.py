@@ -76,9 +76,9 @@ class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
 
   dataset = "Tiny IWSLT 2016 En-De with BPE 16K"
   train_limit = 1000
-  batch_size = 32
+  batch_size = 3
   num_epochs = 5
-  cuda = True
+  cuda = False
 
   embedding_size = 16
   hidden_size = 8

@@ -18,37 +18,49 @@ from layers import *
 
 
 class Encoder(nn.Module):
-  def __init__(self, n_src_vocab, hparams, n_layers=6, n_head=8, d_k=64, d_v=64,
-                d_word_vec=512, dim=512, d_inner=1024, dropout=0.1, *args, **kwargs):
-    #raise NotImplementedError("Bite me!")
+  def __init__(self, hparams, n_layers=6, n_head=8, d_k=64, d_v=64,
+               d_inner=1024, dropout=0.1, *args, **kwargs):
     super(Encoder, self).__init__()
-    self.n_max_seq = hparams.max_len
-    self.dim = dim
+
+    self.hparams = hparams
 
     self.pos_emb = PositionalEmbedding(hparams)
-    self.src_word_emb = nn.Embedding(n_src_vocab, d_word_vec, padding_idx=hparams.pad_id)
+    self.word_emb = nn.Embedding(self.hparams.vocab_size,
+                                 self.hparams.embedding_size,
+                                 padding_idx=hparams.pad_id)
 
-    self.layer_stack = nn.ModuleList([EncoderLayer(dim, d_inner, n_head, d_k, d_v, dropout=dropout) for _ in range(n_layers)])
+    self.layer_stack = nn.ModuleList(
+      [EncoderLayer(self.hparams.embedding_size, d_inner, n_head, d_k, d_v,
+                    dropout=dropout)
+       for _ in range(n_layers)])
 
-  def forward(self, x_train, x_mask, x_pos_emb_indices, attn_mask=None, *args, **kwargs):
+    if self.hparams.cuda:
+      self.word_emb = self.word_emb.cuda()
+      self.pos_emb = self.pos_emb.cuda()
+      self.layer_stack = self.layer_stack.cuda()
+
+  def forward(self, x_train, x_mask, x_pos_emb_indices):
     """Performs a forward pass.
 
     Args:
-      source_indices: Torch Tensor of size [batch_size, max_len]
-      source_lengths: position encoding
+      x_train: Torch Tensor of size [batch_size, max_len]
+      x_mask: Torch Tensor of size [batch_size, max_len]. 0 means to ignore a
+        position, 1 means to keep the position.
+      x_pos_emb_indices: used to compute positional embeddings.
+
+    Returns:
+      enc_output: Tensor of size [batch_size, max_len, hidden_size].
     """
 
-    print("HERE 1")
-    enc_input = self.src_word_emb(x_train)
-    print("HERE 2")
-    enc_input += self.pos_emb(x_pos_emb_indices, x_mask)
-
-    # TODO(hyhieu): continue here
-    sys.exit(0)
+    # TODO(cindyxinyiwang): handle x_mask
+    word_emb = self.word_emb(x_train)
+    pos_emb = self.pos_emb(x_pos_emb_indices, x_mask)
+    enc_input = word_emb + pos_emb
 
     enc_output = enc_input
     for enc_layer in self.layer_stack:
-      enc_output = enc_layer(enc_output, attn_mask=attn_mask)
+      enc_output = enc_layer(enc_output)
+
     return enc_output
 
 class Decoder(nn.Module):
@@ -64,14 +76,12 @@ class Decoder(nn.Module):
     raise NotImplementedError("Bite me!")
 
 class Transformer(nn.Module):
-  def __init__(self, n_src_vocab, n_trg_vocab, hparams, n_layers=6, n_head=8,
-                d_word_vec=512, dim=512, d_inner=1024, d_k=64, d_v=64, 
-                dropout=0.1, *args, **kwargs):
+  def __init__(self, hparams, n_layers=6, n_head=8, d_inner=1024, d_k=64,
+               d_v=64, dropout=0.1, *args, **kwargs):
     super(Transformer, self).__init__()
-    self.encoder = Encoder(n_src_vocab, hparams, n_layers, n_head, d_word_vec=d_word_vec,
-                            dim=dim, d_inner=d_inner, dropout=dropout)
+    self.encoder = Encoder(hparams, n_layers, n_head,
+                           d_inner=d_inner, dropout=dropout)
     self.dropout = nn.Dropout(dropout)
-    assert dim == d_word_vec
 
   def forward(self, x_train, x_mask, x_pos_emb_indices,
               y_train, y_mask, y_pos_emb_indices):

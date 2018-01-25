@@ -162,8 +162,8 @@ class DataLoader(object):
 
     padded_sentences = Variable(torch.LongTensor(padded_sentences),
                                 volatile=volatile)
-    mask = Variable(torch.LongTensor(mask), volatile=volatile)
-    pos_emb_indices = Variable(torch.LongTensor(pos_emb_indices),
+    mask = Variable(torch.FloatTensor(mask), volatile=volatile)
+    pos_emb_indices = Variable(torch.FloatTensor(pos_emb_indices),
                                volatile=volatile)
 
     if self.hparams.cuda:

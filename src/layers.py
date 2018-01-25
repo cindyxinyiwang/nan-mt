@@ -10,6 +10,7 @@ import torch
 import torch.nn.init as init
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.autograd import Variable
 
 class PositionalEmbedding(nn.Module):
   def __init__(self, hparams):
@@ -23,8 +24,9 @@ class PositionalEmbedding(nn.Module):
                      dtype=np.float32)
     freq = np.power(10000.0, -freq)
 
-    self.freq = torch.FloatTensor(freq).view(
-      [1, 1, self.hparams.embedding_size // 2])
+    self.freq = Variable(torch.FloatTensor(freq).view(
+      [1, 1, self.hparams.embedding_size // 2]))
+
     if self.hparams.cuda:
       self.freq = self.freq.cuda()
 
@@ -38,6 +40,7 @@ class PositionalEmbedding(nn.Module):
     Returns:
       pos_emb: Tensor of size [batch_size, max_len, embedding_size].
     """
+
     batch_size, max_len = pos_emb_indices.size()
     pos_emb_indices = pos_emb_indices.view([batch_size, max_len, 1])
     mask = mask.view([batch_size, max_len, 1])
@@ -48,7 +51,7 @@ class PositionalEmbedding(nn.Module):
       batch_size, max_len, -1, 1)
     pos_emb = torch.cat([pos_emb_sin, pos_emb_cos], dim=3).view(
       batch_size, max_len, self.hparams.embedding_size)
-    pos_emb *= mask
+    pos_emb = pos_emb * mask
 
     return pos_emb
 

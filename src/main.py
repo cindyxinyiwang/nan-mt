@@ -41,9 +41,7 @@ def train():
   data = DataLoader()
 
   # TODO(hyhieu,cindyxinyiwang): build models here!
-  model = Transformer(n_src_vocab=len(data.source_word_to_index), 
-                      n_trg_vocab=len(data.target_word_to_index),
-                      hparams=hparams)
+  model = Transformer(hparams=hparams)
 
   # train loop
   print("-" * 80)
