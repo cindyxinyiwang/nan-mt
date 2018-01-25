@@ -47,6 +47,7 @@ class DataLoader(object):
 
     (self.target_word_to_index,
      self.target_index_to_word) = self._build_vocab(self.hparams.target_vocab)
+
     # TODO: set up max_seq_len and pad sentences longer than this
     self.max_seq_len = 80
     # train data
@@ -81,10 +82,10 @@ class DataLoader(object):
     # pad data
     x_valid = self.x_valid[start_index : end_index]
     y_valid = self.y_valid[start_index : end_index]
-    x_valid, x_len = self._pad(
-      sentences=x_valid, padding_side="left", volatile=True)
-    y_valid, y_len = self._pad(
-      sentences=y_valid, padding_side="right", volatile=True)
+    x_valid, x_mask, x_pos_emb_indices = self._pad(sentences=x_valid,
+                                                   volatile=True)
+    y_valid, y_mask, y_pos_emb_indices = self._pad(sentences=y_valid,
+                                                   volatile=True)
 
     # shuffle if reaches the end of data
     if end_index >= self.valid_size:
@@ -94,7 +95,9 @@ class DataLoader(object):
     else:
       self.valid_index += batch_size
 
-    return (x_valid, x_len), (y_valid, y_len), end_of_epoch
+    return ((x_valid, x_mask, x_pos_emb_indices),
+            (y_valid, y_mask, y_pos_emb_indices),
+            end_of_epoch)
 
   def next_train(self):
     """Retrieves a batch of training examples.
@@ -115,8 +118,8 @@ class DataLoader(object):
     # pad data
     x_train = self.x_train[start_index : end_index]
     y_train = self.y_train[start_index : end_index]
-    x_train, x_len = self._pad(sentences=x_train, padding_side="left")
-    y_train, y_len = self._pad(sentences=y_train, padding_side="right")
+    x_train, x_mask, x_pos_emb_indices = self._pad(sentences=x_train)
+    y_train, y_mask, y_pos_emb_indices = self._pad(sentences=y_train)
 
     # shuffle if reaches the end of data
     if end_index >= self.train_size:
@@ -126,52 +129,49 @@ class DataLoader(object):
     else:
       self.train_index += batch_size
 
-    return (x_train, x_len), (y_train, y_len), end_of_epoch
+    return ((x_train, x_mask, x_pos_emb_indices),
+            (y_train, y_mask, y_pos_emb_indices),
+            end_of_epoch)
 
-  def _pad(self, sentences, padding_side, volatile=False):
+  def _pad(self, sentences, volatile=False):
     """Pad all instances in [data] to the longest length.
 
     Args:
       sentences: list of [batch_size] lists.
-      padding_side: must be ['left' 'right']. If 'left', pad <s> on the left,
-        and if 'right', pad </s> on the right.
 
     Returns:
-      padded_sentences: a single torch.Variable of size [batch_size, max_len],
-        which are the sentences.
-      lengths: a single torch.Variable of size [batch_size], which are the
-        actual lengths of padded_sentences. Use this for attention masking.
+      padded_sentences: Variable of size [batch_size, max_len], the sentences.
+      mask: Variable of size [batch_size, max_len]. 0 means to ignore.
+      pos_emb_indices: Variable of size [batch_size, max_len]. indices to use
+        when computing positional embedding.
     """
 
     lengths = [len(sentence) for sentence in sentences]
     max_len = max(lengths)
 
-    if padding_side == "left":
-      padded_sentences = [
-        ([self.hparams.pad_id] * (max_len - len(sentence))) + sentence
-        for sentence in sentences]
-      padded_pos = [
-        [self.hparams.pad_id] * (max_len - len(sentence)) + [i for i in range(len(sentence))]
-        for sentence in sentences]
-    elif padding_side == "right":
-      padded_sentences = [
-        sentence + ([self.hparams.pad_id] * (max_len - len(sentence)))
-        for sentence in sentences]
-      padded_pos = [
-        [i for i in range(len(sentence)) + [self.hparams.pad_id] * (max_len - len(sentence))]
-        for sentence in sentences]
-    else:
-      raise ValueError("Unknown padding_side '{0}'".format(padding_side))
-    padded_sentences = Variable(
-      torch.LongTensor(padded_sentences), volatile=volatile)
-    #lengths = Variable(torch.LongTensor(lengths), volatile=volatile)
-    padded_pos = Variable(torch.LongTensor(padded_pos), volatile=volatile)
+    padded_sentences = [
+      sentence + ([self.hparams.pad_id] * (max_len - len(sentence)))
+      for sentence in sentences]
+    mask = [
+      ([1] * len(sentence)) + ([0] * (max_len - len(sentence)))
+      for sentence in sentences]
+    pos_emb_indices = [
+      (range(len(sentence))) + ([-1] * (max_len - len(sentence)))
+      for sentence in sentences
+    ]
+
+    padded_sentences = Variable(torch.LongTensor(padded_sentences),
+                                volatile=volatile)
+    mask = Variable(torch.LongTensor(mask), volatile=volatile)
+    pos_emb_indices = Variable(torch.LongTensor(pos_emb_indices),
+                               volatile=volatile)
 
     if self.hparams.cuda:
       padded_sentences = padded_sentences.cuda()
-      lengths = lengths.cuda()
+      mask = mask.cuda()
+      pos_emb_indices = pos_emb_indices.cuda()
 
-    return padded_sentences, padded_pos
+    return padded_sentences, mask, pos_emb_indices
 
   def _shuffle(self, verbose=False):
     """Shuffle (x_train, y_train)."""

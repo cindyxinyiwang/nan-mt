@@ -44,6 +44,7 @@ def train():
   model = Transformer(n_src_vocab=len(data.source_word_to_index), 
                       n_trg_vocab=len(data.target_word_to_index),
                       hparams=hparams)
+
   # train loop
   print("-" * 80)
   print("Start training")
@@ -54,11 +55,15 @@ def train():
 
     # training activities
     while True:
-      (x_train, x_len), (y_train, y_len), end_of_epoch = data.next_train()
-      target_words += np.sum(y_len.data.cpu().numpy())
+      ((x_train, x_mask, x_pos_emb_indices),
+       (y_train, y_mask, y_pos_emb_indices),
+       end_of_epoch) = data.next_train()
+      target_words += np.sum(y_mask.data.cpu().numpy())
 
       # TODO(hyhieu,cindyxinyiwang): forward, backward, update, etc.
-      model.forward(x_train, x_len, y_train, y_len)
+      # model.forward(x_train, x_mask, x_pos_emb_indices,
+      #               y_train, y_mask, y_pos_emb_indices)
+
       step += 1
       if step % args.log_every == 0:
         curr_time = time.time()
@@ -73,7 +78,9 @@ def train():
 
     # End-of-Epoch activites, e.g: compute PPL, BLEU, etc.
     while True:
-      (x_valid, x_len), (y_valid, y_len), end_of_epoch = data.next_valid()
+      ((x_valid, x_mask, x_pos_emb_indices),
+       (y_valid, y_mask, y_pos_emb_indices),
+       end_of_epoch) = data.next_train()
 
       # TODO(hyhieu,cindyxinyiwang): Beam search, BLEU, PPL, etc.
 
