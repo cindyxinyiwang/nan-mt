@@ -81,8 +81,10 @@ class ScaledDotProdAttn(nn.Module):
 
   def forward(self, q, k, v, attn_mask=None):
     # (n_head*batch_size, len_q, len_k)
+    # attn_mask (n_head*batch_size, len_k, 1)
     attn = torch.bmm(q, k.transpose(1, 2)) / self.temp
-    
+    if not attn_mask is None:
+        attn.data.masked_fill_(attn_mask, -float('inf'))
     size = attn.size()
     assert len(size) > 2
     # doing softmax along dim 1
@@ -138,8 +140,8 @@ class MultiHeadAttn(nn.Module):
     v_batch = torch.bmm(v_batch, self.w_v).view(-1, len_v, self.d_v)
 
     # (n_head*batch_size, len_q, dim_v)
-    if attn_mask:
-      attn_mask = attn_mask.repeat(n_head, 1, 1)
+    if not attn_mask is None:
+      attn_mask = attn_mask.repeat(self.n_head, 1, 1)
     outputs = self.attention(q_batch, k_batch, v_batch, attn_mask=attn_mask)
 
     # (n_heads, batch_size, len_q, dim_v)=>(batch_size, len_q, n_head*dim_v)
@@ -178,6 +180,7 @@ class EncoderLayer(nn.Module):
     self.pos_ff = PositionwiseFF(dim, d_inner, dropout=dropout)
 
   def forward(self, enc_input, attn_mask=None):
+    # attn_mask: (batch_size, )
     enc_output = self.attn(enc_input, enc_input, enc_input, attn_mask=attn_mask)
     enc_output = self.pos_ff(enc_output)
     return enc_output

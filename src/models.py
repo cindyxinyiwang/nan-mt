@@ -15,7 +15,7 @@ from torch.autograd import Variable
 from torch import nn
 import numpy as np
 from layers import *
-
+from utils import *
 
 class Encoder(nn.Module):
   def __init__(self, hparams, n_layers=6, n_head=8, d_k=64, d_v=64,
@@ -58,8 +58,11 @@ class Encoder(nn.Module):
     enc_input = word_emb + pos_emb
 
     enc_output = enc_input
+    # create attn_mask. For encoder, q and k are both encoder states
+    # make it to (batch_size, len_q, len_k)
+    attn_mask = get_attn_padding_mask(x_train, x_train)
     for enc_layer in self.layer_stack:
-      enc_output = enc_layer(enc_output)
+      enc_output = enc_layer(enc_output, attn_mask=attn_mask)
 
     return enc_output
 
