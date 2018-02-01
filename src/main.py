@@ -3,7 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 import argparse
-import cPickle as pickle
+import _pickle as pickle
 import shutil
 import os
 import sys
@@ -55,7 +55,7 @@ def train():
     while True:
       ((x_train, x_mask, x_pos_emb_indices),
        (y_train, y_mask, y_pos_emb_indices), end_of_epoch) = data.next_train()
-      target_words += np.sum(y_mask.data.cpu().numpy())
+      target_words += np.sum(y_mask.cpu().numpy())
 
       # TODO(hyhieu,cindyxinyiwang): forward, backward, update, etc.
       model.forward(x_train, x_mask, x_pos_emb_indices,

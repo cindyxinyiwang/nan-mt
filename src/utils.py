@@ -14,10 +14,11 @@ class Logger(object):
     self.log = open(output_file, "a")
 
   def write(self, message):
-    self.terminal.write(message)
-    self.terminal.flush()
-    self.log.write(message)
-    self.log.flush()
+    print(message, end="", file=self.terminal, flush=True)
+    print(message, end="", file=self.log, flush=True)
+
+  def flush(self):
+    pass
 
 def get_attn_padding_mask(seq_q, seq_k):
     ''' Indicate the padding-related part to mask '''

@@ -86,7 +86,7 @@ class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
   train_limit = 1000
   batch_size = 3
   num_epochs = 5
-  cuda = False
+  cuda = True
 
   d_word_vec = 6
   d_model = 6

@@ -3,7 +3,6 @@ from __future__ import division
 from __future__ import print_function
 
 import argparse
-import cPickle as pickle
 import random
 import shutil
 import os
@@ -156,13 +155,13 @@ class DataLoader(object):
       ([1] * len(sentence)) + ([0] * (max_len - len(sentence)))
       for sentence in sentences]
     pos_emb_indices = [
-      (range(len(sentence))) + ([-1] * (max_len - len(sentence)))
+      [i for i in range(len(sentence))] + ([-1] * (max_len - len(sentence)))
       for sentence in sentences
     ]
 
     padded_sentences = Variable(torch.LongTensor(padded_sentences),
                                 volatile=volatile)
-    mask = Variable(torch.FloatTensor(mask), volatile=volatile)
+    mask = torch.ByteTensor(mask)
     pos_emb_indices = Variable(torch.FloatTensor(pos_emb_indices),
                                volatile=volatile)
 

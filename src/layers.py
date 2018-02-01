@@ -43,15 +43,15 @@ class PositionalEmbedding(nn.Module):
 
     batch_size, max_len = pos_emb_indices.size()
     pos_emb_indices = pos_emb_indices.view([batch_size, max_len, 1])
-    mask = mask.view([batch_size, max_len, 1])
-
+    mask = mask.clone().view([batch_size, max_len, 1]).repeat(
+      1, 1, self.hparams.d_word_vec)
     pos_emb_sin = torch.sin(pos_emb_indices / self.freq).view(
       batch_size, max_len, -1, 1)
     pos_emb_cos = torch.cos(pos_emb_indices / self.freq).view(
       batch_size, max_len, -1, 1)
     pos_emb = torch.cat([pos_emb_sin, pos_emb_cos], dim=3).view(
       batch_size, max_len, self.hparams.d_word_vec)
-    pos_emb = pos_emb * mask
+    pos_emb.data.masked_fill_(mask, float(0))
 
     return pos_emb
 
@@ -84,7 +84,11 @@ class ScaledDotProdAttn(nn.Module):
     # attn_mask (n_head*batch_size, len_k, 1)
     attn = torch.bmm(q, k.transpose(1, 2)) / self.temp
     if not attn_mask is None:
-        attn.data.masked_fill_(attn_mask, -float('inf'))
+      print("-" * 80)
+      print("attn_size:")
+      print(attn.size())
+      print(attn_mask.size())
+      attn.data.masked_fill_(attn_mask, -float("inf"))
     size = attn.size()
     assert len(size) > 2
     # doing softmax along dim 1
@@ -125,6 +129,7 @@ class MultiHeadAttn(nn.Module):
   def forward(self, q, k, v, attn_mask=None):
     residual = q 
     
+    print("-" * 80)
     print(q.size())
     batch_size, len_q, dim = q.size()
     batch_size, len_k, dim = k.size()

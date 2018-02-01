@@ -3,7 +3,6 @@ from __future__ import division
 from __future__ import print_function
 
 import argparse
-import cPickle as pickle
 import shutil
 import os
 import sys
