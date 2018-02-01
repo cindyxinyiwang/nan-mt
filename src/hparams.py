@@ -67,8 +67,16 @@ class Iwslt16EnDeBpe16Params(object):
   batch_size = 32
   num_epochs = 50
 
-  embedding_size = 256
-  hidden_size = 256
+  d_word_vec = 256  # size of word and positional embeddings
+  d_model = 256  # size of hidden states
+  d_inner = 128  # hidden dimension of the position-wise ff
+  d_k = 64  # dimension of attention keys
+  d_v = 64  # dimension of attention values
+
+  n_layers = 6  # number of layers in a Transformer stack
+  n_heads = 8   # number of attention heads
+
+  dropout = 0.1  # probability of dropping
 
 
 class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
@@ -80,6 +88,13 @@ class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
   num_epochs = 5
   cuda = False
 
-  embedding_size = 16
-  hidden_size = 8
+  d_word_vec = 6
+  d_model = 6
+  d_inner = 7
+
+  d_k = 13
+  d_v = 16
+
+  n_layers = 3
+  n_heads = 4
 
