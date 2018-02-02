@@ -10,6 +10,7 @@ from datetime import datetime
 
 import numpy as np
 import torch
+import torch.nn as nn
 
 class Logger(object):
   def __init__(self, output_file):
@@ -22,6 +23,15 @@ class Logger(object):
 
   def flush(self):
     pass
+
+
+def get_criterion(hparams):
+  weight = torch.ones(hparams.vocab_size)
+  weight[hparams.pad_id] = 0
+  crit = nn.CrossEntropyLoss(weight, size_average=False)
+  if hparams.cuda:
+    crit = crit.cuda()
+  return crit
 
 
 def get_attn_padding_mask(seq_q, seq_k, pad_id=0):

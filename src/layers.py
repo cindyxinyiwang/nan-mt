@@ -53,6 +53,7 @@ class PositionalEmbedding(nn.Module):
 
     return pos_emb
 
+
 class LayerNormalization(nn.Module):
   def __init__(self, d_hid, eps=1e-3):
     super(LayerNormalization, self).__init__()
@@ -69,6 +70,7 @@ class LayerNormalization(nn.Module):
     ln_out = (z - mu.expand_as(z)) / (sigma.expand_as(z) + self.eps)
     ln_out = ln_out * self.a_2.expand_as(ln_out) + self.b_2.expand_as(ln_out)
     return ln_out
+
 
 class ScaledDotProdAttn(nn.Module):
   def __init__(self, dim, dropout=0.1):
@@ -123,6 +125,7 @@ class ScaledDotProdAttn(nn.Module):
     output = torch.bmm(attn, v)
 
     return output
+
 
 class MultiHeadAttn(nn.Module):
   def __init__(self, n_heads, d_model, d_k, d_v, dropout=0.1):
@@ -208,6 +211,7 @@ class MultiHeadAttn(nn.Module):
 
     return outputs
 
+
 class PositionwiseFF(nn.Module):
   def __init__(self, d_hid, d_inner, dropout=0.1):
     super(PositionwiseFF, self).__init__()
@@ -224,6 +228,7 @@ class PositionwiseFF(nn.Module):
     output = self.dropout(output)
     return self.layer_norm(output + residual)
 
+
 class EncoderLayer(nn.Module):
   """Compose multi-head attention and positionwise feeding."""
 
@@ -233,10 +238,17 @@ class EncoderLayer(nn.Module):
     self.pos_ff = PositionwiseFF(d_model, d_inner, dropout=dropout)
 
   def forward(self, enc_input, attn_mask=None):
-    # attn_mask: (batch_size, )
+    """Normal forward pass.
+
+    Args:
+      enc_input: [batch_size, x_len, d_model]
+      attn_mask: [batch_size, x_len, x_len]
+
+    """
     enc_output = self.attn(enc_input, enc_input, enc_input, attn_mask=attn_mask)
     enc_output = self.pos_ff(enc_output)
     return enc_output
+
 
 class DecoderLayer(nn.Module):
   """Multi-head attention to both input_states and output_states."""

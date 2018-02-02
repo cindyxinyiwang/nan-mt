@@ -47,8 +47,6 @@ class DataLoader(object):
     (self.target_word_to_index,
      self.target_index_to_word) = self._build_vocab(self.hparams.target_vocab)
 
-    # TODO: set up max_seq_len and pad sentences longer than this
-    self.max_seq_len = 80
     # train data
     self.x_train, self.y_train = self._build_parallel(self.hparams.source_train,
                                                       self.hparams.target_train)
@@ -81,10 +79,10 @@ class DataLoader(object):
     # pad data
     x_valid = self.x_valid[start_index : end_index]
     y_valid = self.y_valid[start_index : end_index]
-    x_valid, x_mask, x_pos_emb_indices = self._pad(sentences=x_valid,
-                                                   volatile=True)
-    y_valid, y_mask, y_pos_emb_indices = self._pad(sentences=y_valid,
-                                                   volatile=True)
+    x_valid, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_valid,
+                                                            volatile=True)
+    y_valid, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_valid,
+                                                            volatile=True)
 
     # shuffle if reaches the end of data
     if end_index >= self.valid_size:
@@ -94,8 +92,8 @@ class DataLoader(object):
     else:
       self.valid_index += batch_size
 
-    return ((x_valid, x_mask, x_pos_emb_indices),
-            (y_valid, y_mask, y_pos_emb_indices),
+    return ((x_valid, x_mask, x_pos_emb_indices, x_count),
+            (y_valid, y_mask, y_pos_emb_indices, y_count),
             end_of_epoch)
 
   def next_train(self):
@@ -117,8 +115,8 @@ class DataLoader(object):
     # pad data
     x_train = self.x_train[start_index : end_index]
     y_train = self.y_train[start_index : end_index]
-    x_train, x_mask, x_pos_emb_indices = self._pad(sentences=x_train)
-    y_train, y_mask, y_pos_emb_indices = self._pad(sentences=y_train)
+    x_train, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_train)
+    y_train, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_train)
 
     # shuffle if reaches the end of data
     if end_index >= self.train_size:
@@ -128,8 +126,8 @@ class DataLoader(object):
     else:
       self.train_index += batch_size
 
-    return ((x_train, x_mask, x_pos_emb_indices),
-            (y_train, y_mask, y_pos_emb_indices),
+    return ((x_train, x_mask, x_pos_emb_indices, x_count),
+            (y_train, y_mask, y_pos_emb_indices, y_count),
             end_of_epoch)
 
   def _pad(self, sentences, volatile=False):
@@ -146,6 +144,7 @@ class DataLoader(object):
     """
 
     lengths = [len(sentence) for sentence in sentences]
+    sum_len = sum(lengths)
     max_len = max(lengths)
 
     padded_sentences = [
@@ -170,7 +169,7 @@ class DataLoader(object):
       mask = mask.cuda()
       pos_emb_indices = pos_emb_indices.cuda()
 
-    return padded_sentences, mask, pos_emb_indices
+    return padded_sentences, mask, pos_emb_indices, sum_len
 
   def _shuffle(self, verbose=False):
     """Shuffle (x_train, y_train)."""

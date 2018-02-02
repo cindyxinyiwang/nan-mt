@@ -163,3 +163,7 @@ class Transformer(nn.Module):
     logits = self.w_logit(dec_output)
 
     return logits
+
+  def trainable_parameters(self):
+    params = self.parameters()
+    return params
