@@ -78,6 +78,8 @@ class Iwslt16EnDeBpe16Params(object):
 
   dropout = 0.1  # probability of dropping
 
+  share_emb_and_softmax = True  # share embedding and softmax
+
 
 class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
   """Shrinks Iwslt16EnDeBpe16Params for sanity check."""
@@ -86,10 +88,10 @@ class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
   train_limit = 1000
   batch_size = 3
   num_epochs = 5
-  cuda = True
+  cuda = False
 
-  d_word_vec = 6
-  d_model = 6
+  d_word_vec = 10
+  d_model = 10
   d_inner = 7
 
   d_k = 13

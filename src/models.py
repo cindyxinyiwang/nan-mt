@@ -29,8 +29,11 @@ class Encoder(nn.Module):
                                  padding_idx=hparams.pad_id)
 
     self.layer_stack = nn.ModuleList(
-      [EncoderLayer(self.hparams.d_word_vec, self.hparams.d_inner,
-                    self.hparams.n_heads, self.hparams.d_k, self.hparams.d_v,
+      [EncoderLayer(self.hparams.d_model,
+                    self.hparams.d_inner,
+                    self.hparams.n_heads,
+                    self.hparams.d_k,
+                    self.hparams.d_v,
                     dropout=self.hparams.dropout)
        for _ in range(self.hparams.n_layers)])
 
@@ -44,23 +47,28 @@ class Encoder(nn.Module):
 
     Args:
       x_train: Torch Tensor of size [batch_size, max_len]
-      x_mask: Torch Tensor of size [batch_size, max_len]. 0 means to ignore a
-        position, 1 means to keep the position.
+      x_mask: Torch Tensor of size [batch_size, max_len]. 1 means to ignore a
+        position.
       x_pos_emb_indices: used to compute positional embeddings.
 
     Returns:
       enc_output: Tensor of size [batch_size, max_len, d_model].
     """
 
-    # TODO(cindyxinyiwang): handle x_mask
+    batch_size, max_len = x_train.size()
+
+    # [batch_size, max_len, 1] -> [batch_size, max_len, d_word_vec]
+    pos_emb_mask = x_mask.clone().unsqueeze(2).expand(
+      -1, -1, self.hparams.d_word_vec)
+    pos_emb = self.pos_emb(x_pos_emb_indices, pos_emb_mask)
+
+    # [batch_size, max_len, d_word_vec]
     word_emb = self.word_emb(x_train)
-    pos_emb = self.pos_emb(x_pos_emb_indices, x_mask)
     enc_input = word_emb + pos_emb
 
+    # [batch_size, 1, max_len] -> [batch_size, len_q, len_k]
+    attn_mask = x_mask.clone().unsqueeze(1).expand(-1, max_len, -1)
     enc_output = enc_input
-    # create attn_mask. For encoder, q and k are both encoder states
-    # make it to (batch_size, len_q, len_k)
-    attn_mask = get_attn_padding_mask(x_train, x_train)
     for enc_layer in self.layer_stack:
       enc_output = enc_layer(enc_output, attn_mask=attn_mask)
 
@@ -106,20 +114,33 @@ class Decoder(nn.Module):
         output layer.
     """
 
-    print("-" * 80)
-    print("HERE. Calling Decoder")
+    batch_size, x_len = x_mask.size()
+    batch_size, y_len = y_mask.size()
 
+    # [batch_size, y_len, 1] -> [batch_size, y_len, d_word_vec]
+    pos_emb_mask = y_mask.clone().unsqueeze(2).expand(
+      -1, -1, self.hparams.d_word_vec)
+    pos_emb = self.pos_emb(y_pos_emb_indices, pos_emb_mask)
+
+    # [batch_size, x_len, d_word_vec]
     word_emb = self.word_emb(y_train)
-    pos_emb = self.pos_emb(y_pos_emb_indices, y_mask)
     dec_input = word_emb + pos_emb
 
-    # TODO(hyhieu): check the masks!!!
+    # [batch_size, 1, y_len] -> [batch_size, y_len, y_len]
+    y_attn_mask = (y_mask.clone().unsqueeze(1).expand(-1, y_len, -1) +
+                   get_attn_subsequent_mask(y_train,
+                                            pad_id=self.hparams.pad_id))
+    y_attn_mask = torch.gt(y_attn_mask, 0)
+
+    # [batch_size, 1, x_len] -> [batch_size, y_len, x_len]
+    x_attn_mask = x_mask.clone().unsqueeze(1).expand(-1, y_len, -1)
+
     dec_output = dec_input
     for dec_layer in self.layer_stack:
-      dec_output, dec_slf_attn, dec_enc_attn = dec_layer(
-        dec_output, x_states, slf_attn_mask=y_mask, dec_enc_attn_mask=x_mask)
-
-    sys.exit(0)
+      dec_output = dec_layer(dec_output, x_states,
+                             self_attn_mask=y_attn_mask,
+                             dec_enc_attn_mask=x_attn_mask)
+    return dec_output
 
 class Transformer(nn.Module):
   def __init__(self, hparams, *args, **kwargs):
@@ -129,6 +150,9 @@ class Transformer(nn.Module):
     self.encoder = Encoder(hparams)
     self.dropout = nn.Dropout(hparams.dropout)
     self.decoder = Decoder(hparams)
+    self.w_logit = nn.Linear(hparams.d_model, hparams.vocab_size, bias=False)
+    if hparams.share_emb_and_softmax:
+      self.w_logit.weight = self.decoder.word_emb.weight
 
   def forward(self, x_train, x_mask, x_pos_emb_indices,
               y_train, y_mask, y_pos_emb_indices):
@@ -136,5 +160,6 @@ class Transformer(nn.Module):
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
     dec_output = self.decoder(enc_output, x_mask, y_train, y_mask,
                               y_pos_emb_indices)
+    logits = self.w_logit(dec_output)
 
-    return dec_output
+    return logits

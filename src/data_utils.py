@@ -140,7 +140,7 @@ class DataLoader(object):
 
     Returns:
       padded_sentences: Variable of size [batch_size, max_len], the sentences.
-      mask: Variable of size [batch_size, max_len]. 0 means to ignore.
+      mask: Variable of size [batch_size, max_len]. 1 means to ignore.
       pos_emb_indices: Variable of size [batch_size, max_len]. indices to use
         when computing positional embedding.
     """
@@ -152,7 +152,7 @@ class DataLoader(object):
       sentence + ([self.hparams.pad_id] * (max_len - len(sentence)))
       for sentence in sentences]
     mask = [
-      ([1] * len(sentence)) + ([0] * (max_len - len(sentence)))
+      ([0] * len(sentence)) + ([1] * (max_len - len(sentence)))
       for sentence in sentences]
     pos_emb_indices = [
       [i for i in range(len(sentence))] + ([-1] * (max_len - len(sentence)))
