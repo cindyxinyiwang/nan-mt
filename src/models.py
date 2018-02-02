@@ -105,8 +105,8 @@ class Decoder(nn.Module):
         attention memory.
       x_mask: tensor of size [batch_size, max_len]. input mask.
       y_train: Torch Tensor of size [batch_size, max_len]
-      y_mask: Torch Tensor of size [batch_size, max_len]. 0 means to ignore a
-        position, 1 means to keep the position.
+      y_mask: Torch Tensor of size [batch_size, max_len]. 1 means to ignore a
+        position.
       y_pos_emb_indices: used to compute positional embeddings.
 
     Returns:
