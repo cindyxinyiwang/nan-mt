@@ -32,7 +32,7 @@ class DataLoader(object):
     elif hparams == "bpe16":
       self.hparams = Iwslt16EnDeBpe16Params()
     elif hparams == "bpe32":
-      self.hparams = Iwslt16EnDeBpe16Params()
+      self.hparams = Iwslt16EnDeBpe32Params()
     else:
       raise ValueError("Unknown hparams set '{0}'".format(hparams))
 

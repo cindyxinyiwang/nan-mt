@@ -156,6 +156,14 @@ class Transformer(nn.Module):
 
     init.xavier_normal(self.w_logit.weight)
 
+    if hparams.label_smoothing is not None:
+      self.softmax = nn.Softmax(dim=-1)
+      smooth = np.full([1, 1, hparams.vocab_size], 1 / hparams.vocab_size,
+                       dtype=np.float32)
+      self.smooth = torch.FloatTensor(smooth)
+      if self.hparams.cuda:
+        self.smooth = self.smooth.cuda()
+
   def forward(self, x_train, x_mask, x_pos_emb_indices,
               y_train, y_mask, y_pos_emb_indices):
 
@@ -163,6 +171,11 @@ class Transformer(nn.Module):
     dec_output = self.decoder(enc_output, x_mask, y_train, y_mask,
                               y_pos_emb_indices)
     logits = self.w_logit(dec_output)
+    if self.hparams.label_smoothing is not None:
+      smooth = self.hparams.label_smoothing
+      probs = ((1.0 - smooth) * self.softmax(logits) +
+               smooth / self.hparams.vocab_size)
+      logits = torch.log(probs)
 
     return logits
 

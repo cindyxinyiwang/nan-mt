@@ -13,10 +13,46 @@ import torch
 import torch.nn as nn
 
 
-def save_checkpoint(model, optimizer, path):
+def set_lr(optim, lr):
+  for param_group in optim.param_groups:
+    param_group["lr"] = lr
+
+
+def add_argument(parser, name, type, default, help):
+  """Add an argument.
+
+  Args:
+    name: arg's name.
+    type: must be ["bool", "int", "float", "str"].
+    default: corresponding type of value.
+    help: help message.
+  """
+
+  if type == "bool":
+    feature_parser = parser.add_mutually_exclusive_group(required=False)
+    feature_parser.add_argument("--{0}".format(name), dest=name,
+                                action="store_true", help=help)
+    feature_parser.add_argument("--no_{0}".format(name), dest=name,
+                                action="store_false", help=help)
+    parser.set_defaults(name=default)
+  elif type == "int":
+    parser.add_argument("--{0}".format(name),
+                        type=int, default=default, help=help)
+  elif type == "float":
+    parser.add_argument("--{0}".format(name),
+                        type=float, default=default, help=help)
+  elif type == "str":
+    parser.add_argument("--{0}".format(name),
+                        type=str, default=default, help=help)
+  else:
+    raise ValueError("Unknown type '{0}'".format(type))
+
+
+def save_checkpoint(model, optimizer, hparams, path):
   print("Saving model to '{0}'".format(path))
   torch.save(model, os.path.join(path, "model.pt"))
   torch.save(optimizer.state_dict(), os.path.join(path, "optimizer.pt"))
+  torch.save(hparams, os.path.join(path, "hparams.pt"))
 
 
 class Logger(object):
