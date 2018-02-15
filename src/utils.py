@@ -12,6 +12,13 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+
+def save_checkpoint(model, optimizer, path):
+  print("Saving model to '{0}'".format(path))
+  torch.save(model, os.path.join(path, "model.pt"))
+  torch.save(optimizer.state_dict(), os.path.join(path, "optimizer.pt"))
+
+
 class Logger(object):
   def __init__(self, output_file):
     self.terminal = sys.stdout
@@ -32,6 +39,13 @@ def get_criterion(hparams):
   if hparams.cuda:
     crit = crit.cuda()
   return crit
+
+
+def get_performance(crit, logits, labels):
+  loss = crit(logits, labels)
+  _, preds = torch.max(logits, dim=1)
+  acc = torch.eq(preds, labels).sum()
+  return loss, acc
 
 
 def get_attn_padding_mask(seq_q, seq_k, pad_id=0):

@@ -154,6 +154,8 @@ class Transformer(nn.Module):
     if hparams.share_emb_and_softmax:
       self.w_logit.weight = self.decoder.word_emb.weight
 
+    init.xavier_normal(self.w_logit.weight)
+
   def forward(self, x_train, x_mask, x_pos_emb_indices,
               y_train, y_mask, y_pos_emb_indices):
 

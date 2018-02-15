@@ -49,18 +49,20 @@ class DataLoader(object):
 
     # train data
     self.x_train, self.y_train = self._build_parallel(self.hparams.source_train,
-                                                      self.hparams.target_train)
+                                                      self.hparams.target_train,
+                                                      is_training=True)
     self._shuffle()
     self.train_index = 0
     self.train_size = len(self.x_train)
 
     # valid data
     self.x_valid, self.y_valid = self._build_parallel(self.hparams.source_valid,
-                                                      self.hparams.target_valid)
+                                                      self.hparams.target_valid,
+                                                      is_training=False)
     self.valid_index = 0
     self.valid_size = len(self.x_valid)
 
-  def next_valid(self):
+  def next_valid(self, valid_batch_size=20):
     """Retrieves a sentence of testing examples.
 
     Returns:
@@ -73,16 +75,14 @@ class DataLoader(object):
 
     end_of_epoch = False
     start_index = self.valid_index
-    end_index = min(start_index + 1, self.valid_size)
+    end_index = min(start_index + valid_batch_size, self.valid_size)
     batch_size = end_index - start_index
 
     # pad data
     x_valid = self.x_valid[start_index : end_index]
     y_valid = self.y_valid[start_index : end_index]
-    x_valid, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_valid,
-                                                            volatile=True)
-    y_valid, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_valid,
-                                                            volatile=True)
+    x_valid, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_valid)
+    y_valid, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_valid)
 
     # shuffle if reaches the end of data
     if end_index >= self.valid_size:
@@ -141,6 +141,7 @@ class DataLoader(object):
       mask: Variable of size [batch_size, max_len]. 1 means to ignore.
       pos_emb_indices: Variable of size [batch_size, max_len]. indices to use
         when computing positional embedding.
+      sum_len: total words
     """
 
     lengths = [len(sentence) for sentence in sentences]
@@ -180,7 +181,7 @@ class DataLoader(object):
     random.shuffle(xy_train)
     self.x_train, self.y_train = zip(*xy_train)
 
-  def _build_parallel(self, source_file, target_file):
+  def _build_parallel(self, source_file, target_file, is_training):
     """Build pair of data."""
 
     print("-" * 80)
@@ -196,6 +197,7 @@ class DataLoader(object):
       target_lines = finp.read().split("\n")
 
     source_data, target_data = [], []
+    total_sents = 0
     for i, (source_line, target_line) in enumerate(
         zip(source_lines, target_lines)):
       source_line = source_line.strip()
@@ -206,8 +208,13 @@ class DataLoader(object):
       source_indices, target_indices = [], []
       source_tokens = source_line.split(" ")
       target_tokens = target_line.split(" ")
-      if len(source_tokens) > self.hparams.max_len or len(target_tokens) > self.hparams.max_len:
+      if (is_training and
+          (len(source_line) > self.hparams.max_train_len or
+           len(target_line) > self.hparams.max_train_len)):
         continue
+
+      total_sents += 1
+
       for source_token in source_tokens:
         source_token = source_token.strip()
         if source_token not in self.source_word_to_index:
@@ -229,11 +236,11 @@ class DataLoader(object):
       target_data.append(target_indices)
 
       if (self.hparams.train_limit is not None and
-          self.hparams.train_limit <= i + 1):
+          self.hparams.train_limit <= total_sents):
         break
 
-      if (i + 1) % 10000 == 0:
-        print("{0:>6d} pairs".format(i + 1))
+      if total_sents % 10000 == 0:
+        print("{0:>6d} pairs".format(total_sents))
 
     assert len(source_data) == len(target_data)
     print("{0:>6d} pairs".format(len(source_data)))

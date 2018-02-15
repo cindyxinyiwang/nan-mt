@@ -20,6 +20,7 @@ class Iwslt16EnDeBpe32Params(object):
   target_vocab = "de.bpe.16000.vocab"
 
   vocab_size = 32000
+  max_train_len = 200
 
   unk = "<unk>"
   bos = "<s>"
@@ -50,6 +51,7 @@ class Iwslt16EnDeBpe16Params(object):
   target_vocab = "de.bpe.16000.vocab"
 
   vocab_size = 16000
+  max_train_len = 200
 
   unk = "<unk>"
   bos = "<s>"
@@ -61,44 +63,43 @@ class Iwslt16EnDeBpe16Params(object):
   pad = bos
   pad_id = bos_id
 
-  max_len = 80
-
-  cuda = True
-  batch_size = 32
+  batch_size = 192
   num_epochs = 50
+  cuda = True
 
   d_word_vec = 256  # size of word and positional embeddings
   d_model = 256  # size of hidden states
-  d_inner = 128  # hidden dimension of the position-wise ff
+  d_inner = 512  # hidden dimension of the position-wise ff
   d_k = 64  # dimension of attention keys
   d_v = 64  # dimension of attention values
 
-  n_layers = 6  # number of layers in a Transformer stack
-  n_heads = 8   # number of attention heads
+  n_layers = 5  # number of layers in a Transformer stack
+  n_heads = 2   # number of attention heads
 
   dropout = 0.1  # probability of dropping
 
   share_emb_and_softmax = True  # share embedding and softmax
+  learning_rate = 1.0 / np.sqrt(d_model)
 
 
 class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
   """Shrinks Iwslt16EnDeBpe16Params for sanity check."""
 
   dataset = "Tiny IWSLT 2016 En-De with BPE 16K"
-  train_limit = 1000
+  train_limit = 50000
 
-  learning_rate = 3e-4
-  batch_size = 3
-  num_epochs = 5
+  batch_size = 128
+  num_epochs = 10
   cuda = True
 
-  d_word_vec = 10
-  d_model = 10
-  d_inner = 7
+  d_word_vec = 256
+  d_model = 256
+  d_inner = 128
 
-  d_k = 13
-  d_v = 16
+  d_k = 64
+  d_v = 64
 
-  n_layers = 3
-  n_heads = 4
+  n_layers = 5
+  n_heads = 2
+
 
