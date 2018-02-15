@@ -23,7 +23,7 @@ class Iwslt16EnDeBpe32Params(object):
   target_vocab = "de.bpe.16000.vocab"
 
   vocab_size = 32000
-  max_train_len = 200
+  max_train_len = 300
 
   unk = "<unk>"
   bos = "<s>"
@@ -54,7 +54,7 @@ class Iwslt16EnDeBpe16Params(object):
   target_vocab = "de.bpe.16000.vocab"
 
   vocab_size = 16000
-  max_train_len = 200
+  max_train_len = 600
 
   unk = "<unk>"
   bos = "<s>"
@@ -66,7 +66,7 @@ class Iwslt16EnDeBpe16Params(object):
   pad = bos
   pad_id = bos_id
 
-  batch_size = 192
+  batch_size = 50
   num_epochs = 50
   cuda = True
 
@@ -82,7 +82,7 @@ class Iwslt16EnDeBpe16Params(object):
   dropout = 0.1  # probability of dropping
 
   share_emb_and_softmax = True  # share embedding and softmax
-  learning_rate = 1.0 / np.sqrt(d_model)
+  learning_rate = 0.00035
 
 
 class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):

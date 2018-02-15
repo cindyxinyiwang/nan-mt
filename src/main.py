@@ -64,6 +64,7 @@ def train():
     total_sents = 0
 
     # training activities
+    model.train()
     while True:
       # next batch
       ((x_train, x_mask, x_pos_emb_indices, x_count),
@@ -114,8 +115,10 @@ def train():
     save_checkpoint(model, optim, args.output_dir)
 
     # Eval
+    model.eval()
     valid_words = 0
     valid_loss = 0
+    valid_acc = 0
     while True:
       # clear GPU memory
       gc.collect()
@@ -135,6 +138,7 @@ def train():
       labels = y_valid[:, 1:].contiguous().view(-1)
       val_loss, val_acc = get_performance(crit, logits, labels)
       valid_loss += val_loss.data[0]
+      valid_acc += val_acc.data[0]
 
       if end_of_epoch:
         break
@@ -144,7 +148,7 @@ def train():
     log_string += " mins={0:<.2f}".format((curr_time - start_time) / 60.0)
     log_string += "\nvalid:"
     log_string += " loss={0:<6.2f}".format(valid_loss / valid_words)
-    log_string += " acc={0:<5.4f}".format(val_acc.data[0] / y_count)
+    log_string += " acc={0:<5.4f}".format(valid_acc / valid_words)
     log_string += " ppl={0:<.2f}".format(np.exp(valid_loss / valid_words))
     print(log_string)
 
