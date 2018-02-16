@@ -96,6 +96,9 @@ def train():
     elif args.train_set == "bpe32":
       hparams = Iwslt16EnDeBpe32Params()
       data = DataLoader(hparams="bpe32")
+    elif args.train_set in H_PARAMS_DICT:
+      hparams = H_PARAMS_DICT[args.train_set]()
+      data = DataLoader(hparams="bpe32")
     else:
       raise ValueError("Unknown train_set '{0}'".format(args.train_set))
 
