@@ -74,12 +74,14 @@ def eval(model, data, crit, epoch, hparams):
     if end_of_epoch:
       break
 
+  val_ppl = np.exp(valid_loss / valid_words)
   log_string = "epoch={0:<3d}".format(epoch + 1)
   log_string += "\nvalid:"
   log_string += " loss={0:<6.2f}".format(valid_loss / valid_words)
   log_string += " acc={0:<5.4f}".format(valid_acc / valid_words)
-  log_string += " ppl={0:<.2f}".format(np.exp(valid_loss / valid_words))
+  log_string += " val_ppl={0:<.2f}".format(val_ppl)
   print(log_string)
+  return val_ppl
 
 
 def train():
@@ -89,16 +91,16 @@ def train():
   else:
     if args.train_set == "tiny":
       hparams = Iwslt16EnDeTinyParams()
-      data = DataLoader(hparams="tiny")
+      data = DataLoader(hparams=hparams)
     elif args.train_set == "bpe16":
       hparams = Iwslt16EnDeBpe16Params()
-      data = DataLoader(hparams="bpe16")
+      data = DataLoader(hparams=hparams)
     elif args.train_set == "bpe32":
       hparams = Iwslt16EnDeBpe32Params()
-      data = DataLoader(hparams="bpe32")
+      data = DataLoader(hparams=hparams)
     elif args.train_set in H_PARAMS_DICT:
       hparams = H_PARAMS_DICT[args.train_set]()
-      data = DataLoader(hparams="bpe32")
+      data = DataLoader(hparams=hparams)
     else:
       raise ValueError("Unknown train_set '{0}'".format(args.train_set))
 
@@ -126,6 +128,7 @@ def train():
   print("-" * 80)
   print("Start training")
   step = 0
+  best_val_acc = hparams.vocab_size
   for epoch in range(hparams.n_epochs):
     start_time = time.time()
     target_words = 0
@@ -154,14 +157,10 @@ def train():
       tr_loss = tr_loss.div(hparams.batch_size)
       tr_ppl = np.exp(tr_loss.data[0] * hparams.batch_size / y_count)
 
-      # backward pass and training
-      # lr = (np.min(1.0 / np.sqrt(step),
-      #              step / (np.sqrt(hparams.n_warm_ups) ** 3)) /
-      #       np.sqrt(hparams.d_model))
       lr = (np.minimum(1.0 / np.sqrt(step + 1),
-                       step / (np.sqrt(hparams.n_warm_ups) ** 3)) /
+                       (step + 1) / (np.sqrt(hparams.n_warm_ups) ** 3)) /
             np.sqrt(hparams.d_model))
-      set_lr(optim, lr)
+      set_lr(optim, lr * 4.0)
       tr_loss.backward()
       optim.step()
 
@@ -188,16 +187,21 @@ def train():
 
       if step >= hparams.n_train_steps:
         print("Reach {0} steps. Stop training".format(step))
-        eval(model, data, crit, epoch, hparams)
+        val_acc = eval(model, data, crit, epoch, hparams)
+        if val_acc < best_val_acc:
+          best_val_acc = val_acc
+          save_checkpoint(model, optim, hparams, args.output_dir)
         break
 
     # End-of-Epoch activites, e.g: compute PPL, BLEU, etc.
     # Save checkpoint
     print("-" * 80)
-    save_checkpoint(model, optim, hparams, args.output_dir)
 
     # Eval
-    eval(model, data, crit, epoch, hparams)
+    val_acc = eval(model, data, crit, epoch, hparams)
+    if val_acc < best_val_acc:
+      best_val_acc = val_acc
+      save_checkpoint(model, optim, hparams, args.output_dir)
 
 
 def main():

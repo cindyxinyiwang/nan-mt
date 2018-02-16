@@ -20,21 +20,14 @@ from hparams import Iwslt16EnDeBpe32Params
 from hparams import Iwslt16EnDeTinyParams
 
 class DataLoader(object):
-  def __init__(self, hparams="tiny"):
+  def __init__(self, hparams):
     """Encloses both train and valid data.
 
     Args:
       hparams: must be ['tiny' 'bpe16' 'bpe32']
     """
 
-    if hparams == "tiny":
-      self.hparams = Iwslt16EnDeTinyParams()
-    elif hparams == "bpe16":
-      self.hparams = Iwslt16EnDeBpe16Params()
-    elif hparams == "bpe32":
-      self.hparams = Iwslt16EnDeBpe32Params()
-    else:
-      raise ValueError("Unknown hparams set '{0}'".format(hparams))
+    self.hparams = hparams
 
     print("-" * 80)
     print("Building data for '{0}' from '{1}'".format(
