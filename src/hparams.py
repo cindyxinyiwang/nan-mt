@@ -141,11 +141,11 @@ class exp1_v1(Iwslt16EnDeBpe32Params):
   """Without label smoothing"""
 
   cuda = True
-  max_train_len = 400  # None
+  max_train_len = 600  # None
 
   d_word_vec = 288  # size of word and positional embeddings
   d_model = 288  # size of hidden states
-  d_inner = 500  # hidden dimension of the position-wise ff
+  d_inner = 600  # hidden dimension of the position-wise ff
   d_k = 64  # dimension of attention keys
   d_v = 64  # dimension of attention values
 
@@ -157,12 +157,12 @@ class exp1_v1(Iwslt16EnDeBpe32Params):
   share_emb_and_softmax = True  # share embedding and softmax
 
   # training
-  batch_size = 64
+  batch_size = 40
   learning_rate = 0.00035
   label_smoothing = None
 
   n_epochs = 100
-  n_train_steps = 200000
+  n_train_steps = 100000
   n_warm_ups = 4000
 
 
@@ -171,7 +171,40 @@ class exp1_v2(exp1_v1):
 
 
 class exp1_v3(exp1_v1):
-  label_smoothing = 0.05
+  label_smoothing = 0.1
+
+class exp2_v1(Iwslt16EnDeBpe32Params):
+  """Without label smoothing"""
+
+  cuda = True
+  max_train_len = 1000 # None
+
+  d_word_vec = 288  # size of word and positional embeddings
+  d_model = 288  # size of hidden states
+  d_inner = 600  # hidden dimension of the position-wise ff
+  d_k = 64  # dimension of attention keys
+  d_v = 64  # dimension of attention values
+
+  n_layers = 5  # number of layers in a Transformer stack
+  n_heads = 4   # number of attention heads
+
+  dropout = 0.1  # probability of dropping
+
+  share_emb_and_softmax = True  # share embedding and softmax
+
+  # training
+  batch_size = 32
+  learning_rate = 0.00035
+  label_smoothing = None
+
+  n_epochs = 100
+  n_train_steps = 125000
+  n_warm_ups = 6000
+
+class exp2_v2(exp2_v1):
+  n_epochs = 200
+  n_train_steps = 200000
+  n_warm_ups = 10000
 
 
 # Put all Hparams in a dictionary
@@ -179,5 +212,7 @@ H_PARAMS_DICT = {
   "exp1_v1": exp1_v1,
   "exp1_v2": exp1_v2,
   "exp1_v3": exp1_v3,
+  "exp2_v1": exp2_v1,
+  "exp2_v2": exp2_v2,
 }
 

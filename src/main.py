@@ -64,7 +64,8 @@ def eval(model, data, crit, epoch, hparams):
 
     logits = model.forward(
       x_valid, x_mask, x_pos_emb_indices,
-      y_valid[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous())
+      y_valid[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous(),
+      label_smoothing=False)
     logits = logits.view(-1, hparams.vocab_size)
     labels = y_valid[:, 1:].contiguous().view(-1)
     val_loss, val_acc = get_performance(crit, logits, labels)
@@ -160,7 +161,7 @@ def train():
       lr = (np.minimum(1.0 / np.sqrt(step + 1),
                        (step + 1) / (np.sqrt(hparams.n_warm_ups) ** 3)) /
             np.sqrt(hparams.d_model))
-      set_lr(optim, lr * 4.0)
+      set_lr(optim, lr)
       tr_loss.backward()
       optim.step()
 
@@ -185,13 +186,14 @@ def train():
       if end_of_epoch:
         break
 
-      if step >= hparams.n_train_steps:
-        print("Reach {0} steps. Stop training".format(step))
-        val_acc = eval(model, data, crit, epoch, hparams)
-        if val_acc < best_val_acc:
-          best_val_acc = val_acc
-          save_checkpoint(model, optim, hparams, args.output_dir)
-        break
+    # stop if trained for more than n_train_steps
+    if step >= hparams.n_train_steps:
+      print("Reach {0} steps. Stop training".format(step))
+      val_acc = eval(model, data, crit, epoch, hparams)
+      if val_acc < best_val_acc:
+        best_val_acc = val_acc
+        save_checkpoint(model, optim, hparams, args.output_dir)
+      break
 
     # End-of-Epoch activites, e.g: compute PPL, BLEU, etc.
     # Save checkpoint
