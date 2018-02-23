@@ -17,7 +17,7 @@ do
   echo "Training BPE on train.$language"
   spm_train \
     --input="data/raw/en-de/train.$language" \
-    --model_prefix="data/bpe_32k/en-de/$language.bpe.${vocab_size}" \
+    --model_prefix="data/bpe_32k_shared_vocab/en-de/$language.bpe.${vocab_size}" \
     --vocab_size=${vocab_size} \
     --model_type="bpe"
 
@@ -26,10 +26,10 @@ do
     echo "Generating BPE for ${file_name}.$language"
     spm_encode \
       --extra_options="eos" \
-      --model="data/bpe_32k/en-de/$language.bpe.${vocab_size}.model" \
+      --model="data/bpe_32k_shared_vocab/en-de/$language.bpe.${vocab_size}.model" \
       --output_format="piece" \
       < "data/raw/en-de/${file_name}.$language" \
-      > "data/bpe_32k/en-de/${file_name}.bpe.$language"
+      > "data/bpe_32k_shared_vocab/en-de/${file_name}.bpe.$language"
   done
 done
 

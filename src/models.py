@@ -182,3 +182,4 @@ class Transformer(nn.Module):
   def trainable_parameters(self):
     params = self.parameters()
     return params
+

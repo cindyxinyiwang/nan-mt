@@ -207,6 +207,69 @@ class exp2_v2(exp2_v1):
   n_warm_ups = 10000
 
 
+class Iwslt16EnDeBpe32SharedParams(object):
+  """For small experiments."""
+
+  dataset = "IWSLT 2016 En-De with BPE 32K Shared Vocab"
+  data_path = "data/bpe_32k_shared_vocab/en-de"
+
+  train_limit = None
+  source_train = "train.en"
+  target_train = "train.de"
+
+  source_valid = "dev2010.en"
+  target_valid = "dev2010.de"
+
+  source_vocab = "shared_32000.vocab"
+  target_vocab = "shared_32000.vocab"
+
+  vocab_size = 32000
+  max_train_len = 1000  # None
+
+  unk = "<unk>"
+  bos = "<s>"
+  eos = "</s>"
+  unk_id = 31997
+  eos_id = 31998
+  bos_id = 31999
+
+  pad = bos
+  pad_id = bos_id
+
+  cuda = True
+
+  d_word_vec = 288  # size of word and positional embeddings
+  d_model = 288  # size of hidden states
+  d_inner = 300  # hidden dimension of the position-wise ff
+  d_k = 64  # dimension of attention keys
+  d_v = 64  # dimension of attention values
+
+  n_layers = 5  # number of layers in a Transformer stack
+  n_heads = 2   # number of attention heads
+
+  dropout = 0.1  # probability of dropping
+
+  share_emb_and_softmax = True  # share embedding and softmax
+  share_source_and_target_emb = False  # share source and target embeddings
+
+  # training
+  batch_size = 50
+  learning_rate = 0.00035
+  label_smoothing = 0.1
+
+  n_epochs = 50
+  n_train_steps = 100000
+  n_warm_ups = 4000
+
+
+class exp3_v1(Iwslt16EnDeBpe32SharedParams):
+  batch_size = 32
+  label_smoothing = None
+
+  n_train_steps = 200000
+  n_warm_ups = 10000
+
+
 # Put all Hparams in a dictionary
 H_PARAMS_DICT = {
   "exp1_v1": exp1_v1,
@@ -214,5 +277,6 @@ H_PARAMS_DICT = {
   "exp1_v3": exp1_v3,
   "exp2_v1": exp2_v1,
   "exp2_v2": exp2_v2,
+  "exp3_v1": exp3_v1,
 }
 

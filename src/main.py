@@ -92,18 +92,26 @@ def train():
   else:
     if args.train_set == "tiny":
       hparams = Iwslt16EnDeTinyParams()
-      data = DataLoader(hparams=hparams)
     elif args.train_set == "bpe16":
       hparams = Iwslt16EnDeBpe16Params()
-      data = DataLoader(hparams=hparams)
     elif args.train_set == "bpe32":
       hparams = Iwslt16EnDeBpe32Params()
-      data = DataLoader(hparams=hparams)
     elif args.train_set in H_PARAMS_DICT:
       hparams = H_PARAMS_DICT[args.train_set]()
-      data = DataLoader(hparams=hparams)
     else:
       raise ValueError("Unknown train_set '{0}'".format(args.train_set))
+
+  if args.train_set == "tiny":
+    data = DataLoader(hparams=hparams)
+  elif args.train_set == "bpe16":
+    data = DataLoader(hparams=hparams)
+  elif args.train_set == "bpe32":
+    data = DataLoader(hparams=hparams)
+  elif args.train_set in H_PARAMS_DICT:
+    data = DataLoader(hparams=hparams)
+  else:
+    raise ValueError("Unknown train_set '{0}'".format(args.train_set))
+
 
   # build or load model model
   print("-" * 80)
@@ -116,6 +124,8 @@ def train():
   crit = get_criterion(hparams)
 
   # build or load optimizer
+  num_params = count_params(model.trainable_parameters())
+  print("Model has {0} params".format(num_params))
   optim = torch.optim.Adam(model.trainable_parameters(),
                            lr=hparams.learning_rate,
                            betas=(0.9, 0.98), eps=1e-09)
