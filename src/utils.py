@@ -13,11 +13,6 @@ import torch
 import torch.nn as nn
 
 
-def set_lr(optim, lr):
-  for param_group in optim.param_groups:
-    param_group["lr"] = lr
-
-
 def add_argument(parser, name, type, default, help):
   """Add an argument.
 
@@ -117,4 +112,16 @@ def get_attn_subsequent_mask(seq, pad_id=0):
   if seq.is_cuda:
     subsequent_mask = subsequent_mask.cuda()
   return subsequent_mask
+
+
+def set_lr(optim, lr):
+  for param_group in optim.param_groups:
+    param_group["lr"] = lr
+
+
+def count_params(params):
+  num_params = 0
+  for param in params:
+    num_params += param.numel()
+  return num_params
 

@@ -165,13 +165,13 @@ class Transformer(nn.Module):
         self.smooth = self.smooth.cuda()
 
   def forward(self, x_train, x_mask, x_pos_emb_indices,
-              y_train, y_mask, y_pos_emb_indices):
+              y_train, y_mask, y_pos_emb_indices, label_smoothing=True):
 
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
     dec_output = self.decoder(enc_output, x_mask, y_train, y_mask,
                               y_pos_emb_indices)
     logits = self.w_logit(dec_output)
-    if self.hparams.label_smoothing is not None:
+    if label_smoothing and (self.hparams.label_smoothing is not None):
       smooth = self.hparams.label_smoothing
       probs = ((1.0 - smooth) * self.softmax(logits) +
                smooth / self.hparams.vocab_size)
