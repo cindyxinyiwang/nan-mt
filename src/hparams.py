@@ -238,14 +238,14 @@ class Iwslt16EnDeBpe32SharedParams(object):
 
   cuda = True
 
-  d_word_vec = 288  # size of word and positional embeddings
-  d_model = 288  # size of hidden states
-  d_inner = 300  # hidden dimension of the position-wise ff
+  d_word_vec = 128  # size of word and positional embeddings
+  d_model = 128  # size of hidden states
+  d_inner = 384  # hidden dimension of the position-wise ff
   d_k = 64  # dimension of attention keys
   d_v = 64  # dimension of attention values
 
-  n_layers = 5  # number of layers in a Transformer stack
-  n_heads = 2   # number of attention heads
+  n_layers = 4  # number of layers in a Transformer stack
+  n_heads = 3   # number of attention heads
 
   dropout = 0.1  # probability of dropping
 
@@ -263,12 +263,21 @@ class Iwslt16EnDeBpe32SharedParams(object):
 
 
 class exp3_v1(Iwslt16EnDeBpe32SharedParams):
-  batch_size = 32
+  max_train_len = 500
+  batch_size = 64
   label_smoothing = None
 
   n_train_steps = 200000
   n_warm_ups = 10000
 
+
+class exp3_v2(exp3_v1):
+  max_train_len = 1000
+  batch_size = 32
+  label_smoothing = None
+
+  n_train_steps = 200000
+  n_warm_ups = 10000
 
 # Put all Hparams in a dictionary
 H_PARAMS_DICT = {
@@ -278,5 +287,6 @@ H_PARAMS_DICT = {
   "exp2_v1": exp2_v1,
   "exp2_v2": exp2_v2,
   "exp3_v1": exp3_v1,
+  "exp3_v2": exp3_v2,
 }
 
