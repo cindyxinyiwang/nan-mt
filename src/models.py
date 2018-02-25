@@ -195,7 +195,7 @@ class Transformer(nn.Module):
     # (batch_size * beam, src_seq_len, d_model)
     enc_output = Variable(enc_output.data.repeat(1, beam_size, 1).view(
                   enc_output.size(0)*beam_size, enc_output.size(1), enc_output.size(2)))
-    x_mask = Variable(x_mask.data.repeat(1, beam_size).view(
+    x_mask = Variable(x_mask.repeat(1, beam_size).view(
                   x_mask.size(0)*beam_size, x_mask.size(1)))
 
     batch_size, src_seq_len = x_train.size()
@@ -209,20 +209,20 @@ class Transformer(nn.Module):
       len_dec_seq = i+1 
       # (n_remain_sents * beam, seq_len)
       y_partial = torch.stack([b.get_partial_y() for b in beams if not b.done]).view(-1, len_dec_seq)
-      y_mask = Variable(torch.ByteTensor(np.zeros(n_remain_sents*beam_size, len_dec_seq)), volatile=True)
+      y_mask = torch.ByteTensor([[0 for _ in range(n_remain_sents*beam_size)] for _ in range(len_dec_seq)])
 
-      y_partial_pos_emb_indices = torch.arange(len_dec_seq).unsqueeze(0)
+      y_partial_pos = torch.arange(len_dec_seq).unsqueeze(0)
       # size: (n_remain_sents * beam, seq_len)
-      y_partial_pos_emb_indices = y_pos_emb_indices.repeat(n_remain_sents * beam_size, 1)
-      y_partial_pos_emb_indices = Variable(torch.LongTensor(y_pos_emb_indices), volatile=True)
+      y_partial_pos = y_partial_pos.repeat(n_remain_sents * beam_size, 1)
+      y_partial_pos = Variable(torch.LongTensor(y_partial_pos.type(torch.LongTensor)), volatile=True)
 
       if self.hparams.cuda:
         y_partial = y_partial.cuda()
-        y_pos_emb_indices = y_pos_emb_indices.cuda()
+        y_partial_pos = y_partial_pos.cuda()
         y_mask = y_mask.cuda()
 
       dec_output = self.decoder(enc_output, x_mask, y_partial, y_mask, 
-                                y_partial_pos_emb_indices)
+                                y_partial_pos)
       logits = self.w_logit(dec_output)
       log_probs = torch.nn.LogSoftmax(logits).view(n_remain_sents, beam_size, trg_vocab_size)
 

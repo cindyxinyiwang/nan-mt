@@ -32,11 +32,14 @@ add_argument(parser, "max_len", type="int", default="50",
 
 args = parser.parse_args()
 
-model_file_name = os.path.join(args.output_dir, "model.pt")
+model_file_name = os.path.join(args.model_dir, "model.pt")
 model = torch.load(model_file_name)
 
-hparams_file_name = os.path.join(args.output_dir, "hparams.pt")
+hparams_file_name = os.path.join(args.model_dir, "hparams.pt")
 hparams = torch.load(hparams_file_name)
+
+hparams.cuda = False
+model.hparams.cuda = False
 
 data = DataLoader(hparams=hparams)
 
