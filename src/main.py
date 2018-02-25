@@ -61,8 +61,8 @@ def eval(model, data, crit, epoch, hparams):
   valid_loss = 0
   valid_acc = 0
   if args.eval_bleu:
-    valid_hyp = os.path.join(args.output_dir, "dev.trans")
-    out_file = open(valid_hyp, 'w')
+    valid_hyp_file = os.path.join(args.output_dir, "dev.trans")
+    out_file = open(valid_hyp_file, 'w')
   while True:
     # clear GPU memory
     gc.collect()
@@ -106,7 +106,7 @@ def eval(model, data, crit, epoch, hparams):
   log_string += " val_ppl={0:<.2f}".format(val_ppl)
   if args.eval_bleu:
     out_file.close()
-    bleu_str = subprocess.getoutput("./multi_bleu.perl -lc {} < {}".format(hparams.source_valid, ))
+    bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {} < {}".format(hparams.source_valid, valid_hyp_file))
     log_string += " {}".format(bleu_str)
   print(log_string)
   return val_ppl
