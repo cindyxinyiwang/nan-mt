@@ -35,7 +35,7 @@ class Iwslt16EnDeBpe32Params(object):
   pad = bos
   pad_id = bos_id
 
-  cuda = True
+  cuda = False
 
   d_word_vec = 288  # size of word and positional embeddings
   d_model = 288  # size of hidden states
@@ -89,7 +89,7 @@ class Iwslt16EnDeBpe16Params(Iwslt16EnDeBpe32Params):
   pad = bos
   pad_id = bos_id
 
-  cuda = True
+  cuda = False
 
   d_word_vec = 256  # size of word and positional embeddings
   d_model = 256  # size of hidden states
@@ -124,7 +124,7 @@ class Iwslt16EnDeTinyParams(Iwslt16EnDeBpe16Params):
   batch_size = 144
   n_epochs = 10
   n_train_steps = 20000
-  cuda = True
+  cuda = False
 
   d_word_vec = 128
   d_model = 128

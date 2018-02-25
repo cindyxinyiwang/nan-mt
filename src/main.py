@@ -9,6 +9,7 @@ import gc
 import os
 import sys
 import time
+import subprocess
 
 import numpy as np
 
@@ -41,6 +42,15 @@ add_argument(parser, "log_every", type="int", default=50,
 add_argument(parser, "clean_mem_every", type="int", default=10,
              help="how many steps to clean memory")
 
+add_argument(parser, "eval_bleu", action='store_true',
+             help="if calculate BLEU score for dev set")
+
+add_argument(parser, "beam_size", type="int", default=5,
+             help="beam size for dev BLEU")
+
+add_argument(parser, "max_len", type="int", default=50,
+             help="maximum hypothesis length for dev BLEU")
+
 args = parser.parse_args()
 
 
@@ -50,6 +60,9 @@ def eval(model, data, crit, epoch, hparams):
   valid_words = 0
   valid_loss = 0
   valid_acc = 0
+  if args.eval_bleu:
+    valid_hyp_file = os.path.join(args.output_dir, "dev.trans")
+    out_file = open(valid_hyp_file, 'w')
   while True:
     # clear GPU memory
     gc.collect()
@@ -72,15 +85,29 @@ def eval(model, data, crit, epoch, hparams):
     valid_loss += val_loss.data[0]
     valid_acc += val_acc.data[0]
 
+    # BLEU eval
+    if args.eval_bleu:
+      all_hyps, all_scores = model.translate_batch(x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)
+      filtered_tokens = set([hparams.bos_id, hparams.eos_id])
+      for h in all_hyps:
+        h_best = h[0]
+        h_best_words = map(lambda wi: data.target_index_to_word[wi],
+                           filter(lambda wi: wi not in filtered_tokens, h_best))
+        line = ' '.join(h_best_words)
+        line = line.replace(' @@', '')
+        out_file.write(line + '\n')
     if end_of_epoch:
       break
-
   val_ppl = np.exp(valid_loss / valid_words)
   log_string = "epoch={0:<3d}".format(epoch + 1)
   log_string += "\nvalid:"
   log_string += " loss={0:<6.2f}".format(valid_loss / valid_words)
   log_string += " acc={0:<5.4f}".format(valid_acc / valid_words)
   log_string += " val_ppl={0:<.2f}".format(val_ppl)
+  if args.eval_bleu:
+    out_file.close()
+    bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {} < {}".format(hparams.source_valid, valid_hyp_file))
+    log_string += " {}".format(bleu_str)
   print(log_string)
   return val_ppl
 

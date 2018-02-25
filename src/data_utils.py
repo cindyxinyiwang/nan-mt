@@ -20,7 +20,7 @@ from hparams import Iwslt16EnDeBpe32Params
 from hparams import Iwslt16EnDeTinyParams
 
 class DataLoader(object):
-  def __init__(self, hparams):
+  def __init__(self, hparams, decode=False):
     """Encloses both train and valid data.
 
     Args:
@@ -40,6 +40,14 @@ class DataLoader(object):
     (self.target_word_to_index,
      self.target_index_to_word) = self._build_vocab(self.hparams.target_vocab)
 
+    if decode:
+      self.x_test, self.y_test = self._build_parallel(self.hparams.source_test,
+                                                      self.hparams.target_test,
+                                                      is_training=False)
+      self.test_index = 0
+      self.test_size = len(self.x_test)
+      return
+
     # train data
     self.x_train, self.y_train = self._build_parallel(self.hparams.source_train,
                                                       self.hparams.target_train,
@@ -54,6 +62,28 @@ class DataLoader(object):
                                                       is_training=False)
     self.valid_index = 0
     self.valid_size = len(self.x_valid)
+
+  def next_test(self, test_batch_size=1):
+    end_of_epoch = False
+    start_index = self.test_index
+    end_index = min(start_index + test_batch_size, self.test_size)
+    batch_size = end_index - start_index
+
+    # pad data
+    x_test = self.x_test[start_index: end_index]
+    y_test = self.y_test[start_index: end_index]
+    x_test, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_test, volatile=True)
+    y_test, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_test, volatile=True)
+
+    if end_index >= self.test_size:
+      end_of_epoch = True
+      self.test_index = 0
+    else:
+      self.test_index += batch_size
+
+    return ((x_test, x_mask, x_pos_emb_indices, x_count),
+            (y_test, y_mask, y_pos_emb_indices, y_count),
+            end_of_epoch)
 
   def next_valid(self, valid_batch_size=20):
     """Retrieves a sentence of testing examples.
