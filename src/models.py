@@ -195,8 +195,8 @@ class Transformer(nn.Module):
     # (batch_size * beam, src_seq_len, d_model)
     enc_output = Variable(enc_output.data.repeat(1, beam_size, 1).view(
                   enc_output.size(0)*beam_size, enc_output.size(1), enc_output.size(2)))
-    x_mask = Variable(x_mask.repeat(1, beam_size).view(
-                  x_mask.size(0)*beam_size, x_mask.size(1)))
+    x_mask = x_mask.repeat(1, beam_size).view(
+                  x_mask.size(0)*beam_size, x_mask.size(1))
 
     batch_size, src_seq_len = x_train.size()
     trg_vocab_size = self.hparams.vocab_size
@@ -223,8 +223,11 @@ class Transformer(nn.Module):
 
       dec_output = self.decoder(enc_output, x_mask, y_partial, y_mask, 
                                 y_partial_pos)
+      # select the dec output for next word
+      dec_output = dec_output[:, -1, :]
       logits = self.w_logit(dec_output)
-      log_probs = torch.nn.LogSoftmax(logits).view(n_remain_sents, beam_size, trg_vocab_size)
+      log_probs = torch.nn.functional.log_softmax(logits, dim=1)
+      log_probs =  log_probs.view(n_remain_sents, beam_size, trg_vocab_size)
 
       active_beam_idx_list = []
       for beam_idx in range(batch_size):
@@ -238,7 +241,8 @@ class Transformer(nn.Module):
       active_inst_idx_list = torch.LongTensor([beam_to_inst[k] for k in active_beam_idx_list])
       beam_to_inst = {beam_idx: inst_idx for inst_idx, beam_idx in enumerate(active_beam_idx_list)}
 
-      enc_output = select_active_enc_info(enc_output, active_inst_idx_list, n_remain_sents, src_seq_len, d_model)
+      enc_output = select_active_enc_info(enc_output, active_inst_idx_list,
+                                          n_remain_sents, src_seq_len, self.hparams.d_model)
       x_mask = select_active_enc_mask(x_mask, active_inst_idx_list, n_remain_sents, src_seq_len)
 
       n_remain_sents = len(active_inst_idx_list)
@@ -261,10 +265,10 @@ def select_active_enc_info(enc_output, active_inst_idx_list, n_remain_sents, src
   return Variable(active_enc_info, volatile=True)
 
 def select_active_enc_mask(enc_mask, active_inst_idx_list, n_remain_sents, src_seq_len):
-  original_enc_mask = enc_mask.data.view(n_remain_sents, -1)
+  original_enc_mask = enc_mask.view(n_remain_sents, -1)
   active_enc_mask = original_enc_mask.index_select(0, active_inst_idx_list)
   active_enc_mask = active_enc_mask.view(-1, src_seq_len)
-  return Variable(active_enc_mask, volatile=True)
+  return active_enc_mask
 
 class Beam(object):
 
@@ -296,7 +300,7 @@ class Beam(object):
     else:
       # for the first step, all rows in word_scores are the same
       beam_score = word_scores[0]
-    flat_beam_score = beam_score.view(-1)
+    flat_beam_score = beam_score.contiguous().view(-1)
     best_scores, best_scores_id = flat_beam_score.topk(self.size, dim=0, 
                                                         largest=True, sorted=True)
     self.all_scores.append(self.scores)
