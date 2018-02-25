@@ -221,6 +221,9 @@ class Transformer(nn.Module):
         y_partial_pos = y_partial_pos.cuda()
         y_mask = y_mask.cuda()
 
+        enc_output = enc_output.cuda()
+        x_mask = x_mask.cuda()
+
       dec_output = self.decoder(enc_output, x_mask, y_partial, y_mask, 
                                 y_partial_pos)
       # select the dec output for next word
@@ -238,7 +241,11 @@ class Transformer(nn.Module):
           active_beam_idx_list += [beam_idx]
       if not active_beam_idx_list: 
         break
+
       active_inst_idx_list = torch.LongTensor([beam_to_inst[k] for k in active_beam_idx_list])
+      if self.hparams.cuda:
+        active_inst_idx_list = active_inst_idx_list.cuda()
+
       beam_to_inst = {beam_idx: inst_idx for inst_idx, beam_idx in enumerate(active_beam_idx_list)}
 
       enc_output = select_active_enc_info(enc_output, active_inst_idx_list,
@@ -336,4 +343,3 @@ class Beam(object):
       k = self.prev_ks[j][k]
     return hyp[::-1]
 
-    return hyp[::-1]

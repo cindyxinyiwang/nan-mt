@@ -1,3 +1,5 @@
+
+
 import argparse
 import _pickle as pickle
 import shutil
@@ -38,11 +40,11 @@ class TranslationHparams(object):
   pad = bos
   pad_id = bos_id
 
-  cuda = False
+  cuda = True
 
   beam_size = 5
   max_len = 50
-  batch_size = 5
+  batch_size = 50
   out_file = "outputs/trans.test"
   merge_bpe = True
   filtered_tokens = set([eos_id, bos_id])
@@ -68,19 +70,22 @@ model_file_name = os.path.join(args.model_dir, "model.pt")
 model = torch.load(model_file_name)
 
 hparams = TranslationHparams()
+hparams.cuda = True
 model.hparams.cuda = hparams.cuda
 
 data = DataLoader(hparams=hparams, decode=True)
 
 out_file = open(hparams.out_file, 'w')
 end_of_epoch = False
+num_sentences = 0
 while not end_of_epoch:
   ((x_test, x_mask, x_pos_emb_indices, x_count),
-  (y_test, y_mask, y_pos_emb_indices, y_count),
-  end_of_epoch) = data.next_test(test_batch_size=hparams.batch_size)
+   (y_test, y_mask, y_pos_emb_indices, y_count),
+   end_of_epoch) = data.next_test(test_batch_size=hparams.batch_size)
+  num_sentences += x_test.size(0)
 
   all_hyps, all_scores = model.translate_batch(x_test, x_mask, x_pos_emb_indices,
-  	                                            hparams.beam_size, hparams.max_len)
+ 	                                            hparams.beam_size, hparams.max_len)
   for h in all_hyps:
     h_best = h[0]
     h_best_words = map(lambda wi: data.target_index_to_word[wi],
@@ -89,4 +94,8 @@ while not end_of_epoch:
     if hparams.merge_bpe:
         line = line.replace(' @@', '')
     out_file.write(line + '\n')
+    out_file.flush()
+  
+  print("Translated {0} sentences".format(num_sentences))
 out_file.close()
+
