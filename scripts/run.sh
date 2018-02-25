@@ -51,3 +51,11 @@ python3 src/main.py \
   --log_every=250 \
   "$@"
 
+python3 src/main.py \
+  --reset_output_dir \
+  --no_load_model \
+  --train_set="exp3_v2" \
+  --output_dir="outputs_exp3_v2" \
+  --log_every=250 \
+  "$@"
+
