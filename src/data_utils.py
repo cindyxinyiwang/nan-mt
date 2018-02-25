@@ -228,12 +228,13 @@ class DataLoader(object):
       if not source_line or not target_line:
         continue
 
-      source_indices, target_indices = [], []
+      source_indices, target_indices = [], [self.hparams.bos_id]
       source_tokens = source_line.split(" ")
       target_tokens = target_line.split(" ")
       if (is_training and
           (len(source_line) > self.hparams.max_train_len or
            len(target_line) > self.hparams.max_train_len)):
+        print(len(source_line), len(target_line), self.hparams.max_train_len)
         continue
 
       total_sents += 1

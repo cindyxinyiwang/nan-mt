@@ -208,7 +208,7 @@ class exp2_v2(exp2_v1):
 
 
 class Iwslt16EnDeBpe32SharedParams(object):
-  """For small experiments."""
+  """For main experiments."""
 
   dataset = "IWSLT 2016 En-De with BPE 32K Shared Vocab"
   data_path = "data/bpe_32k_shared_vocab/en-de"
@@ -279,14 +279,78 @@ class exp3_v2(exp3_v1):
   n_train_steps = 200000
   n_warm_ups = 10000
 
+
+class exp4_v1(object):
+  """Small setting to debug beam search."""
+
+  dataset = "IWSLT 2016 En-De with BPE 32K Shared Vocab"
+  data_path = "data/bpe_32k_shared_vocab/en-de"
+
+  train_limit = None
+  source_train = "tiny.en"
+  target_train = "tiny.de"
+  source_valid = "tiny.en"
+  target_valid = "tiny.de"
+
+  source_vocab = "shared_32000.vocab"
+  target_vocab = "shared_32000.vocab"
+
+  source_test = "tiny.en"
+  target_test = "tiny.de"
+
+  vocab_size = 32000
+  max_train_len = 1000  # None
+  max_len = 1000
+
+  unk = "<unk>"
+  bos = "<s>"
+  eos = "</s>"
+  unk_id = 31997
+  eos_id = 31998
+  bos_id = 31999
+
+  pad = bos
+  pad_id = bos_id
+
+  cuda = True
+
+  d_word_vec = 64  # size of word and positional embeddings
+  d_model = 64  # size of hidden states
+  d_inner = 144  # hidden dimension of the position-wise ff
+  d_k = 32  # dimension of attention keys
+  d_v = 32  # dimension of attention values
+
+  n_layers = 4  # number of layers in a Transformer stack
+  n_heads = 2   # number of attention heads
+
+  dropout = 0.0  # probability of dropping
+
+  share_emb_and_softmax = True  # share embedding and softmax
+  share_source_and_target_emb = False  # share source and target embeddings
+
+  # training
+  batch_size = 50
+  learning_rate = 0.00035
+  label_smoothing = 0.1
+
+  n_epochs = 50000
+  n_train_steps = 1000
+  n_warm_ups = 400
+
+  batch_size = 64
+  label_smoothing = None
+
+
+
 # Put all Hparams in a dictionary
 H_PARAMS_DICT = {
-  "exp1_v1": exp1_v1,
-  "exp1_v2": exp1_v2,
-  "exp1_v3": exp1_v3,
-  "exp2_v1": exp2_v1,
-  "exp2_v2": exp2_v2,
-  "exp3_v1": exp3_v1,
-  "exp3_v2": exp3_v2,
+  "exp1_v1": exp1_v1,  # old settings. please don't use!
+  "exp1_v2": exp1_v2,  # old settings. please don't use!
+  "exp1_v3": exp1_v3,  # old settings. please don't use!
+  "exp2_v1": exp2_v1,  # old settings. please don't use!
+  "exp2_v2": exp2_v2,  # old settings. please don't use!
+  "exp3_v1": exp3_v1,  # old settings. please don't use!
+  "exp3_v2": exp3_v2,  # old settings. please don't use!
+  "exp4_v1": exp4_v1,
 }
 

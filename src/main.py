@@ -42,7 +42,7 @@ add_argument(parser, "log_every", type="int", default=50,
 add_argument(parser, "clean_mem_every", type="int", default=10,
              help="how many steps to clean memory")
 
-add_argument(parser, "eval_bleu", action='store_true',
+add_argument(parser, "eval_bleu", type="bool", default=False,
              help="if calculate BLEU score for dev set")
 
 add_argument(parser, "beam_size", type="int", default=5,
@@ -166,7 +166,7 @@ def train():
   print("-" * 80)
   print("Start training")
   step = 0
-  best_val_acc = hparams.vocab_size
+  best_val_acc = 1e10  # hparams.vocab_size
   for epoch in range(hparams.n_epochs):
     start_time = time.time()
     target_words = 0
@@ -234,13 +234,13 @@ def train():
 
     # End-of-Epoch activites, e.g: compute PPL, BLEU, etc.
     # Save checkpoint
-    print("-" * 80)
+    # print("-" * 80)
 
     # Eval
-    val_acc = eval(model, data, crit, epoch, hparams)
-    if val_acc < best_val_acc:
-      best_val_acc = val_acc
-      save_checkpoint(model, optim, hparams, args.output_dir)
+    # val_acc = eval(model, data, crit, epoch, hparams)
+    # if val_acc < best_val_acc:
+    #   best_val_acc = val_acc
+    #   save_checkpoint(model, optim, hparams, args.output_dir)
 
 
 def main():
