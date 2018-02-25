@@ -201,7 +201,6 @@ class Transformer(nn.Module):
     batch_size, src_seq_len = x_train.size()
     trg_vocab_size = self.hparams.vocab_size
 
-    top_word_ids, top_beam_ids = [], [] # (seq_len, batch_size, beam_size)
     beams = [Beam(beam_size, self.hparams) for _ in range(batch_size)]
     beam_to_inst = {beam_idx: inst_idx for inst_idx, beam_idx in enumerate(range(batch_size))}
     n_remain_sents = batch_size
@@ -209,12 +208,13 @@ class Transformer(nn.Module):
       len_dec_seq = i+1 
       # (n_remain_sents * beam, seq_len)
       y_partial = torch.stack([b.get_partial_y() for b in beams if not b.done]).view(-1, len_dec_seq)
-      y_mask = torch.ByteTensor([[0 for _ in range(n_remain_sents*beam_size)] for _ in range(len_dec_seq)])
+      y_partial = Variable(y_partial, volatile=True)
+      y_mask = torch.ByteTensor([[0 for _ in range( len_dec_seq)] for _ in range(n_remain_sents*beam_size)])
 
       y_partial_pos = torch.arange(len_dec_seq).unsqueeze(0)
       # size: (n_remain_sents * beam, seq_len)
       y_partial_pos = y_partial_pos.repeat(n_remain_sents * beam_size, 1)
-      y_partial_pos = Variable(torch.LongTensor(y_partial_pos.type(torch.LongTensor)), volatile=True)
+      y_partial_pos = Variable(torch.FloatTensor(y_partial_pos), volatile=True)
 
       if self.hparams.cuda:
         y_partial = y_partial.cuda()
