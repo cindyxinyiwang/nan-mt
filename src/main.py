@@ -39,6 +39,9 @@ add_argument(parser, "output_dir", type="str", default="outputs",
 add_argument(parser, "log_every", type="int", default=50,
              help="how many steps to write log")
 
+add_argument(parser, "eval_every", type="int", default=500,
+             help="how many steps to compute valid ppl")
+
 add_argument(parser, "clean_mem_every", type="int", default=10,
              help="how many steps to clean memory")
 
@@ -54,8 +57,8 @@ add_argument(parser, "max_len", type="int", default=50,
 args = parser.parse_args()
 
 
-def eval(model, data, crit, epoch, hparams):
-  print("Eval at epoch {0}".format(epoch))
+def eval(model, data, crit, step, hparams):
+  print("Eval at step {0}".format(step))
   model.eval()
   valid_words = 0
   valid_loss = 0
@@ -100,8 +103,7 @@ def eval(model, data, crit, epoch, hparams):
     if end_of_epoch:
       break
   val_ppl = np.exp(valid_loss / valid_words)
-  log_string = "epoch={0:<3d}".format(epoch + 1)
-  log_string += "\nvalid:"
+  log_string = "val_step={0:<6d}".format(step)
   log_string += " loss={0:<6.2f}".format(valid_loss / valid_words)
   log_string += " acc={0:<5.4f}".format(valid_acc / valid_words)
   log_string += " val_ppl={0:<.2f}".format(val_ppl)
@@ -155,19 +157,23 @@ def train():
   # build or load optimizer
   num_params = count_params(model.trainable_parameters())
   print("Model has {0} params".format(num_params))
-  optim = torch.optim.Adam(model.trainable_parameters(),
-                           lr=hparams.learning_rate,
+  lr = hparams.fixed_lr if hparams.fixed_lr is not None else 1e-4
+  optim = torch.optim.Adam(model.trainable_parameters(), lr=lr,
                            betas=(0.9, 0.98), eps=1e-09)
   if args.load_model:
     optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
     print("Loading optim from '{0}'".format(optim_file_name))
-    optimizer_state = torch.load(os.path.join(args.output_dir, "optimizer.pt"))
+    optimizer_state = torch.load(optim_file_name)
     optim.load_state_dict(optimizer_state)
+
+    step_file_name = os.path.join(args.output_dir, "step.pt")
+    step = torch.load(step_file_name)
+  else:
+    step = 0
 
   # train loop
   print("-" * 80)
   print("Start training")
-  step = 0
   best_val_acc = 1e10  # hparams.vocab_size
   for epoch in range(hparams.n_epochs):
     start_time = time.time()
@@ -197,9 +203,12 @@ def train():
       tr_loss = tr_loss.div(hparams.batch_size)
       tr_ppl = np.exp(tr_loss.data[0] * hparams.batch_size / y_count)
 
-      lr = (np.minimum(1.0 / np.sqrt(step + 1),
-                       (step + 1) / (np.sqrt(hparams.n_warm_ups) ** 3)) /
-            np.sqrt(hparams.d_model))
+      if hparams.fixed_lr is None or step <= hparams.n_warm_ups:
+        lr = (np.minimum(1.0 / np.sqrt(step + 1),
+                         (step + 1) / (np.sqrt(hparams.n_warm_ups) ** 3)) /
+              np.sqrt(hparams.d_model))
+      else:
+        lr = hparams.fixed_lr
       set_lr(optim, lr)
       tr_loss.backward()
       optim.step()
@@ -222,27 +231,26 @@ def train():
       if step % args.clean_mem_every == 0:
         gc.collect()
 
-      if end_of_epoch:
+      # eval
+      if step % args.eval_every == 0:
+        print("-" * 80)
+        print("Eval at step {0}".format(step))
+        val_acc = eval(model, data, crit, epoch, hparams)
+        if val_acc < best_val_acc:
+          best_val_acc = val_acc
+          save_checkpoint(step, model, optim, hparams, args.output_dir)
+
+      if end_of_epoch or step >= hparams.n_train_steps:
         break
 
     # stop if trained for more than n_train_steps
     if step >= hparams.n_train_steps:
       print("Reach {0} steps. Stop training".format(step))
-      val_acc = eval(model, data, crit, epoch, hparams)
+      val_acc = eval(model, data, crit, step, hparams)
       if val_acc < best_val_acc:
         best_val_acc = val_acc
-        save_checkpoint(model, optim, hparams, args.output_dir)
+        save_checkpoint(step, model, optim, hparams, args.output_dir)
       break
-
-    # End-of-Epoch activites, e.g: compute PPL, BLEU, etc.
-    # Save checkpoint
-    print("-" * 80)
-
-    # Eval
-    val_acc = eval(model, data, crit, epoch, hparams)
-    if val_acc < best_val_acc:
-      best_val_acc = val_acc
-      save_checkpoint(model, optim, hparams, args.output_dir)
 
 def main():
   if not os.path.isdir(args.output_dir):

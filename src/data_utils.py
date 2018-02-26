@@ -15,9 +15,7 @@ from torch.autograd import Variable
 
 import numpy as np
 
-from hparams import Iwslt16EnDeBpe16Params
-from hparams import Iwslt16EnDeBpe32Params
-from hparams import Iwslt16EnDeTinyParams
+from hparams import Iwslt16EnDeBpe32SharedParams
 
 class DataLoader(object):
   def __init__(self, hparams, decode=False):
@@ -106,8 +104,10 @@ class DataLoader(object):
     # pad data
     x_valid = self.x_valid[start_index : end_index]
     y_valid = self.y_valid[start_index : end_index]
-    x_valid, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_valid)
-    y_valid, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_valid)
+    x_valid, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_valid,
+                                                            volatile=True)
+    y_valid, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_valid,
+                                                            volatile=True)
 
     # shuffle if reaches the end of data
     if end_index >= self.valid_size:
@@ -233,9 +233,7 @@ class DataLoader(object):
       source_indices, target_indices = [], [self.hparams.bos_id]
       source_tokens = source_line.split(" ")
       target_tokens = target_line.split(" ")
-      if (is_training and
-          (len(source_line) > self.hparams.max_train_len or
-           len(target_line) > self.hparams.max_train_len)):
+      if is_training and len(target_line) > self.hparams.max_train_len:
         continue
 
       total_sents += 1

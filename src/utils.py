@@ -43,8 +43,9 @@ def add_argument(parser, name, type, default, help):
     raise ValueError("Unknown type '{0}'".format(type))
 
 
-def save_checkpoint(model, optimizer, hparams, path):
+def save_checkpoint(step, model, optimizer, hparams, path):
   print("Saving model to '{0}'".format(path))
+  torch.save(step, os.path.join(path, "step.pt"))
   torch.save(model, os.path.join(path, "model.pt"))
   torch.save(optimizer.state_dict(), os.path.join(path, "optimizer.pt"))
   torch.save(hparams, os.path.join(path, "hparams.pt"))
@@ -60,13 +61,15 @@ class Logger(object):
     print(message, end="", file=self.log, flush=True)
 
   def flush(self):
-    pass
+    self.terminal.flush()
+    self.log.flush()
 
 
 def get_criterion(hparams):
   weight = torch.ones(hparams.vocab_size)
   weight[hparams.pad_id] = 0
-  crit = nn.CrossEntropyLoss(weight, size_average=False)
+  crit = nn.CrossEntropyLoss(weight, size_average=False,
+                             ignore_index=hparams.pad_id)
   if hparams.cuda:
     crit = crit.cuda()
   return crit
