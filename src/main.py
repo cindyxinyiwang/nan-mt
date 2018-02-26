@@ -87,7 +87,8 @@ def eval(model, data, crit, epoch, hparams):
 
     # BLEU eval
     if args.eval_bleu:
-      all_hyps, all_scores = model.translate_batch(x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)
+      all_hyps, all_scores = model.translate_batch(
+        x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)
       filtered_tokens = set([hparams.bos_id, hparams.eos_id])
       for h in all_hyps:
         h_best = h[0]
@@ -234,14 +235,13 @@ def train():
 
     # End-of-Epoch activites, e.g: compute PPL, BLEU, etc.
     # Save checkpoint
-    # print("-" * 80)
+    print("-" * 80)
 
     # Eval
-    # val_acc = eval(model, data, crit, epoch, hparams)
-    # if val_acc < best_val_acc:
-    #   best_val_acc = val_acc
-    #   save_checkpoint(model, optim, hparams, args.output_dir)
-
+    val_acc = eval(model, data, crit, epoch, hparams)
+    if val_acc < best_val_acc:
+      best_val_acc = val_acc
+      save_checkpoint(model, optim, hparams, args.output_dir)
 
 def main():
   if not os.path.isdir(args.output_dir):

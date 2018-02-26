@@ -302,14 +302,23 @@ class Beam(object):
     """
     trg_vocab_size = word_scores.size(1)
 
+    # scores, indices = torch.max(word_scores, dim=1)
+    # scores = scores.cpu().numpy()
+    # indices = indices.cpu().numpy()
+    # print(scores)
+    # print(indices)
+    # if step >= 2:
+    #   sys.exit(0)
+
     if len(self.prev_ks) > 0:
       beam_score = self.scores.unsqueeze(1).expand_as(word_scores) + word_scores
     else:
       # for the first step, all rows in word_scores are the same
       beam_score = word_scores[0]
     flat_beam_score = beam_score.contiguous().view(-1)
-    best_scores, best_scores_id = flat_beam_score.topk(self.size, dim=0, 
-                                                       largest=True, sorted=True)
+    best_scores, best_scores_id = flat_beam_score.topk(self.size, dim=0,
+                                                       largest=True,
+                                                       sorted=True)
     self.all_scores.append(self.scores)
     self.scores = best_scores
 

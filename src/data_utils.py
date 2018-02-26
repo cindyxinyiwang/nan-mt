@@ -72,8 +72,10 @@ class DataLoader(object):
     # pad data
     x_test = self.x_test[start_index: end_index]
     y_test = self.y_test[start_index: end_index]
-    x_test, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_test, volatile=True)
-    y_test, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_test, volatile=True)
+    x_test, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_test,
+                                                           volatile=True)
+    y_test, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_test,
+                                                           volatile=True)
 
     if end_index >= self.test_size:
       end_of_epoch = True
@@ -234,7 +236,6 @@ class DataLoader(object):
       if (is_training and
           (len(source_line) > self.hparams.max_train_len or
            len(target_line) > self.hparams.max_train_len)):
-        print(len(source_line), len(target_line), self.hparams.max_train_len)
         continue
 
       total_sents += 1

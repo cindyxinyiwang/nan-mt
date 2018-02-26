@@ -341,6 +341,42 @@ class exp4_v1(object):
   label_smoothing = None
 
 
+class exp5_v1(Iwslt16EnDeBpe32SharedParams):
+  max_train_len = 500
+  batch_size = 50
+  label_smoothing = None
+
+  n_train_steps = 100000
+  n_warm_ups = 4000
+
+  d_word_vec = 192  # size of word and positional embeddings
+  d_model = 192  # size of hidden states
+  d_inner = 384  # hidden dimension of the position-wise ff
+  d_k = 64  # dimension of attention keys
+  d_v = 64  # dimension of attention values
+
+  n_layers = 5  # number of layers in a Transformer stack
+  n_heads = 3   # number of attention heads
+
+class exp5_v2(exp5_v1):
+  max_train_len = 600
+  batch_size = 32
+  label_smoothing = None
+
+  n_train_steps = 100000
+  n_warm_ups = 746
+
+  d_word_vec = 288  # size of word and positional embeddings
+  d_model = 288  # size of hidden states
+  d_inner = 507  # hidden dimension of the position-wise ff
+  d_k = 64  # dimension of attention keys
+  d_v = 64  # dimension of attention values
+
+  n_layers = 5  # number of layers in a Transformer stack
+  n_heads = 2   # number of attention heads
+
+  dropout = 0.1
+
 
 # Put all Hparams in a dictionary
 H_PARAMS_DICT = {
@@ -351,6 +387,8 @@ H_PARAMS_DICT = {
   "exp2_v2": exp2_v2,  # old settings. please don't use!
   "exp3_v1": exp3_v1,  # old settings. please don't use!
   "exp3_v2": exp3_v2,  # old settings. please don't use!
-  "exp4_v1": exp4_v1,
+  "exp4_v1": exp4_v1,  # toy
+  "exp5_v1": exp5_v1,
+  "exp5_v2": exp5_v2,
 }
 

@@ -27,8 +27,8 @@ class TranslationHparams(exp4_v1):
   target_train = "tiny.de"
   source_valid = "tiny.en"
   target_valid = "tiny.de"
-  source_test = "tiny.en"
-  target_test = "tiny.de"
+  source_test = "dev2010.en"
+  target_test = "dev2010.de"
 
   source_vocab = "shared_32000.vocab"
   target_vocab = "shared_32000.vocab"
@@ -45,9 +45,9 @@ class TranslationHparams(exp4_v1):
 
   cuda = True
 
-  beam_size = 2
-  max_len = 100
-  batch_size = 1
+  beam_size = 4
+  max_len = 500
+  batch_size = 64
   out_file = "outputs/trans.test"
   merge_bpe = True
   filtered_tokens = set([eos_id, bos_id])
@@ -73,7 +73,7 @@ model_file_name = os.path.join(args.model_dir, "model.pt")
 model = torch.load(model_file_name)
 
 hparams = TranslationHparams()
-hparams.cuda = False
+hparams.cuda = True
 model.hparams.cuda = hparams.cuda
 
 data = DataLoader(hparams=hparams, decode=True)
@@ -98,11 +98,11 @@ while not end_of_epoch:
       line = line.replace('▁', ' ')
     else:
       line = ' '.join(h_best_words)
+    line = line.strip()
     out_file.write(line + '\n')
     out_file.flush()
   
   print("Translated {0} sentences".format(num_sentences))
-  break
 
 out_file.close()
 
