@@ -94,8 +94,8 @@ def eval(model, data, crit, epoch, hparams):
         h_best = h[0]
         h_best_words = map(lambda wi: data.target_index_to_word[wi],
                            filter(lambda wi: wi not in filtered_tokens, h_best))
-        line = ' '.join(h_best_words)
-        line = line.replace(' @@', '')
+        line = ''.join(h_best_words)
+        line = line.replace('▁', ' ').strip()
         out_file.write(line + '\n')
     if end_of_epoch:
       break
@@ -107,7 +107,8 @@ def eval(model, data, crit, epoch, hparams):
   log_string += " val_ppl={0:<.2f}".format(val_ppl)
   if args.eval_bleu:
     out_file.close()
-    bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {} < {}".format(hparams.source_valid, valid_hyp_file))
+    ref_file = os.path.join(hparams.data_path, hparams.target_valid)
+    bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {} < {}".format(ref_file, valid_hyp_file))
     log_string += " {}".format(bleu_str)
   print(log_string)
   return val_ppl
