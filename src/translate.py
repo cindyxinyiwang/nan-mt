@@ -47,7 +47,7 @@ class TranslationHparams(exp4_v1):
 
   beam_size = 2
   max_len = 100
-  batch_size = 10
+  batch_size = 1
   out_file = "outputs/trans.test"
   merge_bpe = True
   filtered_tokens = set([eos_id, bos_id])
@@ -73,7 +73,7 @@ model_file_name = os.path.join(args.model_dir, "model.pt")
 model = torch.load(model_file_name)
 
 hparams = TranslationHparams()
-hparams.cuda = True
+hparams.cuda = False
 model.hparams.cuda = hparams.cuda
 
 data = DataLoader(hparams=hparams, decode=True)
@@ -93,9 +93,11 @@ while not end_of_epoch:
     h_best = h[0]
     h_best_words = map(lambda wi: data.target_index_to_word[wi],
                        filter(lambda wi: wi not in hparams.filtered_tokens, h_best))
-    line = ' '.join(h_best_words)
     if hparams.merge_bpe:
-        line = line.replace(' @@', '')
+      line = ''.join(h_best_words)
+      line = line.replace('▁', ' ')
+    else:
+      line = ' '.join(h_best_words)
     out_file.write(line + '\n')
     out_file.flush()
   
