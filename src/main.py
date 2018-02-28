@@ -10,6 +10,7 @@ import os
 import sys
 import time
 import subprocess
+import re
 
 import numpy as np
 
@@ -54,6 +55,9 @@ add_argument(parser, "beam_size", type="int", default=5,
 add_argument(parser, "max_len", type="int", default=50,
              help="maximum hypothesis length for dev BLEU")
 
+add_argument(parser, "patience", type="int", default=-1,
+             help="how many more steps to take before stop. Ignore n_train_stop if patience is set")
+
 args = parser.parse_args()
 
 
@@ -63,6 +67,7 @@ def eval(model, data, crit, step, hparams):
   valid_words = 0
   valid_loss = 0
   valid_acc = 0
+  valid_bleu = None
   if args.eval_bleu:
     valid_hyp_file = os.path.join(args.output_dir, "dev.trans")
     out_file = open(valid_hyp_file, 'w')
@@ -111,9 +116,13 @@ def eval(model, data, crit, step, hparams):
     out_file.close()
     ref_file = os.path.join(hparams.data_path, hparams.target_valid)
     bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {} < {}".format(ref_file, valid_hyp_file))
-    log_string += " {}".format(bleu_str)
+    bleu_str = bleu_str.split('\n')[-1].strip()
+    reg = re.compile("BLEU = ([^,]*).*")
+    valid_bleu = float(reg.match(bleu_str).group(1))
+    log_string += " val_bleu={}".format(valid_bleu)
+    print(bleu_str)
   print(log_string)
-  return val_ppl
+  return val_ppl, valid_bleu
 
 
 def train():
@@ -175,6 +184,11 @@ def train():
   print("-" * 80)
   print("Start training")
   best_val_acc = 1e10  # hparams.vocab_size
+  if args.eval_bleu:
+    best_val_bleu = -1
+
+  cur_attempt = 0
+  set_patience = args.patience >= 0
   for epoch in range(hparams.n_epochs):
     start_time = time.time()
     target_words = 0
@@ -235,20 +249,42 @@ def train():
       if step % args.eval_every == 0:
         print("-" * 80)
         print("Eval at step {0}".format(step))
-        val_acc = eval(model, data, crit, epoch, hparams)
-        if val_acc < best_val_acc:
-          best_val_acc = val_acc
+        val_acc, val_bleu = eval(model, data, crit, epoch, hparams)
+        if args.eval_bleu:
+          save =  val_bleu > best_val_bleu
+          best_val_bleu = max(best_val_bleu, val_bleu)
+        else:
+          save = val_acc < best_val_acc
+        best_val_acc = min(best_val_acc, val_acc)
+        if save:
+          print('save best checkpoint...')
           save_checkpoint(step, model, optim, hparams, args.output_dir)
-
-      if end_of_epoch or step >= hparams.n_train_steps:
+          cur_attempt = 0
+        if set_patience and not save:
+          cur_attempt += 1
+          print('Hit patience {}'.format(cur_attempt))
+      if end_of_epoch:
+        break
+      if set_patience:
+        if cur_attempt >= args.patience: break
+      elif step >= hparams.n_train_steps:
         break
 
+
     # stop if trained for more than n_train_steps
-    if step >= hparams.n_train_steps:
+    early_stop = False
+    if set_patience:
+      if cur_attempt >= args.patience: early_stop = True
+    else:
+      if step >= hparams.n_train_steps: early_stop = True
+    if early_stop:
       print("Reach {0} steps. Stop training".format(step))
-      val_acc = eval(model, data, crit, step, hparams)
-      if val_acc < best_val_acc:
-        best_val_acc = val_acc
+      val_acc, val_bleu = eval(model, data, crit, step, hparams)
+      if args.eval_bleu:
+        save = val_bleu > best_val_bleu
+      else:
+        save = val_acc < best_val_acc
+      if save:
         save_checkpoint(step, model, optim, hparams, args.output_dir)
       break
 
