@@ -84,7 +84,7 @@ def eval(model, data, crit, step, hparams, valid_batch_size=20):
   valid_bleu = None
   if args.eval_bleu:
     valid_hyp_file = os.path.join(args.output_dir, "dev.trans_{0}".format(step))
-    out_file = open(valid_hyp_file, 'w')
+    out_file = open(valid_hyp_file, 'w', encoding='utf-8')
   while True:
     # clear GPU memory
     gc.collect()

@@ -70,7 +70,7 @@ model.hparams.cuda = hparams.cuda
 
 data = DataLoader(hparams=hparams, decode=True)
 
-out_file = open(hparams.out_file, 'w')
+out_file = open(hparams.out_file, 'w', encoding='utf-8')
 end_of_epoch = False
 num_sentences = 0
 while not end_of_epoch:
