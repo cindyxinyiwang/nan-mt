@@ -211,11 +211,11 @@ class DataLoader(object):
       source_file, target_file))
 
     source_file = os.path.join(self.hparams.data_path, source_file)
-    with open(source_file) as finp:
+    with open(source_file, encoding='utf-8') as finp:
       source_lines = finp.read().split("\n")
 
     target_file = os.path.join(self.hparams.data_path, target_file)
-    with open(target_file) as finp:
+    with open(target_file, encoding='utf-8') as finp:
       target_lines = finp.read().split("\n")
 
     source_data, target_data = [], []
@@ -286,7 +286,7 @@ class DataLoader(object):
     print("-" * 80)
     print("Loading vocab from '{0}'".format(file_name))
     file_name = os.path.join(self.hparams.data_path, file_name)
-    with open(file_name) as finp:
+    with open(file_name, encoding='utf-8') as finp:
       lines = finp.read().split("\n")
 
     word_to_index, index_to_word = {}, {}
