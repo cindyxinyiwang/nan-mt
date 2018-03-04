@@ -66,55 +66,37 @@ class Logger(object):
 
 
 def get_criterion(hparams):
-  weight = torch.ones(hparams.vocab_size)
-  weight[hparams.pad_id] = 0
-  crit = nn.CrossEntropyLoss(weight, size_average=False,
-                             ignore_index=hparams.pad_id)
+  weights = torch.ones(hparams.vocab_size)
+  weights[hparams.pad_id] = 0
+  crit = nn.CrossEntropyLoss(weights, size_average=False, reduce=False)
   if hparams.cuda:
     crit = crit.cuda()
   return crit
 
 
-def get_performance(crit, logits, labels):
-  loss = crit(logits, labels)
+def get_performance(crit, logits, labels, hparams):
+  mask = (labels == hparams.pad_id)
+  loss = crit(logits, labels).masked_fill_(mask, 0).sum()
   _, preds = torch.max(logits, dim=1)
-  acc = torch.eq(preds, labels).sum()
+  if hparams.cuda:
+    acc = torch.eq(preds, labels).type(torch.cuda.LongTensor).masked_fill_(mask, 0).sum()
+  else:
+    acc = torch.eq(preds, labels).type(torch.LongTensor).masked_fill_(mask, 0).sum()
+
   return loss, acc
 
-
-def get_attn_padding_mask(seq_q, seq_k, pad_id=0):
-  """Indicate the padding-related part to mask.
-
-  Args:
-    seq_q: Torch tensor [batch_size, len_q].
-    seq_k: Torch tensor [batch_size, len_k].
-
-  Returns:
-    attn_padding_mask: ByteTensor [batch_size, len_q, len_k]. 1 means to the
-      corresponding position is pad.
-  """
-
-  assert seq_q.dim() == 2 and seq_k.dim() == 2
-  batch_size_q, len_q = seq_q.size()
-  batch_size_k, len_k = seq_k.size()
-
-  assert batch_size_q == batch_size_k
-
-  # [batch_size, 1, len_k] -> [batch_size, len_q, len_k]
-  attn_padding_mask = seq_k.data.eq(pad_id).unsqueeze(1).expand(-1, len_q, -1)
-
-  return attn_padding_mask
 
 def get_attn_subsequent_mask(seq, pad_id=0):
   """ Get an attention mask to avoid using the subsequent info."""
 
   assert seq.dim() == 2
-  attn_shape = (seq.size(0), seq.size(1), seq.size(1))
-  subsequent_mask = np.triu(np.ones(attn_shape), k=1).astype(np.uint8)
-  subsequent_mask = torch.from_numpy(subsequent_mask)
+  batch_size, max_len = seq.size()
+  sub_mask = torch.triu(
+    torch.ones(max_len, max_len), diagonal=1).unsqueeze(0).repeat(
+      batch_size, 1, 1).type(torch.ByteTensor)
   if seq.is_cuda:
-    subsequent_mask = subsequent_mask.cuda()
-  return subsequent_mask
+    sub_mask = sub_mask.cuda()
+  return sub_mask
 
 
 def set_lr(optim, lr):

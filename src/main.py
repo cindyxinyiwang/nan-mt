@@ -24,47 +24,61 @@ from models import *
 
 parser = argparse.ArgumentParser(description="Neural MT")
 
-add_argument(parser, "train_set", type="str", default="outputs",
-             help="[tiny | bpe16 | bpe32]")
+add_argument(parser, "load_model", type="bool", default=False, help="load an existing model")
+add_argument(parser, "reset_output_dir", type="bool", default=False, help="delete output directory if it exists")
+add_argument(parser, "output_dir", type="str", default="outputs", help="path to output directory")
+add_argument(parser, "log_every", type="int", default=50, help="how many steps to write log")
+add_argument(parser, "eval_every", type="int", default=500, help="how many steps to compute valid ppl")
+add_argument(parser, "clean_mem_every", type="int", default=10, help="how many steps to clean memory")
+add_argument(parser, "eval_bleu", type="bool", default=False, help="if calculate BLEU score for dev set")
+add_argument(parser, "beam_size", type="int", default=5, help="beam size for dev BLEU")
 
-add_argument(parser, "load_model", type="bool", default=False,
-             help="load an existing model")
+add_argument(parser, "cuda", type="bool", default=False, help="GPU or not")
 
-add_argument(parser, "reset_output_dir", type="bool", default=False,
-             help="delete output directory if it exists")
+add_argument(parser, "max_len", type="int", default=300, help="maximum len considered on the target side")
+add_argument(parser, "n_train_sents", type="int", default=None, help="max number of training sentences to load")
 
-add_argument(parser, "output_dir", type="str", default="outputs",
-             help="path to output directory")
+add_argument(parser, "data_path", type="str", default=None, help="path to all data")
+add_argument(parser, "source_train", type="str", default=None, help="source train file")
+add_argument(parser, "target_train", type="str", default=None, help="target train file")
+add_argument(parser, "source_valid", type="str", default=None, help="source valid file")
+add_argument(parser, "target_valid", type="str", default=None, help="target valid file")
+add_argument(parser, "source_vocab", type="str", default=None, help="source vocab file")
+add_argument(parser, "target_vocab", type="str", default=None, help="target vocab file")
+add_argument(parser, "source_test", type="str", default=None, help="source test file")
+add_argument(parser, "target_test", type="str", default=None, help="target test file")
 
-add_argument(parser, "log_every", type="int", default=50,
-             help="how many steps to write log")
+add_argument(parser, "d_word_vec", type="int", default=288, help="size of word and positional embeddings")
+add_argument(parser, "d_model", type="int", default=288, help="size of hidden states")
+add_argument(parser, "d_inner", type="int", default=512, help="hidden dimension of the position-wise ff")
+add_argument(parser, "d_k", type="int", default=64, help="dim of attn keys")
+add_argument(parser, "d_v", type="int", default=64, help="dim of attn values")
+add_argument(parser, "n_layers", type="int", default=5, help="number of layers in a Transformer stack")
+add_argument(parser, "n_heads", type="int", default=2 , help="number of attention heads")
+add_argument(parser, "batch_size", type="int", default=32, help="")
+add_argument(parser, "lr_fixed", type="int", default=None, help="")
+add_argument(parser, "n_train_steps", type="int", default=100000, help="")
+add_argument(parser, "n_warm_ups", type="int", default=750, help="")
 
-add_argument(parser, "eval_every", type="int", default=500,
-             help="how many steps to compute valid ppl")
+add_argument(parser, "share_emb_and_softmax", type="bool", default=True, help="share embedding and softmax")
 
-add_argument(parser, "clean_mem_every", type="int", default=10,
-             help="how many steps to clean memory")
+add_argument(parser, "dropout", type="float", default=0.1, help="probability of dropping")
+add_argument(parser, "label_smoothing", type="float", default=0.1, help="")
 
-add_argument(parser, "eval_bleu", type="bool", default=False,
-             help="if calculate BLEU score for dev set")
-
-add_argument(parser, "beam_size", type="int", default=5,
-             help="beam size for dev BLEU")
-
-add_argument(parser, "max_len", type="int", default=50,
-             help="maximum hypothesis length for dev BLEU")
 
 args = parser.parse_args()
 
 
-def eval(model, data, crit, step, hparams):
-  print("Eval at step {0}".format(step))
+def eval(model, data, crit, step, hparams, valid_batch_size=20):
+  print("Eval at step {0}. valid_batch_size={1}".format(step, valid_batch_size))
   model.eval()
+  data.reset_valid()
   valid_words = 0
   valid_loss = 0
   valid_acc = 0
+  n_batches = 0
   if args.eval_bleu:
-    valid_hyp_file = os.path.join(args.output_dir, "dev.trans")
+    valid_hyp_file = os.path.join(args.output_dir, "dev.trans_{0}".format(step))
     out_file = open(valid_hyp_file, 'w')
   while True:
     # clear GPU memory
@@ -73,7 +87,10 @@ def eval(model, data, crit, step, hparams):
     # next batch
     ((x_valid, x_mask, x_pos_emb_indices, x_count),
      (y_valid, y_mask, y_pos_emb_indices, y_count),
-     end_of_epoch) = data.next_valid()
+     batch_size, end_of_epoch) = data.next_valid(valid_batch_size=valid_batch_size)
+
+    # do this since you shift y_valid[:, 1:] and y_valid[:, :-1]
+    y_count -= batch_size
 
     # word count
     valid_words += y_count
@@ -83,10 +100,16 @@ def eval(model, data, crit, step, hparams):
       y_valid[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous(),
       label_smoothing=False)
     logits = logits.view(-1, hparams.vocab_size)
+    n_batches += 1
+    # if n_batches >= 1:
+    #   print(logits[5])
+    #   return
     labels = y_valid[:, 1:].contiguous().view(-1)
-    val_loss, val_acc = get_performance(crit, logits, labels)
+
+    val_loss, val_acc = get_performance(crit, logits, labels, hparams)
     valid_loss += val_loss.data[0]
     valid_acc += val_acc.data[0]
+    # print("{0:<5d} / {1:<5d}".format(val_acc.data[0], y_count))
 
     # BLEU eval
     if args.eval_bleu:
@@ -110,9 +133,10 @@ def eval(model, data, crit, step, hparams):
   if args.eval_bleu:
     out_file.close()
     ref_file = os.path.join(hparams.data_path, hparams.target_valid)
-    bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {} < {}".format(ref_file, valid_hyp_file))
+    bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {0} < {1}".format(ref_file, valid_hyp_file))
     log_string += " {}".format(bleu_str)
   print(log_string)
+  model.train()
   return val_ppl
 
 
@@ -121,28 +145,35 @@ def train():
     hparams_file_name = os.path.join(args.output_dir, "hparams.pt")
     hparams = torch.load(hparams_file_name)
   else:
-    if args.train_set == "tiny":
-      hparams = Iwslt16EnDeTinyParams()
-    elif args.train_set == "bpe16":
-      hparams = Iwslt16EnDeBpe16Params()
-    elif args.train_set == "bpe32":
-      hparams = Iwslt16EnDeBpe32Params()
-    elif args.train_set in H_PARAMS_DICT:
-      hparams = H_PARAMS_DICT[args.train_set]()
-    else:
-      raise ValueError("Unknown train_set '{0}'".format(args.train_set))
-
-  if args.train_set == "tiny":
-    data = DataLoader(hparams=hparams)
-  elif args.train_set == "bpe16":
-    data = DataLoader(hparams=hparams)
-  elif args.train_set == "bpe32":
-    data = DataLoader(hparams=hparams)
-  elif args.train_set in H_PARAMS_DICT:
-    data = DataLoader(hparams=hparams)
-  else:
-    raise ValueError("Unknown train_set '{0}'".format(args.train_set))
-
+    hparams = Iwslt16EnDeBpe32SharedParams(
+      data_path=args.data_path,
+      source_train=args.source_train,
+      target_train=args.target_train,
+      source_valid=args.source_valid,
+      target_valid=args.target_valid,
+      source_vocab=args.source_vocab,
+      target_vocab=args.target_vocab,
+      source_test=args.source_test,
+      target_test=args.target_test,
+      max_len=args.max_len,
+      n_train_sents=args.n_train_sents,
+      cuda=args.cuda,
+      d_word_vec=args.d_word_vec,
+      d_model=args.d_model,
+      d_inner=args.d_inner,
+      d_k=args.d_k,
+      d_v=args.d_v,
+      n_layers=args.n_layers,
+      n_heads=args.n_heads,
+      batch_size=args.batch_size,
+      lr_fixed=args.lr_fixed,
+      n_train_steps=args.n_train_steps,
+      n_warm_ups=args.n_warm_ups,
+      share_emb_and_softmax=args.share_emb_and_softmax,
+      dropout=args.dropout,
+      label_smoothing=args.label_smoothing
+    )
+  data = DataLoader(hparams=hparams)
 
   # build or load model model
   print("-" * 80)
@@ -157,7 +188,7 @@ def train():
   # build or load optimizer
   num_params = count_params(model.trainable_parameters())
   print("Model has {0} params".format(num_params))
-  lr = hparams.fixed_lr if hparams.fixed_lr is not None else 1e-4
+  lr = hparams.lr_fixed if hparams.lr_fixed is not None else 1e-4
   optim = torch.optim.Adam(model.trainable_parameters(), lr=lr,
                            betas=(0.9, 0.98), eps=1e-09)
   if args.load_model:
@@ -166,8 +197,11 @@ def train():
     optimizer_state = torch.load(optim_file_name)
     optim.load_state_dict(optimizer_state)
 
-    step_file_name = os.path.join(args.output_dir, "step.pt")
-    step = torch.load(step_file_name)
+    try:
+      step_file_name = os.path.join(args.output_dir, "step.pt")
+      step = torch.load(step_file_name)
+    except:
+      step = 0
   else:
     step = 0
 
@@ -175,10 +209,10 @@ def train():
   print("-" * 80)
   print("Start training")
   best_val_acc = 1e10  # hparams.vocab_size
-  for epoch in range(hparams.n_epochs):
-    start_time = time.time()
-    target_words = 0
-    total_sents = 0
+  start_time = time.time()
+  target_words = 0
+  while True:
+    n_train_batches = data.train_size // hparams.batch_size
 
     # training activities
     model.train()
@@ -186,11 +220,23 @@ def train():
       # next batch
       ((x_train, x_mask, x_pos_emb_indices, x_count),
        (y_train, y_mask, y_pos_emb_indices, y_count),
-       end_of_epoch) = data.next_train()
+       batch_size) = data.next_train()
+
+      # Since you are shifting y_train, i.e. y_train[:, :-1] and y_train[:, 1:]
+      y_count -= batch_size  
+
+      ## DEBUG
+      # print(y_train)
+      # y = y_train.cpu().data.numpy()
+      # for _y in y:
+      #   log_string = ""
+      #   for __y in _y:
+      #     log_string += "{0:<10} ".format(data.source_index_to_word[__y])
+      #   print(log_string)
+      ## END OF DEBUG
 
       # book keeping count
       target_words += y_count
-      total_sents += x_train.size()[0]
 
       # forward pass
       optim.zero_grad()
@@ -199,17 +245,19 @@ def train():
         y_train[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous())
       logits = logits.view(-1, hparams.vocab_size)
       labels = y_train[:, 1:].contiguous().view(-1)
-      tr_loss, tr_acc = get_performance(crit, logits, labels)
-      tr_loss = tr_loss.div(hparams.batch_size)
-      tr_ppl = np.exp(tr_loss.data[0] * hparams.batch_size / y_count)
+      tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
+      tr_ppl = np.exp(tr_loss.data[0] / y_count)
+      tr_loss = tr_loss.div(batch_size)
 
-      if hparams.fixed_lr is None or step <= hparams.n_warm_ups:
+      # set learning rate
+      if hparams.lr_fixed is None or step <= hparams.n_warm_ups:
         lr = (np.minimum(1.0 / np.sqrt(step + 1),
                          (step + 1) / (np.sqrt(hparams.n_warm_ups) ** 3)) /
               np.sqrt(hparams.d_model))
       else:
-        lr = hparams.fixed_lr
+        lr = hparams.lr_fixed
       set_lr(optim, lr)
+
       tr_loss.backward()
       optim.step()
 
@@ -217,14 +265,16 @@ def train():
       if step % args.log_every == 0:
         curr_time = time.time()
         elapsed = (curr_time - start_time) / 60.0
-        log_string = "step={0:<7d}".format(step)
-        log_string += " sen(K)={0:<6.2f}".format(total_sents / 1000)
-        log_string += " mins={0:<5.2f}".format(elapsed)
+        epoch = step // n_train_batches
+        log_string = "ep={0:<3d}".format(epoch)
+        log_string += " steps={0:<6.2f}".format(step / 1000)
         log_string += " lr={0:<8.6f}".format(lr)
+        log_string += " loss={0:<7.2f}".format(tr_loss.data[0])
         log_string += " ppl={0:<8.2f}".format(tr_ppl)
-        log_string += " acc={0:<5.4f}".format(tr_acc.data[0]/ y_count)
+        log_string += " acc={0:<5.4f}".format(tr_acc.data[0] / y_count)
         log_string += " wpm(K)={0:<5.2f}".format(
           target_words / (1000 * elapsed))
+        log_string += " mins={0:<5.2f}".format(elapsed)
         print(log_string)
 
       # clean up GPU memory
@@ -233,14 +283,19 @@ def train():
 
       # eval
       if step % args.eval_every == 0:
-        print("-" * 80)
-        print("Eval at step {0}".format(step))
-        val_acc = eval(model, data, crit, epoch, hparams)
+        # print("-" * 80)
+        # val_acc_1 = eval(model, data, crit, step, hparams, valid_batch_size=20)
+        # print(val_acc_1)
+        # val_acc_2 = eval(model, data, crit, step, hparams, valid_batch_size=40)
+        # print(val_acc_2)
+        # val_acc_3 = eval(model, data, crit, step, hparams, valid_batch_size=60)
+        # print(val_acc_3)
+        val_acc = eval(model, data, crit, step, hparams, valid_batch_size=30)
         if val_acc < best_val_acc:
           best_val_acc = val_acc
           save_checkpoint(step, model, optim, hparams, args.output_dir)
 
-      if end_of_epoch or step >= hparams.n_train_steps:
+      if step >= hparams.n_train_steps:
         break
 
     # stop if trained for more than n_train_steps

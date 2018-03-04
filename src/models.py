@@ -58,7 +58,7 @@ class Encoder(nn.Module):
     batch_size, max_len = x_train.size()
 
     # [batch_size, max_len, 1] -> [batch_size, max_len, d_word_vec]
-    pos_emb_mask = x_mask.clone().unsqueeze(2).expand(
+    pos_emb_mask = x_mask.unsqueeze(2).expand(
       -1, -1, self.hparams.d_word_vec)
     pos_emb = self.pos_emb(x_pos_emb_indices, pos_emb_mask)
 
@@ -67,7 +67,7 @@ class Encoder(nn.Module):
     enc_input = word_emb + pos_emb
 
     # [batch_size, 1, max_len] -> [batch_size, len_q, len_k]
-    attn_mask = x_mask.clone().unsqueeze(1).expand(-1, max_len, -1)
+    attn_mask = x_mask.unsqueeze(1).expand(-1, max_len, -1).contiguous()
     enc_output = enc_input
     for enc_layer in self.layer_stack:
       enc_output = enc_layer(enc_output, attn_mask=attn_mask)
@@ -118,7 +118,7 @@ class Decoder(nn.Module):
     batch_size, y_len = y_mask.size()
 
     # [batch_size, y_len, 1] -> [batch_size, y_len, d_word_vec]
-    pos_emb_mask = y_mask.clone().unsqueeze(2).expand(
+    pos_emb_mask = y_mask.unsqueeze(2).expand(
       -1, -1, self.hparams.d_word_vec)
     pos_emb = self.pos_emb(y_pos_emb_indices, pos_emb_mask)
 
@@ -127,19 +127,17 @@ class Decoder(nn.Module):
     dec_input = word_emb + pos_emb
 
     # [batch_size, 1, y_len] -> [batch_size, y_len, y_len]
-    y_attn_mask = (y_mask.clone().unsqueeze(1).expand(-1, y_len, -1) +
-                   get_attn_subsequent_mask(y_train,
-                                            pad_id=self.hparams.pad_id))
-    y_attn_mask = torch.gt(y_attn_mask, 0)
+    y_time_mask = get_attn_subsequent_mask(y_train, pad_id=self.hparams.pad_id)
+    y_attn_mask = y_mask.unsqueeze(1).expand(-1, y_len, -1).contiguous()
+    y_attn_mask = y_attn_mask | y_time_mask
 
     # [batch_size, 1, x_len] -> [batch_size, y_len, x_len]
-    x_attn_mask = x_mask.clone().unsqueeze(1).expand(-1, y_len, -1)
+    x_attn_mask = x_mask.unsqueeze(1).expand(-1, y_len, -1).contiguous()
 
     dec_output = dec_input
     for dec_layer in self.layer_stack:
       dec_output = dec_layer(dec_output, x_states,
-                             self_attn_mask=y_attn_mask,
-                             dec_enc_attn_mask=x_attn_mask)
+                             y_attn_mask=y_attn_mask, x_attn_mask=x_attn_mask)
     return dec_output
 
 class Transformer(nn.Module):
@@ -153,6 +151,9 @@ class Transformer(nn.Module):
     self.w_logit = nn.Linear(hparams.d_model, hparams.vocab_size, bias=False)
     if hparams.share_emb_and_softmax:
       self.w_logit.weight = self.decoder.word_emb.weight
+
+    if self.hparams.cuda:
+      self.w_logit = self.w_logit.cuda()
 
     init.xavier_normal(self.w_logit.weight)
 
@@ -168,14 +169,16 @@ class Transformer(nn.Module):
               y_train, y_mask, y_pos_emb_indices, label_smoothing=True):
 
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
-    dec_output = self.decoder(enc_output, x_mask, y_train, y_mask,
-                              y_pos_emb_indices)
+    dec_output = self.decoder(
+      enc_output, x_mask, y_train, y_mask, y_pos_emb_indices)
     logits = self.w_logit(dec_output)
+    logits[:, :, self.hparams.pad_id] = -np.inf
     if label_smoothing and (self.hparams.label_smoothing is not None):
       smooth = self.hparams.label_smoothing
       probs = ((1.0 - smooth) * self.softmax(logits) +
                smooth / self.hparams.vocab_size)
       logits = torch.log(probs)
+      logits[:, :, self.hparams.pad_id] = -np.inf
 
     return logits
 
@@ -190,6 +193,7 @@ class Transformer(nn.Module):
       all_hyp: [batch_size, n_best] of hypothesis
       all_scores: [batch_size, n_best]
     """
+
     # (batch_size, src_seq_len, d_model)
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
 
@@ -225,8 +229,9 @@ class Transformer(nn.Module):
         enc_output = enc_output.cuda()
         x_mask = x_mask.cuda()
 
-      dec_output = self.decoder(enc_output, x_mask, y_partial, y_mask, 
-                                y_partial_pos)
+      dec_output = self.decoder(
+        enc_output, x_mask, y_partial, y_mask, y_partial_pos)
+
       # select the dec output for next word
       dec_output = dec_output[:, -1, :]
       logits = self.w_logit(dec_output)
@@ -264,6 +269,84 @@ class Transformer(nn.Module):
       hyps = [beam.get_y(i) for i in idxs[:n_best]]
       all_hyp += [hyps]
     return all_hyp, all_scores
+    
+  def debug_translate_batch(self,
+                            x_train, x_mask, x_pos_emb_indices, beam_size,
+                            max_len, y_train, y_mask, y_pos_emb_indices):
+    # get loss
+    crit = get_criterion(self.hparams)
+    logits = self.forward(
+      x_train, x_mask, x_pos_emb_indices,
+      y_train[:, 0:1], y_mask[:, 0:1], y_pos_emb_indices[:, 0:1].contiguous(),
+      label_smoothing=False)
+    logits = logits.view(-1, self.hparams.vocab_size)
+    labels = y_train[:, 1:2].contiguous().view(-1)
+    #tr_loss, _ = get_performance(crit, logits[1:], labels[1:])
+    # print(logits[0][labels[0]].data, labels[0].data)
+    #neg_log = -torch.nn.functional.log_softmax(logits, dim=1)
+    #for i in range(logits.size()[1]):
+    #  print(i, neg_log[0][i].data[0])
+    tr_loss, _ = get_performance(crit, logits, labels, self.hparams)
+    print("train loss of first word: {}".format(tr_loss.data[0]))
+    
+    logits = self.forward(
+      x_train, x_mask, x_pos_emb_indices,
+      y_train[:, 0:2], y_mask[:, 0:2], y_pos_emb_indices[:, 0:2].contiguous(),
+      label_smoothing=False)
+    logits = logits.view(-1, self.hparams.vocab_size)
+    labels = y_train[:, 1:3].contiguous().view(-1)
+    #tr_loss, _ = get_performance(crit, logits[1:], labels[1:])
+    print(logits[0][labels[0]].data, labels[0].data)
+    tr_loss, _ = get_performance(crit, logits, labels, self.hparams)
+    print("train loss of first two words: {}".format(tr_loss.data[0]))
+
+    logits = self.forward(
+      x_train, x_mask, x_pos_emb_indices,
+      y_train[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous(),
+      label_smoothing=False)
+    logits = logits.view(-1, self.hparams.vocab_size)
+    labels = y_train[:, 1:].contiguous().view(-1)
+    tr_loss, _ = get_performance(crit, logits, labels, self.hparams)
+    print("train loss of total word: {}".format(tr_loss.data[0]))
+    # (batch_size, src_seq_len, d_model)
+
+    enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
+    batch_size, src_seq_len = x_train.size()
+    batch_size, trg_seq_len = y_train.size()
+    trg_vocab_size = self.hparams.vocab_size
+
+    dec_loss = 0.
+    for i in range(trg_seq_len-1):
+      len_dec = i+1
+      y_partial = y_train[:, :len_dec]
+      y_partial_mask = y_mask[:, :len_dec]
+      y_partial_pos = y_pos_emb_indices[:, :len_dec].contiguous()
+      if self.hparams.cuda:
+        y_partial = y_partial.cuda()
+        y_partial_pos = y_partial_pos.cuda()
+        y_partial_mask = y_partial_mask.cuda()
+
+        enc_output = enc_output.cuda()
+        x_mask = x_mask.cuda()
+
+      dec_output = self.decoder(enc_output, x_mask, y_partial, y_partial_mask, 
+                                y_partial_pos)
+      # select the dec output for next word
+      dec_output = dec_output[:, -1, :]
+      logits = self.w_logit(dec_output)
+      logits = logits.view(-1, self.hparams.vocab_size)
+      labels = y_train[:, len_dec].contiguous().view(-1)
+      #if i == 0:
+        #print('use pad id')
+        #labels = Variable(torch.LongTensor([self.hparams.pad_id]))
+        #if self.hparams.cuda: labels = labels.cuda()
+        #s, indices = torch.sort(logits, descending=True)
+        #print('best word', indices[0])
+      loss, _ = get_performance(crit, logits, labels, self.hparams)
+      print("cur_loss", loss.data)
+      print("cur_labels", labels.data)
+      dec_loss = dec_loss + loss.data[0]
+    print('dec_loss_search: ', dec_loss)
 
 def select_active_enc_info(enc_output, active_inst_idx_list, n_remain_sents, src_seq_len, d_model):
 
@@ -292,7 +375,7 @@ class Beam(object):
 
     self.prev_ks = []
 
-    self.next_ys = [self.tt.LongTensor(size).fill_(hparams.pad_id)]
+    self.next_ys = [self.tt.LongTensor(size).fill_(hparams.bos_id)]
     self.next_ys[0][0] = hparams.bos_id 
 
   def advance(self, word_scores, step=0):

@@ -39,27 +39,36 @@ class DataLoader(object):
      self.target_index_to_word) = self._build_vocab(self.hparams.target_vocab)
 
     if decode:
-      self.x_test, self.y_test = self._build_parallel(self.hparams.source_test,
-                                                      self.hparams.target_test,
-                                                      is_training=False)
-      self.test_index = 0
+      self.x_test, self.y_test = self._build_parallel(
+        self.hparams.source_test, self.hparams.target_test, is_training=False)
       self.test_size = len(self.x_test)
+      self.reset_test()
       return
+    else:
+      # train data
+      self.x_train, self.y_train = self._build_parallel(
+        self.hparams.source_train, self.hparams.target_train, is_training=True,
+        sort=True)
+      self.train_size = len(self.x_train)
+      self.reset_train()
 
-    # train data
-    self.x_train, self.y_train = self._build_parallel(self.hparams.source_train,
-                                                      self.hparams.target_train,
-                                                      is_training=True)
-    self._shuffle()
+      # valid data
+      self.x_valid, self.y_valid = self._build_parallel(
+        self.hparams.source_valid, self.hparams.target_valid, is_training=False)
+      self.valid_size = len(self.x_valid)
+      self.reset_valid()
+
+  def reset_train(self):
     self.train_index = 0
-    self.train_size = len(self.x_train)
+    self.train_queue = np.random.uniform(
+      low=0, high=self.train_size - self.hparams.batch_size, size=[1000])
+    self.train_queue = self.train_queue.astype(np.int32)
 
-    # valid data
-    self.x_valid, self.y_valid = self._build_parallel(self.hparams.source_valid,
-                                                      self.hparams.target_valid,
-                                                      is_training=False)
+  def reset_valid(self):
     self.valid_index = 0
-    self.valid_size = len(self.x_valid)
+
+  def reset_test(self):
+    self.test_index = 0
 
   def next_test(self, test_batch_size=1):
     end_of_epoch = False
@@ -83,7 +92,7 @@ class DataLoader(object):
 
     return ((x_test, x_mask, x_pos_emb_indices, x_count),
             (y_test, y_mask, y_pos_emb_indices, y_count),
-            end_of_epoch)
+            batch_size, end_of_epoch)
 
   def next_valid(self, valid_batch_size=20):
     """Retrieves a sentence of testing examples.
@@ -112,14 +121,13 @@ class DataLoader(object):
     # shuffle if reaches the end of data
     if end_index >= self.valid_size:
       end_of_epoch = True
-      self._shuffle()
       self.valid_index = 0
     else:
       self.valid_index += batch_size
 
     return ((x_valid, x_mask, x_pos_emb_indices, x_count),
             (y_valid, y_mask, y_pos_emb_indices, y_count),
-            end_of_epoch)
+            batch_size, end_of_epoch)
 
   def next_train(self):
     """Retrieves a batch of training examples.
@@ -132,10 +140,9 @@ class DataLoader(object):
       end_of_epoch: whether we reach the end of training examples.
     """
 
-    end_of_epoch = False
-    start_index = self.train_index
+    start_index = self.train_queue[self.train_index] 
     end_index = min(start_index + self.hparams.batch_size, self.train_size)
-    batch_size = end_index - start_index
+    batch_size = float(end_index - start_index)
 
     # pad data
     x_train = self.x_train[start_index : end_index]
@@ -144,16 +151,17 @@ class DataLoader(object):
     y_train, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_train)
 
     # shuffle if reaches the end of data
-    if end_index >= self.train_size:
-      end_of_epoch = True
-      self._shuffle()
+    if self.train_index >= 999:
       self.train_index = 0
+      self.train_queue = np.random.uniform(
+        low=0, high=self.train_size - self.hparams.batch_size, size=[1000])
+      self.train_queue = self.train_queue.astype(np.int32)
     else:
-      self.train_index += batch_size
+      self.train_index += 1
 
     return ((x_train, x_mask, x_pos_emb_indices, x_count),
             (y_train, y_mask, y_pos_emb_indices, y_count),
-            end_of_epoch)
+            batch_size)
 
   def _pad(self, sentences, volatile=False):
     """Pad all instances in [data] to the longest length.
@@ -184,11 +192,9 @@ class DataLoader(object):
       for sentence in sentences
     ]
 
-    padded_sentences = Variable(torch.LongTensor(padded_sentences),
-                                volatile=volatile)
+    padded_sentences = Variable(torch.LongTensor(padded_sentences))
     mask = torch.ByteTensor(mask)
-    pos_emb_indices = Variable(torch.FloatTensor(pos_emb_indices),
-                               volatile=volatile)
+    pos_emb_indices = Variable(torch.FloatTensor(pos_emb_indices))
 
     if self.hparams.cuda:
       padded_sentences = padded_sentences.cuda()
@@ -197,16 +203,7 @@ class DataLoader(object):
 
     return padded_sentences, mask, pos_emb_indices, sum_len
 
-  def _shuffle(self, verbose=False):
-    """Shuffle (x_train, y_train)."""
-
-    if verbose:
-      print("Shuffle training data")
-    xy_train = list(zip(self.x_train, self.y_train))
-    random.shuffle(xy_train)
-    self.x_train, self.y_train = zip(*xy_train)
-
-  def _build_parallel(self, source_file, target_file, is_training):
+  def _build_parallel(self, source_file, target_file, is_training, sort=False):
     """Build pair of data."""
 
     print("-" * 80)
@@ -222,7 +219,9 @@ class DataLoader(object):
       target_lines = finp.read().split("\n")
 
     source_data, target_data = [], []
+    source_lens = []
     total_sents = 0
+    source_unk_count, target_unk_count = 0, 0
     for i, (source_line, target_line) in enumerate(
         zip(source_lines, target_lines)):
       source_line = source_line.strip()
@@ -230,10 +229,10 @@ class DataLoader(object):
       if not source_line or not target_line:
         continue
 
-      source_indices, target_indices = [], [self.hparams.bos_id]
+      source_indices, target_indices = [self.hparams.bos_id], [self.hparams.bos_id]
       source_tokens = source_line.split(" ")
       target_tokens = target_line.split(" ")
-      if is_training and len(target_line) > self.hparams.max_train_len:
+      if is_training and len(target_line) > self.hparams.max_len:
         continue
 
       total_sents += 1
@@ -242,6 +241,7 @@ class DataLoader(object):
         source_token = source_token.strip()
         if source_token not in self.source_word_to_index:
           source_token = self.hparams.unk
+          source_unk_count += 1
         source_index = self.source_word_to_index[source_token]
         source_indices.append(source_index)
 
@@ -249,24 +249,34 @@ class DataLoader(object):
         target_token = target_token.strip()
         if target_token not in self.target_word_to_index:
           target_token = self.hparams.unk
+          target_unk_count += 1
         target_index = self.target_word_to_index[target_token]
         target_indices.append(target_index)
 
       assert source_indices[-1] == self.hparams.eos_id
       assert target_indices[-1] == self.hparams.eos_id
 
+      source_lens.append(len(source_indices))
       source_data.append(source_indices)
       target_data.append(target_indices)
 
-      if (self.hparams.train_limit is not None and
-          self.hparams.train_limit <= total_sents):
+      if (self.hparams.n_train_sents is not None and
+          self.hparams.n_train_sents <= total_sents):
         break
 
       if total_sents % 10000 == 0:
-        print("{0:>6d} pairs".format(total_sents))
+        print("{0:>6d} pairs. src_unk={1}. tgt_unk={2}".format(
+          total_sents, source_unk_count, target_unk_count))
 
     assert len(source_data) == len(target_data)
-    print("{0:>6d} pairs".format(len(source_data)))
+    print("{0:>6d} pairs. src_unk={1}. tgt_unk={2}".format(
+      total_sents, source_unk_count, target_unk_count))
+
+    if sort:
+      print("Heuristic sort based on source lens")
+      indices = np.argsort(source_lens)
+      source_data = [source_data[index] for index in indices]
+      target_data = [target_data[index] for index in indices]
 
     return source_data, target_data
 
@@ -299,6 +309,10 @@ class DataLoader(object):
         raise ValueError("Wrong word '{0}' or index '{1}'".format(word, index))
       word_to_index[word] = index
       index_to_word[index] = word
+
+    # adding pad
+    word_to_index[self.hparams.pad_id] = len(index_to_word)
+    index_to_word[len(index_to_word)] = self.hparams.pad
 
     assert len(word_to_index) == len(index_to_word)
     print("Done. vocab_size = {0}".format(len(word_to_index)))
