@@ -145,12 +145,11 @@ class MultiHeadAttn(nn.Module):
     self.w_k = nn.Parameter(torch.FloatTensor(n_heads, self.d_model, self.d_k))
     self.w_v = nn.Parameter(torch.FloatTensor(n_heads, self.d_model, self.d_v))
 
-    self.attention = ScaledDotProdAttn(self.d_model)
+    self.attention = ScaledDotProdAttn(self.d_model, dropout=dropout)
 
     # projection of concatenated attn
     self.w_proj = nn.Linear(n_heads * self.d_v, self.d_model, bias=True)
 
-    self.dropout = nn.Dropout(dropout)
     self.layer_norm = LayerNormalization(self.d_model)
 
     init.xavier_normal(self.w_q)
@@ -234,10 +233,11 @@ class PositionwiseFF(nn.Module):
   def forward(self, x):
     residual = x
     batch_size, x_len, d_model = x.size()
-    x = self.relu(self.w_1(x.view(-1, d_model)))
+    x = self.layer_norm(x.view(-1, d_model))
+    x = self.relu(self.w_1(x))
     x = self.w_2(x).view(batch_size, x_len, d_model)
     x = self.dropout(x)
-    return self.layer_norm(x + residual)
+    return x + residual
 
 
 class EncoderLayer(nn.Module):

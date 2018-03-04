@@ -37,10 +37,12 @@ class Encoder(nn.Module):
                     dropout=self.hparams.dropout)
        for _ in range(self.hparams.n_layers)])
 
+    self.dropout = nn.Dropout(self.hparams.dropout)
     if self.hparams.cuda:
       self.word_emb = self.word_emb.cuda()
       self.pos_emb = self.pos_emb.cuda()
       self.layer_stack = self.layer_stack.cuda()
+      self.dropout = self.dropout.cuda()
 
   def forward(self, x_train, x_mask, x_pos_emb_indices):
     """Performs a forward pass.
@@ -68,7 +70,7 @@ class Encoder(nn.Module):
 
     # [batch_size, 1, max_len] -> [batch_size, len_q, len_k]
     attn_mask = x_mask.unsqueeze(1).expand(-1, max_len, -1).contiguous()
-    enc_output = enc_input
+    enc_output = self.dropout(enc_input)
     for enc_layer in self.layer_stack:
       enc_output = enc_layer(enc_output, attn_mask=attn_mask)
 
@@ -92,10 +94,13 @@ class Decoder(nn.Module):
                     dropout=self.hparams.dropout)
        for _ in range(self.hparams.n_layers)])
 
+    self.dropout = nn.Dropout(self.hparams.dropout)
+
     if self.hparams.cuda:
       self.word_emb = self.word_emb.cuda()
       self.pos_emb = self.pos_emb.cuda()
       self.layer_stack = self.layer_stack.cuda()
+      self.dropout = self.dropout.cuda()
 
   def forward(self, x_states, x_mask, y_train, y_mask, y_pos_emb_indices):
     """Performs a forward pass.
@@ -134,7 +139,7 @@ class Decoder(nn.Module):
     # [batch_size, 1, x_len] -> [batch_size, y_len, x_len]
     x_attn_mask = x_mask.unsqueeze(1).expand(-1, y_len, -1).contiguous()
 
-    dec_output = dec_input
+    dec_output = self.dropout(dec_input)
     for dec_layer in self.layer_stack:
       dec_output = dec_layer(dec_output, x_states,
                              y_attn_mask=y_attn_mask, x_attn_mask=x_attn_mask)

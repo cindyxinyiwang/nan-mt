@@ -64,7 +64,7 @@ add_argument(parser, "n_warm_ups", type="int", default=750, help="")
 add_argument(parser, "share_emb_and_softmax", type="bool", default=True, help="share embedding and softmax")
 
 add_argument(parser, "dropout", type="float", default=0.1, help="probability of dropping")
-add_argument(parser, "label_smoothing", type="float", default=0.1, help="")
+add_argument(parser, "label_smoothing", type="float", default=None, help="")
 
 
 add_argument(parser, "patience", type="int", default=-1,

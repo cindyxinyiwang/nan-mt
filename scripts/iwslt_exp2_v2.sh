@@ -1,10 +1,10 @@
 #!/bin/bash
 
 export PYTHONPATH="$(pwd)"
-export CUDA_VISIBLE_DEVICES="0"
+export CUDA_VISIBLE_DEVICES="2"
 
 python3 src/main.py \
-  --output_dir="outputs_exp2_v1" \
+  --output_dir="outputs_exp2_v2" \
   --log_every=100 \
   --eval_every=1000 \
   --reset_output_dir \
@@ -32,5 +32,6 @@ python3 src/main.py \
   --n_warm_ups=750 \
   --dropout=0.1 \
   --cuda \
+  --label_smoothing=0.1 \
   "$@"
 
