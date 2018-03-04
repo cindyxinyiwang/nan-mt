@@ -78,10 +78,7 @@ def get_performance(crit, logits, labels, hparams):
   mask = (labels == hparams.pad_id)
   loss = crit(logits, labels).masked_fill_(mask, 0).sum()
   _, preds = torch.max(logits, dim=1)
-  if hparams.cuda:
-    acc = torch.eq(preds, labels).type(torch.cuda.LongTensor).masked_fill_(mask, 0).sum()
-  else:
-    acc = torch.eq(preds, labels).type(torch.LongTensor).masked_fill_(mask, 0).sum()
+  acc = torch.eq(preds, labels).int().masked_fill_(mask, 0).sum()
 
   return loss, acc
 

@@ -10,6 +10,7 @@ import os
 import sys
 import time
 import subprocess
+import re
 
 import numpy as np
 
@@ -66,6 +67,9 @@ add_argument(parser, "dropout", type="float", default=0.1, help="probability of 
 add_argument(parser, "label_smoothing", type="float", default=0.1, help="")
 
 
+add_argument(parser, "patience", type="int", default=-1,
+             help="how many more steps to take before stop. Ignore n_train_stop if patience is set")
+
 args = parser.parse_args()
 
 
@@ -77,6 +81,7 @@ def eval(model, data, crit, step, hparams, valid_batch_size=20):
   valid_loss = 0
   valid_acc = 0
   n_batches = 0
+  valid_bleu = None
   if args.eval_bleu:
     valid_hyp_file = os.path.join(args.output_dir, "dev.trans_{0}".format(step))
     out_file = open(valid_hyp_file, 'w')
@@ -211,9 +216,9 @@ def train():
   best_val_acc = 1e10  # hparams.vocab_size
   start_time = time.time()
   target_words = 0
-  while True:
-    n_train_batches = data.train_size // hparams.batch_size
+  n_train_batches = data.train_size // hparams.batch_size
 
+  while True:
     # training activities
     model.train()
     while True:
@@ -283,13 +288,6 @@ def train():
 
       # eval
       if step % args.eval_every == 0:
-        # print("-" * 80)
-        # val_acc_1 = eval(model, data, crit, step, hparams, valid_batch_size=20)
-        # print(val_acc_1)
-        # val_acc_2 = eval(model, data, crit, step, hparams, valid_batch_size=40)
-        # print(val_acc_2)
-        # val_acc_3 = eval(model, data, crit, step, hparams, valid_batch_size=60)
-        # print(val_acc_3)
         val_acc = eval(model, data, crit, step, hparams, valid_batch_size=30)
         if val_acc < best_val_acc:
           best_val_acc = val_acc
@@ -298,10 +296,11 @@ def train():
       if step >= hparams.n_train_steps:
         break
 
+
     # stop if trained for more than n_train_steps
     if step >= hparams.n_train_steps:
       print("Reach {0} steps. Stop training".format(step))
-      val_acc = eval(model, data, crit, step, hparams)
+      val_acc = eval(model, data, crit, step, hparams, valid_batch_size=30)
       if val_acc < best_val_acc:
         best_val_acc = val_acc
         save_checkpoint(step, model, optim, hparams, args.output_dir)

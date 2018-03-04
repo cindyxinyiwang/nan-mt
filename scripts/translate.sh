@@ -3,8 +3,10 @@
 export PYTHONPATH="$(pwd)"
 export CUDA_VISIBLE_DEVICES="0"
 
+# just modify the path to the model
+
 python3.6 src/translate.py \
-  --model_dir="outputs_exp1_v2" \
+  --model_dir="outputs_exp1_v1" \
   --data_path="data/bpe_28k_shared/en-de/" \
   --source_vocab="shared_28000.vocab" \
   --target_vocab="shared_28000.vocab" \
