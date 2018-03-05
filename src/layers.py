@@ -58,21 +58,38 @@ class PositionalEmbedding(nn.Module):
 
     return pos_emb
 
-
 class LayerNormalization(nn.Module):
-  def __init__(self, d_hid, eps=1e-5):
+  def __init__(self, d_hid, eps=1e-3):
     super(LayerNormalization, self).__init__()
 
     self.eps = eps
-    self.scale = nn.Parameter(torch.ones(d_hid), requires_grad=True)
-    self.offset= nn.Parameter(torch.zeros(d_hid), requires_grad=True)
+    self.a_2 = nn.Parameter(torch.ones(d_hid), requires_grad=True)
+    self.b_2 = nn.Parameter(torch.zeros(d_hid), requires_grad=True)
 
-  def forward(self, x):
-    assert x.dim() >= 2
-    mean = x.mean(dim=-1, keepdim=True)
-    std = x.std(dim=-1, keepdim=True)
-    return self.scale * (x - mean) / (std + self.eps) + self.offset
+  def forward(self, z):
+    if z.size(1) == 1:
+      return z
 
+    mu = torch.mean(z, keepdim=True, dim=-1)
+    sigma = torch.std(z, keepdim=True, dim=-1)
+    ln_out = (z - mu.expand_as(z)) / (sigma.expand_as(z) + self.eps)
+    ln_out = ln_out * self.a_2.expand_as(ln_out) + self.b_2.expand_as(ln_out)
+    return ln_out
+
+#class LayerNormalization(nn.Module):
+#  def __init__(self, d_hid, eps=1e-5):
+#    super(LayerNormalization, self).__init__()
+#
+#    self.eps = eps
+#    self.scale = nn.Parameter(torch.ones(d_hid), requires_grad=True)
+#    self.offset= nn.Parameter(torch.zeros(d_hid), requires_grad=True)
+#
+#  def forward(self, x):
+#    assert x.dim() >= 2
+#    mean = x.mean(dim=-1, keepdim=True)
+#    std = x.std(dim=-1, keepdim=True)
+#    return self.scale * (x - mean) / (std + self.eps) + self.offset
+#
 
 class ScaledDotProdAttn(nn.Module):
   def __init__(self, dim, dropout=0.1):
@@ -232,10 +249,11 @@ class PositionwiseFF(nn.Module):
   def forward(self, x):
     residual = x
     batch_size, x_len, d_model = x.size()
-    x = self.relu(self.w_1(x.view(-1, d_model)))
-    x = self.w_2(x).view(batch_size, x_len, d_model)
-    x = self.dropout(x)
-    return self.layer_norm(x + residual)
+    output = self.relu(self.w_1(x.view(-1, d_model)))
+    output = self.w_2(output).view(batch_size, x_len, d_model)
+    output = self.dropout(output)
+    return self.layer_norm(output + residual)
+    #return x 
 
 
 class EncoderLayer(nn.Module):

@@ -274,8 +274,8 @@ def train():
         log_string = "ep={0:<3d}".format(epoch)
         log_string += " steps={0:<6.2f}".format(step / 1000)
         log_string += " lr={0:<8.6f}".format(lr)
-        log_string += " loss={0:<7.2f}".format(tr_loss.data[0])
-        log_string += " ppl={0:<8.2f}".format(tr_ppl)
+        log_string += " loss/word={0:<7.2f}".format(tr_loss.data[0])
+        log_string += " ppl/word={0:<8.2f}".format(tr_ppl)
         log_string += " acc={0:<5.4f}".format(tr_acc.data[0] / y_count)
         log_string += " wpm(K)={0:<5.2f}".format(
           target_words / (1000 * elapsed))

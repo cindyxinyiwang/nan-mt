@@ -1,0 +1,1313 @@
+Singularity: Invoking an interactive shell within container...
+
+[0m--------------------------------------------------------------------------------
+Path outputs_exp2_v5 exists. Remove and remake.
+--------------------------------------------------------------------------------
+Logging to outputs_exp2_v5/stdout
+--------------------------------------------------------------------------------
+Creating a Hparams object
+--------------------------------------------------------------------------------
+Building data for 'IWSLT 2016 En-De with BPE 32K Shared Vocab' from 'data/bpe_28k_shared/en-de/'
+--------------------------------------------------------------------------------
+Loading vocab from 'shared_28000.vocab'
+Done. vocab_size = 28001
+--------------------------------------------------------------------------------
+Loading vocab from 'shared_28000.vocab'
+Done. vocab_size = 28001
+--------------------------------------------------------------------------------
+Loading parallel data from 'train.en' and 'train.de'
+ 10000 pairs. src_unk=19. tgt_unk=46
+ 20000 pairs. src_unk=85. tgt_unk=117
+ 30000 pairs. src_unk=103. tgt_unk=194
+ 40000 pairs. src_unk=146. tgt_unk=340
+ 50000 pairs. src_unk=185. tgt_unk=445
+ 60000 pairs. src_unk=213. tgt_unk=531
+ 70000 pairs. src_unk=254. tgt_unk=608
+ 80000 pairs. src_unk=294. tgt_unk=749
+ 90000 pairs. src_unk=320. tgt_unk=786
+100000 pairs. src_unk=345. tgt_unk=844
+110000 pairs. src_unk=382. tgt_unk=925
+120000 pairs. src_unk=429. tgt_unk=1037
+130000 pairs. src_unk=446. tgt_unk=1122
+140000 pairs. src_unk=493. tgt_unk=1239
+150000 pairs. src_unk=536. tgt_unk=1408
+160000 pairs. src_unk=634. tgt_unk=1518
+170000 pairs. src_unk=698. tgt_unk=1690
+180000 pairs. src_unk=846. tgt_unk=1878
+190000 pairs. src_unk=1039. tgt_unk=2040
+199911 pairs. src_unk=1191. tgt_unk=2523
+Heuristic sort based on source lens
+--------------------------------------------------------------------------------
+Loading parallel data from 'dev2010.en' and 'dev2010.de'
+   903 pairs. src_unk=0. tgt_unk=13
+--------------------------------------------------------------------------------
+Creating model
+Model has 28075008 params
+--------------------------------------------------------------------------------
+Start training
+ep=0   steps=0.10   lr=0.000304 loss=262.70  ppl=1880.77  acc=0.0556 wpm(K)=552.44 mins=0.16 
+ep=0   steps=0.20   lr=0.000609 loss=322.41  ppl=1212.60  acc=0.1074 wpm(K)=502.42 mins=0.32 
+ep=0   steps=0.30   lr=0.000913 loss=63.67   ppl=422.42   acc=0.2196 wpm(K)=494.24 mins=0.47 
+ep=0   steps=0.40   lr=0.001217 loss=43.03   ppl=282.45   acc=0.2418 wpm(K)=486.78 mins=0.63 
+ep=0   steps=0.50   lr=0.001521 loss=44.10   ppl=218.51   acc=0.1947 wpm(K)=479.54 mins=0.78 
+ep=0   steps=0.60   lr=0.001826 loss=608.45  ppl=816.20   acc=0.1181 wpm(K)=481.42 mins=0.94 
+ep=0   steps=0.70   lr=0.002130 loss=112.50  ppl=541.25   acc=0.1381 wpm(K)=483.71 mins=1.10 
+ep=0   steps=0.80   lr=0.002210 loss=179.94  ppl=563.61   acc=0.1331 wpm(K)=477.26 mins=1.25 
+ep=0   steps=0.90   lr=0.002083 loss=181.13  ppl=579.69   acc=0.1076 wpm(K)=471.27 mins=1.40 
+ep=0   steps=1.00   lr=0.001976 loss=165.00  ppl=592.64   acc=0.1306 wpm(K)=469.90 mins=1.56 
+Eval at step 1000. valid_batch_size=30
+val_step=1000   loss=6.30   acc=0.1238 val_ppl=545.50 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.3/0.0/0.0/0.0 (BP=0.014, ratio=0.191, hyp_len=4515, ref_len=23648)
+Saving model to 'outputs_exp2_v5'
+ep=0   steps=1.10   lr=0.001884 loss=116.03  ppl=422.80   acc=0.1564 wpm(K)=386.65 mins=2.09 
+ep=0   steps=1.20   lr=0.001804 loss=214.39  ppl=526.04   acc=0.1151 wpm(K)=392.89 mins=2.24 
+ep=0   steps=1.30   lr=0.001733 loss=203.82  ppl=552.10   acc=0.1104 wpm(K)=397.73 mins=2.40 
+ep=0   steps=1.40   lr=0.001670 loss=70.20   ppl=326.93   acc=0.1598 wpm(K)=401.83 mins=2.56 
+ep=0   steps=1.50   lr=0.001614 loss=175.29  ppl=430.17   acc=0.1362 wpm(K)=405.31 mins=2.71 
+ep=0   steps=1.60   lr=0.001563 loss=234.25  ppl=497.94   acc=0.1143 wpm(K)=407.54 mins=2.87 
+ep=0   steps=1.70   lr=0.001516 loss=264.16  ppl=509.68   acc=0.1335 wpm(K)=410.44 mins=3.02 
+ep=0   steps=1.80   lr=0.001473 loss=88.72   ppl=309.72   acc=0.1859 wpm(K)=412.46 mins=3.18 
+ep=0   steps=1.90   lr=0.001434 loss=254.15  ppl=409.71   acc=0.1183 wpm(K)=415.15 mins=3.33 
+ep=0   steps=2.00   lr=0.001398 loss=87.38   ppl=319.13   acc=0.1608 wpm(K)=417.11 mins=3.49 
+Eval at step 2000. valid_batch_size=30
+val_step=2000   loss=5.98   acc=0.1378 val_ppl=396.38 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.2/0.0/0.0/0.0 (BP=0.064, ratio=0.267, hyp_len=6321, ref_len=23648)
+Saving model to 'outputs_exp2_v5'
+ep=0   steps=2.10   lr=0.001364 loss=74.62   ppl=290.51   acc=0.1734 wpm(K)=372.41 mins=4.12 
+ep=0   steps=2.20   lr=0.001333 loss=86.99   ppl=307.30   acc=0.1605 wpm(K)=377.39 mins=4.28 
+ep=0   steps=2.30   lr=0.001303 loss=62.08   ppl=238.05   acc=0.1956 wpm(K)=380.25 mins=4.43 
+ep=0   steps=2.40   lr=0.001276 loss=157.68  ppl=295.42   acc=0.1556 wpm(K)=383.91 mins=4.59 
+ep=0   steps=2.50   lr=0.001250 loss=97.46   ppl=278.54   acc=0.1805 wpm(K)=387.01 mins=4.75 
+ep=0   steps=2.60   lr=0.001226 loss=14.14   ppl=42.06    acc=0.3967 wpm(K)=388.54 mins=4.90 
+ep=0   steps=2.70   lr=0.001203 loss=87.83   ppl=239.60   acc=0.1969 wpm(K)=390.16 mins=5.06 
+ep=0   steps=2.80   lr=0.001181 loss=181.87  ppl=446.11   acc=0.1604 wpm(K)=392.04 mins=5.21 
+ep=0   steps=2.90   lr=0.001161 loss=42.57   ppl=123.10   acc=0.2580 wpm(K)=393.53 mins=5.36 
+ep=0   steps=3.00   lr=0.001141 loss=119.22  ppl=282.45   acc=0.1538 wpm(K)=395.96 mins=5.52 
+Eval at step 3000. valid_batch_size=30
+val_step=3000   loss=5.81   acc=0.1500 val_ppl=333.81 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.2/0.0/0.0/0.0 (BP=0.148, ratio=0.344, hyp_len=8127, ref_len=23648)
+Saving model to 'outputs_exp2_v5'
+ep=0   steps=3.10   lr=0.001123 loss=156.74  ppl=298.71   acc=0.1625 wpm(K)=365.70 mins=6.22 
+ep=0   steps=3.20   lr=0.001105 loss=94.13   ppl=246.26   acc=0.1846 wpm(K)=367.57 mins=6.37 
+ep=0   steps=3.30   lr=0.001088 loss=162.51  ppl=323.12   acc=0.1567 wpm(K)=369.05 mins=6.53 
+ep=0   steps=3.40   lr=0.001072 loss=96.22   ppl=326.20   acc=0.1898 wpm(K)=370.70 mins=6.68 
+ep=0   steps=3.50   lr=0.001056 loss=175.24  ppl=309.16   acc=0.1616 wpm(K)=373.53 mins=6.84 
+ep=0   steps=3.60   lr=0.001042 loss=60.18   ppl=213.59   acc=0.1783 wpm(K)=375.51 mins=7.00 
+ep=0   steps=3.70   lr=0.001027 loss=183.44  ppl=298.62   acc=0.1641 wpm(K)=377.16 mins=7.15 
+ep=0   steps=3.80   lr=0.001014 loss=147.71  ppl=301.39   acc=0.1486 wpm(K)=378.89 mins=7.31 
+ep=0   steps=3.90   lr=0.001001 loss=63.43   ppl=170.52   acc=0.2253 wpm(K)=379.75 mins=7.46 
+ep=0   steps=4.00   lr=0.000988 loss=96.43   ppl=267.84   acc=0.1413 wpm(K)=381.25 mins=7.62 
+Eval at step 4000. valid_batch_size=30
+val_step=4000   loss=5.77   acc=0.1431 val_ppl=319.97 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.4/0.0/0.0/0.0 (BP=0.014, ratio=0.191, hyp_len=4515, ref_len=23648)
+Saving model to 'outputs_exp2_v5'
+ep=0   steps=4.10   lr=0.000976 loss=96.42   ppl=168.23   acc=0.1927 wpm(K)=360.72 mins=8.26 
+ep=0   steps=4.20   lr=0.000964 loss=160.14  ppl=275.63   acc=0.1404 wpm(K)=360.70 mins=8.47 
+ep=0   steps=4.30   lr=0.000953 loss=197.56  ppl=302.14   acc=0.1689 wpm(K)=359.82 mins=8.68 
+ep=0   steps=4.40   lr=0.000942 loss=124.73  ppl=276.33   acc=0.1732 wpm(K)=359.43 mins=8.89 
+ep=0   steps=4.50   lr=0.000932 loss=45.39   ppl=124.68   acc=0.2292 wpm(K)=358.58 mins=9.10 
+ep=0   steps=4.60   lr=0.000922 loss=91.14   ppl=219.37   acc=0.1885 wpm(K)=357.97 mins=9.32 
+ep=0   steps=4.70   lr=0.000912 loss=75.19   ppl=182.66   acc=0.1970 wpm(K)=357.04 mins=9.53 
+ep=0   steps=4.80   lr=0.000902 loss=150.88  ppl=263.84   acc=0.1628 wpm(K)=356.97 mins=9.73 
+ep=0   steps=4.90   lr=0.000893 loss=31.42   ppl=85.56    acc=0.3053 wpm(K)=356.36 mins=9.93 
+ep=0   steps=5.00   lr=0.000884 loss=240.43  ppl=296.08   acc=0.1635 wpm(K)=356.03 mins=10.15
+Eval at step 5000. valid_batch_size=30
+val_step=5000   loss=5.77   acc=0.1442 val_ppl=321.29 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=0   steps=5.10   lr=0.000875 loss=125.56  ppl=271.47   acc=0.1771 wpm(K)=343.55 mins=10.71
+ep=0   steps=5.20   lr=0.000867 loss=240.90  ppl=255.14   acc=0.1682 wpm(K)=343.08 mins=10.93
+ep=0   steps=5.30   lr=0.000859 loss=76.74   ppl=156.51   acc=0.2181 wpm(K)=343.46 mins=11.14
+ep=0   steps=5.40   lr=0.000851 loss=60.27   ppl=159.97   acc=0.1895 wpm(K)=342.97 mins=11.35
+ep=0   steps=5.50   lr=0.000843 loss=73.71   ppl=147.98   acc=0.2140 wpm(K)=342.71 mins=11.56
+ep=0   steps=5.60   lr=0.000835 loss=61.38   ppl=170.96   acc=0.2147 wpm(K)=342.28 mins=11.78
+ep=0   steps=5.70   lr=0.000828 loss=130.38  ppl=323.30   acc=0.1620 wpm(K)=341.76 mins=11.99
+ep=0   steps=5.80   lr=0.000821 loss=45.39   ppl=105.10   acc=0.2660 wpm(K)=341.81 mins=12.21
+ep=0   steps=5.90   lr=0.000814 loss=219.45  ppl=258.72   acc=0.1590 wpm(K)=341.82 mins=12.43
+ep=0   steps=6.00   lr=0.000807 loss=206.34  ppl=233.32   acc=0.1693 wpm(K)=341.22 mins=12.65
+Eval at step 6000. valid_batch_size=30
+val_step=6000   loss=5.89   acc=0.1332 val_ppl=361.26 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=0   steps=6.10   lr=0.000800 loss=185.70  ppl=242.73   acc=0.1599 wpm(K)=331.41 mins=13.22
+ep=0   steps=6.20   lr=0.000794 loss=210.39  ppl=268.21   acc=0.1786 wpm(K)=331.19 mins=13.44
+ep=1   steps=6.30   lr=0.000787 loss=41.67   ppl=99.28    acc=0.2862 wpm(K)=331.02 mins=13.65
+ep=1   steps=6.40   lr=0.000781 loss=98.12   ppl=242.03   acc=0.1766 wpm(K)=330.93 mins=13.87
+ep=1   steps=6.50   lr=0.000775 loss=54.17   ppl=163.77   acc=0.2794 wpm(K)=331.51 mins=14.09
+ep=1   steps=6.60   lr=0.000769 loss=127.60  ppl=206.55   acc=0.2010 wpm(K)=331.51 mins=14.30
+ep=1   steps=6.70   lr=0.000764 loss=86.87   ppl=201.35   acc=0.1546 wpm(K)=331.59 mins=14.52
+ep=1   steps=6.80   lr=0.000758 loss=195.78  ppl=245.95   acc=0.1863 wpm(K)=331.77 mins=14.74
+ep=1   steps=6.90   lr=0.000752 loss=68.49   ppl=171.48   acc=0.2160 wpm(K)=331.82 mins=14.95
+ep=1   steps=7.00   lr=0.000747 loss=32.89   ppl=86.51    acc=0.3051 wpm(K)=332.21 mins=15.16
+Eval at step 7000. valid_batch_size=30
+val_step=7000   loss=5.76   acc=0.1453 val_ppl=316.57 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.4/0.0/0.0/0.0 (BP=0.004, ratio=0.153, hyp_len=3612, ref_len=23648)
+Saving model to 'outputs_exp2_v5'
+ep=1   steps=7.10   lr=0.000742 loss=45.25   ppl=105.18   acc=0.2701 wpm(K)=322.84 mins=15.81
+ep=1   steps=7.20   lr=0.000737 loss=147.10  ppl=269.70   acc=0.1736 wpm(K)=322.37 mins=16.03
+ep=1   steps=7.30   lr=0.000732 loss=74.11   ppl=147.37   acc=0.2211 wpm(K)=322.33 mins=16.24
+ep=1   steps=7.40   lr=0.000727 loss=241.42  ppl=223.65   acc=0.1779 wpm(K)=322.26 mins=16.46
+ep=1   steps=7.50   lr=0.000722 loss=174.92  ppl=249.67   acc=0.1746 wpm(K)=323.00 mins=16.66
+ep=1   steps=7.60   lr=0.000717 loss=162.27  ppl=229.79   acc=0.1749 wpm(K)=323.21 mins=16.88
+ep=1   steps=7.70   lr=0.000712 loss=53.22   ppl=95.01    acc=0.2487 wpm(K)=323.27 mins=17.10
+ep=1   steps=7.80   lr=0.000708 loss=145.61  ppl=256.51   acc=0.1643 wpm(K)=323.05 mins=17.31
+ep=1   steps=7.90   lr=0.000703 loss=59.80   ppl=138.62   acc=0.2629 wpm(K)=323.04 mins=17.53
+ep=1   steps=8.00   lr=0.000699 loss=54.27   ppl=98.94    acc=0.2646 wpm(K)=322.89 mins=17.74
+Eval at step 8000. valid_batch_size=30
+val_step=8000   loss=5.82   acc=0.1450 val_ppl=337.64 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=1   steps=8.10   lr=0.000694 loss=77.29   ppl=107.28   acc=0.2212 wpm(K)=315.23 mins=18.39
+ep=1   steps=8.20   lr=0.000690 loss=232.31  ppl=212.66   acc=0.1615 wpm(K)=315.68 mins=18.60
+ep=1   steps=8.30   lr=0.000686 loss=46.22   ppl=77.46    acc=0.2529 wpm(K)=316.03 mins=18.81
+ep=1   steps=8.40   lr=0.000682 loss=85.42   ppl=150.73   acc=0.2239 wpm(K)=316.26 mins=19.02
+ep=1   steps=8.50   lr=0.000678 loss=120.93  ppl=212.69   acc=0.1898 wpm(K)=316.27 mins=19.23
+ep=1   steps=8.60   lr=0.000674 loss=103.43  ppl=223.24   acc=0.1781 wpm(K)=316.82 mins=19.45
+ep=1   steps=8.70   lr=0.000670 loss=160.36  ppl=184.01   acc=0.2093 wpm(K)=317.13 mins=19.67
+ep=1   steps=8.80   lr=0.000666 loss=74.63   ppl=122.14   acc=0.2616 wpm(K)=317.32 mins=19.89
+ep=1   steps=8.90   lr=0.000662 loss=149.39  ppl=211.29   acc=0.1848 wpm(K)=317.55 mins=20.10
+ep=1   steps=9.00   lr=0.000659 loss=70.79   ppl=178.32   acc=0.1922 wpm(K)=317.79 mins=20.31
+Eval at step 9000. valid_batch_size=30
+val_step=9000   loss=5.87   acc=0.1407 val_ppl=353.33 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=1   steps=9.10   lr=0.000655 loss=106.39  ppl=180.81   acc=0.2122 wpm(K)=312.39 mins=20.90
+ep=1   steps=9.20   lr=0.000652 loss=149.75  ppl=175.81   acc=0.2071 wpm(K)=312.76 mins=21.12
+ep=1   steps=9.30   lr=0.000648 loss=39.53   ppl=94.62    acc=0.3094 wpm(K)=312.74 mins=21.34
+ep=1   steps=9.40   lr=0.000645 loss=79.26   ppl=157.98   acc=0.2315 wpm(K)=312.93 mins=21.56
+ep=1   steps=9.50   lr=0.000641 loss=210.55  ppl=226.96   acc=0.1723 wpm(K)=313.35 mins=21.77
+ep=1   steps=9.60   lr=0.000638 loss=61.11   ppl=134.48   acc=0.2281 wpm(K)=313.54 mins=21.97
+ep=1   steps=9.70   lr=0.000635 loss=152.95  ppl=227.27   acc=0.1973 wpm(K)=313.56 mins=22.19
+ep=1   steps=9.80   lr=0.000631 loss=104.57  ppl=204.34   acc=0.2003 wpm(K)=313.79 mins=22.40
+ep=1   steps=9.90   lr=0.000628 loss=234.27  ppl=247.69   acc=0.1640 wpm(K)=314.07 mins=22.62
+ep=1   steps=10.00  lr=0.000625 loss=210.54  ppl=196.36   acc=0.1763 wpm(K)=314.40 mins=22.83
+Eval at step 10000. valid_batch_size=30
+val_step=10000  loss=5.97   acc=0.1383 val_ppl=392.27 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=1   steps=10.10  lr=0.000622 loss=101.28  ppl=146.39   acc=0.2092 wpm(K)=309.62 mins=23.42
+ep=1   steps=10.20  lr=0.000619 loss=49.68   ppl=120.12   acc=0.2681 wpm(K)=309.87 mins=23.62
+ep=1   steps=10.30  lr=0.000616 loss=135.20  ppl=184.68   acc=0.2159 wpm(K)=309.92 mins=23.83
+ep=1   steps=10.40  lr=0.000613 loss=171.16  ppl=193.70   acc=0.2058 wpm(K)=310.35 mins=24.05
+ep=1   steps=10.50  lr=0.000610 loss=90.49   ppl=146.02   acc=0.2031 wpm(K)=310.49 mins=24.26
+ep=1   steps=10.60  lr=0.000607 loss=148.16  ppl=175.98   acc=0.2170 wpm(K)=310.72 mins=24.47
+ep=1   steps=10.70  lr=0.000604 loss=84.23   ppl=212.42   acc=0.2167 wpm(K)=310.74 mins=24.69
+ep=1   steps=10.80  lr=0.000601 loss=102.93  ppl=163.83   acc=0.2307 wpm(K)=310.92 mins=24.91
+ep=1   steps=10.90  lr=0.000599 loss=47.16   ppl=126.05   acc=0.2596 wpm(K)=311.42 mins=25.13
+ep=1   steps=11.00  lr=0.000596 loss=150.21  ppl=194.53   acc=0.1853 wpm(K)=311.55 mins=25.33
+Eval at step 11000. valid_batch_size=30
+val_step=11000  loss=5.89   acc=0.1413 val_ppl=361.65 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=1   steps=11.10  lr=0.000593 loss=65.56   ppl=120.29   acc=0.2648 wpm(K)=307.56 mins=25.90
+ep=1   steps=11.20  lr=0.000591 loss=141.77  ppl=143.85   acc=0.2191 wpm(K)=307.62 mins=26.11
+ep=1   steps=11.30  lr=0.000588 loss=141.34  ppl=195.90   acc=0.2135 wpm(K)=308.16 mins=26.32
+ep=1   steps=11.40  lr=0.000585 loss=209.38  ppl=221.16   acc=0.1829 wpm(K)=308.58 mins=26.54
+ep=1   steps=11.50  lr=0.000583 loss=61.38   ppl=127.67   acc=0.2494 wpm(K)=308.85 mins=26.75
+ep=1   steps=11.60  lr=0.000580 loss=108.64  ppl=179.21   acc=0.2075 wpm(K)=309.08 mins=26.97
+ep=1   steps=11.70  lr=0.000578 loss=39.20   ppl=104.11   acc=0.2778 wpm(K)=309.48 mins=27.17
+ep=1   steps=11.80  lr=0.000575 loss=133.49  ppl=129.69   acc=0.2335 wpm(K)=309.65 mins=27.38
+ep=1   steps=11.90  lr=0.000573 loss=30.17   ppl=61.94    acc=0.3718 wpm(K)=309.92 mins=27.59
+ep=1   steps=12.00  lr=0.000571 loss=166.82  ppl=193.38   acc=0.1923 wpm(K)=310.13 mins=27.80
+Eval at step 12000. valid_batch_size=30
+val_step=12000  loss=6.01   acc=0.1336 val_ppl=406.86 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=1   steps=12.10  lr=0.000568 loss=99.05   ppl=171.63   acc=0.2143 wpm(K)=306.16 mins=28.38
+ep=1   steps=12.20  lr=0.000566 loss=85.17   ppl=141.94   acc=0.2055 wpm(K)=306.44 mins=28.60
+ep=1   steps=12.30  lr=0.000564 loss=212.46  ppl=178.05   acc=0.1867 wpm(K)=306.70 mins=28.80
+ep=1   steps=12.40  lr=0.000561 loss=34.40   ppl=72.47    acc=0.3074 wpm(K)=306.89 mins=29.01
+ep=2   steps=12.50  lr=0.000559 loss=64.93   ppl=108.91   acc=0.2348 wpm(K)=307.02 mins=29.23
+ep=2   steps=12.60  lr=0.000557 loss=43.68   ppl=94.90    acc=0.2801 wpm(K)=307.26 mins=29.44
+ep=2   steps=12.70  lr=0.000555 loss=87.46   ppl=149.41   acc=0.2433 wpm(K)=307.32 mins=29.65
+ep=2   steps=12.80  lr=0.000552 loss=66.29   ppl=140.38   acc=0.2354 wpm(K)=307.42 mins=29.87
+ep=2   steps=12.90  lr=0.000550 loss=333.68  ppl=262.46   acc=0.1633 wpm(K)=307.57 mins=30.09
+ep=2   steps=13.00  lr=0.000548 loss=110.76  ppl=173.98   acc=0.2198 wpm(K)=307.79 mins=30.30
+Eval at step 13000. valid_batch_size=30
+val_step=13000  loss=6.45   acc=0.1238 val_ppl=630.63 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=2   steps=13.10  lr=0.000546 loss=67.74   ppl=145.90   acc=0.2345 wpm(K)=304.39 mins=30.86
+ep=2   steps=13.20  lr=0.000544 loss=24.95   ppl=50.12    acc=0.4020 wpm(K)=304.51 mins=31.07
+ep=2   steps=13.30  lr=0.000542 loss=67.60   ppl=90.64    acc=0.2708 wpm(K)=304.68 mins=31.28
+ep=2   steps=13.40  lr=0.000540 loss=101.53  ppl=168.13   acc=0.2145 wpm(K)=304.84 mins=31.50
+ep=2   steps=13.50  lr=0.000538 loss=49.32   ppl=140.86   acc=0.2571 wpm(K)=304.86 mins=31.71
+ep=2   steps=13.60  lr=0.000536 loss=153.80  ppl=177.82   acc=0.2042 wpm(K)=305.03 mins=31.92
+ep=2   steps=13.70  lr=0.000534 loss=82.86   ppl=129.70   acc=0.2220 wpm(K)=305.38 mins=32.14
+ep=2   steps=13.80  lr=0.000532 loss=397.52  ppl=249.31   acc=0.1753 wpm(K)=305.82 mins=32.34
+ep=2   steps=13.90  lr=0.000530 loss=173.06  ppl=220.91   acc=0.2076 wpm(K)=306.04 mins=32.55
+ep=2   steps=14.00  lr=0.000528 loss=232.14  ppl=202.31   acc=0.2009 wpm(K)=306.17 mins=32.76
+Eval at step 14000. valid_batch_size=30
+val_step=14000  loss=5.96   acc=0.1404 val_ppl=386.28 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=2   steps=14.10  lr=0.000526 loss=74.61   ppl=88.20    acc=0.2608 wpm(K)=302.98 mins=33.33
+ep=2   steps=14.20  lr=0.000524 loss=338.32  ppl=172.94   acc=0.1694 wpm(K)=303.18 mins=33.54
+ep=2   steps=14.30  lr=0.000523 loss=28.94   ppl=51.46    acc=0.3277 wpm(K)=303.24 mins=33.76
+ep=2   steps=14.40  lr=0.000521 loss=57.36   ppl=130.21   acc=0.2361 wpm(K)=303.72 mins=33.97
+ep=2   steps=14.50  lr=0.000519 loss=63.19   ppl=85.99    acc=0.2599 wpm(K)=304.05 mins=34.18
+ep=2   steps=14.60  lr=0.000517 loss=194.25  ppl=168.78   acc=0.2038 wpm(K)=304.41 mins=34.39
+ep=2   steps=14.70  lr=0.000515 loss=47.81   ppl=106.09   acc=0.2439 wpm(K)=304.54 mins=34.60
+ep=2   steps=14.80  lr=0.000514 loss=32.07   ppl=57.75    acc=0.3478 wpm(K)=304.79 mins=34.81
+ep=2   steps=14.90  lr=0.000512 loss=120.32  ppl=161.75   acc=0.2206 wpm(K)=305.02 mins=35.03
+ep=2   steps=15.00  lr=0.000510 loss=45.15   ppl=138.52   acc=0.2662 wpm(K)=305.18 mins=35.24
+Eval at step 15000. valid_batch_size=30
+val_step=15000  loss=5.92   acc=0.1487 val_ppl=373.60 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=2   steps=15.10  lr=0.000509 loss=70.26   ppl=127.15   acc=0.2392 wpm(K)=302.70 mins=35.78
+ep=2   steps=15.20  lr=0.000507 loss=106.37  ppl=113.04   acc=0.2486 wpm(K)=302.88 mins=35.99
+ep=2   steps=15.30  lr=0.000505 loss=39.85   ppl=66.32    acc=0.2993 wpm(K)=303.05 mins=36.20
+ep=2   steps=15.40  lr=0.000504 loss=196.70  ppl=199.13   acc=0.1918 wpm(K)=303.28 mins=36.42
+ep=2   steps=15.50  lr=0.000502 loss=27.07   ppl=41.18    acc=0.3863 wpm(K)=303.68 mins=36.63
+ep=2   steps=15.60  lr=0.000500 loss=54.35   ppl=109.96   acc=0.2676 wpm(K)=303.73 mins=36.85
+ep=2   steps=15.70  lr=0.000499 loss=85.17   ppl=143.21   acc=0.2368 wpm(K)=304.12 mins=37.05
+ep=2   steps=15.80  lr=0.000497 loss=34.88   ppl=79.62    acc=0.2824 wpm(K)=304.21 mins=37.26
+ep=2   steps=15.90  lr=0.000496 loss=54.64   ppl=135.78   acc=0.2331 wpm(K)=304.36 mins=37.47
+ep=2   steps=16.00  lr=0.000494 loss=71.95   ppl=150.87   acc=0.2331 wpm(K)=304.55 mins=37.68
+Eval at step 16000. valid_batch_size=30
+val_step=16000  loss=6.18   acc=0.1321 val_ppl=482.66 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=2   steps=16.10  lr=0.000493 loss=146.56  ppl=155.74   acc=0.2099 wpm(K)=301.57 mins=38.26
+ep=2   steps=16.20  lr=0.000491 loss=34.81   ppl=60.98    acc=0.3173 wpm(K)=301.59 mins=38.47
+ep=2   steps=16.30  lr=0.000490 loss=154.52  ppl=190.38   acc=0.1900 wpm(K)=301.77 mins=38.69
+ep=2   steps=16.40  lr=0.000488 loss=259.59  ppl=182.73   acc=0.1862 wpm(K)=301.98 mins=38.90
+ep=2   steps=16.50  lr=0.000487 loss=251.09  ppl=231.28   acc=0.1890 wpm(K)=302.54 mins=39.11
+ep=2   steps=16.60  lr=0.000485 loss=56.83   ppl=129.30   acc=0.2620 wpm(K)=302.66 mins=39.32
+ep=2   steps=16.70  lr=0.000484 loss=120.77  ppl=168.24   acc=0.2215 wpm(K)=302.84 mins=39.54
+ep=2   steps=16.80  lr=0.000482 loss=122.05  ppl=103.37   acc=0.2221 wpm(K)=302.94 mins=39.75
+ep=2   steps=16.90  lr=0.000481 loss=119.87  ppl=151.51   acc=0.2212 wpm(K)=303.00 mins=39.97
+ep=2   steps=17.00  lr=0.000479 loss=26.50   ppl=54.63    acc=0.3632 wpm(K)=303.03 mins=40.18
+Eval at step 17000. valid_batch_size=30
+val_step=17000  loss=6.79   acc=0.1187 val_ppl=890.19 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=2   steps=17.10  lr=0.000478 loss=140.68  ppl=165.62   acc=0.2077 wpm(K)=300.58 mins=40.76
+ep=2   steps=17.20  lr=0.000477 loss=184.50  ppl=168.19   acc=0.1970 wpm(K)=300.82 mins=40.97
+ep=2   steps=17.30  lr=0.000475 loss=82.92   ppl=105.15   acc=0.2298 wpm(K)=301.06 mins=41.19
+ep=2   steps=17.40  lr=0.000474 loss=258.63  ppl=187.68   acc=0.1790 wpm(K)=301.15 mins=41.40
+ep=2   steps=17.50  lr=0.000472 loss=35.40   ppl=76.69    acc=0.2912 wpm(K)=301.29 mins=41.62
+ep=2   steps=17.60  lr=0.000471 loss=118.20  ppl=172.99   acc=0.2180 wpm(K)=301.57 mins=41.83
+ep=2   steps=17.70  lr=0.000470 loss=39.88   ppl=77.90    acc=0.3345 wpm(K)=301.94 mins=42.05
+ep=2   steps=17.80  lr=0.000468 loss=83.84   ppl=111.61   acc=0.2425 wpm(K)=302.20 mins=42.26
+ep=2   steps=17.90  lr=0.000467 loss=64.42   ppl=132.26   acc=0.2441 wpm(K)=302.29 mins=42.48
+ep=2   steps=18.00  lr=0.000466 loss=91.15   ppl=140.27   acc=0.2508 wpm(K)=302.61 mins=42.70
+Eval at step 18000. valid_batch_size=30
+val_step=18000  loss=6.44   acc=0.1245 val_ppl=629.43 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=2   steps=18.10  lr=0.000465 loss=38.02   ppl=70.35    acc=0.3147 wpm(K)=300.02 mins=43.28
+ep=2   steps=18.20  lr=0.000463 loss=172.02  ppl=169.03   acc=0.1985 wpm(K)=300.20 mins=43.49
+ep=2   steps=18.30  lr=0.000462 loss=49.27   ppl=99.12    acc=0.3061 wpm(K)=300.34 mins=43.70
+ep=2   steps=18.40  lr=0.000461 loss=234.72  ppl=131.27   acc=0.2143 wpm(K)=300.64 mins=43.91
+ep=2   steps=18.50  lr=0.000460 loss=107.04  ppl=139.14   acc=0.2363 wpm(K)=300.94 mins=44.13
+ep=2   steps=18.60  lr=0.000458 loss=42.58   ppl=102.95   acc=0.2993 wpm(K)=301.28 mins=44.35
+ep=2   steps=18.70  lr=0.000457 loss=175.34  ppl=174.49   acc=0.2070 wpm(K)=301.62 mins=44.57
+ep=3   steps=18.80  lr=0.000456 loss=184.17  ppl=156.72   acc=0.2041 wpm(K)=301.78 mins=44.79
+ep=3   steps=18.90  lr=0.000455 loss=115.22  ppl=132.93   acc=0.2361 wpm(K)=302.04 mins=45.00
+ep=3   steps=19.00  lr=0.000453 loss=106.02  ppl=106.35   acc=0.2366 wpm(K)=302.28 mins=45.21
+Eval at step 19000. valid_batch_size=30
+val_step=19000  loss=6.02   acc=0.1404 val_ppl=411.18 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=3   steps=19.10  lr=0.000452 loss=85.77   ppl=118.28   acc=0.2470 wpm(K)=300.11 mins=45.79
+ep=3   steps=19.20  lr=0.000451 loss=39.36   ppl=67.49    acc=0.2910 wpm(K)=300.33 mins=46.01
+ep=3   steps=19.30  lr=0.000450 loss=20.13   ppl=29.65    acc=0.4421 wpm(K)=300.63 mins=46.23
+ep=3   steps=19.40  lr=0.000449 loss=54.95   ppl=90.79    acc=0.2641 wpm(K)=300.82 mins=46.44
+ep=3   steps=19.50  lr=0.000448 loss=320.61  ppl=201.84   acc=0.1785 wpm(K)=300.93 mins=46.65
+ep=3   steps=19.60  lr=0.000446 loss=117.59  ppl=166.14   acc=0.2283 wpm(K)=301.20 mins=46.87
+ep=3   steps=19.70  lr=0.000445 loss=37.84   ppl=80.37    acc=0.3080 wpm(K)=301.44 mins=47.08
+ep=3   steps=19.80  lr=0.000444 loss=85.15   ppl=139.27   acc=0.2156 wpm(K)=301.57 mins=47.30
+ep=3   steps=19.90  lr=0.000443 loss=97.39   ppl=144.08   acc=0.2153 wpm(K)=301.72 mins=47.51
+ep=3   steps=20.00  lr=0.000442 loss=46.07   ppl=131.84   acc=0.2848 wpm(K)=301.78 mins=47.73
+Eval at step 20000. valid_batch_size=30
+val_step=20000  loss=6.53   acc=0.1314 val_ppl=682.17 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=3   steps=20.10  lr=0.000441 loss=82.51   ppl=125.96   acc=0.2216 wpm(K)=299.70 mins=48.30
+ep=3   steps=20.20  lr=0.000440 loss=90.54   ppl=97.91    acc=0.2532 wpm(K)=299.85 mins=48.52
+ep=3   steps=20.30  lr=0.000439 loss=49.31   ppl=68.74    acc=0.3083 wpm(K)=299.93 mins=48.73
+ep=3   steps=20.40  lr=0.000438 loss=99.63   ppl=120.82   acc=0.2331 wpm(K)=300.03 mins=48.95
+ep=3   steps=20.50  lr=0.000437 loss=67.83   ppl=97.42    acc=0.2405 wpm(K)=300.19 mins=49.16
+ep=3   steps=20.60  lr=0.000435 loss=46.79   ppl=74.79    acc=0.2795 wpm(K)=300.26 mins=49.38
+ep=3   steps=20.70  lr=0.000434 loss=72.55   ppl=79.20    acc=0.2580 wpm(K)=300.39 mins=49.60
+ep=3   steps=20.80  lr=0.000433 loss=99.97   ppl=161.76   acc=0.2130 wpm(K)=300.51 mins=49.80
+ep=3   steps=20.90  lr=0.000432 loss=62.67   ppl=99.41    acc=0.2523 wpm(K)=300.98 mins=50.01
+ep=3   steps=21.00  lr=0.000431 loss=114.92  ppl=154.12   acc=0.2110 wpm(K)=301.09 mins=50.22
+Eval at step 21000. valid_batch_size=30
+val_step=21000  loss=6.74   acc=0.1212 val_ppl=843.71 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=3   steps=21.10  lr=0.000430 loss=122.01  ppl=153.11   acc=0.2152 wpm(K)=299.08 mins=50.81
+ep=3   steps=21.20  lr=0.000429 loss=262.59  ppl=100.93   acc=0.2268 wpm(K)=299.19 mins=51.02
+ep=3   steps=21.30  lr=0.000428 loss=171.46  ppl=185.03   acc=0.2008 wpm(K)=299.39 mins=51.24
+ep=3   steps=21.40  lr=0.000427 loss=104.88  ppl=149.81   acc=0.2224 wpm(K)=299.35 mins=51.46
+ep=3   steps=21.50  lr=0.000426 loss=140.46  ppl=137.42   acc=0.2191 wpm(K)=299.58 mins=51.67
+ep=3   steps=21.60  lr=0.000425 loss=97.71   ppl=125.51   acc=0.2442 wpm(K)=299.79 mins=51.88
+ep=3   steps=21.70  lr=0.000424 loss=67.04   ppl=113.96   acc=0.2627 wpm(K)=299.95 mins=52.09
+ep=3   steps=21.80  lr=0.000423 loss=94.92   ppl=102.54   acc=0.2165 wpm(K)=300.06 mins=52.31
+ep=3   steps=21.90  lr=0.000422 loss=35.00   ppl=63.34    acc=0.3259 wpm(K)=300.20 mins=52.52
+ep=3   steps=22.00  lr=0.000421 loss=201.71  ppl=139.56   acc=0.2104 wpm(K)=300.35 mins=52.74
+Eval at step 22000. valid_batch_size=30
+val_step=22000  loss=7.36   acc=0.1125 val_ppl=1564.04 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=3   steps=22.10  lr=0.000420 loss=151.36  ppl=111.74   acc=0.2240 wpm(K)=298.58 mins=53.31
+ep=3   steps=22.20  lr=0.000419 loss=51.59   ppl=111.86   acc=0.2800 wpm(K)=298.79 mins=53.52
+ep=3   steps=22.30  lr=0.000419 loss=195.27  ppl=156.27   acc=0.1997 wpm(K)=299.03 mins=53.74
+ep=3   steps=22.40  lr=0.000418 loss=88.68   ppl=95.09    acc=0.2472 wpm(K)=299.25 mins=53.95
+ep=3   steps=22.50  lr=0.000417 loss=143.77  ppl=150.98   acc=0.2061 wpm(K)=299.28 mins=54.17
+ep=3   steps=22.60  lr=0.000416 loss=123.35  ppl=162.91   acc=0.2219 wpm(K)=299.46 mins=54.38
+ep=3   steps=22.70  lr=0.000415 loss=244.52  ppl=168.02   acc=0.1814 wpm(K)=299.67 mins=54.60
+ep=3   steps=22.80  lr=0.000414 loss=145.47  ppl=126.96   acc=0.2102 wpm(K)=299.84 mins=54.81
+ep=3   steps=22.90  lr=0.000413 loss=120.72  ppl=91.68    acc=0.2386 wpm(K)=299.98 mins=55.02
+ep=3   steps=23.00  lr=0.000412 loss=173.82  ppl=162.21   acc=0.2040 wpm(K)=300.21 mins=55.23
+Eval at step 23000. valid_batch_size=30
+val_step=23000  loss=6.88   acc=0.1250 val_ppl=973.72 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=3   steps=23.10  lr=0.000411 loss=118.09  ppl=131.12   acc=0.2387 wpm(K)=298.49 mins=55.81
+ep=3   steps=23.20  lr=0.000410 loss=128.05  ppl=119.94   acc=0.2290 wpm(K)=298.62 mins=56.02
+ep=3   steps=23.30  lr=0.000409 loss=23.16   ppl=49.40    acc=0.3579 wpm(K)=298.71 mins=56.23
+ep=3   steps=23.40  lr=0.000409 loss=12.58   ppl=21.09    acc=0.5076 wpm(K)=298.83 mins=56.44
+ep=3   steps=23.50  lr=0.000408 loss=140.18  ppl=166.50   acc=0.2064 wpm(K)=299.06 mins=56.65
+ep=3   steps=23.60  lr=0.000407 loss=170.95  ppl=170.14   acc=0.2094 wpm(K)=299.39 mins=56.87
+ep=3   steps=23.70  lr=0.000406 loss=42.11   ppl=70.19    acc=0.3186 wpm(K)=299.45 mins=57.08
+ep=3   steps=23.80  lr=0.000405 loss=112.15  ppl=152.40   acc=0.2423 wpm(K)=299.55 mins=57.29
+ep=3   steps=23.90  lr=0.000404 loss=178.50  ppl=163.27   acc=0.2221 wpm(K)=299.60 mins=57.50
+ep=3   steps=24.00  lr=0.000403 loss=79.54   ppl=116.48   acc=0.2449 wpm(K)=299.75 mins=57.70
+Eval at step 24000. valid_batch_size=30
+val_step=24000  loss=8.07   acc=0.0938 val_ppl=3184.24 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=3   steps=24.10  lr=0.000403 loss=92.87   ppl=98.84    acc=0.2705 wpm(K)=298.29 mins=58.24
+ep=3   steps=24.20  lr=0.000402 loss=78.58   ppl=182.39   acc=0.2133 wpm(K)=298.39 mins=58.46
+ep=3   steps=24.30  lr=0.000401 loss=168.97  ppl=143.33   acc=0.2057 wpm(K)=298.55 mins=58.67
+ep=3   steps=24.40  lr=0.000400 loss=64.30   ppl=71.44    acc=0.2739 wpm(K)=298.64 mins=58.88
+ep=3   steps=24.50  lr=0.000399 loss=170.18  ppl=141.26   acc=0.2182 wpm(K)=298.74 mins=59.10
+ep=3   steps=24.60  lr=0.000398 loss=65.80   ppl=103.33   acc=0.2533 wpm(K)=298.94 mins=59.32
+ep=3   steps=24.70  lr=0.000398 loss=45.00   ppl=78.56    acc=0.2848 wpm(K)=299.32 mins=59.53
+ep=3   steps=24.80  lr=0.000397 loss=52.90   ppl=95.86    acc=0.2749 wpm(K)=299.37 mins=59.75
+ep=3   steps=24.90  lr=0.000396 loss=87.23   ppl=138.59   acc=0.2226 wpm(K)=299.47 mins=59.96
+ep=4   steps=25.00  lr=0.000395 loss=89.78   ppl=115.42   acc=0.2215 wpm(K)=299.67 mins=60.18
+Eval at step 25000. valid_batch_size=30
+val_step=25000  loss=6.94   acc=0.1158 val_ppl=1032.67 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=4   steps=25.10  lr=0.000394 loss=146.48  ppl=151.99   acc=0.2272 wpm(K)=298.07 mins=60.77
+ep=4   steps=25.20  lr=0.000394 loss=66.86   ppl=75.37    acc=0.2586 wpm(K)=298.27 mins=60.98
+ep=4   steps=25.30  lr=0.000393 loss=117.62  ppl=131.02   acc=0.2176 wpm(K)=298.48 mins=61.19
+ep=4   steps=25.40  lr=0.000392 loss=63.07   ppl=110.44   acc=0.2401 wpm(K)=298.56 mins=61.41
+ep=4   steps=25.50  lr=0.000391 loss=128.14  ppl=149.39   acc=0.2283 wpm(K)=298.70 mins=61.62
+ep=4   steps=25.60  lr=0.000391 loss=124.26  ppl=128.39   acc=0.2271 wpm(K)=298.76 mins=61.84
+ep=4   steps=25.70  lr=0.000390 loss=237.89  ppl=183.16   acc=0.1916 wpm(K)=298.89 mins=62.06
+ep=4   steps=25.80  lr=0.000389 loss=128.92  ppl=114.03   acc=0.2101 wpm(K)=299.06 mins=62.27
+ep=4   steps=25.90  lr=0.000388 loss=60.07   ppl=106.21   acc=0.2500 wpm(K)=299.18 mins=62.49
+ep=4   steps=26.00  lr=0.000388 loss=49.26   ppl=131.69   acc=0.2353 wpm(K)=299.36 mins=62.70
+Eval at step 26000. valid_batch_size=30
+val_step=26000  loss=7.46   acc=0.1093 val_ppl=1740.65 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=4   steps=26.10  lr=0.000387 loss=182.38  ppl=135.98   acc=0.2273 wpm(K)=297.80 mins=63.28
+ep=4   steps=26.20  lr=0.000386 loss=169.09  ppl=160.11   acc=0.2008 wpm(K)=297.84 mins=63.49
+ep=4   steps=26.30  lr=0.000385 loss=56.28   ppl=107.49   acc=0.2779 wpm(K)=297.93 mins=63.71
+ep=4   steps=26.40  lr=0.000385 loss=55.29   ppl=71.78    acc=0.3068 wpm(K)=298.12 mins=63.92
+ep=4   steps=26.50  lr=0.000384 loss=29.83   ppl=73.66    acc=0.3423 wpm(K)=298.31 mins=64.14
+ep=4   steps=26.60  lr=0.000383 loss=161.19  ppl=152.52   acc=0.2212 wpm(K)=298.52 mins=64.35
+ep=4   steps=26.70  lr=0.000382 loss=155.61  ppl=125.20   acc=0.2008 wpm(K)=298.61 mins=64.56
+ep=4   steps=26.80  lr=0.000382 loss=113.04  ppl=125.17   acc=0.2230 wpm(K)=298.66 mins=64.77
+ep=4   steps=26.90  lr=0.000381 loss=45.69   ppl=91.12    acc=0.2994 wpm(K)=298.72 mins=64.99
+ep=4   steps=27.00  lr=0.000380 loss=50.45   ppl=84.34    acc=0.2692 wpm(K)=298.84 mins=65.20
+Eval at step 27000. valid_batch_size=30
+val_step=27000  loss=7.50   acc=0.1080 val_ppl=1806.55 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=4   steps=27.10  lr=0.000380 loss=124.68  ppl=140.34   acc=0.2119 wpm(K)=297.19 mins=65.77
+ep=4   steps=27.20  lr=0.000379 loss=127.75  ppl=146.28   acc=0.2305 wpm(K)=297.30 mins=65.98
+ep=4   steps=27.30  lr=0.000378 loss=69.18   ppl=83.72    acc=0.2660 wpm(K)=297.44 mins=66.20
+ep=4   steps=27.40  lr=0.000378 loss=97.02   ppl=120.42   acc=0.2361 wpm(K)=297.61 mins=66.41
+ep=4   steps=27.50  lr=0.000377 loss=118.09  ppl=131.94   acc=0.2339 wpm(K)=297.77 mins=66.63
+ep=4   steps=27.60  lr=0.000376 loss=281.83  ppl=167.55   acc=0.1914 wpm(K)=298.04 mins=66.85
+ep=4   steps=27.70  lr=0.000376 loss=55.03   ppl=98.08    acc=0.2786 wpm(K)=298.37 mins=67.04
+ep=4   steps=27.80  lr=0.000375 loss=85.61   ppl=140.47   acc=0.2455 wpm(K)=298.54 mins=67.25
+ep=4   steps=27.90  lr=0.000374 loss=11.11   ppl=16.09    acc=0.5078 wpm(K)=298.73 mins=67.46
+ep=4   steps=28.00  lr=0.000374 loss=216.49  ppl=189.49   acc=0.2104 wpm(K)=298.82 mins=67.67
+Eval at step 28000. valid_batch_size=30
+val_step=28000  loss=8.30   acc=0.0952 val_ppl=4024.33 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=4   steps=28.10  lr=0.000373 loss=32.76   ppl=65.12    acc=0.3506 wpm(K)=297.83 mins=68.12
+ep=4   steps=28.20  lr=0.000372 loss=109.21  ppl=102.40   acc=0.2649 wpm(K)=298.12 mins=68.27
+ep=4   steps=28.30  lr=0.000372 loss=122.99  ppl=128.87   acc=0.2321 wpm(K)=298.55 mins=68.43
+ep=4   steps=28.40  lr=0.000371 loss=54.14   ppl=72.84    acc=0.3119 wpm(K)=298.90 mins=68.59
+ep=4   steps=28.50  lr=0.000370 loss=136.35  ppl=133.16   acc=0.2186 wpm(K)=299.35 mins=68.75
+ep=4   steps=28.60  lr=0.000370 loss=77.26   ppl=83.99    acc=0.2634 wpm(K)=299.78 mins=68.92
+ep=4   steps=28.70  lr=0.000369 loss=64.94   ppl=84.83    acc=0.2692 wpm(K)=300.13 mins=69.07
+ep=4   steps=28.80  lr=0.000368 loss=214.79  ppl=166.33   acc=0.2188 wpm(K)=300.48 mins=69.23
+ep=4   steps=28.90  lr=0.000368 loss=62.15   ppl=84.69    acc=0.2768 wpm(K)=300.89 mins=69.39
+ep=4   steps=29.00  lr=0.000367 loss=104.82  ppl=114.91   acc=0.2207 wpm(K)=301.37 mins=69.56
+Eval at step 29000. valid_batch_size=30
+val_step=29000  loss=7.86   acc=0.1098 val_ppl=2587.93 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=4   steps=29.10  lr=0.000366 loss=98.51   ppl=117.80   acc=0.2436 wpm(K)=300.43 mins=70.01
+ep=4   steps=29.20  lr=0.000366 loss=57.33   ppl=78.09    acc=0.2874 wpm(K)=300.72 mins=70.17
+ep=4   steps=29.30  lr=0.000365 loss=55.78   ppl=100.69   acc=0.2636 wpm(K)=301.04 mins=70.33
+ep=4   steps=29.40  lr=0.000365 loss=98.61   ppl=167.74   acc=0.2159 wpm(K)=301.43 mins=70.49
+ep=4   steps=29.50  lr=0.000364 loss=111.45  ppl=120.74   acc=0.2285 wpm(K)=301.84 mins=70.65
+ep=4   steps=29.60  lr=0.000363 loss=50.45   ppl=69.22    acc=0.3255 wpm(K)=302.26 mins=70.81
+ep=4   steps=29.70  lr=0.000363 loss=165.37  ppl=172.88   acc=0.2045 wpm(K)=302.55 mins=70.97
+ep=4   steps=29.80  lr=0.000362 loss=56.86   ppl=90.36    acc=0.2500 wpm(K)=302.84 mins=71.13
+ep=4   steps=29.90  lr=0.000361 loss=100.55  ppl=147.88   acc=0.2453 wpm(K)=303.10 mins=71.28
+ep=4   steps=30.00  lr=0.000361 loss=154.09  ppl=134.48   acc=0.2227 wpm(K)=303.56 mins=71.45
+Eval at step 30000. valid_batch_size=30
+val_step=30000  loss=7.43   acc=0.1111 val_ppl=1682.37 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=4   steps=30.10  lr=0.000360 loss=197.43  ppl=165.22   acc=0.2061 wpm(K)=302.66 mins=71.90
+ep=4   steps=30.20  lr=0.000360 loss=53.96   ppl=111.89   acc=0.2650 wpm(K)=302.96 mins=72.06
+ep=4   steps=30.30  lr=0.000359 loss=60.20   ppl=90.10    acc=0.2897 wpm(K)=303.29 mins=72.22
+ep=4   steps=30.40  lr=0.000358 loss=93.18   ppl=89.78    acc=0.2624 wpm(K)=303.65 mins=72.38
+ep=4   steps=30.50  lr=0.000358 loss=10.17   ppl=13.78    acc=0.5484 wpm(K)=304.00 mins=72.54
+ep=4   steps=30.60  lr=0.000357 loss=294.44  ppl=215.92   acc=0.1934 wpm(K)=304.32 mins=72.70
+ep=4   steps=30.70  lr=0.000357 loss=89.98   ppl=112.22   acc=0.2115 wpm(K)=304.58 mins=72.85
+ep=4   steps=30.80  lr=0.000356 loss=57.58   ppl=98.95    acc=0.2993 wpm(K)=304.95 mins=73.01
+ep=4   steps=30.90  lr=0.000356 loss=55.98   ppl=121.79   acc=0.2654 wpm(K)=305.23 mins=73.17
+ep=4   steps=31.00  lr=0.000355 loss=41.95   ppl=104.07   acc=0.3080 wpm(K)=305.56 mins=73.33
+Eval at step 31000. valid_batch_size=30
+val_step=31000  loss=8.64   acc=0.0863 val_ppl=5641.39 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=4   steps=31.10  lr=0.000354 loss=50.96   ppl=98.84    acc=0.2901 wpm(K)=304.65 mins=73.79
+ep=4   steps=31.20  lr=0.000354 loss=131.88  ppl=131.47   acc=0.2231 wpm(K)=304.90 mins=73.94
+ep=5   steps=31.30  lr=0.000353 loss=47.92   ppl=90.94    acc=0.3029 wpm(K)=305.28 mins=74.10
+ep=5   steps=31.40  lr=0.000353 loss=219.17  ppl=152.01   acc=0.2213 wpm(K)=305.59 mins=74.26
+ep=5   steps=31.50  lr=0.000352 loss=71.91   ppl=104.42   acc=0.2465 wpm(K)=305.89 mins=74.42
+ep=5   steps=31.60  lr=0.000352 loss=39.05   ppl=74.37    acc=0.3310 wpm(K)=306.18 mins=74.58
+ep=5   steps=31.70  lr=0.000351 loss=75.78   ppl=132.81   acc=0.2258 wpm(K)=306.56 mins=74.74
+ep=5   steps=31.80  lr=0.000350 loss=47.81   ppl=79.12    acc=0.2686 wpm(K)=306.75 mins=74.90
+ep=5   steps=31.90  lr=0.000350 loss=59.98   ppl=119.92   acc=0.2743 wpm(K)=306.99 mins=75.05
+ep=5   steps=32.00  lr=0.000349 loss=151.67  ppl=156.89   acc=0.2396 wpm(K)=307.42 mins=75.21
+Eval at step 32000. valid_batch_size=30
+val_step=32000  loss=8.11   acc=0.0957 val_ppl=3331.10 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=5   steps=32.10  lr=0.000349 loss=29.35   ppl=53.50    acc=0.3390 wpm(K)=306.57 mins=75.67
+ep=5   steps=32.20  lr=0.000348 loss=197.47  ppl=144.27   acc=0.2054 wpm(K)=306.82 mins=75.82
+ep=5   steps=32.30  lr=0.000348 loss=178.39  ppl=163.49   acc=0.2286 wpm(K)=307.15 mins=75.98
+ep=5   steps=32.40  lr=0.000347 loss=110.93  ppl=121.13   acc=0.2432 wpm(K)=307.52 mins=76.14
+ep=5   steps=32.50  lr=0.000347 loss=90.63   ppl=131.97   acc=0.2593 wpm(K)=307.85 mins=76.30
+ep=5   steps=32.60  lr=0.000346 loss=54.04   ppl=99.43    acc=0.2500 wpm(K)=308.09 mins=76.45
+ep=5   steps=32.70  lr=0.000346 loss=124.82  ppl=137.70   acc=0.2010 wpm(K)=308.38 mins=76.61
+ep=5   steps=32.80  lr=0.000345 loss=261.31  ppl=136.84   acc=0.2347 wpm(K)=308.82 mins=76.77
+ep=5   steps=32.90  lr=0.000345 loss=57.44   ppl=91.47    acc=0.2850 wpm(K)=309.14 mins=76.93
+ep=5   steps=33.00  lr=0.000344 loss=290.14  ppl=152.45   acc=0.2177 wpm(K)=309.54 mins=77.10
+Eval at step 33000. valid_batch_size=30
+val_step=33000  loss=8.38   acc=0.0927 val_ppl=4365.73 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=5   steps=33.10  lr=0.000344 loss=53.30   ppl=100.46   acc=0.2892 wpm(K)=308.67 mins=77.55
+ep=5   steps=33.20  lr=0.000343 loss=44.08   ppl=96.01    acc=0.2621 wpm(K)=308.95 mins=77.71
+ep=5   steps=33.30  lr=0.000342 loss=33.86   ppl=49.98    acc=0.3285 wpm(K)=309.25 mins=77.86
+ep=5   steps=33.40  lr=0.000342 loss=59.84   ppl=85.90    acc=0.2884 wpm(K)=309.52 mins=78.02
+ep=5   steps=33.50  lr=0.000341 loss=378.21  ppl=166.54   acc=0.1948 wpm(K)=309.74 mins=78.18
+ep=5   steps=33.60  lr=0.000341 loss=109.34  ppl=161.67   acc=0.2137 wpm(K)=310.01 mins=78.34
+ep=5   steps=33.70  lr=0.000340 loss=34.84   ppl=70.51    acc=0.3359 wpm(K)=310.21 mins=78.49
+ep=5   steps=33.80  lr=0.000340 loss=111.15  ppl=137.85   acc=0.2285 wpm(K)=310.43 mins=78.65
+ep=5   steps=33.90  lr=0.000339 loss=93.80   ppl=130.64   acc=0.2565 wpm(K)=310.67 mins=78.80
+ep=5   steps=34.00  lr=0.000339 loss=233.43  ppl=158.25   acc=0.2041 wpm(K)=310.95 mins=78.96
+Eval at step 34000. valid_batch_size=30
+val_step=34000  loss=8.27   acc=0.0914 val_ppl=3924.46 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=5   steps=34.10  lr=0.000338 loss=43.34   ppl=94.40    acc=0.2951 wpm(K)=310.15 mins=79.42
+ep=5   steps=34.20  lr=0.000338 loss=143.02  ppl=166.26   acc=0.2000 wpm(K)=310.43 mins=79.57
+ep=5   steps=34.30  lr=0.000337 loss=105.03  ppl=125.10   acc=0.2371 wpm(K)=310.78 mins=79.74
+ep=5   steps=34.40  lr=0.000337 loss=105.11  ppl=114.13   acc=0.2563 wpm(K)=311.02 mins=79.89
+ep=5   steps=34.50  lr=0.000336 loss=92.91   ppl=104.87   acc=0.2457 wpm(K)=311.25 mins=80.05
+ep=5   steps=34.60  lr=0.000336 loss=58.58   ppl=107.17   acc=0.2743 wpm(K)=311.59 mins=80.21
+ep=5   steps=34.70  lr=0.000336 loss=59.82   ppl=98.56    acc=0.2686 wpm(K)=311.90 mins=80.37
+ep=5   steps=34.80  lr=0.000335 loss=100.01  ppl=107.63   acc=0.2588 wpm(K)=312.11 mins=80.53
+ep=5   steps=34.90  lr=0.000335 loss=81.84   ppl=128.83   acc=0.2319 wpm(K)=312.41 mins=80.69
+ep=5   steps=35.00  lr=0.000334 loss=65.27   ppl=88.40    acc=0.2918 wpm(K)=312.63 mins=80.84
+Eval at step 35000. valid_batch_size=30
+val_step=35000  loss=8.83   acc=0.0824 val_ppl=6847.17 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=5   steps=35.10  lr=0.000334 loss=110.54  ppl=97.73    acc=0.2565 wpm(K)=311.76 mins=81.27
+ep=5   steps=35.20  lr=0.000333 loss=55.91   ppl=85.69    acc=0.2861 wpm(K)=312.02 mins=81.43
+ep=5   steps=35.30  lr=0.000333 loss=160.89  ppl=167.83   acc=0.2119 wpm(K)=312.23 mins=81.58
+ep=5   steps=35.40  lr=0.000332 loss=114.95  ppl=121.00   acc=0.2477 wpm(K)=312.49 mins=81.74
+ep=5   steps=35.50  lr=0.000332 loss=169.21  ppl=155.44   acc=0.2302 wpm(K)=312.76 mins=81.90
+ep=5   steps=35.60  lr=0.000331 loss=27.68   ppl=53.09    acc=0.3677 wpm(K)=312.95 mins=82.06
+ep=5   steps=35.70  lr=0.000331 loss=294.02  ppl=179.90   acc=0.1915 wpm(K)=313.23 mins=82.22
+ep=5   steps=35.80  lr=0.000330 loss=165.38  ppl=177.35   acc=0.2114 wpm(K)=313.50 mins=82.38
+ep=5   steps=35.90  lr=0.000330 loss=43.49   ppl=103.46   acc=0.2667 wpm(K)=313.79 mins=82.54
+ep=5   steps=36.00  lr=0.000329 loss=420.03  ppl=166.74   acc=0.2014 wpm(K)=314.21 mins=82.70
+Eval at step 36000. valid_batch_size=30
+val_step=36000  loss=8.15   acc=0.0930 val_ppl=3474.35 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=5   steps=36.10  lr=0.000329 loss=128.71  ppl=135.50   acc=0.2229 wpm(K)=312.87 mins=83.28
+ep=5   steps=36.20  lr=0.000328 loss=86.19   ppl=106.38   acc=0.2538 wpm(K)=313.23 mins=83.44
+ep=5   steps=36.30  lr=0.000328 loss=134.00  ppl=119.16   acc=0.2219 wpm(K)=313.41 mins=83.60
+ep=5   steps=36.40  lr=0.000328 loss=19.73   ppl=43.81    acc=0.4072 wpm(K)=313.63 mins=83.76
+ep=5   steps=36.50  lr=0.000327 loss=284.04  ppl=196.05   acc=0.1980 wpm(K)=313.91 mins=83.92
+ep=5   steps=36.60  lr=0.000327 loss=35.35   ppl=77.52    acc=0.3231 wpm(K)=314.13 mins=84.07
+ep=5   steps=36.70  lr=0.000326 loss=82.85   ppl=130.76   acc=0.2188 wpm(K)=314.37 mins=84.23
+ep=5   steps=36.80  lr=0.000326 loss=424.61  ppl=224.87   acc=0.1837 wpm(K)=314.66 mins=84.39
+ep=5   steps=36.90  lr=0.000325 loss=85.92   ppl=127.64   acc=0.2540 wpm(K)=314.87 mins=84.55
+ep=5   steps=37.00  lr=0.000325 loss=50.58   ppl=72.40    acc=0.2619 wpm(K)=315.04 mins=84.70
+Eval at step 37000. valid_batch_size=30
+val_step=37000  loss=8.33   acc=0.0978 val_ppl=4130.45 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=5   steps=37.10  lr=0.000324 loss=172.64  ppl=149.70   acc=0.2230 wpm(K)=314.27 mins=85.16
+ep=5   steps=37.20  lr=0.000324 loss=145.20  ppl=163.17   acc=0.2039 wpm(K)=314.60 mins=85.32
+ep=5   steps=37.30  lr=0.000324 loss=47.10   ppl=100.41   acc=0.2875 wpm(K)=314.78 mins=85.47
+ep=5   steps=37.40  lr=0.000323 loss=47.44   ppl=76.48    acc=0.3229 wpm(K)=315.04 mins=85.63
+ep=6   steps=37.50  lr=0.000323 loss=232.32  ppl=166.15   acc=0.2215 wpm(K)=315.37 mins=85.79
+ep=6   steps=37.60  lr=0.000322 loss=112.80  ppl=92.14    acc=0.2744 wpm(K)=315.63 mins=85.95
+ep=6   steps=37.70  lr=0.000322 loss=136.08  ppl=144.14   acc=0.2272 wpm(K)=315.93 mins=86.12
+ep=6   steps=37.80  lr=0.000321 loss=35.04   ppl=77.19    acc=0.3566 wpm(K)=316.21 mins=86.28
+ep=6   steps=37.90  lr=0.000321 loss=89.90   ppl=100.53   acc=0.2420 wpm(K)=316.47 mins=86.43
+ep=6   steps=38.00  lr=0.000321 loss=223.58  ppl=131.25   acc=0.2345 wpm(K)=316.71 mins=86.59
+Eval at step 38000. valid_batch_size=30
+val_step=38000  loss=7.90   acc=0.1029 val_ppl=2699.11 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=6   steps=38.10  lr=0.000320 loss=334.60  ppl=172.04   acc=0.1981 wpm(K)=315.85 mins=87.04
+ep=6   steps=38.20  lr=0.000320 loss=116.58  ppl=98.35    acc=0.2448 wpm(K)=316.09 mins=87.20
+ep=6   steps=38.30  lr=0.000319 loss=197.54  ppl=137.96   acc=0.2081 wpm(K)=316.26 mins=87.36
+ep=6   steps=38.40  lr=0.000319 loss=113.28  ppl=91.31    acc=0.2702 wpm(K)=316.51 mins=87.52
+ep=6   steps=38.50  lr=0.000319 loss=53.26   ppl=115.32   acc=0.2423 wpm(K)=316.69 mins=87.68
+ep=6   steps=38.60  lr=0.000318 loss=51.53   ppl=97.55    acc=0.2611 wpm(K)=316.92 mins=87.83
+ep=6   steps=38.70  lr=0.000318 loss=320.59  ppl=138.35   acc=0.2057 wpm(K)=317.17 mins=87.99
+ep=6   steps=38.80  lr=0.000317 loss=101.04  ppl=118.63   acc=0.2482 wpm(K)=317.37 mins=88.15
+ep=6   steps=38.90  lr=0.000317 loss=186.31  ppl=125.39   acc=0.2277 wpm(K)=317.58 mins=88.31
+ep=6   steps=39.00  lr=0.000316 loss=36.50   ppl=60.21    acc=0.3263 wpm(K)=317.80 mins=88.47
+Eval at step 39000. valid_batch_size=30
+val_step=39000  loss=8.76   acc=0.0890 val_ppl=6370.77 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=6   steps=39.10  lr=0.000316 loss=62.55   ppl=87.19    acc=0.2612 wpm(K)=317.06 mins=88.90
+ep=6   steps=39.20  lr=0.000316 loss=318.02  ppl=161.71   acc=0.1969 wpm(K)=317.28 mins=89.06
+ep=6   steps=39.30  lr=0.000315 loss=48.14   ppl=82.61    acc=0.3066 wpm(K)=317.56 mins=89.22
+ep=6   steps=39.40  lr=0.000315 loss=141.07  ppl=124.97   acc=0.2417 wpm(K)=317.86 mins=89.38
+ep=6   steps=39.50  lr=0.000314 loss=126.38  ppl=128.38   acc=0.2485 wpm(K)=318.13 mins=89.54
+ep=6   steps=39.60  lr=0.000314 loss=95.70   ppl=100.01   acc=0.2481 wpm(K)=318.37 mins=89.70
+ep=6   steps=39.70  lr=0.000314 loss=105.60  ppl=105.74   acc=0.2648 wpm(K)=318.63 mins=89.86
+ep=6   steps=39.80  lr=0.000313 loss=68.72   ppl=96.75    acc=0.2599 wpm(K)=318.84 mins=90.02
+ep=6   steps=39.90  lr=0.000313 loss=101.26  ppl=150.81   acc=0.2198 wpm(K)=319.08 mins=90.18
+ep=6   steps=40.00  lr=0.000313 loss=158.49  ppl=133.69   acc=0.2268 wpm(K)=319.39 mins=90.35
+Eval at step 40000. valid_batch_size=30
+val_step=40000  loss=8.38   acc=0.0980 val_ppl=4362.87 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=6   steps=40.10  lr=0.000312 loss=35.20   ppl=52.81    acc=0.3169 wpm(K)=318.67 mins=90.77
+ep=6   steps=40.20  lr=0.000312 loss=94.57   ppl=96.03    acc=0.2670 wpm(K)=318.89 mins=90.93
+ep=6   steps=40.30  lr=0.000311 loss=108.21  ppl=126.82   acc=0.2378 wpm(K)=319.20 mins=91.09
+ep=6   steps=40.40  lr=0.000311 loss=110.71  ppl=115.46   acc=0.2292 wpm(K)=319.47 mins=91.26
+ep=6   steps=40.50  lr=0.000311 loss=63.85   ppl=69.34    acc=0.3050 wpm(K)=319.68 mins=91.41
+ep=6   steps=40.60  lr=0.000310 loss=309.12  ppl=139.55   acc=0.2077 wpm(K)=319.96 mins=91.58
+ep=6   steps=40.70  lr=0.000310 loss=215.32  ppl=140.17   acc=0.2360 wpm(K)=320.17 mins=91.73
+ep=6   steps=40.80  lr=0.000309 loss=27.16   ppl=44.52    acc=0.3581 wpm(K)=320.39 mins=91.89
+ep=6   steps=40.90  lr=0.000309 loss=147.21  ppl=126.66   acc=0.2292 wpm(K)=320.65 mins=92.05
+ep=6   steps=41.00  lr=0.000309 loss=76.68   ppl=98.13    acc=0.2673 wpm(K)=320.95 mins=92.22
+Eval at step 41000. valid_batch_size=30
+val_step=41000  loss=8.73   acc=0.0923 val_ppl=6204.24 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.039, hyp_len=920, ref_len=23648)
+ep=6   steps=41.10  lr=0.000308 loss=231.08  ppl=133.46   acc=0.2244 wpm(K)=320.19 mins=92.65
+ep=6   steps=41.20  lr=0.000308 loss=96.11   ppl=89.10    acc=0.2453 wpm(K)=320.45 mins=92.81
+ep=6   steps=41.30  lr=0.000308 loss=165.87  ppl=134.43   acc=0.2133 wpm(K)=320.71 mins=92.97
+ep=6   steps=41.40  lr=0.000307 loss=101.90  ppl=93.26    acc=0.2601 wpm(K)=320.96 mins=93.13
+ep=6   steps=41.50  lr=0.000307 loss=31.36   ppl=46.77    acc=0.3755 wpm(K)=321.24 mins=93.29
+ep=6   steps=41.60  lr=0.000306 loss=125.82  ppl=118.62   acc=0.2337 wpm(K)=321.47 mins=93.45
+ep=6   steps=41.70  lr=0.000306 loss=104.26  ppl=119.89   acc=0.2525 wpm(K)=321.72 mins=93.61
+ep=6   steps=41.80  lr=0.000306 loss=99.36   ppl=107.30   acc=0.2721 wpm(K)=321.95 mins=93.77
+ep=6   steps=41.90  lr=0.000305 loss=62.20   ppl=136.26   acc=0.2519 wpm(K)=322.16 mins=93.93
+ep=6   steps=42.00  lr=0.000305 loss=171.84  ppl=149.61   acc=0.2067 wpm(K)=322.40 mins=94.09
+Eval at step 42000. valid_batch_size=30
+val_step=42000  loss=8.19   acc=0.0986 val_ppl=3614.53 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=6   steps=42.10  lr=0.000305 loss=121.00  ppl=136.13   acc=0.2398 wpm(K)=321.67 mins=94.54
+ep=6   steps=42.20  lr=0.000304 loss=261.40  ppl=153.87   acc=0.2161 wpm(K)=321.85 mins=94.70
+ep=6   steps=42.30  lr=0.000304 loss=173.28  ppl=120.60   acc=0.2377 wpm(K)=322.11 mins=94.86
+ep=6   steps=42.40  lr=0.000304 loss=85.29   ppl=93.82    acc=0.2646 wpm(K)=322.44 mins=95.02
+ep=6   steps=42.50  lr=0.000303 loss=78.05   ppl=109.36   acc=0.2632 wpm(K)=322.68 mins=95.18
+ep=6   steps=42.60  lr=0.000303 loss=85.66   ppl=72.96    acc=0.2723 wpm(K)=322.87 mins=95.34
+ep=6   steps=42.70  lr=0.000302 loss=66.45   ppl=78.07    acc=0.2992 wpm(K)=323.03 mins=95.49
+ep=6   steps=42.80  lr=0.000302 loss=67.83   ppl=92.88    acc=0.2630 wpm(K)=323.23 mins=95.65
+ep=6   steps=42.90  lr=0.000302 loss=53.00   ppl=93.22    acc=0.2781 wpm(K)=323.42 mins=95.81
+ep=6   steps=43.00  lr=0.000301 loss=126.85  ppl=143.77   acc=0.2448 wpm(K)=323.60 mins=95.96
+Eval at step 43000. valid_batch_size=30
+val_step=43000  loss=8.76   acc=0.0921 val_ppl=6401.12 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=6   steps=43.10  lr=0.000301 loss=23.65   ppl=36.72    acc=0.3429 wpm(K)=322.86 mins=96.41
+ep=6   steps=43.20  lr=0.000301 loss=144.60  ppl=141.02   acc=0.2342 wpm(K)=323.10 mins=96.57
+ep=6   steps=43.30  lr=0.000300 loss=88.71   ppl=83.80    acc=0.2637 wpm(K)=323.35 mins=96.73
+ep=6   steps=43.40  lr=0.000300 loss=26.75   ppl=49.84    acc=0.3744 wpm(K)=323.52 mins=96.89
+ep=6   steps=43.50  lr=0.000300 loss=88.79   ppl=113.00   acc=0.2862 wpm(K)=323.79 mins=97.05
+ep=6   steps=43.60  lr=0.000299 loss=146.24  ppl=114.58   acc=0.2351 wpm(K)=324.00 mins=97.21
+ep=6   steps=43.70  lr=0.000299 loss=29.78   ppl=61.90    acc=0.3766 wpm(K)=324.22 mins=97.37
+ep=7   steps=43.80  lr=0.000299 loss=86.58   ppl=85.36    acc=0.2648 wpm(K)=324.42 mins=97.53
+ep=7   steps=43.90  lr=0.000298 loss=173.63  ppl=135.41   acc=0.2279 wpm(K)=324.71 mins=97.69
+ep=7   steps=44.00  lr=0.000298 loss=74.74   ppl=83.86    acc=0.2870 wpm(K)=324.92 mins=97.85
+Eval at step 44000. valid_batch_size=30
+val_step=44000  loss=8.47   acc=0.0959 val_ppl=4775.44 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=7   steps=44.10  lr=0.000298 loss=315.17  ppl=154.88   acc=0.1995 wpm(K)=324.12 mins=98.30
+ep=7   steps=44.20  lr=0.000297 loss=121.38  ppl=122.40   acc=0.2327 wpm(K)=324.34 mins=98.46
+ep=7   steps=44.30  lr=0.000297 loss=60.41   ppl=80.91    acc=0.2568 wpm(K)=324.55 mins=98.62
+ep=7   steps=44.40  lr=0.000297 loss=60.55   ppl=90.54    acc=0.2837 wpm(K)=324.81 mins=98.78
+ep=7   steps=44.50  lr=0.000296 loss=95.67   ppl=108.66   acc=0.2542 wpm(K)=324.97 mins=98.94
+ep=7   steps=44.60  lr=0.000296 loss=60.66   ppl=106.30   acc=0.2572 wpm(K)=325.18 mins=99.10
+ep=7   steps=44.70  lr=0.000296 loss=70.65   ppl=82.72    acc=0.2891 wpm(K)=325.38 mins=99.25
+ep=7   steps=44.80  lr=0.000295 loss=152.03  ppl=130.32   acc=0.2232 wpm(K)=325.63 mins=99.41
+ep=7   steps=44.90  lr=0.000295 loss=69.84   ppl=101.27   acc=0.2769 wpm(K)=325.81 mins=99.57
+ep=7   steps=45.00  lr=0.000295 loss=195.47  ppl=145.48   acc=0.2182 wpm(K)=326.02 mins=99.73
+Eval at step 45000. valid_batch_size=30
+val_step=45000  loss=9.15   acc=0.0839 val_ppl=9407.33 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=7   steps=45.10  lr=0.000294 loss=122.80  ppl=137.60   acc=0.2180 wpm(K)=325.20 mins=100.18
+ep=7   steps=45.20  lr=0.000294 loss=56.84   ppl=72.94    acc=0.2901 wpm(K)=325.38 mins=100.34
+ep=7   steps=45.30  lr=0.000294 loss=53.80   ppl=70.17    acc=0.2914 wpm(K)=325.59 mins=100.50
+ep=7   steps=45.40  lr=0.000293 loss=58.37   ppl=97.29    acc=0.2892 wpm(K)=325.75 mins=100.66
+ep=7   steps=45.50  lr=0.000293 loss=67.32   ppl=104.87   acc=0.2765 wpm(K)=325.86 mins=100.81
+ep=7   steps=45.60  lr=0.000293 loss=51.97   ppl=82.35    acc=0.3077 wpm(K)=326.03 mins=100.97
+ep=7   steps=45.70  lr=0.000292 loss=52.92   ppl=91.42    acc=0.2773 wpm(K)=326.26 mins=101.13
+ep=7   steps=45.80  lr=0.000292 loss=116.22  ppl=147.25   acc=0.2255 wpm(K)=326.41 mins=101.29
+ep=7   steps=45.90  lr=0.000292 loss=206.71  ppl=109.00   acc=0.2277 wpm(K)=326.60 mins=101.45
+ep=7   steps=46.00  lr=0.000291 loss=73.82   ppl=89.23    acc=0.2643 wpm(K)=326.80 mins=101.61
+Eval at step 46000. valid_batch_size=30
+val_step=46000  loss=8.16   acc=0.1029 val_ppl=3482.89 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=7   steps=46.10  lr=0.000291 loss=76.02   ppl=100.21   acc=0.2462 wpm(K)=326.15 mins=102.07
+ep=7   steps=46.20  lr=0.000291 loss=87.74   ppl=120.43   acc=0.2594 wpm(K)=326.29 mins=102.22
+ep=7   steps=46.30  lr=0.000290 loss=29.69   ppl=56.05    acc=0.3178 wpm(K)=326.47 mins=102.38
+ep=7   steps=46.40  lr=0.000290 loss=87.00   ppl=92.44    acc=0.2488 wpm(K)=326.58 mins=102.54
+ep=7   steps=46.50  lr=0.000290 loss=41.28   ppl=88.01    acc=0.2983 wpm(K)=326.76 mins=102.70
+ep=7   steps=46.60  lr=0.000290 loss=95.05   ppl=93.04    acc=0.2727 wpm(K)=326.90 mins=102.85
+ep=7   steps=46.70  lr=0.000289 loss=76.61   ppl=111.58   acc=0.2596 wpm(K)=327.12 mins=103.01
+ep=7   steps=46.80  lr=0.000289 loss=56.83   ppl=80.82    acc=0.2826 wpm(K)=327.31 mins=103.17
+ep=7   steps=46.90  lr=0.000289 loss=64.28   ppl=98.60    acc=0.2522 wpm(K)=327.48 mins=103.33
+ep=7   steps=47.00  lr=0.000288 loss=54.22   ppl=98.54    acc=0.2989 wpm(K)=327.70 mins=103.49
+Eval at step 47000. valid_batch_size=30
+val_step=47000  loss=8.04   acc=0.1013 val_ppl=3115.16 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=7   steps=47.10  lr=0.000288 loss=231.28  ppl=110.83   acc=0.2405 wpm(K)=327.02 mins=103.95
+ep=7   steps=47.20  lr=0.000288 loss=34.53   ppl=84.62    acc=0.2972 wpm(K)=327.20 mins=104.11
+ep=7   steps=47.30  lr=0.000287 loss=90.12   ppl=84.51    acc=0.2492 wpm(K)=327.42 mins=104.27
+ep=7   steps=47.40  lr=0.000287 loss=309.37  ppl=141.86   acc=0.2112 wpm(K)=327.65 mins=104.43
+ep=7   steps=47.50  lr=0.000287 loss=92.64   ppl=103.48   acc=0.2488 wpm(K)=327.82 mins=104.59
+ep=7   steps=47.60  lr=0.000286 loss=51.11   ppl=65.57    acc=0.2992 wpm(K)=328.05 mins=104.75
+ep=7   steps=47.70  lr=0.000286 loss=93.67   ppl=102.80   acc=0.2504 wpm(K)=328.22 mins=104.91
+ep=7   steps=47.80  lr=0.000286 loss=119.35  ppl=112.28   acc=0.2237 wpm(K)=328.42 mins=105.07
+ep=7   steps=47.90  lr=0.000286 loss=169.42  ppl=135.14   acc=0.2145 wpm(K)=328.60 mins=105.23
+ep=7   steps=48.00  lr=0.000285 loss=70.01   ppl=83.71    acc=0.2787 wpm(K)=328.82 mins=105.39
+Eval at step 48000. valid_batch_size=30
+val_step=48000  loss=8.08   acc=0.1068 val_ppl=3239.45 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.044, hyp_len=1047, ref_len=23648)
+ep=7   steps=48.10  lr=0.000285 loss=144.31  ppl=161.69   acc=0.2203 wpm(K)=328.15 mins=105.84
+ep=7   steps=48.20  lr=0.000285 loss=184.47  ppl=131.99   acc=0.2093 wpm(K)=328.39 mins=106.00
+ep=7   steps=48.30  lr=0.000284 loss=356.52  ppl=164.76   acc=0.2094 wpm(K)=328.57 mins=106.16
+ep=7   steps=48.40  lr=0.000284 loss=36.44   ppl=55.72    acc=0.3379 wpm(K)=328.76 mins=106.32
+ep=7   steps=48.50  lr=0.000284 loss=38.84   ppl=82.07    acc=0.3262 wpm(K)=328.91 mins=106.48
+ep=7   steps=48.60  lr=0.000284 loss=48.36   ppl=57.44    acc=0.2958 wpm(K)=329.04 mins=106.63
+ep=7   steps=48.70  lr=0.000283 loss=33.14   ppl=56.35    acc=0.3726 wpm(K)=329.19 mins=106.79
+ep=7   steps=48.80  lr=0.000283 loss=157.63  ppl=112.02   acc=0.2245 wpm(K)=329.40 mins=106.95
+ep=7   steps=48.90  lr=0.000283 loss=134.03  ppl=118.01   acc=0.2458 wpm(K)=329.53 mins=107.11
+ep=7   steps=49.00  lr=0.000282 loss=50.63   ppl=71.09    acc=0.3105 wpm(K)=329.68 mins=107.26
+Eval at step 49000. valid_batch_size=30
+val_step=49000  loss=8.17   acc=0.1041 val_ppl=3518.38 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=7   steps=49.10  lr=0.000282 loss=92.84   ppl=125.27   acc=0.2537 wpm(K)=328.90 mins=107.71
+ep=7   steps=49.20  lr=0.000282 loss=102.05  ppl=153.22   acc=0.2203 wpm(K)=329.06 mins=107.87
+ep=7   steps=49.30  lr=0.000281 loss=40.10   ppl=77.46    acc=0.3153 wpm(K)=329.18 mins=108.03
+ep=7   steps=49.40  lr=0.000281 loss=204.48  ppl=118.65   acc=0.2336 wpm(K)=329.48 mins=108.20
+ep=7   steps=49.50  lr=0.000281 loss=52.36   ppl=70.30    acc=0.2843 wpm(K)=329.64 mins=108.36
+ep=7   steps=49.60  lr=0.000281 loss=54.66   ppl=69.06    acc=0.3220 wpm(K)=329.77 mins=108.51
+ep=7   steps=49.70  lr=0.000280 loss=65.83   ppl=96.52    acc=0.2646 wpm(K)=329.93 mins=108.67
+ep=7   steps=49.80  lr=0.000280 loss=33.86   ppl=63.53    acc=0.3065 wpm(K)=330.04 mins=108.83
+ep=7   steps=49.90  lr=0.000280 loss=41.22   ppl=64.16    acc=0.3186 wpm(K)=330.23 mins=108.99
+ep=8   steps=50.00  lr=0.000280 loss=25.91   ppl=40.52    acc=0.3750 wpm(K)=330.48 mins=109.15
+Eval at step 50000. valid_batch_size=30
+val_step=50000  loss=8.21   acc=0.1038 val_ppl=3660.94 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=8   steps=50.10  lr=0.000279 loss=101.20  ppl=142.51   acc=0.2404 wpm(K)=329.71 mins=109.60
+ep=8   steps=50.20  lr=0.000279 loss=93.15   ppl=129.39   acc=0.2414 wpm(K)=329.85 mins=109.76
+ep=8   steps=50.30  lr=0.000279 loss=9.78    ppl=9.49     acc=0.5755 wpm(K)=329.99 mins=109.92
+ep=8   steps=50.40  lr=0.000278 loss=165.98  ppl=147.92   acc=0.2342 wpm(K)=330.14 mins=110.08
+ep=8   steps=50.50  lr=0.000278 loss=172.14  ppl=128.69   acc=0.2381 wpm(K)=330.30 mins=110.24
+ep=8   steps=50.60  lr=0.000278 loss=41.10   ppl=57.93    acc=0.3272 wpm(K)=330.45 mins=110.39
+ep=8   steps=50.70  lr=0.000278 loss=69.87   ppl=133.27   acc=0.2451 wpm(K)=330.60 mins=110.55
+ep=8   steps=50.80  lr=0.000277 loss=93.04   ppl=124.61   acc=0.2285 wpm(K)=330.83 mins=110.71
+ep=8   steps=50.90  lr=0.000277 loss=41.78   ppl=75.66    acc=0.3430 wpm(K)=330.97 mins=110.87
+ep=8   steps=51.00  lr=0.000277 loss=49.59   ppl=79.20    acc=0.2810 wpm(K)=331.15 mins=111.03
+Eval at step 51000. valid_batch_size=30
+val_step=51000  loss=8.50   acc=0.0957 val_ppl=4896.31 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=8   steps=51.10  lr=0.000276 loss=87.31   ppl=104.47   acc=0.2912 wpm(K)=330.50 mins=111.47
+ep=8   steps=51.20  lr=0.000276 loss=155.67  ppl=127.78   acc=0.2493 wpm(K)=330.61 mins=111.62
+ep=8   steps=51.30  lr=0.000276 loss=44.63   ppl=97.22    acc=0.2917 wpm(K)=330.75 mins=111.78
+ep=8   steps=51.40  lr=0.000276 loss=194.44  ppl=135.77   acc=0.2155 wpm(K)=330.96 mins=111.94
+ep=8   steps=51.50  lr=0.000275 loss=33.09   ppl=60.60    acc=0.3140 wpm(K)=331.16 mins=112.10
+ep=8   steps=51.60  lr=0.000275 loss=119.07  ppl=89.89    acc=0.2562 wpm(K)=331.32 mins=112.26
+ep=8   steps=51.70  lr=0.000275 loss=74.06   ppl=124.78   acc=0.2688 wpm(K)=331.52 mins=112.42
+ep=8   steps=51.80  lr=0.000275 loss=21.27   ppl=31.12    acc=0.4293 wpm(K)=331.66 mins=112.58
+ep=8   steps=51.90  lr=0.000274 loss=48.05   ppl=81.91    acc=0.3410 wpm(K)=331.78 mins=112.73
+ep=8   steps=52.00  lr=0.000274 loss=86.23   ppl=66.69    acc=0.2679 wpm(K)=331.93 mins=112.89
+Eval at step 52000. valid_batch_size=30
+val_step=52000  loss=9.11   acc=0.0905 val_ppl=9085.00 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=8   steps=52.10  lr=0.000274 loss=70.16   ppl=96.81    acc=0.3035 wpm(K)=331.20 mins=113.34
+ep=8   steps=52.20  lr=0.000274 loss=107.18  ppl=91.17    acc=0.2882 wpm(K)=331.37 mins=113.50
+ep=8   steps=52.30  lr=0.000273 loss=121.15  ppl=141.34   acc=0.2452 wpm(K)=331.60 mins=113.67
+ep=8   steps=52.40  lr=0.000273 loss=91.79   ppl=121.46   acc=0.2778 wpm(K)=331.74 mins=113.83
+ep=8   steps=52.50  lr=0.000273 loss=42.96   ppl=50.78    acc=0.3457 wpm(K)=331.89 mins=113.98
+ep=8   steps=52.60  lr=0.000273 loss=21.98   ppl=36.18    acc=0.4439 wpm(K)=332.03 mins=114.14
+ep=8   steps=52.70  lr=0.000272 loss=62.15   ppl=92.81    acc=0.2779 wpm(K)=332.15 mins=114.29
+ep=8   steps=52.80  lr=0.000272 loss=94.55   ppl=120.92   acc=0.2425 wpm(K)=332.38 mins=114.46
+ep=8   steps=52.90  lr=0.000272 loss=52.34   ppl=113.45   acc=0.2655 wpm(K)=332.54 mins=114.62
+ep=8   steps=53.00  lr=0.000271 loss=167.33  ppl=160.82   acc=0.2324 wpm(K)=332.76 mins=114.78
+Eval at step 53000. valid_batch_size=30
+val_step=53000  loss=8.26   acc=0.0978 val_ppl=3878.83 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=8   steps=53.10  lr=0.000271 loss=38.86   ppl=55.23    acc=0.3452 wpm(K)=332.15 mins=115.21
+ep=8   steps=53.20  lr=0.000271 loss=90.49   ppl=106.76   acc=0.2629 wpm(K)=332.30 mins=115.37
+ep=8   steps=53.30  lr=0.000271 loss=41.90   ppl=76.66    acc=0.3269 wpm(K)=332.47 mins=115.53
+ep=8   steps=53.40  lr=0.000270 loss=40.98   ppl=67.80    acc=0.2926 wpm(K)=332.62 mins=115.69
+ep=8   steps=53.50  lr=0.000270 loss=109.84  ppl=107.80   acc=0.2663 wpm(K)=332.80 mins=115.85
+ep=8   steps=53.60  lr=0.000270 loss=95.27   ppl=113.73   acc=0.2562 wpm(K)=332.99 mins=116.02
+ep=8   steps=53.70  lr=0.000270 loss=42.16   ppl=69.57    acc=0.3333 wpm(K)=333.16 mins=116.18
+ep=8   steps=53.80  lr=0.000269 loss=170.98  ppl=109.56   acc=0.2266 wpm(K)=333.37 mins=116.34
+ep=8   steps=53.90  lr=0.000269 loss=62.87   ppl=95.77    acc=0.3039 wpm(K)=333.51 mins=116.50
+ep=8   steps=54.00  lr=0.000269 loss=97.11   ppl=90.92    acc=0.2496 wpm(K)=333.69 mins=116.66
+Eval at step 54000. valid_batch_size=30
+val_step=54000  loss=7.75   acc=0.1130 val_ppl=2327.73 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=8   steps=54.10  lr=0.000269 loss=205.87  ppl=135.52   acc=0.2154 wpm(K)=333.04 mins=117.09
+ep=8   steps=54.20  lr=0.000268 loss=256.96  ppl=113.73   acc=0.2441 wpm(K)=333.17 mins=117.25
+ep=8   steps=54.30  lr=0.000268 loss=87.61   ppl=104.53   acc=0.2570 wpm(K)=333.37 mins=117.41
+ep=8   steps=54.40  lr=0.000268 loss=234.26  ppl=144.64   acc=0.2104 wpm(K)=333.61 mins=117.57
+ep=8   steps=54.50  lr=0.000268 loss=117.08  ppl=98.64    acc=0.2586 wpm(K)=333.81 mins=117.73
+ep=8   steps=54.60  lr=0.000267 loss=50.26   ppl=80.05    acc=0.2916 wpm(K)=333.98 mins=117.89
+ep=8   steps=54.70  lr=0.000267 loss=36.39   ppl=72.36    acc=0.3199 wpm(K)=334.15 mins=118.05
+ep=8   steps=54.80  lr=0.000267 loss=67.87   ppl=124.72   acc=0.2622 wpm(K)=334.30 mins=118.21
+ep=8   steps=54.90  lr=0.000267 loss=121.56  ppl=94.60    acc=0.2515 wpm(K)=334.46 mins=118.37
+ep=8   steps=55.00  lr=0.000267 loss=74.83   ppl=95.71    acc=0.2629 wpm(K)=334.59 mins=118.53
+Eval at step 55000. valid_batch_size=30
+val_step=55000  loss=8.67   acc=0.1014 val_ppl=5830.92 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=8   steps=55.10  lr=0.000266 loss=56.84   ppl=60.70    acc=0.3115 wpm(K)=333.95 mins=118.95
+ep=8   steps=55.20  lr=0.000266 loss=20.44   ppl=29.63    acc=0.4404 wpm(K)=334.15 mins=119.12
+ep=8   steps=55.30  lr=0.000266 loss=109.50  ppl=111.74   acc=0.2423 wpm(K)=334.31 mins=119.28
+ep=8   steps=55.40  lr=0.000266 loss=48.21   ppl=83.14    acc=0.3009 wpm(K)=334.46 mins=119.43
+ep=8   steps=55.50  lr=0.000265 loss=128.85  ppl=125.68   acc=0.2474 wpm(K)=334.68 mins=119.60
+ep=8   steps=55.60  lr=0.000265 loss=112.08  ppl=91.06    acc=0.2591 wpm(K)=334.87 mins=119.76
+ep=8   steps=55.70  lr=0.000265 loss=134.71  ppl=110.05   acc=0.2345 wpm(K)=335.01 mins=119.92
+ep=8   steps=55.80  lr=0.000265 loss=165.47  ppl=113.51   acc=0.2475 wpm(K)=335.16 mins=120.08
+ep=8   steps=55.90  lr=0.000264 loss=46.94   ppl=93.52    acc=0.2961 wpm(K)=335.29 mins=120.23
+ep=8   steps=56.00  lr=0.000264 loss=84.40   ppl=73.75    acc=0.2707 wpm(K)=335.47 mins=120.39
+Eval at step 56000. valid_batch_size=30
+val_step=56000  loss=8.33   acc=0.1004 val_ppl=4128.06 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=8   steps=56.10  lr=0.000264 loss=278.44  ppl=168.94   acc=0.2239 wpm(K)=334.78 mins=120.84
+ep=8   steps=56.20  lr=0.000264 loss=158.38  ppl=135.11   acc=0.2314 wpm(K)=334.97 mins=121.00
+ep=9   steps=56.30  lr=0.000263 loss=104.17  ppl=91.55    acc=0.2615 wpm(K)=335.11 mins=121.16
+ep=9   steps=56.40  lr=0.000263 loss=54.61   ppl=93.63    acc=0.2519 wpm(K)=335.20 mins=121.32
+ep=9   steps=56.50  lr=0.000263 loss=107.84  ppl=94.88    acc=0.2612 wpm(K)=335.41 mins=121.48
+ep=9   steps=56.60  lr=0.000263 loss=45.92   ppl=85.89    acc=0.2848 wpm(K)=335.58 mins=121.64
+ep=9   steps=56.70  lr=0.000262 loss=177.48  ppl=133.20   acc=0.2110 wpm(K)=335.73 mins=121.80
+ep=9   steps=56.80  lr=0.000262 loss=52.43   ppl=88.79    acc=0.2594 wpm(K)=335.83 mins=121.96
+ep=9   steps=56.90  lr=0.000262 loss=57.21   ppl=65.99    acc=0.2723 wpm(K)=336.01 mins=122.12
+ep=9   steps=57.00  lr=0.000262 loss=137.31  ppl=125.01   acc=0.2374 wpm(K)=336.21 mins=122.28
+Eval at step 57000. valid_batch_size=30
+val_step=57000  loss=8.17   acc=0.1036 val_ppl=3519.75 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=9   steps=57.10  lr=0.000262 loss=196.97  ppl=159.95   acc=0.2254 wpm(K)=335.53 mins=122.73
+ep=9   steps=57.20  lr=0.000261 loss=18.34   ppl=20.91    acc=0.4560 wpm(K)=335.71 mins=122.90
+ep=9   steps=57.30  lr=0.000261 loss=88.28   ppl=99.58    acc=0.2736 wpm(K)=335.87 mins=123.06
+ep=9   steps=57.40  lr=0.000261 loss=52.58   ppl=97.95    acc=0.2861 wpm(K)=336.02 mins=123.22
+ep=9   steps=57.50  lr=0.000261 loss=118.21  ppl=117.22   acc=0.2355 wpm(K)=336.16 mins=123.37
+ep=9   steps=57.60  lr=0.000260 loss=439.31  ppl=204.17   acc=0.1873 wpm(K)=336.30 mins=123.53
+ep=9   steps=57.70  lr=0.000260 loss=51.42   ppl=57.00    acc=0.3194 wpm(K)=336.49 mins=123.69
+ep=9   steps=57.80  lr=0.000260 loss=61.81   ppl=55.71    acc=0.3049 wpm(K)=336.67 mins=123.85
+ep=9   steps=57.90  lr=0.000260 loss=49.83   ppl=90.42    acc=0.2853 wpm(K)=336.85 mins=124.02
+ep=9   steps=58.00  lr=0.000260 loss=70.05   ppl=90.92    acc=0.2716 wpm(K)=337.01 mins=124.18
+Eval at step 58000. valid_batch_size=30
+val_step=58000  loss=8.27   acc=0.1027 val_ppl=3898.41 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=9   steps=58.10  lr=0.000259 loss=74.31   ppl=103.99   acc=0.2480 wpm(K)=336.39 mins=124.63
+ep=9   steps=58.20  lr=0.000259 loss=23.13   ppl=35.12    acc=0.4087 wpm(K)=336.53 mins=124.79
+ep=9   steps=58.30  lr=0.000259 loss=51.25   ppl=82.16    acc=0.2957 wpm(K)=336.69 mins=124.95
+ep=9   steps=58.40  lr=0.000259 loss=90.78   ppl=108.37   acc=0.2629 wpm(K)=336.87 mins=125.11
+ep=9   steps=58.50  lr=0.000258 loss=109.53  ppl=93.16    acc=0.2561 wpm(K)=337.00 mins=125.27
+ep=9   steps=58.60  lr=0.000258 loss=139.90  ppl=108.07   acc=0.2343 wpm(K)=337.12 mins=125.42
+ep=9   steps=58.70  lr=0.000258 loss=71.62   ppl=79.99    acc=0.2983 wpm(K)=337.26 mins=125.58
+ep=9   steps=58.80  lr=0.000258 loss=98.75   ppl=118.30   acc=0.2508 wpm(K)=337.39 mins=125.74
+ep=9   steps=58.90  lr=0.000258 loss=56.19   ppl=78.61    acc=0.2646 wpm(K)=337.55 mins=125.90
+ep=9   steps=59.00  lr=0.000257 loss=56.47   ppl=78.65    acc=0.2802 wpm(K)=337.70 mins=126.06
+Eval at step 59000. valid_batch_size=30
+val_step=59000  loss=8.17   acc=0.1100 val_ppl=3527.91 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=9   steps=59.10  lr=0.000257 loss=88.28   ppl=105.02   acc=0.2438 wpm(K)=337.07 mins=126.51
+ep=9   steps=59.20  lr=0.000257 loss=180.41  ppl=101.35   acc=0.2376 wpm(K)=337.19 mins=126.67
+ep=9   steps=59.30  lr=0.000257 loss=116.96  ppl=113.47   acc=0.2516 wpm(K)=337.31 mins=126.82
+ep=9   steps=59.40  lr=0.000256 loss=65.84   ppl=73.70    acc=0.2755 wpm(K)=337.43 mins=126.98
+ep=9   steps=59.50  lr=0.000256 loss=113.88  ppl=100.19   acc=0.2541 wpm(K)=337.61 mins=127.14
+ep=9   steps=59.60  lr=0.000256 loss=102.12  ppl=78.03    acc=0.2773 wpm(K)=337.73 mins=127.30
+ep=9   steps=59.70  lr=0.000256 loss=166.62  ppl=141.27   acc=0.2154 wpm(K)=337.89 mins=127.46
+ep=9   steps=59.80  lr=0.000256 loss=135.45  ppl=136.20   acc=0.2404 wpm(K)=337.99 mins=127.61
+ep=9   steps=59.90  lr=0.000255 loss=102.76  ppl=126.82   acc=0.2430 wpm(K)=338.12 mins=127.77
+ep=9   steps=60.00  lr=0.000255 loss=44.75   ppl=94.28    acc=0.2825 wpm(K)=338.27 mins=127.93
+Eval at step 60000. valid_batch_size=30
+val_step=60000  loss=8.35   acc=0.1097 val_ppl=4214.43 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=9   steps=60.10  lr=0.000255 loss=33.53   ppl=55.60    acc=0.3521 wpm(K)=337.68 mins=128.36
+ep=9   steps=60.20  lr=0.000255 loss=129.73  ppl=107.78   acc=0.2559 wpm(K)=337.79 mins=128.52
+ep=9   steps=60.30  lr=0.000255 loss=84.44   ppl=96.76    acc=0.2453 wpm(K)=337.97 mins=128.68
+ep=9   steps=60.40  lr=0.000254 loss=166.18  ppl=142.70   acc=0.2407 wpm(K)=338.09 mins=128.83
+ep=9   steps=60.50  lr=0.000254 loss=127.29  ppl=137.72   acc=0.2285 wpm(K)=338.21 mins=128.99
+ep=9   steps=60.60  lr=0.000254 loss=101.02  ppl=121.02   acc=0.2611 wpm(K)=338.34 mins=129.15
+ep=9   steps=60.70  lr=0.000254 loss=89.54   ppl=93.75    acc=0.2456 wpm(K)=338.48 mins=129.31
+ep=9   steps=60.80  lr=0.000253 loss=33.39   ppl=55.50    acc=0.3571 wpm(K)=338.66 mins=129.47
+ep=9   steps=60.90  lr=0.000253 loss=38.98   ppl=72.73    acc=0.3093 wpm(K)=338.81 mins=129.63
+ep=9   steps=61.00  lr=0.000253 loss=54.45   ppl=86.20    acc=0.2890 wpm(K)=338.97 mins=129.79
+Eval at step 61000. valid_batch_size=30
+val_step=61000  loss=8.69   acc=0.0955 val_ppl=5963.83 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=9   steps=61.10  lr=0.000253 loss=70.15   ppl=110.58   acc=0.2683 wpm(K)=338.41 mins=130.21
+ep=9   steps=61.20  lr=0.000253 loss=54.75   ppl=99.36    acc=0.2940 wpm(K)=338.55 mins=130.37
+ep=9   steps=61.30  lr=0.000252 loss=74.36   ppl=81.32    acc=0.2754 wpm(K)=338.74 mins=130.54
+ep=9   steps=61.40  lr=0.000252 loss=86.38   ppl=89.55    acc=0.2732 wpm(K)=338.89 mins=130.70
+ep=9   steps=61.50  lr=0.000252 loss=86.51   ppl=115.43   acc=0.2659 wpm(K)=339.01 mins=130.85
+ep=9   steps=61.60  lr=0.000252 loss=7.93    ppl=9.09     acc=0.5739 wpm(K)=339.12 mins=131.03
+ep=9   steps=61.70  lr=0.000252 loss=169.91  ppl=128.31   acc=0.2295 wpm(K)=339.10 mins=131.23
+ep=9   steps=61.80  lr=0.000251 loss=89.30   ppl=82.27    acc=0.2685 wpm(K)=339.11 mins=131.43
+ep=9   steps=61.90  lr=0.000251 loss=79.51   ppl=87.50    acc=0.2777 wpm(K)=339.10 mins=131.64
+ep=9   steps=62.00  lr=0.000251 loss=62.90   ppl=77.24    acc=0.3024 wpm(K)=339.11 mins=131.85
+Eval at step 62000. valid_batch_size=30
+val_step=62000  loss=8.53   acc=0.0980 val_ppl=5070.49 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=9   steps=62.10  lr=0.000251 loss=155.12  ppl=121.04   acc=0.2367 wpm(K)=338.25 mins=132.39
+ep=9   steps=62.20  lr=0.000251 loss=84.39   ppl=88.08    acc=0.2836 wpm(K)=338.24 mins=132.60
+ep=9   steps=62.30  lr=0.000250 loss=143.36  ppl=151.27   acc=0.1969 wpm(K)=338.23 mins=132.79
+ep=9   steps=62.40  lr=0.000250 loss=172.94  ppl=110.59   acc=0.2389 wpm(K)=338.23 mins=132.99
+ep=10  steps=62.50  lr=0.000250 loss=31.18   ppl=47.82    acc=0.3721 wpm(K)=338.27 mins=133.19
+ep=10  steps=62.60  lr=0.000250 loss=92.67   ppl=108.30   acc=0.2559 wpm(K)=338.31 mins=133.39
+ep=10  steps=62.70  lr=0.000250 loss=228.17  ppl=132.57   acc=0.2189 wpm(K)=338.31 mins=133.58
+ep=10  steps=62.80  lr=0.000249 loss=78.35   ppl=67.14    acc=0.2617 wpm(K)=338.37 mins=133.79
+ep=10  steps=62.90  lr=0.000249 loss=26.11   ppl=38.41    acc=0.3843 wpm(K)=338.44 mins=133.99
+ep=10  steps=63.00  lr=0.000249 loss=100.21  ppl=93.88    acc=0.2833 wpm(K)=338.44 mins=134.19
+Eval at step 63000. valid_batch_size=30
+val_step=63000  loss=8.19   acc=0.1028 val_ppl=3613.16 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=10  steps=63.10  lr=0.000249 loss=24.24   ppl=50.27    acc=0.3889 wpm(K)=337.55 mins=134.74
+ep=10  steps=63.20  lr=0.000249 loss=75.13   ppl=86.54    acc=0.2690 wpm(K)=337.58 mins=134.94
+ep=10  steps=63.30  lr=0.000248 loss=60.48   ppl=101.37   acc=0.2554 wpm(K)=337.60 mins=135.14
+ep=10  steps=63.40  lr=0.000248 loss=217.42  ppl=144.98   acc=0.2296 wpm(K)=337.69 mins=135.34
+ep=10  steps=63.50  lr=0.000248 loss=125.98  ppl=69.35    acc=0.2923 wpm(K)=337.71 mins=135.55
+ep=10  steps=63.60  lr=0.000248 loss=97.56   ppl=95.97    acc=0.2632 wpm(K)=337.74 mins=135.74
+ep=10  steps=63.70  lr=0.000248 loss=44.73   ppl=66.52    acc=0.3079 wpm(K)=337.80 mins=135.95
+ep=10  steps=63.80  lr=0.000247 loss=118.16  ppl=105.88   acc=0.2454 wpm(K)=337.78 mins=136.16
+ep=10  steps=63.90  lr=0.000247 loss=47.03   ppl=73.66    acc=0.3143 wpm(K)=337.76 mins=136.36
+ep=10  steps=64.00  lr=0.000247 loss=37.76   ppl=51.22    acc=0.3257 wpm(K)=337.75 mins=136.56
+Eval at step 64000. valid_batch_size=30
+val_step=64000  loss=8.64   acc=0.0946 val_ppl=5677.58 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=10  steps=64.10  lr=0.000247 loss=143.33  ppl=140.11   acc=0.2338 wpm(K)=336.94 mins=137.10
+ep=10  steps=64.20  lr=0.000247 loss=20.35   ppl=36.54    acc=0.4420 wpm(K)=336.97 mins=137.31
+ep=10  steps=64.30  lr=0.000246 loss=65.99   ppl=97.56    acc=0.2495 wpm(K)=336.97 mins=137.52
+ep=10  steps=64.40  lr=0.000246 loss=131.18  ppl=137.19   acc=0.2227 wpm(K)=337.01 mins=137.72
+ep=10  steps=64.50  lr=0.000246 loss=51.35   ppl=76.37    acc=0.2929 wpm(K)=337.03 mins=137.93
+ep=10  steps=64.60  lr=0.000246 loss=99.80   ppl=140.31   acc=0.2430 wpm(K)=337.04 mins=138.13
+ep=10  steps=64.70  lr=0.000246 loss=36.81   ppl=61.44    acc=0.3007 wpm(K)=337.08 mins=138.33
+ep=10  steps=64.80  lr=0.000246 loss=47.99   ppl=63.44    acc=0.3108 wpm(K)=337.11 mins=138.53
+ep=10  steps=64.90  lr=0.000245 loss=115.19  ppl=125.33   acc=0.2490 wpm(K)=337.15 mins=138.72
+ep=10  steps=65.00  lr=0.000245 loss=87.39   ppl=90.96    acc=0.2726 wpm(K)=337.16 mins=138.93
+Eval at step 65000. valid_batch_size=30
+val_step=65000  loss=8.77   acc=0.0977 val_ppl=6425.57 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=10  steps=65.10  lr=0.000245 loss=65.93   ppl=93.44    acc=0.2559 wpm(K)=336.41 mins=139.44
+ep=10  steps=65.20  lr=0.000245 loss=85.46   ppl=108.08   acc=0.2363 wpm(K)=336.45 mins=139.64
+ep=10  steps=65.30  lr=0.000245 loss=34.29   ppl=64.87    acc=0.3422 wpm(K)=336.51 mins=139.84
+ep=10  steps=65.40  lr=0.000244 loss=78.09   ppl=87.40    acc=0.2898 wpm(K)=336.53 mins=140.04
+ep=10  steps=65.50  lr=0.000244 loss=127.36  ppl=124.34   acc=0.2296 wpm(K)=336.52 mins=140.24
+ep=10  steps=65.60  lr=0.000244 loss=35.46   ppl=52.86    acc=0.3287 wpm(K)=336.58 mins=140.45
+ep=10  steps=65.70  lr=0.000244 loss=165.98  ppl=130.10   acc=0.2466 wpm(K)=336.60 mins=140.65
+ep=10  steps=65.80  lr=0.000244 loss=69.52   ppl=74.56    acc=0.2946 wpm(K)=336.62 mins=140.86
+ep=10  steps=65.90  lr=0.000243 loss=367.99  ppl=117.62   acc=0.2162 wpm(K)=336.68 mins=141.06
+ep=10  steps=66.00  lr=0.000243 loss=135.54  ppl=107.64   acc=0.2654 wpm(K)=336.72 mins=141.29
+Eval at step 66000. valid_batch_size=30
+val_step=66000  loss=9.01   acc=0.0959 val_ppl=8213.14 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=10  steps=66.10  lr=0.000243 loss=105.41  ppl=102.87   acc=0.2665 wpm(K)=335.91 mins=141.87
+ep=10  steps=66.20  lr=0.000243 loss=122.47  ppl=127.02   acc=0.2324 wpm(K)=335.89 mins=142.10
+ep=10  steps=66.30  lr=0.000243 loss=58.12   ppl=69.83    acc=0.2945 wpm(K)=335.87 mins=142.33
+ep=10  steps=66.40  lr=0.000243 loss=77.48   ppl=102.98   acc=0.2598 wpm(K)=335.86 mins=142.57
+ep=10  steps=66.50  lr=0.000242 loss=53.96   ppl=85.65    acc=0.2938 wpm(K)=335.88 mins=142.80
+ep=10  steps=66.60  lr=0.000242 loss=140.99  ppl=118.44   acc=0.2476 wpm(K)=335.85 mins=143.03
+ep=10  steps=66.70  lr=0.000242 loss=165.01  ppl=129.87   acc=0.2221 wpm(K)=335.84 mins=143.26
+ep=10  steps=66.80  lr=0.000242 loss=96.62   ppl=144.13   acc=0.2347 wpm(K)=335.78 mins=143.50
+ep=10  steps=66.90  lr=0.000242 loss=54.70   ppl=79.51    acc=0.2975 wpm(K)=335.69 mins=143.72
+ep=10  steps=67.00  lr=0.000241 loss=21.88   ppl=103.21   acc=0.3510 wpm(K)=335.68 mins=143.96
+Eval at step 67000. valid_batch_size=30
+val_step=67000  loss=8.91   acc=0.0943 val_ppl=7434.38 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=10  steps=67.10  lr=0.000241 loss=147.05  ppl=115.95   acc=0.2657 wpm(K)=334.85 mins=144.53
+ep=10  steps=67.20  lr=0.000241 loss=79.66   ppl=89.64    acc=0.2434 wpm(K)=334.85 mins=144.77
+ep=10  steps=67.30  lr=0.000241 loss=77.11   ppl=83.93    acc=0.2873 wpm(K)=334.78 mins=145.00
+ep=10  steps=67.40  lr=0.000241 loss=150.04  ppl=94.32    acc=0.2604 wpm(K)=334.76 mins=145.23
+ep=10  steps=67.50  lr=0.000241 loss=52.33   ppl=74.05    acc=0.2905 wpm(K)=334.73 mins=145.46
+ep=10  steps=67.60  lr=0.000240 loss=105.26  ppl=86.09    acc=0.2765 wpm(K)=334.67 mins=145.69
+ep=10  steps=67.70  lr=0.000240 loss=69.04   ppl=82.23    acc=0.2854 wpm(K)=334.62 mins=145.92
+ep=10  steps=67.80  lr=0.000240 loss=52.28   ppl=73.78    acc=0.3008 wpm(K)=334.60 mins=146.15
+ep=10  steps=67.90  lr=0.000240 loss=70.18   ppl=75.08    acc=0.3000 wpm(K)=334.54 mins=146.39
+ep=10  steps=68.00  lr=0.000240 loss=28.49   ppl=47.58    acc=0.3686 wpm(K)=334.54 mins=146.62
+Eval at step 68000. valid_batch_size=30
+val_step=68000  loss=8.86   acc=0.0932 val_ppl=7025.54 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=10  steps=68.10  lr=0.000240 loss=69.52   ppl=120.83   acc=0.2651 wpm(K)=333.39 mins=147.33
+ep=10  steps=68.20  lr=0.000239 loss=32.32   ppl=44.21    acc=0.3407 wpm(K)=333.37 mins=147.56
+ep=10  steps=68.30  lr=0.000239 loss=112.57  ppl=79.18    acc=0.2949 wpm(K)=333.37 mins=147.79
+ep=10  steps=68.40  lr=0.000239 loss=45.72   ppl=60.22    acc=0.3109 wpm(K)=333.31 mins=148.02
+ep=10  steps=68.50  lr=0.000239 loss=44.07   ppl=75.65    acc=0.2853 wpm(K)=333.25 mins=148.25
+ep=10  steps=68.60  lr=0.000239 loss=54.87   ppl=105.35   acc=0.2626 wpm(K)=333.19 mins=148.48
+ep=10  steps=68.70  lr=0.000238 loss=65.81   ppl=47.65    acc=0.2936 wpm(K)=333.19 mins=148.72
+ep=11  steps=68.80  lr=0.000238 loss=116.89  ppl=104.82   acc=0.2525 wpm(K)=333.16 mins=148.95
+ep=11  steps=68.90  lr=0.000238 loss=46.36   ppl=66.07    acc=0.3418 wpm(K)=333.09 mins=149.18
+ep=11  steps=69.00  lr=0.000238 loss=161.06  ppl=81.24    acc=0.2500 wpm(K)=333.04 mins=149.41
+Eval at step 69000. valid_batch_size=30
+val_step=69000  loss=8.75   acc=0.0916 val_ppl=6331.54 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=11  steps=69.10  lr=0.000238 loss=124.55  ppl=105.80   acc=0.2526 wpm(K)=332.30 mins=149.99
+ep=11  steps=69.20  lr=0.000238 loss=86.01   ppl=80.06    acc=0.2866 wpm(K)=332.26 mins=150.22
+ep=11  steps=69.30  lr=0.000237 loss=196.07  ppl=153.78   acc=0.2207 wpm(K)=332.18 mins=150.45
+ep=11  steps=69.40  lr=0.000237 loss=88.17   ppl=90.64    acc=0.2524 wpm(K)=332.13 mins=150.68
+ep=11  steps=69.50  lr=0.000237 loss=52.88   ppl=86.88    acc=0.2876 wpm(K)=332.05 mins=150.91
+ep=11  steps=69.60  lr=0.000237 loss=107.62  ppl=122.70   acc=0.2486 wpm(K)=332.00 mins=151.14
+ep=11  steps=69.70  lr=0.000237 loss=258.25  ppl=126.99   acc=0.2345 wpm(K)=331.96 mins=151.37
+ep=11  steps=69.80  lr=0.000237 loss=91.53   ppl=94.44    acc=0.2826 wpm(K)=331.95 mins=151.60
+ep=11  steps=69.90  lr=0.000236 loss=41.16   ppl=68.13    acc=0.3013 wpm(K)=331.91 mins=151.83
+ep=11  steps=70.00  lr=0.000236 loss=52.25   ppl=96.38    acc=0.2568 wpm(K)=331.89 mins=152.06
+Eval at step 70000. valid_batch_size=30
+val_step=70000  loss=8.12   acc=0.1047 val_ppl=3376.05 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=11  steps=70.10  lr=0.000236 loss=59.42   ppl=70.37    acc=0.2908 wpm(K)=331.14 mins=152.64
+ep=11  steps=70.20  lr=0.000236 loss=157.52  ppl=102.82   acc=0.2500 wpm(K)=331.12 mins=152.87
+ep=11  steps=70.30  lr=0.000236 loss=71.20   ppl=77.32    acc=0.2882 wpm(K)=331.12 mins=153.10
+ep=11  steps=70.40  lr=0.000236 loss=61.07   ppl=81.57    acc=0.2860 wpm(K)=331.03 mins=153.33
+ep=11  steps=70.50  lr=0.000235 loss=143.53  ppl=121.44   acc=0.2288 wpm(K)=331.00 mins=153.56
+ep=11  steps=70.60  lr=0.000235 loss=107.05  ppl=100.52   acc=0.2530 wpm(K)=330.98 mins=153.79
+ep=11  steps=70.70  lr=0.000235 loss=51.02   ppl=70.23    acc=0.2865 wpm(K)=330.97 mins=154.02
+ep=11  steps=70.80  lr=0.000235 loss=214.45  ppl=120.15   acc=0.2366 wpm(K)=330.97 mins=154.25
+ep=11  steps=70.90  lr=0.000235 loss=57.30   ppl=86.57    acc=0.2993 wpm(K)=330.97 mins=154.48
+ep=11  steps=71.00  lr=0.000235 loss=22.71   ppl=37.83    acc=0.4200 wpm(K)=330.91 mins=154.71
+Eval at step 71000. valid_batch_size=30
+val_step=71000  loss=8.66   acc=0.1025 val_ppl=5765.37 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=11  steps=71.10  lr=0.000234 loss=61.19   ppl=86.50    acc=0.3166 wpm(K)=330.09 mins=155.32
+ep=11  steps=71.20  lr=0.000234 loss=57.55   ppl=72.44    acc=0.3070 wpm(K)=330.06 mins=155.55
+ep=11  steps=71.30  lr=0.000234 loss=145.36  ppl=127.14   acc=0.2292 wpm(K)=330.08 mins=155.78
+ep=11  steps=71.40  lr=0.000234 loss=124.08  ppl=108.61   acc=0.2409 wpm(K)=330.03 mins=156.01
+ep=11  steps=71.50  lr=0.000234 loss=56.52   ppl=90.92    acc=0.2893 wpm(K)=330.05 mins=156.24
+ep=11  steps=71.60  lr=0.000234 loss=64.79   ppl=62.17    acc=0.2749 wpm(K)=330.03 mins=156.47
+ep=11  steps=71.70  lr=0.000233 loss=120.11  ppl=134.60   acc=0.2500 wpm(K)=330.02 mins=156.71
+ep=11  steps=71.80  lr=0.000233 loss=27.59   ppl=48.08    acc=0.3772 wpm(K)=330.01 mins=156.94
+ep=11  steps=71.90  lr=0.000233 loss=116.22  ppl=102.65   acc=0.2578 wpm(K)=329.97 mins=157.17
+ep=11  steps=72.00  lr=0.000233 loss=162.34  ppl=149.82   acc=0.2353 wpm(K)=329.93 mins=157.40
+Eval at step 72000. valid_batch_size=30
+val_step=72000  loss=8.50   acc=0.0947 val_ppl=4935.88 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=11  steps=72.10  lr=0.000233 loss=177.27  ppl=108.65   acc=0.2388 wpm(K)=329.15 mins=157.97
+ep=11  steps=72.20  lr=0.000233 loss=32.25   ppl=50.62    acc=0.3574 wpm(K)=329.18 mins=158.20
+ep=11  steps=72.30  lr=0.000232 loss=67.82   ppl=88.58    acc=0.2645 wpm(K)=329.12 mins=158.43
+ep=11  steps=72.40  lr=0.000232 loss=113.93  ppl=115.96   acc=0.2347 wpm(K)=329.15 mins=158.66
+ep=11  steps=72.50  lr=0.000232 loss=123.44  ppl=103.71   acc=0.2409 wpm(K)=329.13 mins=158.89
+ep=11  steps=72.60  lr=0.000232 loss=120.86  ppl=87.44    acc=0.2867 wpm(K)=329.07 mins=159.12
+ep=11  steps=72.70  lr=0.000232 loss=215.87  ppl=145.55   acc=0.2343 wpm(K)=329.03 mins=159.35
+ep=11  steps=72.80  lr=0.000232 loss=236.47  ppl=134.85   acc=0.2191 wpm(K)=329.03 mins=159.59
+ep=11  steps=72.90  lr=0.000231 loss=120.01  ppl=127.62   acc=0.2386 wpm(K)=329.00 mins=159.82
+ep=11  steps=73.00  lr=0.000231 loss=41.84   ppl=69.22    acc=0.2911 wpm(K)=328.95 mins=160.05
+Eval at step 73000. valid_batch_size=30
+val_step=73000  loss=9.27   acc=0.0910 val_ppl=10645.55 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=11  steps=73.10  lr=0.000231 loss=175.60  ppl=107.23   acc=0.2454 wpm(K)=328.15 mins=160.65
+ep=11  steps=73.20  lr=0.000231 loss=80.02   ppl=102.58   acc=0.2550 wpm(K)=328.14 mins=160.88
+ep=11  steps=73.30  lr=0.000231 loss=40.58   ppl=69.66    acc=0.3039 wpm(K)=328.17 mins=161.11
+ep=11  steps=73.40  lr=0.000231 loss=214.26  ppl=144.83   acc=0.2257 wpm(K)=328.13 mins=161.35
+ep=11  steps=73.50  lr=0.000231 loss=41.38   ppl=71.65    acc=0.2935 wpm(K)=328.09 mins=161.58
+ep=11  steps=73.60  lr=0.000230 loss=106.25  ppl=83.19    acc=0.2718 wpm(K)=328.10 mins=161.81
+ep=11  steps=73.70  lr=0.000230 loss=32.59   ppl=53.57    acc=0.3359 wpm(K)=328.10 mins=162.05
+ep=11  steps=73.80  lr=0.000230 loss=220.15  ppl=131.90   acc=0.2197 wpm(K)=328.10 mins=162.28
+ep=11  steps=73.90  lr=0.000230 loss=103.83  ppl=62.65    acc=0.3126 wpm(K)=328.04 mins=162.51
+ep=11  steps=74.00  lr=0.000230 loss=33.15   ppl=55.57    acc=0.3371 wpm(K)=327.98 mins=162.74
+Eval at step 74000. valid_batch_size=30
+val_step=74000  loss=9.34   acc=0.0848 val_ppl=11435.30 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=11  steps=74.10  lr=0.000230 loss=75.67   ppl=107.20   acc=0.2587 wpm(K)=327.19 mins=163.36
+ep=11  steps=74.20  lr=0.000229 loss=93.10   ppl=113.18   acc=0.2540 wpm(K)=327.17 mins=163.59
+ep=11  steps=74.30  lr=0.000229 loss=46.63   ppl=76.52    acc=0.2849 wpm(K)=327.13 mins=163.82
+ep=11  steps=74.40  lr=0.000229 loss=270.08  ppl=146.92   acc=0.2073 wpm(K)=327.14 mins=164.06
+ep=11  steps=74.50  lr=0.000229 loss=119.53  ppl=109.19   acc=0.2503 wpm(K)=327.10 mins=164.29
+ep=11  steps=74.60  lr=0.000229 loss=66.48   ppl=80.34    acc=0.2948 wpm(K)=327.07 mins=164.52
+ep=11  steps=74.70  lr=0.000229 loss=42.84   ppl=77.62    acc=0.3111 wpm(K)=327.02 mins=164.76
+ep=11  steps=74.80  lr=0.000229 loss=150.58  ppl=120.27   acc=0.2376 wpm(K)=326.99 mins=164.99
+ep=11  steps=74.90  lr=0.000228 loss=99.40   ppl=103.21   acc=0.2624 wpm(K)=326.94 mins=165.23
+ep=12  steps=75.00  lr=0.000228 loss=165.64  ppl=119.56   acc=0.2238 wpm(K)=326.90 mins=165.46
+Eval at step 75000. valid_batch_size=30
+val_step=75000  loss=8.39   acc=0.1099 val_ppl=4404.91 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=12  steps=75.10  lr=0.000228 loss=168.44  ppl=108.53   acc=0.2496 wpm(K)=326.16 mins=166.07
+ep=12  steps=75.20  lr=0.000228 loss=47.15   ppl=84.56    acc=0.3059 wpm(K)=326.14 mins=166.31
+ep=12  steps=75.30  lr=0.000228 loss=114.21  ppl=79.18    acc=0.2799 wpm(K)=326.13 mins=166.54
+ep=12  steps=75.40  lr=0.000228 loss=38.10   ppl=53.77    acc=0.3758 wpm(K)=326.05 mins=166.77
+ep=12  steps=75.50  lr=0.000227 loss=119.17  ppl=101.15   acc=0.2385 wpm(K)=326.01 mins=167.01
+ep=12  steps=75.60  lr=0.000227 loss=96.60   ppl=117.12   acc=0.2357 wpm(K)=325.98 mins=167.24
+ep=12  steps=75.70  lr=0.000227 loss=235.04  ppl=137.32   acc=0.2134 wpm(K)=325.95 mins=167.47
+ep=12  steps=75.80  lr=0.000227 loss=38.55   ppl=56.32    acc=0.3660 wpm(K)=325.89 mins=167.70
+ep=12  steps=75.90  lr=0.000227 loss=86.96   ppl=55.14    acc=0.3026 wpm(K)=325.89 mins=167.94
+ep=12  steps=76.00  lr=0.000227 loss=68.06   ppl=117.45   acc=0.2473 wpm(K)=325.83 mins=168.17
+Eval at step 76000. valid_batch_size=30
+val_step=76000  loss=8.15   acc=0.1151 val_ppl=3477.58 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=12  steps=76.10  lr=0.000227 loss=62.89   ppl=90.19    acc=0.2752 wpm(K)=325.07 mins=168.78
+ep=12  steps=76.20  lr=0.000226 loss=31.43   ppl=45.79    acc=0.3536 wpm(K)=325.02 mins=169.02
+ep=12  steps=76.30  lr=0.000226 loss=75.84   ppl=79.91    acc=0.2744 wpm(K)=325.00 mins=169.25
+ep=12  steps=76.40  lr=0.000226 loss=45.88   ppl=91.63    acc=0.2892 wpm(K)=325.01 mins=169.48
+ep=12  steps=76.50  lr=0.000226 loss=25.56   ppl=27.41    acc=0.4130 wpm(K)=324.98 mins=169.71
+ep=12  steps=76.60  lr=0.000226 loss=111.97  ppl=98.27    acc=0.2471 wpm(K)=324.91 mins=169.95
+ep=12  steps=76.70  lr=0.000226 loss=70.13   ppl=81.47    acc=0.2667 wpm(K)=324.87 mins=170.18
+ep=12  steps=76.80  lr=0.000226 loss=42.94   ppl=76.28    acc=0.3028 wpm(K)=324.86 mins=170.41
+ep=12  steps=76.90  lr=0.000225 loss=49.91   ppl=97.15    acc=0.2865 wpm(K)=324.88 mins=170.64
+ep=12  steps=77.00  lr=0.000225 loss=85.74   ppl=87.88    acc=0.2822 wpm(K)=324.84 mins=170.88
+Eval at step 77000. valid_batch_size=30
+val_step=77000  loss=8.53   acc=0.1007 val_ppl=5040.71 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=12  steps=77.10  lr=0.000225 loss=21.26   ppl=30.01    acc=0.4400 wpm(K)=324.09 mins=171.49
+ep=12  steps=77.20  lr=0.000225 loss=254.50  ppl=124.91   acc=0.2507 wpm(K)=324.04 mins=171.72
+ep=12  steps=77.30  lr=0.000225 loss=299.24  ppl=127.85   acc=0.2356 wpm(K)=324.02 mins=171.96
+ep=12  steps=77.40  lr=0.000225 loss=184.21  ppl=104.08   acc=0.2388 wpm(K)=324.02 mins=172.19
+ep=12  steps=77.50  lr=0.000225 loss=69.74   ppl=108.69   acc=0.2689 wpm(K)=324.02 mins=172.43
+ep=12  steps=77.60  lr=0.000224 loss=312.27  ppl=139.37   acc=0.2288 wpm(K)=324.00 mins=172.66
+ep=12  steps=77.70  lr=0.000224 loss=65.93   ppl=69.76    acc=0.2857 wpm(K)=324.00 mins=172.90
+ep=12  steps=77.80  lr=0.000224 loss=143.96  ppl=104.92   acc=0.2394 wpm(K)=323.97 mins=173.13
+ep=12  steps=77.90  lr=0.000224 loss=29.06   ppl=41.87    acc=0.3815 wpm(K)=323.95 mins=173.36
+ep=12  steps=78.00  lr=0.000224 loss=171.63  ppl=108.43   acc=0.2440 wpm(K)=323.95 mins=173.60
+Eval at step 78000. valid_batch_size=30
+val_step=78000  loss=7.41   acc=0.1245 val_ppl=1649.87 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=12  steps=78.10  lr=0.000224 loss=36.49   ppl=49.04    acc=0.3633 wpm(K)=323.26 mins=174.18
+ep=12  steps=78.20  lr=0.000223 loss=67.57   ppl=91.31    acc=0.2651 wpm(K)=323.27 mins=174.41
+ep=12  steps=78.30  lr=0.000223 loss=100.03  ppl=86.86    acc=0.2650 wpm(K)=323.24 mins=174.64
+ep=12  steps=78.40  lr=0.000223 loss=60.51   ppl=71.83    acc=0.2980 wpm(K)=323.17 mins=174.87
+ep=12  steps=78.50  lr=0.000223 loss=110.77  ppl=106.04   acc=0.2500 wpm(K)=323.15 mins=175.11
+ep=12  steps=78.60  lr=0.000223 loss=127.07  ppl=120.93   acc=0.2441 wpm(K)=323.13 mins=175.34
+ep=12  steps=78.70  lr=0.000223 loss=132.04  ppl=83.84    acc=0.2463 wpm(K)=323.11 mins=175.57
+ep=12  steps=78.80  lr=0.000223 loss=101.15  ppl=93.07    acc=0.2535 wpm(K)=323.07 mins=175.80
+ep=12  steps=78.90  lr=0.000223 loss=265.38  ppl=123.57   acc=0.2292 wpm(K)=323.06 mins=176.03
+ep=12  steps=79.00  lr=0.000222 loss=348.02  ppl=180.70   acc=0.2137 wpm(K)=323.11 mins=176.27
+Eval at step 79000. valid_batch_size=30
+val_step=79000  loss=8.55   acc=0.0999 val_ppl=5170.74 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=12  steps=79.10  lr=0.000222 loss=75.26   ppl=99.96    acc=0.2524 wpm(K)=322.38 mins=176.89
+ep=12  steps=79.20  lr=0.000222 loss=118.43  ppl=105.20   acc=0.2457 wpm(K)=322.36 mins=177.12
+ep=12  steps=79.30  lr=0.000222 loss=106.92  ppl=143.44   acc=0.2380 wpm(K)=322.37 mins=177.36
+ep=12  steps=79.40  lr=0.000222 loss=147.54  ppl=101.47   acc=0.2505 wpm(K)=322.32 mins=177.59
+ep=12  steps=79.50  lr=0.000222 loss=179.20  ppl=123.33   acc=0.2376 wpm(K)=322.30 mins=177.83
+ep=12  steps=79.60  lr=0.000222 loss=96.65   ppl=103.23   acc=0.2654 wpm(K)=322.30 mins=178.06
+ep=12  steps=79.70  lr=0.000221 loss=40.74   ppl=83.02    acc=0.3153 wpm(K)=322.26 mins=178.30
+ep=12  steps=79.80  lr=0.000221 loss=134.35  ppl=114.44   acc=0.2426 wpm(K)=322.23 mins=178.53
+ep=12  steps=79.90  lr=0.000221 loss=162.89  ppl=128.74   acc=0.2460 wpm(K)=322.24 mins=178.77
+ep=12  steps=80.00  lr=0.000221 loss=75.36   ppl=75.30    acc=0.2796 wpm(K)=322.23 mins=179.00
+Eval at step 80000. valid_batch_size=30
+val_step=80000  loss=7.93   acc=0.1109 val_ppl=2768.27 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=12  steps=80.10  lr=0.000221 loss=38.98   ppl=50.52    acc=0.3428 wpm(K)=321.50 mins=179.62
+ep=12  steps=80.20  lr=0.000221 loss=62.01   ppl=75.41    acc=0.2898 wpm(K)=321.43 mins=179.85
+ep=12  steps=80.30  lr=0.000221 loss=45.22   ppl=60.31    acc=0.3343 wpm(K)=321.42 mins=180.09
+ep=12  steps=80.40  lr=0.000220 loss=21.31   ppl=37.63    acc=0.3936 wpm(K)=321.49 mins=180.33
+ep=12  steps=80.50  lr=0.000220 loss=88.39   ppl=92.33    acc=0.2704 wpm(K)=321.45 mins=180.56
+ep=12  steps=80.60  lr=0.000220 loss=59.10   ppl=84.71    acc=0.2864 wpm(K)=321.44 mins=180.79
+ep=12  steps=80.70  lr=0.000220 loss=92.26   ppl=99.33    acc=0.2445 wpm(K)=321.41 mins=181.03
+ep=12  steps=80.80  lr=0.000220 loss=48.92   ppl=73.77    acc=0.2995 wpm(K)=321.39 mins=181.26
+ep=12  steps=80.90  lr=0.000220 loss=158.37  ppl=104.98   acc=0.2580 wpm(K)=321.35 mins=181.50
+ep=12  steps=81.00  lr=0.000220 loss=63.05   ppl=85.11    acc=0.2819 wpm(K)=321.35 mins=181.73
+Eval at step 81000. valid_batch_size=30
+val_step=81000  loss=8.62   acc=0.1002 val_ppl=5517.40 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=12  steps=81.10  lr=0.000219 loss=48.37   ppl=71.91    acc=0.2818 wpm(K)=320.76 mins=182.31
+ep=12  steps=81.20  lr=0.000219 loss=114.28  ppl=110.68   acc=0.2767 wpm(K)=320.75 mins=182.55
+ep=13  steps=81.30  lr=0.000219 loss=79.57   ppl=85.75    acc=0.2867 wpm(K)=320.72 mins=182.78
+ep=13  steps=81.40  lr=0.000219 loss=57.90   ppl=91.74    acc=0.2659 wpm(K)=320.71 mins=183.01
+ep=13  steps=81.50  lr=0.000219 loss=52.27   ppl=70.54    acc=0.3053 wpm(K)=320.69 mins=183.24
+ep=13  steps=81.60  lr=0.000219 loss=69.21   ppl=85.40    acc=0.2771 wpm(K)=320.65 mins=183.48
+ep=13  steps=81.70  lr=0.000219 loss=66.61   ppl=84.84    acc=0.2771 wpm(K)=320.68 mins=183.72
+ep=13  steps=81.80  lr=0.000219 loss=49.34   ppl=106.78   acc=0.2899 wpm(K)=320.66 mins=183.95
+ep=13  steps=81.90  lr=0.000218 loss=177.99  ppl=112.93   acc=0.2373 wpm(K)=320.67 mins=184.19
+ep=13  steps=82.00  lr=0.000218 loss=59.83   ppl=92.43    acc=0.2884 wpm(K)=320.67 mins=184.43
+Eval at step 82000. valid_batch_size=30
+val_step=82000  loss=8.82   acc=0.0912 val_ppl=6788.33 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=13  steps=82.10  lr=0.000218 loss=71.25   ppl=80.89    acc=0.2678 wpm(K)=320.08 mins=184.99
+ep=13  steps=82.20  lr=0.000218 loss=59.90   ppl=71.46    acc=0.3096 wpm(K)=320.04 mins=185.22
+ep=13  steps=82.30  lr=0.000218 loss=32.61   ppl=38.92    acc=0.3930 wpm(K)=320.04 mins=185.45
+ep=13  steps=82.40  lr=0.000218 loss=376.32  ppl=124.30   acc=0.2363 wpm(K)=320.04 mins=185.68
+ep=13  steps=82.50  lr=0.000218 loss=56.78   ppl=85.94    acc=0.2917 wpm(K)=320.02 mins=185.91
+ep=13  steps=82.60  lr=0.000217 loss=51.00   ppl=64.97    acc=0.3223 wpm(K)=320.02 mins=186.13
+ep=13  steps=82.70  lr=0.000217 loss=76.58   ppl=84.71    acc=0.2826 wpm(K)=320.01 mins=186.36
+ep=13  steps=82.80  lr=0.000217 loss=55.68   ppl=68.88    acc=0.2922 wpm(K)=319.99 mins=186.59
+ep=13  steps=82.90  lr=0.000217 loss=33.02   ppl=50.78    acc=0.3792 wpm(K)=320.00 mins=186.82
+ep=13  steps=83.00  lr=0.000217 loss=99.41   ppl=83.44    acc=0.2656 wpm(K)=320.03 mins=187.05
+Eval at step 83000. valid_batch_size=30
+val_step=83000  loss=7.95   acc=0.1134 val_ppl=2835.11 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=13  steps=83.10  lr=0.000217 loss=106.19  ppl=101.82   acc=0.2449 wpm(K)=319.39 mins=187.65
+ep=13  steps=83.20  lr=0.000217 loss=43.14   ppl=76.83    acc=0.3208 wpm(K)=319.40 mins=187.87
+ep=13  steps=83.30  lr=0.000217 loss=143.76  ppl=104.24   acc=0.2535 wpm(K)=319.42 mins=188.10
+ep=13  steps=83.40  lr=0.000216 loss=133.25  ppl=105.12   acc=0.2609 wpm(K)=319.39 mins=188.33
+ep=13  steps=83.50  lr=0.000216 loss=42.74   ppl=83.61    acc=0.2945 wpm(K)=319.33 mins=188.57
+ep=13  steps=83.60  lr=0.000216 loss=108.04  ppl=81.81    acc=0.2752 wpm(K)=319.32 mins=188.81
+ep=13  steps=83.70  lr=0.000216 loss=82.94   ppl=87.21    acc=0.2576 wpm(K)=319.32 mins=189.03
+ep=13  steps=83.80  lr=0.000216 loss=174.20  ppl=112.61   acc=0.2398 wpm(K)=319.32 mins=189.26
+ep=13  steps=83.90  lr=0.000216 loss=171.56  ppl=127.71   acc=0.2509 wpm(K)=319.33 mins=189.49
+ep=13  steps=84.00  lr=0.000216 loss=146.37  ppl=121.40   acc=0.2459 wpm(K)=319.32 mins=189.72
+Eval at step 84000. valid_batch_size=30
+val_step=84000  loss=9.05   acc=0.0870 val_ppl=8524.18 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=13  steps=84.10  lr=0.000216 loss=63.92   ppl=96.15    acc=0.2946 wpm(K)=318.75 mins=190.28
+ep=13  steps=84.20  lr=0.000215 loss=38.74   ppl=64.10    acc=0.3523 wpm(K)=318.74 mins=190.51
+ep=13  steps=84.30  lr=0.000215 loss=62.48   ppl=85.89    acc=0.3229 wpm(K)=318.72 mins=190.74
+ep=13  steps=84.40  lr=0.000215 loss=213.34  ppl=129.34   acc=0.2372 wpm(K)=318.72 mins=190.97
+ep=13  steps=84.50  lr=0.000215 loss=65.33   ppl=67.67    acc=0.2883 wpm(K)=318.74 mins=191.20
+ep=13  steps=84.60  lr=0.000215 loss=194.72  ppl=105.31   acc=0.2444 wpm(K)=318.74 mins=191.42
+ep=13  steps=84.70  lr=0.000215 loss=177.44  ppl=122.98   acc=0.2339 wpm(K)=318.72 mins=191.65
+ep=13  steps=84.80  lr=0.000215 loss=89.47   ppl=99.75    acc=0.2605 wpm(K)=318.73 mins=191.88
+ep=13  steps=84.90  lr=0.000214 loss=134.13  ppl=99.02    acc=0.2430 wpm(K)=318.70 mins=192.11
+ep=13  steps=85.00  lr=0.000214 loss=69.39   ppl=134.55   acc=0.2494 wpm(K)=318.70 mins=192.34
+Eval at step 85000. valid_batch_size=30
+val_step=85000  loss=8.90   acc=0.0945 val_ppl=7344.48 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=13  steps=85.10  lr=0.000214 loss=48.68   ppl=86.83    acc=0.2722 wpm(K)=318.15 mins=192.90
+ep=13  steps=85.20  lr=0.000214 loss=15.27   ppl=37.33    acc=0.4741 wpm(K)=318.12 mins=193.13
+ep=13  steps=85.30  lr=0.000214 loss=65.55   ppl=127.03   acc=0.2402 wpm(K)=318.11 mins=193.36
+ep=13  steps=85.40  lr=0.000214 loss=223.54  ppl=123.58   acc=0.2290 wpm(K)=318.11 mins=193.59
+ep=13  steps=85.50  lr=0.000214 loss=51.23   ppl=57.84    acc=0.3119 wpm(K)=318.12 mins=193.82
+ep=13  steps=85.60  lr=0.000214 loss=119.59  ppl=119.56   acc=0.2475 wpm(K)=318.09 mins=194.04
+ep=13  steps=85.70  lr=0.000213 loss=196.66  ppl=127.06   acc=0.2256 wpm(K)=318.06 mins=194.27
+ep=13  steps=85.80  lr=0.000213 loss=139.90  ppl=105.98   acc=0.2490 wpm(K)=318.09 mins=194.50
+ep=13  steps=85.90  lr=0.000213 loss=93.87   ppl=113.33   acc=0.2378 wpm(K)=318.07 mins=194.73
+ep=13  steps=86.00  lr=0.000213 loss=92.07   ppl=104.30   acc=0.2681 wpm(K)=318.05 mins=194.95
+Eval at step 86000. valid_batch_size=30
+val_step=86000  loss=8.73   acc=0.0956 val_ppl=6202.34 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=13  steps=86.10  lr=0.000213 loss=37.97   ppl=68.96    acc=0.3171 wpm(K)=317.46 mins=195.56
+ep=13  steps=86.20  lr=0.000213 loss=68.98   ppl=59.15    acc=0.2773 wpm(K)=317.47 mins=195.78
+ep=13  steps=86.30  lr=0.000213 loss=26.27   ppl=45.65    acc=0.3955 wpm(K)=317.48 mins=196.01
+ep=13  steps=86.40  lr=0.000213 loss=48.58   ppl=56.69    acc=0.3143 wpm(K)=317.47 mins=196.24
+ep=13  steps=86.50  lr=0.000213 loss=22.16   ppl=142.53   acc=0.3497 wpm(K)=317.47 mins=196.47
+ep=13  steps=86.60  lr=0.000212 loss=58.14   ppl=81.33    acc=0.3073 wpm(K)=317.49 mins=196.70
+ep=13  steps=86.70  lr=0.000212 loss=70.04   ppl=79.66    acc=0.2793 wpm(K)=317.47 mins=196.93
+ep=13  steps=86.80  lr=0.000212 loss=106.61  ppl=74.66    acc=0.2756 wpm(K)=317.44 mins=197.15
+ep=13  steps=86.90  lr=0.000212 loss=81.05   ppl=86.85    acc=0.2909 wpm(K)=317.48 mins=197.38
+ep=13  steps=87.00  lr=0.000212 loss=80.31   ppl=95.26    acc=0.2571 wpm(K)=317.48 mins=197.61
+Eval at step 87000. valid_batch_size=30
+val_step=87000  loss=9.74   acc=0.0751 val_ppl=17053.33 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=13  steps=87.10  lr=0.000212 loss=141.65  ppl=69.97    acc=0.2896 wpm(K)=316.92 mins=198.18
+ep=13  steps=87.20  lr=0.000212 loss=25.84   ppl=35.84    acc=0.3939 wpm(K)=316.94 mins=198.41
+ep=13  steps=87.30  lr=0.000212 loss=87.77   ppl=76.29    acc=0.2531 wpm(K)=316.95 mins=198.64
+ep=13  steps=87.40  lr=0.000211 loss=46.70   ppl=58.02    acc=0.2989 wpm(K)=316.96 mins=198.87
+ep=14  steps=87.50  lr=0.000211 loss=53.14   ppl=54.15    acc=0.3192 wpm(K)=316.90 mins=199.09
+ep=14  steps=87.60  lr=0.000211 loss=58.76   ppl=76.88    acc=0.2864 wpm(K)=316.88 mins=199.32
+ep=14  steps=87.70  lr=0.000211 loss=177.40  ppl=106.13   acc=0.2638 wpm(K)=316.93 mins=199.55
+ep=14  steps=87.80  lr=0.000211 loss=140.72  ppl=107.36   acc=0.2627 wpm(K)=316.92 mins=199.78
+ep=14  steps=87.90  lr=0.000211 loss=171.07  ppl=109.40   acc=0.2401 wpm(K)=316.93 mins=200.01
+ep=14  steps=88.00  lr=0.000211 loss=319.68  ppl=114.49   acc=0.2280 wpm(K)=316.89 mins=200.23
+Eval at step 88000. valid_batch_size=30
+val_step=88000  loss=9.61   acc=0.0822 val_ppl=14869.28 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.038, hyp_len=903, ref_len=23648)
+ep=14  steps=88.10  lr=0.000211 loss=65.15   ppl=109.47   acc=0.2635 wpm(K)=316.36 mins=200.80
+ep=14  steps=88.20  lr=0.000210 loss=139.25  ppl=146.95   acc=0.2307 wpm(K)=316.38 mins=201.03
+ep=14  steps=88.30  lr=0.000210 loss=88.25   ppl=109.82   acc=0.2762 wpm(K)=316.37 mins=201.25
+ep=14  steps=88.40  lr=0.000210 loss=231.59  ppl=133.61   acc=0.2431 wpm(K)=316.38 mins=201.48
+ep=14  steps=88.50  lr=0.000210 loss=48.13   ppl=57.58    acc=0.3132 wpm(K)=316.37 mins=201.71
+ep=14  steps=88.60  lr=0.000210 loss=63.87   ppl=83.42    acc=0.2662 wpm(K)=316.35 mins=201.94
+ep=14  steps=88.70  lr=0.000210 loss=66.65   ppl=101.14   acc=0.2749 wpm(K)=316.37 mins=202.17
+ep=14  steps=88.80  lr=0.000210 loss=46.36   ppl=88.41    acc=0.2810 wpm(K)=316.39 mins=202.40
+ep=14  steps=88.90  lr=0.000210 loss=50.11   ppl=80.87    acc=0.3123 wpm(K)=316.39 mins=202.62
+ep=14  steps=89.00  lr=0.000210 loss=56.37   ppl=67.02    acc=0.3054 wpm(K)=316.39 mins=202.85
+Eval at step 89000. valid_batch_size=30
+val_step=89000  loss=9.06   acc=0.0894 val_ppl=8574.35 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=14  steps=89.10  lr=0.000209 loss=53.68   ppl=95.28    acc=0.2706 wpm(K)=315.79 mins=203.45
+ep=14  steps=89.20  lr=0.000209 loss=37.42   ppl=57.92    acc=0.3593 wpm(K)=315.80 mins=203.68
+ep=14  steps=89.30  lr=0.000209 loss=33.90   ppl=63.86    acc=0.3295 wpm(K)=315.81 mins=203.91
+ep=14  steps=89.40  lr=0.000209 loss=26.71   ppl=47.81    acc=0.3575 wpm(K)=315.85 mins=204.14
+ep=14  steps=89.50  lr=0.000209 loss=70.15   ppl=106.36   acc=0.2578 wpm(K)=315.88 mins=204.37
+ep=14  steps=89.60  lr=0.000209 loss=104.17  ppl=94.43    acc=0.2906 wpm(K)=315.87 mins=204.59
+ep=14  steps=89.70  lr=0.000209 loss=120.58  ppl=139.86   acc=0.2330 wpm(K)=315.87 mins=204.82
+ep=14  steps=89.80  lr=0.000209 loss=142.76  ppl=100.01   acc=0.2298 wpm(K)=315.88 mins=205.05
+ep=14  steps=89.90  lr=0.000208 loss=173.40  ppl=161.73   acc=0.2126 wpm(K)=315.88 mins=205.28
+ep=14  steps=90.00  lr=0.000208 loss=59.50   ppl=76.48    acc=0.3326 wpm(K)=315.90 mins=205.51
+Eval at step 90000. valid_batch_size=30
+val_step=90000  loss=8.75   acc=0.0974 val_ppl=6282.38 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=14  steps=90.10  lr=0.000208 loss=57.68   ppl=93.25    acc=0.2924 wpm(K)=315.34 mins=206.11
+ep=14  steps=90.20  lr=0.000208 loss=207.73  ppl=128.45   acc=0.2337 wpm(K)=315.38 mins=206.33
+ep=14  steps=90.30  lr=0.000208 loss=73.69   ppl=114.99   acc=0.2555 wpm(K)=315.41 mins=206.56
+ep=14  steps=90.40  lr=0.000208 loss=160.16  ppl=99.14    acc=0.2413 wpm(K)=315.43 mins=206.79
+ep=14  steps=90.50  lr=0.000208 loss=89.02   ppl=94.70    acc=0.2556 wpm(K)=315.43 mins=207.02
+ep=14  steps=90.60  lr=0.000208 loss=75.02   ppl=81.85    acc=0.2789 wpm(K)=315.41 mins=207.25
+ep=14  steps=90.70  lr=0.000208 loss=84.62   ppl=99.24    acc=0.2445 wpm(K)=315.40 mins=207.48
+ep=14  steps=90.80  lr=0.000207 loss=201.41  ppl=108.93   acc=0.2183 wpm(K)=315.44 mins=207.71
+ep=14  steps=90.90  lr=0.000207 loss=70.00   ppl=96.67    acc=0.2796 wpm(K)=315.41 mins=207.93
+ep=14  steps=91.00  lr=0.000207 loss=45.18   ppl=68.53    acc=0.2953 wpm(K)=315.42 mins=208.16
+Eval at step 91000. valid_batch_size=30
+val_step=91000  loss=8.04   acc=0.1095 val_ppl=3114.09 Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+Use of uninitialized value in division (/) at ./multi-bleu.perl line 125, <STDIN> line 903.
+BLEU = 0.00, 0.0/0.0/0.0/0.0 (BP=0.000, ratio=0.076, hyp_len=1806, ref_len=23648)
+ep=14  steps=91.10  lr=0.000207 loss=71.60   ppl=96.84    acc=0.2954 wpm(K)=314.88 mins=208.76
+ep=14  steps=91.20  lr=0.000207 loss=126.01  ppl=114.86   acc=0.2294 wpm(K)=314.88 mins=208.99
+ep=14  steps=91.30  lr=0.000207 loss=271.75  ppl=132.33   acc=0.2270 wpm(K)=314.88 mins=209.21
+ep=14  steps=91.40  lr=0.000207 loss=66.71   ppl=86.97    acc=0.2845 wpm(K)=314.91 mins=209.44
+ep=14  steps=91.50  lr=0.000207 loss=127.52  ppl=106.56   acc=0.2529 wpm(K)=314.90 mins=209.67
+ep=14  steps=91.60  lr=0.000207 loss=107.30  ppl=122.58   acc=0.2479 wpm(K)=314.90 mins=209.91
+ep=14  steps=91.70  lr=0.000206 loss=65.79   ppl=88.18    acc=0.2830 wpm(K)=314.88 mins=210.14
+slurmstepd: error: *** JOB 44146 ON compute-0-7 CANCELLED AT 2018-03-04T22:34:58 ***

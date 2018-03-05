@@ -1,0 +1,1882 @@
+Singularity: Invoking an interactive shell within container...
+
+[0m--------------------------------------------------------------------------------
+Path outputs_exp2_v3_nonorm exists. Remove and remake.
+--------------------------------------------------------------------------------
+Logging to outputs_exp2_v3_nonorm/stdout
+--------------------------------------------------------------------------------
+Creating a Hparams object
+--------------------------------------------------------------------------------
+Building data for 'IWSLT 2016 En-De with BPE 32K Shared Vocab' from 'data/bpe_28k_shared/en-de/'
+--------------------------------------------------------------------------------
+Loading vocab from 'shared_28000.vocab'
+Done. vocab_size = 28001
+--------------------------------------------------------------------------------
+Loading vocab from 'shared_28000.vocab'
+Done. vocab_size = 28001
+--------------------------------------------------------------------------------
+Loading parallel data from 'train.en' and 'train.de'
+ 10000 pairs. src_unk=19. tgt_unk=46
+ 20000 pairs. src_unk=85. tgt_unk=117
+ 30000 pairs. src_unk=103. tgt_unk=194
+ 40000 pairs. src_unk=146. tgt_unk=340
+ 50000 pairs. src_unk=185. tgt_unk=445
+ 60000 pairs. src_unk=213. tgt_unk=531
+ 70000 pairs. src_unk=254. tgt_unk=608
+ 80000 pairs. src_unk=294. tgt_unk=749
+ 90000 pairs. src_unk=320. tgt_unk=786
+100000 pairs. src_unk=345. tgt_unk=844
+110000 pairs. src_unk=382. tgt_unk=925
+120000 pairs. src_unk=429. tgt_unk=1037
+130000 pairs. src_unk=446. tgt_unk=1122
+140000 pairs. src_unk=493. tgt_unk=1239
+150000 pairs. src_unk=536. tgt_unk=1408
+160000 pairs. src_unk=634. tgt_unk=1518
+170000 pairs. src_unk=698. tgt_unk=1690
+180000 pairs. src_unk=846. tgt_unk=1878
+190000 pairs. src_unk=1039. tgt_unk=2040
+199911 pairs. src_unk=1191. tgt_unk=2523
+Heuristic sort based on source lens
+--------------------------------------------------------------------------------
+Loading parallel data from 'dev2010.en' and 'dev2010.de'
+   903 pairs. src_unk=0. tgt_unk=13
+--------------------------------------------------------------------------------
+Creating model
+Model has 28075008 params
+--------------------------------------------------------------------------------
+Start training
+ep=0   steps=0.10   lr=0.000304 loss/word=300.12  ppl/word=1751.25  acc=0.0778 wpm(K)=522.34 mins=0.14 
+ep=0   steps=0.20   lr=0.000609 loss/word=368.01  ppl/word=1669.92  acc=0.0693 wpm(K)=527.45 mins=0.29 
+ep=0   steps=0.30   lr=0.000913 loss/word=197.89  ppl/word=1301.84  acc=0.0691 wpm(K)=520.51 mins=0.43 
+ep=0   steps=0.40   lr=0.001217 loss/word=110.08  ppl/word=1447.81  acc=0.0393 wpm(K)=526.30 mins=0.57 
+ep=0   steps=0.50   lr=0.001521 loss/word=198.64  ppl/word=1452.47  acc=0.0722 wpm(K)=527.20 mins=0.72 
+ep=0   steps=0.60   lr=0.001826 loss/word=135.10  ppl/word=1346.34  acc=0.0583 wpm(K)=523.06 mins=0.86 
+ep=0   steps=0.70   lr=0.002130 loss/word=167.83  ppl/word=1828.38  acc=0.0462 wpm(K)=519.69 mins=1.00 
+ep=0   steps=0.80   lr=0.002210 loss/word=94.76   ppl/word=1276.16  acc=0.0401 wpm(K)=521.78 mins=1.15 
+ep=0   steps=0.90   lr=0.002083 loss/word=83.36   ppl/word=950.58   acc=0.0823 wpm(K)=518.94 mins=1.29 
+ep=0   steps=1.00   lr=0.001976 loss/word=142.67  ppl/word=98805890.34 acc=0.0121 wpm(K)=515.69 mins=1.43 
+Eval at step 1000. valid_batch_size=30
+val_step=1000   loss=13.32  acc=0.0040 val_ppl=611276.52
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=0   steps=1.10   lr=0.001884 loss/word=156.55  ppl/word=1516.52  acc=0.0234 wpm(K)=443.10 mins=1.81 
+ep=0   steps=1.20   lr=0.001804 loss/word=132.77  ppl/word=1277.21  acc=0.0539 wpm(K)=449.80 mins=1.96 
+ep=0   steps=1.30   lr=0.001733 loss/word=35.61   ppl/word=783.58   acc=0.0058 wpm(K)=453.30 mins=2.10 
+ep=0   steps=1.40   lr=0.001670 loss/word=162.11  ppl/word=1118.60  acc=0.0650 wpm(K)=459.96 mins=2.25 
+ep=0   steps=1.50   lr=0.001614 loss/word=580.30  ppl/word=2109.86  acc=0.0676 wpm(K)=460.67 mins=2.39 
+ep=0   steps=1.60   lr=0.001563 loss/word=34.91   ppl/word=743.22   acc=0.0118 wpm(K)=464.76 mins=2.53 
+ep=0   steps=1.70   lr=0.001516 loss/word=198.99  ppl/word=1182.23  acc=0.0678 wpm(K)=466.64 mins=2.68 
+ep=0   steps=1.80   lr=0.001473 loss/word=60.92   ppl/word=793.34   acc=0.0342 wpm(K)=468.67 mins=2.82 
+ep=0   steps=1.90   lr=0.001434 loss/word=230.35  ppl/word=1687.01  acc=0.0746 wpm(K)=471.39 mins=2.96 
+ep=0   steps=2.00   lr=0.001398 loss/word=139.12  ppl/word=1344.16  acc=0.0518 wpm(K)=473.23 mins=3.11 
+Eval at step 2000. valid_batch_size=30
+val_step=2000   loss=7.25   acc=0.0382 val_ppl=1402.06
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=0   steps=2.10   lr=0.001364 loss/word=42.72   ppl/word=651.60   acc=0.0379 wpm(K)=443.40 mins=3.48 
+ep=0   steps=2.20   lr=0.001333 loss/word=138.71  ppl/word=1200.41  acc=0.0559 wpm(K)=446.29 mins=3.62 
+ep=0   steps=2.30   lr=0.001303 loss/word=46.94   ppl/word=747.69   acc=0.0088 wpm(K)=449.13 mins=3.76 
+ep=0   steps=2.40   lr=0.001276 loss/word=39.67   ppl/word=570.56   acc=0.0100 wpm(K)=451.45 mins=3.90 
+ep=0   steps=2.50   lr=0.001250 loss/word=409.30  ppl/word=1677.20  acc=0.0816 wpm(K)=454.70 mins=4.04 
+ep=0   steps=2.60   lr=0.001226 loss/word=194.04  ppl/word=1366.49  acc=0.0570 wpm(K)=455.71 mins=4.17 
+ep=0   steps=2.70   lr=0.001203 loss/word=359.97  ppl/word=1439.66  acc=0.0783 wpm(K)=457.62 mins=4.31 
+ep=0   steps=2.80   lr=0.001181 loss/word=250.19  ppl/word=1448.33  acc=0.0655 wpm(K)=459.12 mins=4.46 
+ep=0   steps=2.90   lr=0.001161 loss/word=94.98   ppl/word=1297.97  acc=0.0330 wpm(K)=459.71 mins=4.60 
+ep=0   steps=3.00   lr=0.001141 loss/word=98.55   ppl/word=1275.81  acc=0.0227 wpm(K)=460.98 mins=4.74 
+Eval at step 3000. valid_batch_size=30
+val_step=3000   loss=7.22   acc=0.0555 val_ppl=1363.85
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=0   steps=3.10   lr=0.001123 loss/word=327.38  ppl/word=1591.45  acc=0.0669 wpm(K)=439.86 mins=5.13 
+ep=0   steps=3.20   lr=0.001105 loss/word=71.75   ppl/word=874.15   acc=0.0324 wpm(K)=440.88 mins=5.28 
+ep=0   steps=3.30   lr=0.001088 loss/word=134.53  ppl/word=928.35   acc=0.0571 wpm(K)=441.06 mins=5.41 
+ep=0   steps=3.40   lr=0.001072 loss/word=36.53   ppl/word=594.57   acc=0.0109 wpm(K)=442.25 mins=5.56 
+ep=0   steps=3.50   lr=0.001056 loss/word=94.72   ppl/word=996.51   acc=0.0456 wpm(K)=443.17 mins=5.70 
+ep=0   steps=3.60   lr=0.001042 loss/word=292.79  ppl/word=1509.82  acc=0.0820 wpm(K)=444.92 mins=5.84 
+ep=0   steps=3.70   lr=0.001027 loss/word=41.59   ppl/word=4547.99  acc=0.0000 wpm(K)=444.78 mins=5.98 
+ep=0   steps=3.80   lr=0.001014 loss/word=248.91  ppl/word=1307.44  acc=0.0757 wpm(K)=447.54 mins=6.13 
+ep=0   steps=3.90   lr=0.001001 loss/word=165.05  ppl/word=1071.86  acc=0.0713 wpm(K)=449.63 mins=6.28 
+ep=0   steps=4.00   lr=0.000988 loss/word=118.38  ppl/word=1253.53  acc=0.0395 wpm(K)=450.95 mins=6.42 
+Eval at step 4000. valid_batch_size=30
+val_step=4000   loss=7.21   acc=0.0555 val_ppl=1351.59
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=0   steps=4.10   lr=0.000976 loss/word=237.67  ppl/word=1324.00  acc=0.0813 wpm(K)=419.35 mins=7.07 
+ep=0   steps=4.20   lr=0.000964 loss/word=86.99   ppl/word=949.81   acc=0.0419 wpm(K)=420.06 mins=7.22 
+ep=0   steps=4.30   lr=0.000953 loss/word=132.44  ppl/word=1269.92  acc=0.0556 wpm(K)=422.09 mins=7.36 
+ep=0   steps=4.40   lr=0.000942 loss/word=269.63  ppl/word=1461.75  acc=0.0693 wpm(K)=423.48 mins=7.50 
+ep=0   steps=4.50   lr=0.000932 loss/word=187.65  ppl/word=1657.79  acc=0.0556 wpm(K)=425.27 mins=7.65 
+ep=0   steps=4.60   lr=0.000922 loss/word=217.41  ppl/word=1372.43  acc=0.0654 wpm(K)=425.88 mins=7.78 
+ep=0   steps=4.70   lr=0.000912 loss/word=195.78  ppl/word=1319.02  acc=0.0550 wpm(K)=427.58 mins=7.92 
+ep=0   steps=4.80   lr=0.000902 loss/word=76.91   ppl/word=1005.76  acc=0.0197 wpm(K)=428.52 mins=8.06 
+ep=0   steps=4.90   lr=0.000893 loss/word=88.82   ppl/word=814.92   acc=0.0472 wpm(K)=429.48 mins=8.20 
+ep=0   steps=5.00   lr=0.000884 loss/word=86.68   ppl/word=1009.70  acc=0.0349 wpm(K)=431.15 mins=8.34 
+Eval at step 5000. valid_batch_size=30
+val_step=5000   loss=7.20   acc=0.0555 val_ppl=1345.98
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=0   steps=5.10   lr=0.000875 loss/word=82.17   ppl/word=975.56   acc=0.0366 wpm(K)=418.74 mins=8.75 
+ep=0   steps=5.20   lr=0.000867 loss/word=220.15  ppl/word=1240.43  acc=0.0708 wpm(K)=420.65 mins=8.88 
+ep=0   steps=5.30   lr=0.000859 loss/word=453.16  ppl/word=1652.13  acc=0.0761 wpm(K)=422.18 mins=9.03 
+ep=0   steps=5.40   lr=0.000851 loss/word=120.27  ppl/word=1661.05  acc=0.0443 wpm(K)=424.22 mins=9.18 
+ep=0   steps=5.50   lr=0.000843 loss/word=166.61  ppl/word=989.37   acc=0.0673 wpm(K)=425.77 mins=9.31 
+ep=0   steps=5.60   lr=0.000835 loss/word=224.72  ppl/word=1280.72  acc=0.0706 wpm(K)=427.35 mins=9.46 
+ep=0   steps=5.70   lr=0.000828 loss/word=158.32  ppl/word=1218.92  acc=0.0645 wpm(K)=428.67 mins=9.60 
+ep=0   steps=5.80   lr=0.000821 loss/word=70.75   ppl/word=1037.49  acc=0.0184 wpm(K)=429.74 mins=9.74 
+ep=0   steps=5.90   lr=0.000814 loss/word=240.97  ppl/word=1504.10  acc=0.0702 wpm(K)=430.97 mins=9.88 
+ep=0   steps=6.00   lr=0.000807 loss/word=204.78  ppl/word=1259.44  acc=0.0763 wpm(K)=431.75 mins=10.03
+Eval at step 6000. valid_batch_size=30
+val_step=6000   loss=7.20   acc=0.0555 val_ppl=1335.57
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=0   steps=6.10   lr=0.000800 loss/word=49.46   ppl/word=772.65   acc=0.0084 wpm(K)=422.48 mins=10.44
+ep=0   steps=6.20   lr=0.000794 loss/word=93.22   ppl/word=1136.64  acc=0.0448 wpm(K)=423.73 mins=10.57
+ep=1   steps=6.30   lr=0.000787 loss/word=145.71  ppl/word=1318.88  acc=0.0601 wpm(K)=424.33 mins=10.71
+ep=1   steps=6.40   lr=0.000781 loss/word=110.12  ppl/word=1057.96  acc=0.0474 wpm(K)=425.27 mins=10.85
+ep=1   steps=6.50   lr=0.000775 loss/word=145.53  ppl/word=1011.85  acc=0.0565 wpm(K)=426.11 mins=10.99
+ep=1   steps=6.60   lr=0.000769 loss/word=62.16   ppl/word=909.06   acc=0.0171 wpm(K)=427.17 mins=11.14
+ep=1   steps=6.70   lr=0.000764 loss/word=63.75   ppl/word=1056.59  acc=0.0307 wpm(K)=428.68 mins=11.28
+ep=1   steps=6.80   lr=0.000758 loss/word=151.81  ppl/word=1177.69  acc=0.0640 wpm(K)=429.35 mins=11.42
+ep=1   steps=6.90   lr=0.000752 loss/word=88.69   ppl/word=888.34   acc=0.0407 wpm(K)=429.71 mins=11.56
+ep=1   steps=7.00   lr=0.000747 loss/word=84.27   ppl/word=1142.38  acc=0.0313 wpm(K)=430.51 mins=11.70
+Eval at step 7000. valid_batch_size=30
+val_step=7000   loss=7.20   acc=0.0555 val_ppl=1332.92
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=1   steps=7.10   lr=0.000742 loss/word=421.40  ppl/word=1511.26  acc=0.0793 wpm(K)=413.12 mins=12.37
+ep=1   steps=7.20   lr=0.000737 loss/word=91.63   ppl/word=1040.94  acc=0.0379 wpm(K)=414.47 mins=12.51
+ep=1   steps=7.30   lr=0.000732 loss/word=88.49   ppl/word=981.90   acc=0.0316 wpm(K)=415.73 mins=12.66
+ep=1   steps=7.40   lr=0.000727 loss/word=185.63  ppl/word=991.50   acc=0.0836 wpm(K)=417.36 mins=12.80
+ep=1   steps=7.50   lr=0.000722 loss/word=359.21  ppl/word=1519.44  acc=0.0822 wpm(K)=418.36 mins=12.94
+ep=1   steps=7.60   lr=0.000717 loss/word=39.87   ppl/word=3756.98  acc=0.0000 wpm(K)=418.99 mins=13.08
+ep=1   steps=7.70   lr=0.000712 loss/word=188.74  ppl/word=1239.18  acc=0.0719 wpm(K)=420.14 mins=13.22
+ep=1   steps=7.80   lr=0.000708 loss/word=208.31  ppl/word=1229.09  acc=0.0608 wpm(K)=421.44 mins=13.36
+ep=1   steps=7.90   lr=0.000703 loss/word=403.65  ppl/word=1440.96  acc=0.0738 wpm(K)=422.42 mins=13.51
+ep=1   steps=8.00   lr=0.000699 loss/word=86.84   ppl/word=971.30   acc=0.0446 wpm(K)=423.15 mins=13.64
+Eval at step 8000. valid_batch_size=30
+val_step=8000   loss=7.19   acc=0.0555 val_ppl=1330.56
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=1   steps=8.10   lr=0.000694 loss/word=65.38   ppl/word=997.08   acc=0.0297 wpm(K)=416.98 mins=14.03
+ep=1   steps=8.20   lr=0.000690 loss/word=310.97  ppl/word=1427.16  acc=0.0715 wpm(K)=417.41 mins=14.17
+ep=1   steps=8.30   lr=0.000686 loss/word=59.73   ppl/word=836.87   acc=0.0176 wpm(K)=418.12 mins=14.31
+ep=1   steps=8.40   lr=0.000682 loss/word=70.77   ppl/word=916.82   acc=0.0301 wpm(K)=418.79 mins=14.45
+ep=1   steps=8.50   lr=0.000678 loss/word=373.68  ppl/word=1500.68  acc=0.0820 wpm(K)=420.25 mins=14.59
+ep=1   steps=8.60   lr=0.000674 loss/word=126.46  ppl/word=1009.63  acc=0.0667 wpm(K)=421.32 mins=14.72
+ep=1   steps=8.70   lr=0.000670 loss/word=196.35  ppl/word=1314.17  acc=0.0686 wpm(K)=422.41 mins=14.86
+ep=1   steps=8.80   lr=0.000666 loss/word=108.86  ppl/word=1188.70  acc=0.0407 wpm(K)=423.14 mins=14.99
+ep=1   steps=8.90   lr=0.000662 loss/word=178.15  ppl/word=1159.08  acc=0.0668 wpm(K)=423.97 mins=15.13
+ep=1   steps=9.00   lr=0.000659 loss/word=41.30   ppl/word=651.12   acc=0.0049 wpm(K)=424.83 mins=15.26
+Eval at step 9000. valid_batch_size=30
+val_step=9000   loss=7.19   acc=0.0555 val_ppl=1328.10
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=1   steps=9.10   lr=0.000655 loss/word=118.49  ppl/word=1212.38  acc=0.0431 wpm(K)=419.87 mins=15.63
+ep=1   steps=9.20   lr=0.000652 loss/word=65.83   ppl/word=933.98   acc=0.0227 wpm(K)=420.81 mins=15.76
+ep=1   steps=9.30   lr=0.000648 loss/word=125.37  ppl/word=1471.56  acc=0.0491 wpm(K)=421.81 mins=15.90
+ep=1   steps=9.40   lr=0.000645 loss/word=63.15   ppl/word=881.54   acc=0.0101 wpm(K)=422.66 mins=16.04
+ep=1   steps=9.50   lr=0.000641 loss/word=64.50   ppl/word=850.02   acc=0.0131 wpm(K)=423.59 mins=16.17
+ep=1   steps=9.60   lr=0.000638 loss/word=314.02  ppl/word=1492.46  acc=0.0676 wpm(K)=424.45 mins=16.31
+ep=1   steps=9.70   lr=0.000635 loss/word=116.67  ppl/word=1131.40  acc=0.0433 wpm(K)=425.55 mins=16.44
+ep=1   steps=9.80   lr=0.000631 loss/word=136.98  ppl/word=1260.16  acc=0.0570 wpm(K)=426.37 mins=16.57
+ep=1   steps=9.90   lr=0.000628 loss/word=109.99  ppl/word=1049.04  acc=0.0415 wpm(K)=427.19 mins=16.71
+ep=1   steps=10.00  lr=0.000625 loss/word=149.24  ppl/word=1287.07  acc=0.0705 wpm(K)=428.22 mins=16.84
+Eval at step 10000. valid_batch_size=30
+val_step=10000  loss=7.19   acc=0.0555 val_ppl=1330.30
+ep=1   steps=10.10  lr=0.000622 loss/word=69.23   ppl/word=822.87   acc=0.0182 wpm(K)=423.77 mins=17.17
+ep=1   steps=10.20  lr=0.000619 loss/word=126.77  ppl/word=1346.66  acc=0.0320 wpm(K)=424.62 mins=17.31
+ep=1   steps=10.30  lr=0.000616 loss/word=82.21   ppl/word=1072.71  acc=0.0265 wpm(K)=425.48 mins=17.44
+ep=1   steps=10.40  lr=0.000613 loss/word=144.92  ppl/word=1484.67  acc=0.0520 wpm(K)=426.59 mins=17.57
+ep=1   steps=10.50  lr=0.000610 loss/word=603.18  ppl/word=1744.01  acc=0.0739 wpm(K)=427.49 mins=17.70
+ep=1   steps=10.60  lr=0.000607 loss/word=62.67   ppl/word=876.11   acc=0.0169 wpm(K)=428.54 mins=17.84
+ep=1   steps=10.70  lr=0.000604 loss/word=77.68   ppl/word=842.33   acc=0.0379 wpm(K)=429.65 mins=17.97
+ep=1   steps=10.80  lr=0.000601 loss/word=218.26  ppl/word=1227.05  acc=0.0723 wpm(K)=430.57 mins=18.10
+ep=1   steps=10.90  lr=0.000599 loss/word=233.67  ppl/word=1255.27  acc=0.0725 wpm(K)=431.67 mins=18.24
+ep=1   steps=11.00  lr=0.000596 loss/word=93.21   ppl/word=965.69   acc=0.0369 wpm(K)=432.75 mins=18.37
+Eval at step 11000. valid_batch_size=30
+val_step=11000  loss=7.19   acc=0.0555 val_ppl=1322.77
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=1   steps=11.10  lr=0.000593 loss/word=80.67   ppl/word=891.51   acc=0.0368 wpm(K)=428.44 mins=18.72
+ep=1   steps=11.20  lr=0.000591 loss/word=25.39   ppl/word=430.04   acc=0.0075 wpm(K)=429.53 mins=18.85
+ep=1   steps=11.30  lr=0.000588 loss/word=84.42   ppl/word=1019.48  acc=0.0436 wpm(K)=430.43 mins=18.99
+ep=1   steps=11.40  lr=0.000585 loss/word=159.42  ppl/word=1462.61  acc=0.0557 wpm(K)=431.10 mins=19.12
+ep=1   steps=11.50  lr=0.000583 loss/word=225.47  ppl/word=1265.92  acc=0.0574 wpm(K)=431.86 mins=19.25
+ep=1   steps=11.60  lr=0.000580 loss/word=334.51  ppl/word=1324.58  acc=0.0833 wpm(K)=432.53 mins=19.38
+ep=1   steps=11.70  lr=0.000578 loss/word=170.14  ppl/word=1124.78  acc=0.0568 wpm(K)=433.08 mins=19.52
+ep=1   steps=11.80  lr=0.000575 loss/word=255.60  ppl/word=1409.48  acc=0.0683 wpm(K)=433.84 mins=19.65
+ep=1   steps=11.90  lr=0.000573 loss/word=200.08  ppl/word=1258.53  acc=0.0725 wpm(K)=434.77 mins=19.78
+ep=1   steps=12.00  lr=0.000571 loss/word=65.96   ppl/word=1344.49  acc=0.0102 wpm(K)=435.55 mins=19.92
+Eval at step 12000. valid_batch_size=30
+val_step=12000  loss=7.19   acc=0.0555 val_ppl=1320.36
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=1   steps=12.10  lr=0.000568 loss/word=196.01  ppl/word=1187.22  acc=0.0767 wpm(K)=431.37 mins=20.26
+ep=1   steps=12.20  lr=0.000566 loss/word=337.02  ppl/word=1391.28  acc=0.0805 wpm(K)=432.21 mins=20.40
+ep=1   steps=12.30  lr=0.000564 loss/word=159.55  ppl/word=1122.01  acc=0.0702 wpm(K)=433.02 mins=20.53
+ep=1   steps=12.40  lr=0.000561 loss/word=38.93   ppl/word=423.24   acc=0.0097 wpm(K)=433.72 mins=20.66
+ep=2   steps=12.50  lr=0.000559 loss/word=194.79  ppl/word=1251.41  acc=0.0824 wpm(K)=434.65 mins=20.80
+ep=2   steps=12.60  lr=0.000557 loss/word=67.46   ppl/word=815.98   acc=0.0186 wpm(K)=435.13 mins=20.93
+ep=2   steps=12.70  lr=0.000555 loss/word=217.54  ppl/word=1224.83  acc=0.0715 wpm(K)=435.78 mins=21.06
+ep=2   steps=12.80  lr=0.000552 loss/word=178.97  ppl/word=1146.48  acc=0.0701 wpm(K)=436.81 mins=21.20
+ep=2   steps=12.90  lr=0.000550 loss/word=154.83  ppl/word=1234.53  acc=0.0575 wpm(K)=437.36 mins=21.32
+ep=2   steps=13.00  lr=0.000548 loss/word=150.80  ppl/word=1146.78  acc=0.0774 wpm(K)=437.92 mins=21.46
+Eval at step 13000. valid_batch_size=30
+val_step=13000  loss=7.19   acc=0.0555 val_ppl=1320.08
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=2   steps=13.10  lr=0.000546 loss/word=60.50   ppl/word=913.01   acc=0.0176 wpm(K)=434.01 mins=21.80
+ep=2   steps=13.20  lr=0.000544 loss/word=76.55   ppl/word=821.81   acc=0.0247 wpm(K)=434.81 mins=21.94
+ep=2   steps=13.30  lr=0.000542 loss/word=52.55   ppl/word=677.14   acc=0.0116 wpm(K)=435.46 mins=22.07
+ep=2   steps=13.40  lr=0.000540 loss/word=62.31   ppl/word=924.24   acc=0.0137 wpm(K)=435.92 mins=22.20
+ep=2   steps=13.50  lr=0.000538 loss/word=184.52  ppl/word=1426.42  acc=0.0578 wpm(K)=436.61 mins=22.33
+ep=2   steps=13.60  lr=0.000536 loss/word=150.48  ppl/word=1322.54  acc=0.0403 wpm(K)=437.27 mins=22.46
+ep=2   steps=13.70  lr=0.000534 loss/word=105.13  ppl/word=1090.46  acc=0.0353 wpm(K)=438.24 mins=22.60
+ep=2   steps=13.80  lr=0.000532 loss/word=139.95  ppl/word=1105.92  acc=0.0579 wpm(K)=439.12 mins=22.74
+ep=2   steps=13.90  lr=0.000530 loss/word=115.42  ppl/word=1249.36  acc=0.0483 wpm(K)=439.66 mins=22.87
+ep=2   steps=14.00  lr=0.000528 loss/word=234.92  ppl/word=1103.33  acc=0.0783 wpm(K)=440.28 mins=23.00
+Eval at step 14000. valid_batch_size=30
+val_step=14000  loss=7.19   acc=0.0555 val_ppl=1323.52
+ep=2   steps=14.10  lr=0.000526 loss/word=132.02  ppl/word=1319.00  acc=0.0578 wpm(K)=437.12 mins=23.33
+ep=2   steps=14.20  lr=0.000524 loss/word=219.08  ppl/word=1541.92  acc=0.0576 wpm(K)=437.67 mins=23.46
+ep=2   steps=14.30  lr=0.000523 loss/word=64.13   ppl/word=766.40   acc=0.0097 wpm(K)=438.26 mins=23.59
+ep=2   steps=14.40  lr=0.000521 loss/word=143.62  ppl/word=1285.06  acc=0.0530 wpm(K)=438.96 mins=23.73
+ep=2   steps=14.50  lr=0.000519 loss/word=92.16   ppl/word=1240.36  acc=0.0338 wpm(K)=439.52 mins=23.86
+ep=2   steps=14.60  lr=0.000517 loss/word=71.32   ppl/word=822.67   acc=0.0206 wpm(K)=440.28 mins=23.99
+ep=2   steps=14.70  lr=0.000515 loss/word=303.08  ppl/word=1398.49  acc=0.0724 wpm(K)=440.81 mins=24.12
+ep=2   steps=14.80  lr=0.000514 loss/word=119.89  ppl/word=1186.23  acc=0.0406 wpm(K)=441.60 mins=24.26
+ep=2   steps=14.90  lr=0.000512 loss/word=186.46  ppl/word=1324.42  acc=0.0711 wpm(K)=442.03 mins=24.39
+ep=2   steps=15.00  lr=0.000510 loss/word=107.62  ppl/word=1050.71  acc=0.0404 wpm(K)=442.66 mins=24.52
+Eval at step 15000. valid_batch_size=30
+val_step=15000  loss=7.18   acc=0.0555 val_ppl=1318.19
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=2   steps=15.10  lr=0.000509 loss/word=166.20  ppl/word=1388.52  acc=0.0667 wpm(K)=439.49 mins=24.87
+ep=2   steps=15.20  lr=0.000507 loss/word=111.12  ppl/word=983.46   acc=0.0562 wpm(K)=440.22 mins=25.00
+ep=2   steps=15.30  lr=0.000505 loss/word=63.24   ppl/word=889.31   acc=0.0302 wpm(K)=440.61 mins=25.14
+ep=2   steps=15.40  lr=0.000504 loss/word=60.04   ppl/word=955.11   acc=0.0286 wpm(K)=441.29 mins=25.27
+ep=2   steps=15.50  lr=0.000502 loss/word=101.38  ppl/word=886.06   acc=0.0586 wpm(K)=441.71 mins=25.40
+ep=2   steps=15.60  lr=0.000500 loss/word=127.58  ppl/word=1273.75  acc=0.0473 wpm(K)=442.18 mins=25.52
+ep=2   steps=15.70  lr=0.000499 loss/word=69.29   ppl/word=1140.29  acc=0.0254 wpm(K)=442.70 mins=25.65
+ep=2   steps=15.80  lr=0.000497 loss/word=161.16  ppl/word=1125.37  acc=0.0627 wpm(K)=443.10 mins=25.77
+ep=2   steps=15.90  lr=0.000496 loss/word=181.51  ppl/word=1312.62  acc=0.0544 wpm(K)=443.64 mins=25.90
+ep=2   steps=16.00  lr=0.000494 loss/word=265.27  ppl/word=1389.66  acc=0.0733 wpm(K)=444.27 mins=26.03
+Eval at step 16000. valid_batch_size=30
+val_step=16000  loss=7.19   acc=0.0555 val_ppl=1323.21
+ep=2   steps=16.10  lr=0.000493 loss/word=183.76  ppl/word=1163.52  acc=0.0636 wpm(K)=441.59 mins=26.35
+ep=2   steps=16.20  lr=0.000491 loss/word=140.19  ppl/word=1037.48  acc=0.0573 wpm(K)=442.23 mins=26.48
+ep=2   steps=16.30  lr=0.000490 loss/word=254.29  ppl/word=1324.06  acc=0.0654 wpm(K)=442.68 mins=26.62
+ep=2   steps=16.40  lr=0.000488 loss/word=69.17   ppl/word=870.76   acc=0.0214 wpm(K)=443.09 mins=26.75
+ep=2   steps=16.50  lr=0.000487 loss/word=66.66   ppl/word=1017.64  acc=0.0162 wpm(K)=443.65 mins=26.88
+ep=2   steps=16.60  lr=0.000485 loss/word=82.76   ppl/word=989.09   acc=0.0365 wpm(K)=443.92 mins=27.01
+ep=2   steps=16.70  lr=0.000484 loss/word=61.34   ppl/word=911.45   acc=0.0208 wpm(K)=444.22 mins=27.14
+ep=2   steps=16.80  lr=0.000482 loss/word=534.62  ppl/word=1645.75  acc=0.0758 wpm(K)=444.93 mins=27.28
+ep=2   steps=16.90  lr=0.000481 loss/word=65.78   ppl/word=972.02   acc=0.0098 wpm(K)=445.18 mins=27.40
+ep=2   steps=17.00  lr=0.000479 loss/word=186.68  ppl/word=1301.48  acc=0.0588 wpm(K)=445.80 mins=27.54
+Eval at step 17000. valid_batch_size=30
+val_step=17000  loss=7.18   acc=0.0555 val_ppl=1319.22
+ep=2   steps=17.10  lr=0.000478 loss/word=132.44  ppl/word=983.63   acc=0.0634 wpm(K)=443.01 mins=27.87
+ep=2   steps=17.20  lr=0.000477 loss/word=56.41   ppl/word=780.99   acc=0.0185 wpm(K)=443.56 mins=28.00
+ep=2   steps=17.30  lr=0.000475 loss/word=174.09  ppl/word=1263.94  acc=0.0615 wpm(K)=444.20 mins=28.14
+ep=2   steps=17.40  lr=0.000474 loss/word=638.40  ppl/word=1537.46  acc=0.0790 wpm(K)=444.93 mins=28.27
+ep=2   steps=17.50  lr=0.000472 loss/word=144.81  ppl/word=1443.53  acc=0.0502 wpm(K)=445.12 mins=28.40
+ep=2   steps=17.60  lr=0.000471 loss/word=60.48   ppl/word=809.57   acc=0.0277 wpm(K)=445.63 mins=28.53
+ep=2   steps=17.70  lr=0.000470 loss/word=107.48  ppl/word=848.94   acc=0.0608 wpm(K)=445.92 mins=28.66
+ep=2   steps=17.80  lr=0.000468 loss/word=175.72  ppl/word=1233.76  acc=0.0671 wpm(K)=446.27 mins=28.79
+ep=2   steps=17.90  lr=0.000467 loss/word=160.50  ppl/word=1052.75  acc=0.0610 wpm(K)=446.74 mins=28.93
+ep=2   steps=18.00  lr=0.000466 loss/word=119.68  ppl/word=980.68   acc=0.0540 wpm(K)=447.16 mins=29.06
+Eval at step 18000. valid_batch_size=30
+val_step=18000  loss=7.18   acc=0.0555 val_ppl=1318.91
+ep=2   steps=18.10  lr=0.000465 loss/word=322.61  ppl/word=1459.10  acc=0.0812 wpm(K)=444.42 mins=29.39
+ep=2   steps=18.20  lr=0.000463 loss/word=72.23   ppl/word=1055.59  acc=0.0241 wpm(K)=444.72 mins=29.52
+ep=2   steps=18.30  lr=0.000462 loss/word=74.74   ppl/word=1288.14  acc=0.0150 wpm(K)=445.11 mins=29.65
+ep=2   steps=18.40  lr=0.000461 loss/word=150.87  ppl/word=1536.07  acc=0.0486 wpm(K)=445.59 mins=29.78
+ep=2   steps=18.50  lr=0.000460 loss/word=321.55  ppl/word=1614.29  acc=0.0617 wpm(K)=446.06 mins=29.91
+ep=2   steps=18.60  lr=0.000458 loss/word=68.19   ppl/word=915.49   acc=0.0469 wpm(K)=446.31 mins=30.05
+ep=2   steps=18.70  lr=0.000457 loss/word=191.13  ppl/word=1356.46  acc=0.0625 wpm(K)=446.82 mins=30.18
+ep=3   steps=18.80  lr=0.000456 loss/word=96.70   ppl/word=1169.68  acc=0.0388 wpm(K)=447.10 mins=30.31
+ep=3   steps=18.90  lr=0.000455 loss/word=124.88  ppl/word=1272.86  acc=0.0483 wpm(K)=447.39 mins=30.44
+ep=3   steps=19.00  lr=0.000453 loss/word=118.28  ppl/word=1050.90  acc=0.0404 wpm(K)=447.96 mins=30.57
+Eval at step 19000. valid_batch_size=30
+val_step=19000  loss=7.19   acc=0.0555 val_ppl=1323.66
+ep=3   steps=19.10  lr=0.000452 loss/word=190.11  ppl/word=1349.97  acc=0.0664 wpm(K)=445.29 mins=30.90
+ep=3   steps=19.20  lr=0.000451 loss/word=55.31   ppl/word=738.39   acc=0.0112 wpm(K)=445.55 mins=31.03
+ep=3   steps=19.30  lr=0.000450 loss/word=66.29   ppl/word=1123.12  acc=0.0232 wpm(K)=446.07 mins=31.17
+ep=3   steps=19.40  lr=0.000449 loss/word=85.09   ppl/word=968.93   acc=0.0455 wpm(K)=446.24 mins=31.29
+ep=3   steps=19.50  lr=0.000448 loss/word=171.34  ppl/word=1160.57  acc=0.0605 wpm(K)=446.60 mins=31.42
+ep=3   steps=19.60  lr=0.000446 loss/word=36.92   ppl/word=573.78   acc=0.0000 wpm(K)=447.03 mins=31.56
+ep=3   steps=19.70  lr=0.000445 loss/word=183.44  ppl/word=1219.83  acc=0.0654 wpm(K)=447.50 mins=31.69
+ep=3   steps=19.80  lr=0.000444 loss/word=86.23   ppl/word=1161.27  acc=0.0256 wpm(K)=447.70 mins=31.82
+ep=3   steps=19.90  lr=0.000443 loss/word=75.50   ppl/word=1145.93  acc=0.0175 wpm(K)=447.95 mins=31.95
+ep=3   steps=20.00  lr=0.000442 loss/word=199.98  ppl/word=1186.61  acc=0.0819 wpm(K)=448.37 mins=32.08
+Eval at step 20000. valid_batch_size=30
+val_step=20000  loss=7.18   acc=0.0555 val_ppl=1318.11
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=3   steps=20.10  lr=0.000441 loss/word=180.56  ppl/word=1199.49  acc=0.0577 wpm(K)=445.76 mins=32.43
+ep=3   steps=20.20  lr=0.000440 loss/word=159.73  ppl/word=1077.76  acc=0.0574 wpm(K)=446.40 mins=32.56
+ep=3   steps=20.30  lr=0.000439 loss/word=55.75   ppl/word=778.25   acc=0.0261 wpm(K)=446.71 mins=32.69
+ep=3   steps=20.40  lr=0.000438 loss/word=100.57  ppl/word=1126.26  acc=0.0437 wpm(K)=447.11 mins=32.83
+ep=3   steps=20.50  lr=0.000437 loss/word=516.95  ppl/word=1534.36  acc=0.0794 wpm(K)=447.65 mins=32.96
+ep=3   steps=20.60  lr=0.000435 loss/word=108.94  ppl/word=905.52   acc=0.0645 wpm(K)=447.94 mins=33.09
+ep=3   steps=20.70  lr=0.000434 loss/word=79.15   ppl/word=1092.91  acc=0.0304 wpm(K)=448.40 mins=33.22
+ep=3   steps=20.80  lr=0.000433 loss/word=74.07   ppl/word=944.58   acc=0.0289 wpm(K)=448.72 mins=33.35
+ep=3   steps=20.90  lr=0.000432 loss/word=256.76  ppl/word=1466.25  acc=0.0754 wpm(K)=449.07 mins=33.48
+ep=3   steps=21.00  lr=0.000431 loss/word=184.10  ppl/word=1111.15  acc=0.0774 wpm(K)=449.48 mins=33.61
+Eval at step 21000. valid_batch_size=30
+val_step=21000  loss=7.18   acc=0.0555 val_ppl=1317.96
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=3   steps=21.10  lr=0.000430 loss/word=71.51   ppl/word=854.57   acc=0.0295 wpm(K)=446.98 mins=33.97
+ep=3   steps=21.20  lr=0.000429 loss/word=261.91  ppl/word=1462.60  acc=0.0661 wpm(K)=447.51 mins=34.10
+ep=3   steps=21.30  lr=0.000428 loss/word=37.75   ppl/word=505.88   acc=0.0103 wpm(K)=447.94 mins=34.24
+ep=3   steps=21.40  lr=0.000427 loss/word=42.82   ppl/word=568.87   acc=0.0093 wpm(K)=448.11 mins=34.37
+ep=3   steps=21.50  lr=0.000426 loss/word=162.05  ppl/word=1264.87  acc=0.0634 wpm(K)=448.51 mins=34.50
+ep=3   steps=21.60  lr=0.000425 loss/word=143.97  ppl/word=1183.98  acc=0.0568 wpm(K)=448.65 mins=34.63
+ep=3   steps=21.70  lr=0.000424 loss/word=46.02   ppl/word=657.10   acc=0.0132 wpm(K)=448.97 mins=34.76
+ep=3   steps=21.80  lr=0.000423 loss/word=126.26  ppl/word=941.93   acc=0.0627 wpm(K)=449.51 mins=34.90
+ep=3   steps=21.90  lr=0.000422 loss/word=77.28   ppl/word=1059.72  acc=0.0338 wpm(K)=449.73 mins=35.03
+ep=3   steps=22.00  lr=0.000421 loss/word=80.29   ppl/word=1479.33  acc=0.0312 wpm(K)=450.14 mins=35.16
+Eval at step 22000. valid_batch_size=30
+val_step=22000  loss=7.18   acc=0.0555 val_ppl=1317.00
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=3   steps=22.10  lr=0.000420 loss/word=176.52  ppl/word=910.30   acc=0.0820 wpm(K)=447.66 mins=35.50
+ep=3   steps=22.20  lr=0.000419 loss/word=81.67   ppl/word=1104.07  acc=0.0375 wpm(K)=447.99 mins=35.64
+ep=3   steps=22.30  lr=0.000419 loss/word=189.97  ppl/word=1145.88  acc=0.0742 wpm(K)=448.43 mins=35.77
+ep=3   steps=22.40  lr=0.000418 loss/word=64.37   ppl/word=938.07   acc=0.0199 wpm(K)=448.64 mins=35.90
+ep=3   steps=22.50  lr=0.000417 loss/word=40.97   ppl/word=751.03   acc=0.0051 wpm(K)=448.96 mins=36.03
+ep=3   steps=22.60  lr=0.000416 loss/word=266.11  ppl/word=1289.34  acc=0.0799 wpm(K)=449.31 mins=36.16
+ep=3   steps=22.70  lr=0.000415 loss/word=166.30  ppl/word=1380.82  acc=0.0543 wpm(K)=449.87 mins=36.29
+ep=3   steps=22.80  lr=0.000414 loss/word=159.67  ppl/word=1321.22  acc=0.0703 wpm(K)=450.32 mins=36.41
+ep=3   steps=22.90  lr=0.000413 loss/word=251.62  ppl/word=1283.32  acc=0.0658 wpm(K)=450.82 mins=36.54
+ep=3   steps=23.00  lr=0.000412 loss/word=241.07  ppl/word=1216.14  acc=0.0755 wpm(K)=451.21 mins=36.68
+Eval at step 23000. valid_batch_size=30
+val_step=23000  loss=7.18   acc=0.0555 val_ppl=1318.49
+ep=3   steps=23.10  lr=0.000411 loss/word=83.24   ppl/word=820.36   acc=0.0529 wpm(K)=449.31 mins=37.01
+ep=3   steps=23.20  lr=0.000410 loss/word=107.37  ppl/word=1303.73  acc=0.0543 wpm(K)=449.65 mins=37.14
+ep=3   steps=23.30  lr=0.000409 loss/word=131.09  ppl/word=1153.34  acc=0.0504 wpm(K)=449.71 mins=37.27
+ep=3   steps=23.40  lr=0.000409 loss/word=294.51  ppl/word=1145.36  acc=0.0859 wpm(K)=450.14 mins=37.40
+ep=3   steps=23.50  lr=0.000408 loss/word=82.42   ppl/word=1052.68  acc=0.0317 wpm(K)=450.41 mins=37.53
+ep=3   steps=23.60  lr=0.000407 loss/word=58.51   ppl/word=801.60   acc=0.0179 wpm(K)=450.67 mins=37.66
+ep=3   steps=23.70  lr=0.000406 loss/word=142.18  ppl/word=1050.03  acc=0.0596 wpm(K)=451.10 mins=37.79
+ep=3   steps=23.80  lr=0.000405 loss/word=64.63   ppl/word=789.83   acc=0.0226 wpm(K)=451.40 mins=37.92
+ep=3   steps=23.90  lr=0.000404 loss/word=658.92  ppl/word=1637.66  acc=0.0716 wpm(K)=451.73 mins=38.06
+ep=3   steps=24.00  lr=0.000403 loss/word=109.25  ppl/word=1273.37  acc=0.0491 wpm(K)=452.12 mins=38.19
+Eval at step 24000. valid_batch_size=30
+val_step=24000  loss=7.18   acc=0.0555 val_ppl=1318.77
+ep=3   steps=24.10  lr=0.000403 loss/word=70.55   ppl/word=935.69   acc=0.0333 wpm(K)=450.14 mins=38.52
+ep=3   steps=24.20  lr=0.000402 loss/word=95.91   ppl/word=1491.26  acc=0.0310 wpm(K)=450.49 mins=38.65
+ep=3   steps=24.30  lr=0.000401 loss/word=153.78  ppl/word=1238.35  acc=0.0579 wpm(K)=450.78 mins=38.78
+ep=3   steps=24.40  lr=0.000400 loss/word=98.84   ppl/word=1028.71  acc=0.0439 wpm(K)=451.13 mins=38.91
+ep=3   steps=24.50  lr=0.000399 loss/word=203.36  ppl/word=1348.04  acc=0.0609 wpm(K)=451.39 mins=39.04
+ep=3   steps=24.60  lr=0.000398 loss/word=51.30   ppl/word=962.21   acc=0.0084 wpm(K)=451.72 mins=39.17
+ep=3   steps=24.70  lr=0.000398 loss/word=110.32  ppl/word=1028.56  acc=0.0452 wpm(K)=452.06 mins=39.30
+ep=3   steps=24.80  lr=0.000397 loss/word=91.35   ppl/word=1165.47  acc=0.0435 wpm(K)=452.28 mins=39.44
+ep=3   steps=24.90  lr=0.000396 loss/word=336.80  ppl/word=1512.93  acc=0.0761 wpm(K)=452.59 mins=39.57
+ep=4   steps=25.00  lr=0.000395 loss/word=153.85  ppl/word=1078.67  acc=0.0667 wpm(K)=453.02 mins=39.70
+Eval at step 25000. valid_batch_size=30
+val_step=25000  loss=7.18   acc=0.0555 val_ppl=1313.59
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=4   steps=25.10  lr=0.000394 loss/word=152.01  ppl/word=982.27   acc=0.0680 wpm(K)=450.78 mins=40.05
+ep=4   steps=25.20  lr=0.000394 loss/word=203.32  ppl/word=1283.86  acc=0.0660 wpm(K)=451.03 mins=40.19
+ep=4   steps=25.30  lr=0.000393 loss/word=65.12   ppl/word=867.55   acc=0.0357 wpm(K)=451.23 mins=40.32
+ep=4   steps=25.40  lr=0.000392 loss/word=62.01   ppl/word=779.83   acc=0.0201 wpm(K)=451.65 mins=40.45
+ep=4   steps=25.50  lr=0.000391 loss/word=245.64  ppl/word=1382.08  acc=0.0718 wpm(K)=451.98 mins=40.58
+ep=4   steps=25.60  lr=0.000391 loss/word=71.43   ppl/word=865.12   acc=0.0325 wpm(K)=452.39 mins=40.72
+ep=4   steps=25.70  lr=0.000390 loss/word=170.90  ppl/word=1118.94  acc=0.0668 wpm(K)=452.91 mins=40.85
+ep=4   steps=25.80  lr=0.000389 loss/word=123.94  ppl/word=1001.58  acc=0.0575 wpm(K)=453.36 mins=40.98
+ep=4   steps=25.90  lr=0.000388 loss/word=162.93  ppl/word=1327.84  acc=0.0662 wpm(K)=453.70 mins=41.12
+ep=4   steps=26.00  lr=0.000388 loss/word=91.55   ppl/word=1360.34  acc=0.0246 wpm(K)=454.11 mins=41.25
+Eval at step 26000. valid_batch_size=30
+val_step=26000  loss=7.18   acc=0.0555 val_ppl=1313.49
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=4   steps=26.10  lr=0.000387 loss/word=223.41  ppl/word=1228.33  acc=0.0816 wpm(K)=452.08 mins=41.60
+ep=4   steps=26.20  lr=0.000386 loss/word=213.60  ppl/word=1132.27  acc=0.0792 wpm(K)=452.47 mins=41.74
+ep=4   steps=26.30  lr=0.000385 loss/word=67.46   ppl/word=833.22   acc=0.0249 wpm(K)=452.70 mins=41.87
+ep=4   steps=26.40  lr=0.000385 loss/word=99.67   ppl/word=1010.70  acc=0.0304 wpm(K)=453.16 mins=42.00
+ep=4   steps=26.50  lr=0.000384 loss/word=234.86  ppl/word=1240.95  acc=0.0682 wpm(K)=453.39 mins=42.14
+ep=4   steps=26.60  lr=0.000383 loss/word=119.16  ppl/word=1065.43  acc=0.0420 wpm(K)=453.84 mins=42.27
+ep=4   steps=26.70  lr=0.000382 loss/word=194.24  ppl/word=1309.69  acc=0.0635 wpm(K)=454.01 mins=42.40
+ep=4   steps=26.80  lr=0.000382 loss/word=252.20  ppl/word=1418.82  acc=0.0764 wpm(K)=454.32 mins=42.54
+ep=4   steps=26.90  lr=0.000381 loss/word=215.35  ppl/word=1262.72  acc=0.0736 wpm(K)=454.72 mins=42.67
+ep=4   steps=27.00  lr=0.000380 loss/word=95.89   ppl/word=1003.15  acc=0.0360 wpm(K)=454.97 mins=42.80
+Eval at step 27000. valid_batch_size=30
+val_step=27000  loss=7.18   acc=0.0555 val_ppl=1313.06
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=4   steps=27.10  lr=0.000380 loss/word=113.75  ppl/word=924.76   acc=0.0638 wpm(K)=452.93 mins=43.16
+ep=4   steps=27.20  lr=0.000379 loss/word=291.19  ppl/word=1554.21  acc=0.0647 wpm(K)=453.21 mins=43.29
+ep=4   steps=27.30  lr=0.000378 loss/word=184.49  ppl/word=1248.98  acc=0.0628 wpm(K)=453.43 mins=43.42
+ep=4   steps=27.40  lr=0.000378 loss/word=229.58  ppl/word=1130.34  acc=0.0670 wpm(K)=453.67 mins=43.56
+ep=4   steps=27.50  lr=0.000377 loss/word=158.60  ppl/word=1140.24  acc=0.0652 wpm(K)=454.12 mins=43.69
+ep=4   steps=27.60  lr=0.000376 loss/word=104.05  ppl/word=880.92   acc=0.0713 wpm(K)=454.45 mins=43.83
+ep=4   steps=27.70  lr=0.000376 loss/word=20.55   ppl/word=304.53   acc=0.0087 wpm(K)=454.65 mins=43.96
+ep=4   steps=27.80  lr=0.000375 loss/word=83.31   ppl/word=1223.09  acc=0.0213 wpm(K)=455.00 mins=44.10
+ep=4   steps=27.90  lr=0.000374 loss/word=146.54  ppl/word=1142.75  acc=0.0586 wpm(K)=455.41 mins=44.23
+ep=4   steps=28.00  lr=0.000374 loss/word=81.74   ppl/word=958.08   acc=0.0262 wpm(K)=455.76 mins=44.37
+Eval at step 28000. valid_batch_size=30
+val_step=28000  loss=7.18   acc=0.0555 val_ppl=1313.77
+ep=4   steps=28.10  lr=0.000373 loss/word=100.26  ppl/word=1021.97  acc=0.0540 wpm(K)=453.85 mins=44.70
+ep=4   steps=28.20  lr=0.000372 loss/word=115.93  ppl/word=915.40   acc=0.0460 wpm(K)=454.18 mins=44.83
+ep=4   steps=28.30  lr=0.000372 loss/word=124.82  ppl/word=1220.38  acc=0.0445 wpm(K)=454.40 mins=44.96
+ep=4   steps=28.40  lr=0.000371 loss/word=115.63  ppl/word=1337.98  acc=0.0370 wpm(K)=454.57 mins=45.09
+ep=4   steps=28.50  lr=0.000370 loss/word=102.14  ppl/word=919.33   acc=0.0585 wpm(K)=454.80 mins=45.23
+ep=4   steps=28.60  lr=0.000370 loss/word=88.22   ppl/word=1161.48  acc=0.0325 wpm(K)=455.05 mins=45.36
+ep=4   steps=28.70  lr=0.000369 loss/word=356.60  ppl/word=1420.78  acc=0.0878 wpm(K)=455.47 mins=45.49
+ep=4   steps=28.80  lr=0.000368 loss/word=175.88  ppl/word=1187.33  acc=0.0843 wpm(K)=455.72 mins=45.63
+ep=4   steps=28.90  lr=0.000368 loss/word=163.77  ppl/word=1167.54  acc=0.0620 wpm(K)=456.02 mins=45.76
+ep=4   steps=29.00  lr=0.000367 loss/word=88.71   ppl/word=1069.44  acc=0.0344 wpm(K)=456.25 mins=45.90
+Eval at step 29000. valid_batch_size=30
+val_step=29000  loss=7.18   acc=0.0555 val_ppl=1317.31
+ep=4   steps=29.10  lr=0.000366 loss/word=67.03   ppl/word=797.98   acc=0.0218 wpm(K)=454.42 mins=46.23
+ep=4   steps=29.20  lr=0.000366 loss/word=111.43  ppl/word=914.32   acc=0.0516 wpm(K)=454.56 mins=46.36
+ep=4   steps=29.30  lr=0.000365 loss/word=190.27  ppl/word=1301.71  acc=0.0671 wpm(K)=454.86 mins=46.49
+ep=4   steps=29.40  lr=0.000365 loss/word=167.69  ppl/word=1034.84  acc=0.0763 wpm(K)=455.06 mins=46.62
+ep=4   steps=29.50  lr=0.000364 loss/word=203.41  ppl/word=1164.14  acc=0.0651 wpm(K)=455.54 mins=46.75
+ep=4   steps=29.60  lr=0.000363 loss/word=272.98  ppl/word=1228.47  acc=0.0684 wpm(K)=455.89 mins=46.88
+ep=4   steps=29.70  lr=0.000363 loss/word=205.12  ppl/word=1171.03  acc=0.0721 wpm(K)=456.39 mins=47.02
+ep=4   steps=29.80  lr=0.000362 loss/word=93.58   ppl/word=1167.14  acc=0.0448 wpm(K)=456.61 mins=47.14
+ep=4   steps=29.90  lr=0.000361 loss/word=177.86  ppl/word=1208.15  acc=0.0661 wpm(K)=456.86 mins=47.28
+ep=4   steps=30.00  lr=0.000361 loss/word=228.19  ppl/word=1232.86  acc=0.0565 wpm(K)=457.04 mins=47.41
+Eval at step 30000. valid_batch_size=30
+val_step=30000  loss=7.18   acc=0.0555 val_ppl=1313.03
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=4   steps=30.10  lr=0.000360 loss/word=124.61  ppl/word=1119.37  acc=0.0528 wpm(K)=455.12 mins=47.76
+ep=4   steps=30.20  lr=0.000360 loss/word=62.01   ppl/word=815.55   acc=0.0203 wpm(K)=455.42 mins=47.89
+ep=4   steps=30.30  lr=0.000359 loss/word=161.38  ppl/word=1329.04  acc=0.0529 wpm(K)=455.60 mins=48.02
+ep=4   steps=30.40  lr=0.000358 loss/word=91.44   ppl/word=946.46   acc=0.0632 wpm(K)=455.81 mins=48.16
+ep=4   steps=30.50  lr=0.000358 loss/word=83.15   ppl/word=1328.38  acc=0.0297 wpm(K)=456.06 mins=48.29
+ep=4   steps=30.60  lr=0.000357 loss/word=84.09   ppl/word=1212.16  acc=0.0237 wpm(K)=456.30 mins=48.42
+ep=4   steps=30.70  lr=0.000357 loss/word=68.77   ppl/word=872.09   acc=0.0308 wpm(K)=456.45 mins=48.55
+ep=4   steps=30.80  lr=0.000356 loss/word=570.67  ppl/word=1620.29  acc=0.0732 wpm(K)=456.81 mins=48.69
+ep=4   steps=30.90  lr=0.000356 loss/word=53.50   ppl/word=781.91   acc=0.0078 wpm(K)=457.01 mins=48.82
+ep=4   steps=31.00  lr=0.000355 loss/word=134.46  ppl/word=1170.43  acc=0.0509 wpm(K)=457.19 mins=48.95
+Eval at step 31000. valid_batch_size=30
+val_step=31000  loss=7.18   acc=0.0555 val_ppl=1317.97
+ep=4   steps=31.10  lr=0.000354 loss/word=55.55   ppl/word=819.19   acc=0.0189 wpm(K)=455.50 mins=49.29
+ep=4   steps=31.20  lr=0.000354 loss/word=121.75  ppl/word=1063.52  acc=0.0626 wpm(K)=455.79 mins=49.42
+ep=5   steps=31.30  lr=0.000353 loss/word=74.21   ppl/word=956.40   acc=0.0260 wpm(K)=456.06 mins=49.55
+ep=5   steps=31.40  lr=0.000353 loss/word=228.05  ppl/word=1403.81  acc=0.0765 wpm(K)=456.18 mins=49.68
+ep=5   steps=31.50  lr=0.000352 loss/word=43.44   ppl/word=554.87   acc=0.0182 wpm(K)=456.34 mins=49.82
+ep=5   steps=31.60  lr=0.000352 loss/word=164.04  ppl/word=1137.43  acc=0.0737 wpm(K)=456.57 mins=49.95
+ep=5   steps=31.70  lr=0.000351 loss/word=63.55   ppl/word=941.21   acc=0.0303 wpm(K)=456.76 mins=50.08
+ep=5   steps=31.80  lr=0.000350 loss/word=60.45   ppl/word=908.27   acc=0.0176 wpm(K)=456.97 mins=50.21
+ep=5   steps=31.90  lr=0.000350 loss/word=326.05  ppl/word=1394.90  acc=0.0805 wpm(K)=457.16 mins=50.35
+ep=5   steps=32.00  lr=0.000349 loss/word=132.11  ppl/word=1293.90  acc=0.0525 wpm(K)=457.40 mins=50.48
+Eval at step 32000. valid_batch_size=30
+val_step=32000  loss=7.20   acc=0.0555 val_ppl=1334.68
+ep=5   steps=32.10  lr=0.000349 loss/word=123.60  ppl/word=1244.74  acc=0.0541 wpm(K)=455.72 mins=50.81
+ep=5   steps=32.20  lr=0.000348 loss/word=42.56   ppl/word=793.04   acc=0.0098 wpm(K)=455.96 mins=50.95
+ep=5   steps=32.30  lr=0.000348 loss/word=305.87  ppl/word=1241.04  acc=0.0728 wpm(K)=456.24 mins=51.08
+ep=5   steps=32.40  lr=0.000347 loss/word=478.33  ppl/word=1638.75  acc=0.0759 wpm(K)=456.52 mins=51.21
+ep=5   steps=32.50  lr=0.000347 loss/word=208.37  ppl/word=1101.13  acc=0.0819 wpm(K)=456.68 mins=51.35
+ep=5   steps=32.60  lr=0.000346 loss/word=142.57  ppl/word=1412.54  acc=0.0493 wpm(K)=456.90 mins=51.48
+ep=5   steps=32.70  lr=0.000346 loss/word=257.46  ppl/word=1324.86  acc=0.0777 wpm(K)=457.05 mins=51.61
+ep=5   steps=32.80  lr=0.000345 loss/word=169.26  ppl/word=1134.58  acc=0.0766 wpm(K)=457.40 mins=51.75
+ep=5   steps=32.90  lr=0.000345 loss/word=190.64  ppl/word=1287.12  acc=0.0599 wpm(K)=457.56 mins=51.88
+ep=5   steps=33.00  lr=0.000344 loss/word=148.53  ppl/word=961.56   acc=0.0621 wpm(K)=457.83 mins=52.01
+Eval at step 33000. valid_batch_size=30
+val_step=33000  loss=7.18   acc=0.0555 val_ppl=1316.30
+ep=5   steps=33.10  lr=0.000344 loss/word=86.88   ppl/word=1080.52  acc=0.0377 wpm(K)=456.31 mins=52.35
+ep=5   steps=33.20  lr=0.000343 loss/word=192.41  ppl/word=1375.70  acc=0.0634 wpm(K)=456.53 mins=52.48
+ep=5   steps=33.30  lr=0.000342 loss/word=211.50  ppl/word=1579.01  acc=0.0566 wpm(K)=456.76 mins=52.61
+ep=5   steps=33.40  lr=0.000342 loss/word=104.61  ppl/word=1037.77  acc=0.0373 wpm(K)=456.98 mins=52.75
+ep=5   steps=33.50  lr=0.000341 loss/word=121.34  ppl/word=1078.87  acc=0.0612 wpm(K)=457.13 mins=52.88
+ep=5   steps=33.60  lr=0.000341 loss/word=49.12   ppl/word=758.77   acc=0.0000 wpm(K)=457.43 mins=53.01
+ep=5   steps=33.70  lr=0.000340 loss/word=64.10   ppl/word=932.21   acc=0.0233 wpm(K)=457.59 mins=53.15
+ep=5   steps=33.80  lr=0.000340 loss/word=215.02  ppl/word=1345.97  acc=0.0628 wpm(K)=457.87 mins=53.28
+ep=5   steps=33.90  lr=0.000339 loss/word=218.30  ppl/word=1321.99  acc=0.0617 wpm(K)=458.15 mins=53.41
+ep=5   steps=34.00  lr=0.000339 loss/word=197.61  ppl/word=1376.08  acc=0.0731 wpm(K)=458.37 mins=53.54
+Eval at step 34000. valid_batch_size=30
+val_step=34000  loss=7.18   acc=0.0555 val_ppl=1314.17
+ep=5   steps=34.10  lr=0.000338 loss/word=108.88  ppl/word=1033.20  acc=0.0578 wpm(K)=457.02 mins=53.88
+ep=5   steps=34.20  lr=0.000338 loss/word=56.07   ppl/word=620.50   acc=0.0179 wpm(K)=457.24 mins=54.01
+ep=5   steps=34.30  lr=0.000337 loss/word=66.16   ppl/word=988.37   acc=0.0195 wpm(K)=457.34 mins=54.14
+ep=5   steps=34.40  lr=0.000337 loss/word=72.32   ppl/word=868.92   acc=0.0175 wpm(K)=457.42 mins=54.27
+ep=5   steps=34.50  lr=0.000336 loss/word=74.54   ppl/word=1185.22  acc=0.0178 wpm(K)=457.59 mins=54.40
+ep=5   steps=34.60  lr=0.000336 loss/word=64.35   ppl/word=818.81   acc=0.0358 wpm(K)=457.77 mins=54.53
+ep=5   steps=34.70  lr=0.000336 loss/word=168.10  ppl/word=1265.89  acc=0.0598 wpm(K)=457.97 mins=54.66
+ep=5   steps=34.80  lr=0.000335 loss/word=56.32   ppl/word=1024.73  acc=0.0077 wpm(K)=458.32 mins=54.79
+ep=5   steps=34.90  lr=0.000335 loss/word=317.99  ppl/word=1256.22  acc=0.0891 wpm(K)=458.48 mins=54.93
+ep=5   steps=35.00  lr=0.000334 loss/word=85.12   ppl/word=987.91   acc=0.0456 wpm(K)=458.73 mins=55.06
+Eval at step 35000. valid_batch_size=30
+val_step=35000  loss=7.18   acc=0.0555 val_ppl=1317.77
+ep=5   steps=35.10  lr=0.000334 loss/word=319.03  ppl/word=1416.24  acc=0.0810 wpm(K)=457.33 mins=55.39
+ep=5   steps=35.20  lr=0.000333 loss/word=84.68   ppl/word=1041.28  acc=0.0410 wpm(K)=457.50 mins=55.52
+ep=5   steps=35.30  lr=0.000333 loss/word=159.97  ppl/word=1286.42  acc=0.0713 wpm(K)=457.72 mins=55.65
+ep=5   steps=35.40  lr=0.000332 loss/word=76.93   ppl/word=1204.81  acc=0.0259 wpm(K)=457.92 mins=55.78
+ep=5   steps=35.50  lr=0.000332 loss/word=205.21  ppl/word=1122.23  acc=0.0813 wpm(K)=458.14 mins=55.91
+ep=5   steps=35.60  lr=0.000331 loss/word=66.90   ppl/word=998.08   acc=0.0097 wpm(K)=458.35 mins=56.05
+ep=5   steps=35.70  lr=0.000331 loss/word=161.52  ppl/word=1421.24  acc=0.0520 wpm(K)=458.55 mins=56.18
+ep=5   steps=35.80  lr=0.000330 loss/word=102.78  ppl/word=1016.51  acc=0.0484 wpm(K)=458.68 mins=56.31
+ep=5   steps=35.90  lr=0.000330 loss/word=327.42  ppl/word=1544.33  acc=0.0652 wpm(K)=459.08 mins=56.44
+ep=5   steps=36.00  lr=0.000329 loss/word=119.00  ppl/word=1267.00  acc=0.0450 wpm(K)=459.25 mins=56.57
+Eval at step 36000. valid_batch_size=30
+val_step=36000  loss=7.18   acc=0.0555 val_ppl=1314.73
+ep=5   steps=36.10  lr=0.000329 loss/word=241.30  ppl/word=1498.16  acc=0.0767 wpm(K)=457.83 mins=56.91
+ep=5   steps=36.20  lr=0.000328 loss/word=219.58  ppl/word=1543.97  acc=0.0700 wpm(K)=458.02 mins=57.04
+ep=5   steps=36.30  lr=0.000328 loss/word=252.75  ppl/word=1499.49  acc=0.0678 wpm(K)=458.25 mins=57.17
+ep=5   steps=36.40  lr=0.000328 loss/word=116.49  ppl/word=1212.32  acc=0.0552 wpm(K)=458.42 mins=57.30
+ep=5   steps=36.50  lr=0.000327 loss/word=163.00  ppl/word=1088.07  acc=0.0603 wpm(K)=458.66 mins=57.43
+ep=5   steps=36.60  lr=0.000327 loss/word=130.61  ppl/word=1251.95  acc=0.0546 wpm(K)=458.88 mins=57.55
+ep=5   steps=36.70  lr=0.000326 loss/word=256.03  ppl/word=1594.76  acc=0.0621 wpm(K)=459.03 mins=57.68
+ep=5   steps=36.80  lr=0.000326 loss/word=115.63  ppl/word=1318.92  acc=0.0602 wpm(K)=459.29 mins=57.81
+ep=5   steps=36.90  lr=0.000325 loss/word=182.58  ppl/word=1275.75  acc=0.0747 wpm(K)=459.56 mins=57.94
+ep=5   steps=37.00  lr=0.000325 loss/word=91.07   ppl/word=863.85   acc=0.0394 wpm(K)=459.76 mins=58.06
+Eval at step 37000. valid_batch_size=30
+val_step=37000  loss=7.18   acc=0.0555 val_ppl=1313.49
+ep=5   steps=37.10  lr=0.000324 loss/word=295.62  ppl/word=1446.27  acc=0.0738 wpm(K)=458.51 mins=58.38
+ep=5   steps=37.20  lr=0.000324 loss/word=303.00  ppl/word=1473.84  acc=0.0692 wpm(K)=458.70 mins=58.51
+ep=5   steps=37.30  lr=0.000324 loss/word=34.39   ppl/word=700.24   acc=0.0060 wpm(K)=458.85 mins=58.64
+ep=5   steps=37.40  lr=0.000323 loss/word=152.52  ppl/word=1255.72  acc=0.0687 wpm(K)=459.14 mins=58.77
+ep=6   steps=37.50  lr=0.000323 loss/word=267.53  ppl/word=1231.98  acc=0.0748 wpm(K)=459.46 mins=58.91
+ep=6   steps=37.60  lr=0.000322 loss/word=143.67  ppl/word=1205.60  acc=0.0571 wpm(K)=459.62 mins=59.04
+ep=6   steps=37.70  lr=0.000322 loss/word=64.65   ppl/word=966.25   acc=0.0166 wpm(K)=459.80 mins=59.17
+ep=6   steps=37.80  lr=0.000321 loss/word=149.70  ppl/word=1100.48  acc=0.0599 wpm(K)=459.94 mins=59.30
+ep=6   steps=37.90  lr=0.000321 loss/word=66.17   ppl/word=905.88   acc=0.0225 wpm(K)=460.16 mins=59.43
+ep=6   steps=38.00  lr=0.000321 loss/word=203.32  ppl/word=1234.67  acc=0.0624 wpm(K)=460.41 mins=59.57
+Eval at step 38000. valid_batch_size=30
+val_step=38000  loss=7.18   acc=0.0555 val_ppl=1313.91
+ep=6   steps=38.10  lr=0.000320 loss/word=107.49  ppl/word=1151.15  acc=0.0451 wpm(K)=459.14 mins=59.90
+ep=6   steps=38.20  lr=0.000320 loss/word=85.95   ppl/word=832.62   acc=0.0416 wpm(K)=459.31 mins=60.03
+ep=6   steps=38.30  lr=0.000319 loss/word=99.77   ppl/word=1002.56  acc=0.0368 wpm(K)=459.46 mins=60.16
+ep=6   steps=38.40  lr=0.000319 loss/word=271.83  ppl/word=1278.47  acc=0.0822 wpm(K)=459.56 mins=60.29
+ep=6   steps=38.50  lr=0.000319 loss/word=231.67  ppl/word=1238.35  acc=0.0730 wpm(K)=459.82 mins=60.42
+ep=6   steps=38.60  lr=0.000318 loss/word=273.11  ppl/word=1463.92  acc=0.0601 wpm(K)=459.95 mins=60.55
+ep=6   steps=38.70  lr=0.000318 loss/word=69.27   ppl/word=878.94   acc=0.0245 wpm(K)=460.13 mins=60.68
+ep=6   steps=38.80  lr=0.000317 loss/word=176.11  ppl/word=1582.40  acc=0.0497 wpm(K)=460.30 mins=60.82
+ep=6   steps=38.90  lr=0.000317 loss/word=128.58  ppl/word=972.98   acc=0.0518 wpm(K)=460.60 mins=60.95
+ep=6   steps=39.00  lr=0.000316 loss/word=303.63  ppl/word=1409.17  acc=0.0776 wpm(K)=460.70 mins=61.08
+Eval at step 39000. valid_batch_size=30
+val_step=39000  loss=7.18   acc=0.0555 val_ppl=1314.68
+ep=6   steps=39.10  lr=0.000316 loss/word=203.33  ppl/word=1076.33  acc=0.0697 wpm(K)=459.41 mins=61.41
+ep=6   steps=39.20  lr=0.000316 loss/word=86.57   ppl/word=1216.06  acc=0.0333 wpm(K)=459.51 mins=61.54
+ep=6   steps=39.30  lr=0.000315 loss/word=212.44  ppl/word=1105.70  acc=0.0732 wpm(K)=459.55 mins=61.67
+ep=6   steps=39.40  lr=0.000315 loss/word=98.28   ppl/word=1250.25  acc=0.0385 wpm(K)=459.79 mins=61.80
+ep=6   steps=39.50  lr=0.000314 loss/word=118.10  ppl/word=1080.77  acc=0.0388 wpm(K)=459.96 mins=61.94
+ep=6   steps=39.60  lr=0.000314 loss/word=169.89  ppl/word=1133.31  acc=0.0647 wpm(K)=460.07 mins=62.06
+ep=6   steps=39.70  lr=0.000314 loss/word=314.74  ppl/word=1297.77  acc=0.0662 wpm(K)=460.34 mins=62.20
+ep=6   steps=39.80  lr=0.000313 loss/word=51.94   ppl/word=792.86   acc=0.0120 wpm(K)=460.50 mins=62.33
+ep=6   steps=39.90  lr=0.000313 loss/word=76.16   ppl/word=1015.78  acc=0.0398 wpm(K)=460.71 mins=62.46
+ep=6   steps=40.00  lr=0.000313 loss/word=94.57   ppl/word=1017.30  acc=0.0343 wpm(K)=460.85 mins=62.60
+Eval at step 40000. valid_batch_size=30
+val_step=40000  loss=7.18   acc=0.0555 val_ppl=1313.15
+ep=6   steps=40.10  lr=0.000312 loss/word=435.71  ppl/word=1485.83  acc=0.0765 wpm(K)=459.51 mins=62.93
+ep=6   steps=40.20  lr=0.000312 loss/word=53.12   ppl/word=745.19   acc=0.0156 wpm(K)=459.60 mins=63.06
+ep=6   steps=40.30  lr=0.000311 loss/word=195.18  ppl/word=1125.12  acc=0.0709 wpm(K)=459.89 mins=63.20
+ep=6   steps=40.40  lr=0.000311 loss/word=239.87  ppl/word=1181.38  acc=0.0756 wpm(K)=460.10 mins=63.34
+ep=6   steps=40.50  lr=0.000311 loss/word=57.17   ppl/word=794.21   acc=0.0109 wpm(K)=460.23 mins=63.47
+ep=6   steps=40.60  lr=0.000310 loss/word=214.84  ppl/word=1454.85  acc=0.0625 wpm(K)=460.45 mins=63.60
+ep=6   steps=40.70  lr=0.000310 loss/word=60.56   ppl/word=817.24   acc=0.0208 wpm(K)=460.63 mins=63.74
+ep=6   steps=40.80  lr=0.000309 loss/word=44.95   ppl/word=632.94   acc=0.0135 wpm(K)=460.73 mins=63.87
+ep=6   steps=40.90  lr=0.000309 loss/word=179.56  ppl/word=1104.54  acc=0.0780 wpm(K)=460.95 mins=64.00
+ep=6   steps=41.00  lr=0.000309 loss/word=171.62  ppl/word=1299.40  acc=0.0601 wpm(K)=461.21 mins=64.14
+Eval at step 41000. valid_batch_size=30
+val_step=41000  loss=7.18   acc=0.0555 val_ppl=1318.49
+ep=6   steps=41.10  lr=0.000308 loss/word=21.88   ppl/word=358.91   acc=0.0000 wpm(K)=459.87 mins=64.47
+ep=6   steps=41.20  lr=0.000308 loss/word=91.66   ppl/word=1256.87  acc=0.0316 wpm(K)=460.02 mins=64.60
+ep=6   steps=41.30  lr=0.000308 loss/word=340.27  ppl/word=1373.75  acc=0.0770 wpm(K)=460.15 mins=64.73
+ep=6   steps=41.40  lr=0.000307 loss/word=109.87  ppl/word=1325.94  acc=0.0429 wpm(K)=460.42 mins=64.86
+ep=6   steps=41.50  lr=0.000307 loss/word=64.37   ppl/word=820.22   acc=0.0293 wpm(K)=460.59 mins=65.00
+ep=6   steps=41.60  lr=0.000306 loss/word=269.02  ppl/word=1281.61  acc=0.0798 wpm(K)=460.80 mins=65.13
+ep=6   steps=41.70  lr=0.000306 loss/word=426.31  ppl/word=1478.86  acc=0.0706 wpm(K)=461.03 mins=65.27
+ep=6   steps=41.80  lr=0.000306 loss/word=120.02  ppl/word=1105.69  acc=0.0493 wpm(K)=461.22 mins=65.40
+ep=6   steps=41.90  lr=0.000305 loss/word=102.81  ppl/word=871.05   acc=0.0453 wpm(K)=461.36 mins=65.53
+ep=6   steps=42.00  lr=0.000305 loss/word=58.72   ppl/word=801.87   acc=0.0107 wpm(K)=461.49 mins=65.67
+Eval at step 42000. valid_batch_size=30
+val_step=42000  loss=7.18   acc=0.0555 val_ppl=1313.53
+ep=6   steps=42.10  lr=0.000305 loss/word=111.59  ppl/word=1068.66  acc=0.0508 wpm(K)=460.29 mins=65.99
+ep=6   steps=42.20  lr=0.000304 loss/word=78.62   ppl/word=948.46   acc=0.0300 wpm(K)=460.45 mins=66.12
+ep=6   steps=42.30  lr=0.000304 loss/word=90.88   ppl/word=1086.16  acc=0.0433 wpm(K)=460.69 mins=66.25
+ep=6   steps=42.40  lr=0.000304 loss/word=80.97   ppl/word=1002.09  acc=0.0240 wpm(K)=460.90 mins=66.39
+ep=6   steps=42.50  lr=0.000303 loss/word=205.98  ppl/word=1135.15  acc=0.0736 wpm(K)=460.97 mins=66.52
+ep=6   steps=42.60  lr=0.000303 loss/word=152.74  ppl/word=995.66   acc=0.0650 wpm(K)=461.22 mins=66.65
+ep=6   steps=42.70  lr=0.000302 loss/word=237.76  ppl/word=1318.69  acc=0.0670 wpm(K)=461.42 mins=66.78
+ep=6   steps=42.80  lr=0.000302 loss/word=82.04   ppl/word=1278.29  acc=0.0191 wpm(K)=461.56 mins=66.92
+ep=6   steps=42.90  lr=0.000302 loss/word=265.79  ppl/word=1375.17  acc=0.0697 wpm(K)=461.70 mins=67.05
+ep=6   steps=43.00  lr=0.000301 loss/word=134.16  ppl/word=1063.79  acc=0.0487 wpm(K)=461.83 mins=67.18
+Eval at step 43000. valid_batch_size=30
+val_step=43000  loss=7.18   acc=0.0555 val_ppl=1314.58
+ep=6   steps=43.10  lr=0.000301 loss/word=296.18  ppl/word=1410.26  acc=0.0712 wpm(K)=460.65 mins=67.52
+ep=6   steps=43.20  lr=0.000301 loss/word=65.81   ppl/word=952.73   acc=0.0261 wpm(K)=460.83 mins=67.65
+ep=6   steps=43.30  lr=0.000300 loss/word=81.68   ppl/word=1238.73  acc=0.0218 wpm(K)=461.05 mins=67.79
+ep=6   steps=43.40  lr=0.000300 loss/word=196.14  ppl/word=1251.85  acc=0.0761 wpm(K)=461.21 mins=67.92
+ep=6   steps=43.50  lr=0.000300 loss/word=216.92  ppl/word=1490.60  acc=0.0726 wpm(K)=461.29 mins=68.05
+ep=6   steps=43.60  lr=0.000299 loss/word=147.68  ppl/word=1259.63  acc=0.0589 wpm(K)=461.40 mins=68.18
+ep=6   steps=43.70  lr=0.000299 loss/word=86.60   ppl/word=876.00   acc=0.0367 wpm(K)=461.56 mins=68.32
+ep=7   steps=43.80  lr=0.000299 loss/word=378.44  ppl/word=1492.98  acc=0.0815 wpm(K)=461.82 mins=68.45
+ep=7   steps=43.90  lr=0.000298 loss/word=196.02  ppl/word=1187.81  acc=0.0824 wpm(K)=462.05 mins=68.58
+ep=7   steps=44.00  lr=0.000298 loss/word=115.94  ppl/word=1027.21  acc=0.0561 wpm(K)=462.33 mins=68.71
+Eval at step 44000. valid_batch_size=30
+val_step=44000  loss=7.18   acc=0.0555 val_ppl=1315.69
+ep=7   steps=44.10  lr=0.000298 loss/word=173.50  ppl/word=1127.79  acc=0.0759 wpm(K)=461.29 mins=69.03
+ep=7   steps=44.20  lr=0.000297 loss/word=50.52   ppl/word=734.14   acc=0.0245 wpm(K)=461.48 mins=69.16
+ep=7   steps=44.30  lr=0.000297 loss/word=327.25  ppl/word=1383.15  acc=0.0767 wpm(K)=461.67 mins=69.28
+ep=7   steps=44.40  lr=0.000297 loss/word=124.72  ppl/word=1033.91  acc=0.0504 wpm(K)=461.85 mins=69.42
+ep=7   steps=44.50  lr=0.000296 loss/word=101.24  ppl/word=1045.69  acc=0.0494 wpm(K)=461.97 mins=69.55
+ep=7   steps=44.60  lr=0.000296 loss/word=99.65   ppl/word=1088.92  acc=0.0417 wpm(K)=462.04 mins=69.68
+ep=7   steps=44.70  lr=0.000296 loss/word=197.06  ppl/word=1045.92  acc=0.0739 wpm(K)=462.15 mins=69.81
+ep=7   steps=44.80  lr=0.000295 loss/word=116.04  ppl/word=1179.86  acc=0.0476 wpm(K)=462.29 mins=69.94
+ep=7   steps=44.90  lr=0.000295 loss/word=96.38   ppl/word=1125.25  acc=0.0251 wpm(K)=462.35 mins=70.07
+ep=7   steps=45.00  lr=0.000295 loss/word=206.17  ppl/word=1186.37  acc=0.0719 wpm(K)=462.49 mins=70.20
+Eval at step 45000. valid_batch_size=30
+val_step=45000  loss=7.18   acc=0.0555 val_ppl=1314.83
+ep=7   steps=45.10  lr=0.000294 loss/word=419.24  ppl/word=1583.10  acc=0.0692 wpm(K)=461.34 mins=70.53
+ep=7   steps=45.20  lr=0.000294 loss/word=103.72  ppl/word=1066.97  acc=0.0357 wpm(K)=461.52 mins=70.67
+ep=7   steps=45.30  lr=0.000294 loss/word=37.80   ppl/word=602.35   acc=0.0106 wpm(K)=461.62 mins=70.80
+ep=7   steps=45.40  lr=0.000293 loss/word=73.70   ppl/word=1117.22  acc=0.0298 wpm(K)=461.69 mins=70.93
+ep=7   steps=45.50  lr=0.000293 loss/word=273.17  ppl/word=1263.70  acc=0.0662 wpm(K)=461.80 mins=71.06
+ep=7   steps=45.60  lr=0.000293 loss/word=261.79  ppl/word=1412.31  acc=0.0753 wpm(K)=462.01 mins=71.20
+ep=7   steps=45.70  lr=0.000292 loss/word=102.46  ppl/word=1189.78  acc=0.0389 wpm(K)=462.24 mins=71.33
+ep=7   steps=45.80  lr=0.000292 loss/word=52.19   ppl/word=680.76   acc=0.0156 wpm(K)=462.29 mins=71.46
+ep=7   steps=45.90  lr=0.000292 loss/word=64.32   ppl/word=834.11   acc=0.0261 wpm(K)=462.41 mins=71.59
+ep=7   steps=46.00  lr=0.000291 loss/word=84.67   ppl/word=1058.77  acc=0.0308 wpm(K)=462.62 mins=71.73
+Eval at step 46000. valid_batch_size=30
+val_step=46000  loss=7.18   acc=0.0555 val_ppl=1312.59
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=7   steps=46.10  lr=0.000291 loss/word=761.05  ppl/word=1731.43  acc=0.0732 wpm(K)=461.43 mins=72.07
+ep=7   steps=46.20  lr=0.000291 loss/word=242.26  ppl/word=1490.22  acc=0.0697 wpm(K)=461.62 mins=72.21
+ep=7   steps=46.30  lr=0.000290 loss/word=374.45  ppl/word=1329.17  acc=0.0798 wpm(K)=461.91 mins=72.34
+ep=7   steps=46.40  lr=0.000290 loss/word=71.24   ppl/word=849.28   acc=0.0237 wpm(K)=462.03 mins=72.47
+ep=7   steps=46.50  lr=0.000290 loss/word=168.60  ppl/word=1104.02  acc=0.0688 wpm(K)=462.22 mins=72.61
+ep=7   steps=46.60  lr=0.000290 loss/word=271.70  ppl/word=1393.11  acc=0.0749 wpm(K)=462.38 mins=72.74
+ep=7   steps=46.70  lr=0.000289 loss/word=171.95  ppl/word=1420.72  acc=0.0528 wpm(K)=462.61 mins=72.87
+ep=7   steps=46.80  lr=0.000289 loss/word=152.34  ppl/word=1258.05  acc=0.0571 wpm(K)=462.80 mins=73.01
+ep=7   steps=46.90  lr=0.000289 loss/word=227.40  ppl/word=1254.20  acc=0.0804 wpm(K)=463.04 mins=73.14
+ep=7   steps=47.00  lr=0.000288 loss/word=65.68   ppl/word=939.79   acc=0.0228 wpm(K)=463.24 mins=73.28
+Eval at step 47000. valid_batch_size=30
+val_step=47000  loss=7.18   acc=0.0555 val_ppl=1312.98
+ep=7   steps=47.10  lr=0.000288 loss/word=84.90   ppl/word=1249.50  acc=0.0341 wpm(K)=462.19 mins=73.62
+ep=7   steps=47.20  lr=0.000288 loss/word=112.04  ppl/word=1300.67  acc=0.0460 wpm(K)=462.33 mins=73.75
+ep=7   steps=47.30  lr=0.000287 loss/word=293.27  ppl/word=1357.66  acc=0.0699 wpm(K)=462.59 mins=73.89
+ep=7   steps=47.40  lr=0.000287 loss/word=74.39   ppl/word=1168.58  acc=0.0267 wpm(K)=462.64 mins=74.02
+ep=7   steps=47.50  lr=0.000287 loss/word=202.66  ppl/word=1460.66  acc=0.0730 wpm(K)=462.79 mins=74.15
+ep=7   steps=47.60  lr=0.000286 loss/word=109.84  ppl/word=1266.41  acc=0.0386 wpm(K)=462.92 mins=74.29
+ep=7   steps=47.70  lr=0.000286 loss/word=241.04  ppl/word=1456.28  acc=0.0755 wpm(K)=463.18 mins=74.42
+ep=7   steps=47.80  lr=0.000286 loss/word=293.84  ppl/word=1423.41  acc=0.0764 wpm(K)=463.39 mins=74.55
+ep=7   steps=47.90  lr=0.000286 loss/word=173.90  ppl/word=1313.36  acc=0.0632 wpm(K)=463.49 mins=74.68
+ep=7   steps=48.00  lr=0.000285 loss/word=84.78   ppl/word=960.89   acc=0.0481 wpm(K)=463.70 mins=74.82
+Eval at step 48000. valid_batch_size=30
+val_step=48000  loss=7.18   acc=0.0555 val_ppl=1312.24
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=7   steps=48.10  lr=0.000285 loss/word=101.18  ppl/word=804.04   acc=0.0496 wpm(K)=461.12 mins=75.39
+ep=7   steps=48.20  lr=0.000285 loss/word=87.57   ppl/word=855.81   acc=0.0458 wpm(K)=461.28 mins=75.52
+ep=7   steps=48.30  lr=0.000284 loss/word=164.38  ppl/word=1459.30  acc=0.0485 wpm(K)=461.39 mins=75.65
+ep=7   steps=48.40  lr=0.000284 loss/word=692.13  ppl/word=2004.67  acc=0.0652 wpm(K)=461.48 mins=75.79
+ep=7   steps=48.50  lr=0.000284 loss/word=123.63  ppl/word=1230.60  acc=0.0558 wpm(K)=461.59 mins=75.92
+ep=7   steps=48.60  lr=0.000284 loss/word=243.37  ppl/word=1301.20  acc=0.0681 wpm(K)=461.70 mins=76.05
+ep=7   steps=48.70  lr=0.000283 loss/word=154.44  ppl/word=1141.38  acc=0.0584 wpm(K)=461.95 mins=76.18
+ep=7   steps=48.80  lr=0.000283 loss/word=50.45   ppl/word=671.61   acc=0.0202 wpm(K)=462.05 mins=76.31
+ep=7   steps=48.90  lr=0.000283 loss/word=113.54  ppl/word=1371.02  acc=0.0477 wpm(K)=462.28 mins=76.45
+ep=7   steps=49.00  lr=0.000282 loss/word=102.02  ppl/word=898.90   acc=0.0521 wpm(K)=462.47 mins=76.58
+Eval at step 49000. valid_batch_size=30
+val_step=49000  loss=7.18   acc=0.0555 val_ppl=1312.40
+ep=7   steps=49.10  lr=0.000282 loss/word=104.65  ppl/word=1406.23  acc=0.0498 wpm(K)=461.36 mins=76.92
+ep=7   steps=49.20  lr=0.000282 loss/word=42.22   ppl/word=802.55   acc=0.0099 wpm(K)=461.49 mins=77.05
+ep=7   steps=49.30  lr=0.000281 loss/word=117.41  ppl/word=1247.78  acc=0.0569 wpm(K)=461.60 mins=77.18
+ep=7   steps=49.40  lr=0.000281 loss/word=49.90   ppl/word=843.29   acc=0.0042 wpm(K)=461.81 mins=77.31
+ep=7   steps=49.50  lr=0.000281 loss/word=111.74  ppl/word=1258.02  acc=0.0439 wpm(K)=461.85 mins=77.44
+ep=7   steps=49.60  lr=0.000281 loss/word=81.48   ppl/word=1241.70  acc=0.0355 wpm(K)=461.88 mins=77.57
+ep=7   steps=49.70  lr=0.000280 loss/word=139.61  ppl/word=1301.20  acc=0.0626 wpm(K)=461.88 mins=77.70
+ep=7   steps=49.80  lr=0.000280 loss/word=157.51  ppl/word=1118.66  acc=0.0655 wpm(K)=462.06 mins=77.83
+ep=7   steps=49.90  lr=0.000280 loss/word=123.33  ppl/word=1003.88  acc=0.0595 wpm(K)=462.18 mins=77.96
+ep=8   steps=50.00  lr=0.000280 loss/word=58.19   ppl/word=811.19   acc=0.0252 wpm(K)=462.26 mins=78.09
+Eval at step 50000. valid_batch_size=30
+val_step=50000  loss=7.18   acc=0.0555 val_ppl=1312.59
+ep=8   steps=50.10  lr=0.000279 loss/word=179.81  ppl/word=1317.29  acc=0.0674 wpm(K)=461.28 mins=78.43
+ep=8   steps=50.20  lr=0.000279 loss/word=314.47  ppl/word=1251.14  acc=0.0822 wpm(K)=461.42 mins=78.56
+ep=8   steps=50.30  lr=0.000279 loss/word=170.51  ppl/word=1072.14  acc=0.0831 wpm(K)=461.55 mins=78.69
+ep=8   steps=50.40  lr=0.000278 loss/word=115.36  ppl/word=1227.78  acc=0.0424 wpm(K)=461.81 mins=78.83
+ep=8   steps=50.50  lr=0.000278 loss/word=98.29   ppl/word=989.52   acc=0.0351 wpm(K)=461.95 mins=78.96
+ep=8   steps=50.60  lr=0.000278 loss/word=277.24  ppl/word=1325.30  acc=0.0762 wpm(K)=462.19 mins=79.10
+ep=8   steps=50.70  lr=0.000278 loss/word=443.42  ppl/word=1589.47  acc=0.0743 wpm(K)=462.34 mins=79.23
+ep=8   steps=50.80  lr=0.000277 loss/word=69.08   ppl/word=880.78   acc=0.0337 wpm(K)=462.48 mins=79.37
+ep=8   steps=50.90  lr=0.000277 loss/word=56.89   ppl/word=698.49   acc=0.0072 wpm(K)=462.69 mins=79.50
+ep=8   steps=51.00  lr=0.000277 loss/word=161.19  ppl/word=1358.40  acc=0.0587 wpm(K)=462.84 mins=79.63
+Eval at step 51000. valid_batch_size=30
+val_step=51000  loss=7.18   acc=0.0555 val_ppl=1311.94
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=8   steps=51.10  lr=0.000276 loss/word=76.80   ppl/word=1266.69  acc=0.0174 wpm(K)=461.79 mins=79.96
+ep=8   steps=51.20  lr=0.000276 loss/word=111.83  ppl/word=1162.35  acc=0.0552 wpm(K)=461.97 mins=80.08
+ep=8   steps=51.30  lr=0.000276 loss/word=224.08  ppl/word=1388.00  acc=0.0676 wpm(K)=462.17 mins=80.21
+ep=8   steps=51.40  lr=0.000276 loss/word=166.11  ppl/word=1317.18  acc=0.0689 wpm(K)=462.37 mins=80.35
+ep=8   steps=51.50  lr=0.000275 loss/word=87.50   ppl/word=1058.71  acc=0.0274 wpm(K)=462.47 mins=80.48
+ep=8   steps=51.60  lr=0.000275 loss/word=32.49   ppl/word=2212.48  acc=0.0000 wpm(K)=462.63 mins=80.61
+ep=8   steps=51.70  lr=0.000275 loss/word=242.09  ppl/word=1252.99  acc=0.0727 wpm(K)=462.72 mins=80.74
+ep=8   steps=51.80  lr=0.000275 loss/word=82.69   ppl/word=1407.73  acc=0.0219 wpm(K)=462.90 mins=80.88
+ep=8   steps=51.90  lr=0.000274 loss/word=93.40   ppl/word=1010.76  acc=0.0532 wpm(K)=463.00 mins=81.01
+ep=8   steps=52.00  lr=0.000274 loss/word=302.01  ppl/word=1590.38  acc=0.0625 wpm(K)=463.16 mins=81.14
+Eval at step 52000. valid_batch_size=30
+val_step=52000  loss=7.18   acc=0.0555 val_ppl=1312.07
+ep=8   steps=52.10  lr=0.000274 loss/word=40.58   ppl/word=484.99   acc=0.0000 wpm(K)=462.18 mins=81.47
+ep=8   steps=52.20  lr=0.000274 loss/word=283.76  ppl/word=1363.67  acc=0.0795 wpm(K)=462.34 mins=81.60
+ep=8   steps=52.30  lr=0.000273 loss/word=85.12   ppl/word=1297.34  acc=0.0132 wpm(K)=462.45 mins=81.73
+ep=8   steps=52.40  lr=0.000273 loss/word=106.45  ppl/word=1139.38  acc=0.0558 wpm(K)=462.50 mins=81.86
+ep=8   steps=52.50  lr=0.000273 loss/word=69.66   ppl/word=1015.21  acc=0.0217 wpm(K)=462.66 mins=81.99
+ep=8   steps=52.60  lr=0.000273 loss/word=178.38  ppl/word=1399.21  acc=0.0508 wpm(K)=462.84 mins=82.12
+ep=8   steps=52.70  lr=0.000272 loss/word=55.89   ppl/word=810.64   acc=0.0337 wpm(K)=462.95 mins=82.26
+ep=8   steps=52.80  lr=0.000272 loss/word=53.24   ppl/word=756.40   acc=0.0233 wpm(K)=463.15 mins=82.39
+ep=8   steps=52.90  lr=0.000272 loss/word=49.66   ppl/word=561.71   acc=0.0239 wpm(K)=463.31 mins=82.52
+ep=8   steps=53.00  lr=0.000271 loss/word=215.24  ppl/word=1212.69  acc=0.0649 wpm(K)=463.41 mins=82.65
+Eval at step 53000. valid_batch_size=30
+val_step=53000  loss=7.18   acc=0.0555 val_ppl=1312.97
+ep=8   steps=53.10  lr=0.000271 loss/word=42.42   ppl/word=683.01   acc=0.0096 wpm(K)=462.52 mins=82.98
+ep=8   steps=53.20  lr=0.000271 loss/word=75.24   ppl/word=916.23   acc=0.0255 wpm(K)=462.58 mins=83.12
+ep=8   steps=53.30  lr=0.000271 loss/word=110.30  ppl/word=986.03   acc=0.0586 wpm(K)=462.73 mins=83.24
+ep=8   steps=53.40  lr=0.000270 loss/word=149.15  ppl/word=1240.87  acc=0.0642 wpm(K)=462.92 mins=83.38
+ep=8   steps=53.50  lr=0.000270 loss/word=85.61   ppl/word=1010.22  acc=0.0455 wpm(K)=463.10 mins=83.51
+ep=8   steps=53.60  lr=0.000270 loss/word=52.66   ppl/word=846.08   acc=0.0080 wpm(K)=463.28 mins=83.64
+ep=8   steps=53.70  lr=0.000270 loss/word=109.99  ppl/word=1109.32  acc=0.0418 wpm(K)=463.37 mins=83.78
+ep=8   steps=53.80  lr=0.000269 loss/word=457.94  ppl/word=1700.46  acc=0.0731 wpm(K)=463.62 mins=83.91
+ep=8   steps=53.90  lr=0.000269 loss/word=326.92  ppl/word=1443.69  acc=0.0598 wpm(K)=463.72 mins=84.04
+ep=8   steps=54.00  lr=0.000269 loss/word=672.70  ppl/word=1509.37  acc=0.0762 wpm(K)=463.83 mins=84.17
+Eval at step 54000. valid_batch_size=30
+val_step=54000  loss=7.18   acc=0.0555 val_ppl=1312.40
+ep=8   steps=54.10  lr=0.000269 loss/word=123.78  ppl/word=1081.02  acc=0.0476 wpm(K)=462.87 mins=84.50
+ep=8   steps=54.20  lr=0.000268 loss/word=58.80   ppl/word=869.69   acc=0.0108 wpm(K)=462.97 mins=84.63
+ep=8   steps=54.30  lr=0.000268 loss/word=135.97  ppl/word=1067.04  acc=0.0673 wpm(K)=463.09 mins=84.76
+ep=8   steps=54.40  lr=0.000268 loss/word=96.72   ppl/word=1016.53  acc=0.0358 wpm(K)=463.17 mins=84.89
+ep=8   steps=54.50  lr=0.000268 loss/word=391.64  ppl/word=1584.12  acc=0.0717 wpm(K)=463.28 mins=85.02
+ep=8   steps=54.60  lr=0.000267 loss/word=111.18  ppl/word=1056.42  acc=0.0568 wpm(K)=463.40 mins=85.16
+ep=8   steps=54.70  lr=0.000267 loss/word=341.76  ppl/word=1384.34  acc=0.0820 wpm(K)=463.54 mins=85.29
+ep=8   steps=54.80  lr=0.000267 loss/word=87.22   ppl/word=1214.28  acc=0.0229 wpm(K)=463.68 mins=85.42
+ep=8   steps=54.90  lr=0.000267 loss/word=50.03   ppl/word=811.73   acc=0.0084 wpm(K)=463.80 mins=85.55
+ep=8   steps=55.00  lr=0.000267 loss/word=365.11  ppl/word=1355.73  acc=0.0778 wpm(K)=463.98 mins=85.69
+Eval at step 55000. valid_batch_size=30
+val_step=55000  loss=7.18   acc=0.0555 val_ppl=1315.41
+ep=8   steps=55.10  lr=0.000266 loss/word=497.98  ppl/word=1632.69  acc=0.0766 wpm(K)=463.01 mins=86.01
+ep=8   steps=55.20  lr=0.000266 loss/word=88.86   ppl/word=961.66   acc=0.0435 wpm(K)=463.03 mins=86.14
+ep=8   steps=55.30  lr=0.000266 loss/word=199.90  ppl/word=1508.55  acc=0.0618 wpm(K)=463.22 mins=86.27
+ep=8   steps=55.40  lr=0.000266 loss/word=122.93  ppl/word=1182.18  acc=0.0360 wpm(K)=463.31 mins=86.41
+ep=8   steps=55.50  lr=0.000265 loss/word=160.48  ppl/word=1215.66  acc=0.0650 wpm(K)=463.43 mins=86.54
+ep=8   steps=55.60  lr=0.000265 loss/word=195.94  ppl/word=1294.21  acc=0.0651 wpm(K)=463.47 mins=86.67
+ep=8   steps=55.70  lr=0.000265 loss/word=78.91   ppl/word=1029.44  acc=0.0302 wpm(K)=463.51 mins=86.80
+ep=8   steps=55.80  lr=0.000265 loss/word=98.65   ppl/word=999.70   acc=0.0481 wpm(K)=463.61 mins=86.93
+ep=8   steps=55.90  lr=0.000264 loss/word=87.26   ppl/word=878.03   acc=0.0388 wpm(K)=463.67 mins=87.05
+ep=8   steps=56.00  lr=0.000264 loss/word=146.62  ppl/word=1077.08  acc=0.0595 wpm(K)=463.85 mins=87.19
+Eval at step 56000. valid_batch_size=30
+val_step=56000  loss=7.18   acc=0.0555 val_ppl=1312.74
+ep=8   steps=56.10  lr=0.000264 loss/word=34.16   ppl/word=851.51   acc=0.0000 wpm(K)=462.92 mins=87.52
+ep=8   steps=56.20  lr=0.000264 loss/word=64.65   ppl/word=1060.05  acc=0.0168 wpm(K)=463.02 mins=87.65
+ep=9   steps=56.30  lr=0.000263 loss/word=135.76  ppl/word=1500.91  acc=0.0471 wpm(K)=463.18 mins=87.78
+ep=9   steps=56.40  lr=0.000263 loss/word=184.92  ppl/word=1237.52  acc=0.0626 wpm(K)=463.35 mins=87.92
+ep=9   steps=56.50  lr=0.000263 loss/word=66.59   ppl/word=830.21   acc=0.0095 wpm(K)=463.34 mins=88.05
+ep=9   steps=56.60  lr=0.000263 loss/word=45.94   ppl/word=631.51   acc=0.0395 wpm(K)=463.45 mins=88.17
+ep=9   steps=56.70  lr=0.000262 loss/word=110.67  ppl/word=1243.08  acc=0.0402 wpm(K)=463.60 mins=88.31
+ep=9   steps=56.80  lr=0.000262 loss/word=76.41   ppl/word=980.53   acc=0.0479 wpm(K)=463.71 mins=88.44
+ep=9   steps=56.90  lr=0.000262 loss/word=182.15  ppl/word=1357.98  acc=0.0569 wpm(K)=463.83 mins=88.57
+ep=9   steps=57.00  lr=0.000262 loss/word=73.91   ppl/word=1140.25  acc=0.0179 wpm(K)=463.99 mins=88.71
+Eval at step 57000. valid_batch_size=30
+val_step=57000  loss=7.18   acc=0.0555 val_ppl=1313.22
+ep=9   steps=57.10  lr=0.000262 loss/word=149.63  ppl/word=1063.90  acc=0.0713 wpm(K)=463.10 mins=89.04
+ep=9   steps=57.20  lr=0.000261 loss/word=142.95  ppl/word=1002.38  acc=0.0650 wpm(K)=463.20 mins=89.17
+ep=9   steps=57.30  lr=0.000261 loss/word=247.76  ppl/word=1394.57  acc=0.0749 wpm(K)=463.29 mins=89.30
+ep=9   steps=57.40  lr=0.000261 loss/word=157.50  ppl/word=1286.01  acc=0.0611 wpm(K)=463.45 mins=89.44
+ep=9   steps=57.50  lr=0.000261 loss/word=111.93  ppl/word=980.31   acc=0.0654 wpm(K)=463.56 mins=89.57
+ep=9   steps=57.60  lr=0.000260 loss/word=322.85  ppl/word=1325.26  acc=0.0870 wpm(K)=463.62 mins=89.70
+ep=9   steps=57.70  lr=0.000260 loss/word=140.13  ppl/word=1577.08  acc=0.0525 wpm(K)=463.71 mins=89.83
+ep=9   steps=57.80  lr=0.000260 loss/word=197.38  ppl/word=1398.82  acc=0.0700 wpm(K)=463.93 mins=89.96
+ep=9   steps=57.90  lr=0.000260 loss/word=203.07  ppl/word=1262.77  acc=0.0725 wpm(K)=464.06 mins=90.09
+ep=9   steps=58.00  lr=0.000260 loss/word=47.61   ppl/word=711.11   acc=0.0302 wpm(K)=464.26 mins=90.23
+Eval at step 58000. valid_batch_size=30
+val_step=58000  loss=7.18   acc=0.0555 val_ppl=1312.14
+ep=9   steps=58.10  lr=0.000259 loss/word=93.48   ppl/word=1050.09  acc=0.0442 wpm(K)=463.50 mins=90.55
+ep=9   steps=58.20  lr=0.000259 loss/word=55.32   ppl/word=1034.76  acc=0.0000 wpm(K)=463.69 mins=90.68
+ep=9   steps=58.30  lr=0.000259 loss/word=116.52  ppl/word=1106.35  acc=0.0526 wpm(K)=463.77 mins=90.80
+ep=9   steps=58.40  lr=0.000259 loss/word=105.98  ppl/word=907.02   acc=0.0582 wpm(K)=463.94 mins=90.93
+ep=9   steps=58.50  lr=0.000258 loss/word=574.10  ppl/word=1540.11  acc=0.0859 wpm(K)=464.06 mins=91.06
+ep=9   steps=58.60  lr=0.000258 loss/word=92.80   ppl/word=1176.48  acc=0.0405 wpm(K)=464.15 mins=91.18
+ep=9   steps=58.70  lr=0.000258 loss/word=23.57   ppl/word=379.61   acc=0.0000 wpm(K)=464.26 mins=91.31
+ep=9   steps=58.80  lr=0.000258 loss/word=134.25  ppl/word=1400.70  acc=0.0607 wpm(K)=464.40 mins=91.44
+ep=9   steps=58.90  lr=0.000258 loss/word=99.76   ppl/word=1284.11  acc=0.0359 wpm(K)=464.53 mins=91.57
+ep=9   steps=59.00  lr=0.000257 loss/word=260.69  ppl/word=1287.75  acc=0.0695 wpm(K)=464.65 mins=91.69
+Eval at step 59000. valid_batch_size=30
+val_step=59000  loss=7.18   acc=0.0555 val_ppl=1312.26
+ep=9   steps=59.10  lr=0.000257 loss/word=258.96  ppl/word=1481.78  acc=0.0696 wpm(K)=463.79 mins=92.02
+ep=9   steps=59.20  lr=0.000257 loss/word=153.35  ppl/word=1189.39  acc=0.0548 wpm(K)=463.88 mins=92.15
+ep=9   steps=59.30  lr=0.000257 loss/word=53.82   ppl/word=734.14   acc=0.0268 wpm(K)=463.98 mins=92.28
+ep=9   steps=59.40  lr=0.000256 loss/word=122.93  ppl/word=1182.48  acc=0.0432 wpm(K)=464.07 mins=92.41
+ep=9   steps=59.50  lr=0.000256 loss/word=59.96   ppl/word=946.70   acc=0.0214 wpm(K)=464.14 mins=92.54
+ep=9   steps=59.60  lr=0.000256 loss/word=68.20   ppl/word=878.17   acc=0.0186 wpm(K)=464.21 mins=92.67
+ep=9   steps=59.70  lr=0.000256 loss/word=142.34  ppl/word=1104.97  acc=0.0677 wpm(K)=464.32 mins=92.80
+ep=9   steps=59.80  lr=0.000256 loss/word=202.97  ppl/word=1228.96  acc=0.0602 wpm(K)=464.46 mins=92.93
+ep=9   steps=59.90  lr=0.000255 loss/word=95.61   ppl/word=1152.15  acc=0.0323 wpm(K)=464.58 mins=93.06
+ep=9   steps=60.00  lr=0.000255 loss/word=208.71  ppl/word=1294.46  acc=0.0633 wpm(K)=464.65 mins=93.19
+Eval at step 60000. valid_batch_size=30
+val_step=60000  loss=7.18   acc=0.0555 val_ppl=1312.82
+ep=9   steps=60.10  lr=0.000255 loss/word=106.78  ppl/word=1234.98  acc=0.0563 wpm(K)=463.75 mins=93.52
+ep=9   steps=60.20  lr=0.000255 loss/word=68.53   ppl/word=888.77   acc=0.0186 wpm(K)=463.84 mins=93.65
+ep=9   steps=60.30  lr=0.000255 loss/word=141.38  ppl/word=1329.57  acc=0.0429 wpm(K)=463.89 mins=93.78
+ep=9   steps=60.40  lr=0.000254 loss/word=112.12  ppl/word=859.97   acc=0.0584 wpm(K)=463.97 mins=93.91
+ep=9   steps=60.50  lr=0.000254 loss/word=663.64  ppl/word=1553.41  acc=0.0813 wpm(K)=464.12 mins=94.05
+ep=9   steps=60.60  lr=0.000254 loss/word=74.59   ppl/word=771.90   acc=0.0362 wpm(K)=464.26 mins=94.18
+ep=9   steps=60.70  lr=0.000254 loss/word=158.70  ppl/word=1156.80  acc=0.0681 wpm(K)=464.31 mins=94.31
+ep=9   steps=60.80  lr=0.000253 loss/word=251.87  ppl/word=1405.36  acc=0.0719 wpm(K)=464.44 mins=94.44
+ep=9   steps=60.90  lr=0.000253 loss/word=330.61  ppl/word=1650.16  acc=0.0497 wpm(K)=464.51 mins=94.57
+ep=9   steps=61.00  lr=0.000253 loss/word=85.04   ppl/word=1196.39  acc=0.0286 wpm(K)=464.59 mins=94.70
+Eval at step 61000. valid_batch_size=30
+val_step=61000  loss=7.18   acc=0.0555 val_ppl=1315.48
+ep=9   steps=61.10  lr=0.000253 loss/word=135.18  ppl/word=1320.23  acc=0.0482 wpm(K)=463.67 mins=95.03
+ep=9   steps=61.20  lr=0.000253 loss/word=337.67  ppl/word=1438.80  acc=0.0808 wpm(K)=463.71 mins=95.16
+ep=9   steps=61.30  lr=0.000252 loss/word=119.65  ppl/word=1185.00  acc=0.0499 wpm(K)=463.81 mins=95.29
+ep=9   steps=61.40  lr=0.000252 loss/word=77.08   ppl/word=844.77   acc=0.0437 wpm(K)=463.86 mins=95.42
+ep=9   steps=61.50  lr=0.000252 loss/word=89.72   ppl/word=1027.22  acc=0.0314 wpm(K)=463.91 mins=95.55
+ep=9   steps=61.60  lr=0.000252 loss/word=139.90  ppl/word=1275.80  acc=0.0511 wpm(K)=464.02 mins=95.69
+ep=9   steps=61.70  lr=0.000252 loss/word=158.21  ppl/word=1110.20  acc=0.0679 wpm(K)=464.13 mins=95.82
+ep=9   steps=61.80  lr=0.000251 loss/word=162.64  ppl/word=1311.02  acc=0.0579 wpm(K)=464.22 mins=95.95
+ep=9   steps=61.90  lr=0.000251 loss/word=125.95  ppl/word=1370.62  acc=0.0394 wpm(K)=464.33 mins=96.08
+ep=9   steps=62.00  lr=0.000251 loss/word=366.06  ppl/word=1259.16  acc=0.0804 wpm(K)=464.44 mins=96.21
+Eval at step 62000. valid_batch_size=30
+val_step=62000  loss=7.18   acc=0.0555 val_ppl=1312.66
+ep=9   steps=62.10  lr=0.000251 loss/word=91.53   ppl/word=1181.68  acc=0.0266 wpm(K)=463.53 mins=96.53
+ep=9   steps=62.20  lr=0.000251 loss/word=86.68   ppl/word=1063.03  acc=0.0352 wpm(K)=463.59 mins=96.66
+ep=9   steps=62.30  lr=0.000250 loss/word=182.29  ppl/word=1207.81  acc=0.0681 wpm(K)=463.74 mins=96.80
+ep=9   steps=62.40  lr=0.000250 loss/word=57.66   ppl/word=928.48   acc=0.0148 wpm(K)=463.76 mins=96.93
+ep=10  steps=62.50  lr=0.000250 loss/word=54.61   ppl/word=1026.75  acc=0.0040 wpm(K)=463.89 mins=97.06
+ep=10  steps=62.60  lr=0.000250 loss/word=37.78   ppl/word=561.11   acc=0.0000 wpm(K)=464.00 mins=97.19
+ep=10  steps=62.70  lr=0.000250 loss/word=65.08   ppl/word=775.21   acc=0.0256 wpm(K)=464.17 mins=97.33
+ep=10  steps=62.80  lr=0.000249 loss/word=52.00   ppl/word=718.00   acc=0.0198 wpm(K)=464.34 mins=97.46
+ep=10  steps=62.90  lr=0.000249 loss/word=243.58  ppl/word=1195.03  acc=0.0736 wpm(K)=464.53 mins=97.59
+ep=10  steps=63.00  lr=0.000249 loss/word=127.20  ppl/word=1362.08  acc=0.0585 wpm(K)=464.61 mins=97.73
+Eval at step 63000. valid_batch_size=30
+val_step=63000  loss=7.18   acc=0.0555 val_ppl=1312.53
+ep=10  steps=63.10  lr=0.000249 loss/word=183.88  ppl/word=1467.55  acc=0.0607 wpm(K)=463.86 mins=98.05
+ep=10  steps=63.20  lr=0.000249 loss/word=83.93   ppl/word=897.42   acc=0.0253 wpm(K)=463.97 mins=98.19
+ep=10  steps=63.30  lr=0.000248 loss/word=217.01  ppl/word=1344.13  acc=0.0695 wpm(K)=464.08 mins=98.32
+ep=10  steps=63.40  lr=0.000248 loss/word=60.44   ppl/word=825.16   acc=0.0243 wpm(K)=464.17 mins=98.45
+ep=10  steps=63.50  lr=0.000248 loss/word=147.95  ppl/word=1055.98  acc=0.0588 wpm(K)=464.30 mins=98.58
+ep=10  steps=63.60  lr=0.000248 loss/word=98.38   ppl/word=1162.95  acc=0.0381 wpm(K)=464.46 mins=98.72
+ep=10  steps=63.70  lr=0.000248 loss/word=343.25  ppl/word=1324.14  acc=0.0746 wpm(K)=464.54 mins=98.85
+ep=10  steps=63.80  lr=0.000247 loss/word=69.23   ppl/word=894.15   acc=0.0337 wpm(K)=464.71 mins=98.98
+ep=10  steps=63.90  lr=0.000247 loss/word=36.67   ppl/word=677.70   acc=0.0167 wpm(K)=464.84 mins=99.11
+ep=10  steps=64.00  lr=0.000247 loss/word=162.24  ppl/word=1288.04  acc=0.0662 wpm(K)=464.90 mins=99.24
+Eval at step 64000. valid_batch_size=30
+val_step=64000  loss=7.18   acc=0.0555 val_ppl=1315.84
+ep=10  steps=64.10  lr=0.000247 loss/word=282.68  ppl/word=1147.16  acc=0.0802 wpm(K)=464.06 mins=99.57
+ep=10  steps=64.20  lr=0.000247 loss/word=43.77   ppl/word=599.14   acc=0.0046 wpm(K)=464.17 mins=99.71
+ep=10  steps=64.30  lr=0.000246 loss/word=344.05  ppl/word=1340.21  acc=0.0765 wpm(K)=464.37 mins=99.84
+ep=10  steps=64.40  lr=0.000246 loss/word=134.04  ppl/word=988.19   acc=0.0595 wpm(K)=464.43 mins=99.97
+ep=10  steps=64.50  lr=0.000246 loss/word=65.48   ppl/word=1008.18  acc=0.0264 wpm(K)=464.51 mins=100.10
+ep=10  steps=64.60  lr=0.000246 loss/word=180.76  ppl/word=1368.11  acc=0.0637 wpm(K)=464.66 mins=100.23
+ep=10  steps=64.70  lr=0.000246 loss/word=87.89   ppl/word=985.83   acc=0.0368 wpm(K)=464.78 mins=100.37
+ep=10  steps=64.80  lr=0.000246 loss/word=140.94  ppl/word=1112.09  acc=0.0638 wpm(K)=464.91 mins=100.50
+ep=10  steps=64.90  lr=0.000245 loss/word=76.60   ppl/word=1078.94  acc=0.0285 wpm(K)=465.00 mins=100.63
+ep=10  steps=65.00  lr=0.000245 loss/word=95.42   ppl/word=1118.53  acc=0.0299 wpm(K)=465.10 mins=100.76
+Eval at step 65000. valid_batch_size=30
+val_step=65000  loss=7.18   acc=0.0555 val_ppl=1312.19
+ep=10  steps=65.10  lr=0.000245 loss/word=87.31   ppl/word=1099.34  acc=0.0301 wpm(K)=464.32 mins=101.09
+ep=10  steps=65.20  lr=0.000245 loss/word=175.54  ppl/word=1293.18  acc=0.0625 wpm(K)=464.44 mins=101.23
+ep=10  steps=65.30  lr=0.000245 loss/word=301.62  ppl/word=1328.98  acc=0.0812 wpm(K)=464.54 mins=101.36
+ep=10  steps=65.40  lr=0.000244 loss/word=47.02   ppl/word=693.23   acc=0.0087 wpm(K)=464.64 mins=101.49
+ep=10  steps=65.50  lr=0.000244 loss/word=202.48  ppl/word=1349.09  acc=0.0712 wpm(K)=464.77 mins=101.62
+ep=10  steps=65.60  lr=0.000244 loss/word=180.17  ppl/word=1267.06  acc=0.0719 wpm(K)=464.88 mins=101.75
+ep=10  steps=65.70  lr=0.000244 loss/word=344.66  ppl/word=1479.17  acc=0.0847 wpm(K)=465.08 mins=101.88
+ep=10  steps=65.80  lr=0.000244 loss/word=207.31  ppl/word=1477.50  acc=0.0583 wpm(K)=465.17 mins=102.01
+ep=10  steps=65.90  lr=0.000243 loss/word=234.45  ppl/word=1177.27  acc=0.0905 wpm(K)=465.24 mins=102.14
+ep=10  steps=66.00  lr=0.000243 loss/word=111.73  ppl/word=1221.57  acc=0.0378 wpm(K)=465.32 mins=102.26
+Eval at step 66000. valid_batch_size=30
+val_step=66000  loss=7.18   acc=0.0555 val_ppl=1316.31
+ep=10  steps=66.10  lr=0.000243 loss/word=88.60   ppl/word=1060.09  acc=0.0270 wpm(K)=464.60 mins=102.58
+ep=10  steps=66.20  lr=0.000243 loss/word=162.60  ppl/word=1210.31  acc=0.0655 wpm(K)=464.65 mins=102.70
+ep=10  steps=66.30  lr=0.000243 loss/word=42.58   ppl/word=4266.91  acc=0.0000 wpm(K)=464.89 mins=102.84
+ep=10  steps=66.40  lr=0.000243 loss/word=121.52  ppl/word=1146.74  acc=0.0507 wpm(K)=465.08 mins=102.97
+ep=10  steps=66.50  lr=0.000242 loss/word=91.01   ppl/word=1280.85  acc=0.0344 wpm(K)=465.15 mins=103.10
+ep=10  steps=66.60  lr=0.000242 loss/word=299.12  ppl/word=1349.91  acc=0.0723 wpm(K)=465.27 mins=103.23
+ep=10  steps=66.70  lr=0.000242 loss/word=175.58  ppl/word=1173.02  acc=0.0679 wpm(K)=465.42 mins=103.36
+ep=10  steps=66.80  lr=0.000242 loss/word=65.14   ppl/word=1065.34  acc=0.0268 wpm(K)=465.44 mins=103.49
+ep=10  steps=66.90  lr=0.000242 loss/word=37.42   ppl/word=804.43   acc=0.0112 wpm(K)=465.55 mins=103.62
+ep=10  steps=67.00  lr=0.000241 loss/word=24.36   ppl/word=367.05   acc=0.0076 wpm(K)=465.61 mins=103.76
+Eval at step 67000. valid_batch_size=30
+val_step=67000  loss=7.18   acc=0.0555 val_ppl=1313.39
+ep=10  steps=67.10  lr=0.000241 loss/word=153.72  ppl/word=1286.89  acc=0.0597 wpm(K)=464.84 mins=104.08
+ep=10  steps=67.20  lr=0.000241 loss/word=41.03   ppl/word=733.58   acc=0.0050 wpm(K)=464.87 mins=104.22
+ep=10  steps=67.30  lr=0.000241 loss/word=351.55  ppl/word=1354.51  acc=0.0801 wpm(K)=465.02 mins=104.35
+ep=10  steps=67.40  lr=0.000241 loss/word=129.74  ppl/word=1300.46  acc=0.0328 wpm(K)=465.10 mins=104.48
+ep=10  steps=67.50  lr=0.000241 loss/word=83.34   ppl/word=1096.60  acc=0.0184 wpm(K)=465.18 mins=104.61
+ep=10  steps=67.60  lr=0.000240 loss/word=38.99   ppl/word=641.54   acc=0.0000 wpm(K)=465.30 mins=104.75
+ep=10  steps=67.70  lr=0.000240 loss/word=189.22  ppl/word=1435.21  acc=0.0648 wpm(K)=465.46 mins=104.88
+ep=10  steps=67.80  lr=0.000240 loss/word=207.33  ppl/word=1398.38  acc=0.0742 wpm(K)=465.57 mins=105.01
+ep=10  steps=67.90  lr=0.000240 loss/word=198.85  ppl/word=1370.18  acc=0.0613 wpm(K)=465.66 mins=105.15
+ep=10  steps=68.00  lr=0.000240 loss/word=115.53  ppl/word=1158.81  acc=0.0420 wpm(K)=465.78 mins=105.28
+Eval at step 68000. valid_batch_size=30
+val_step=68000  loss=7.18   acc=0.0555 val_ppl=1316.36
+ep=10  steps=68.10  lr=0.000240 loss/word=472.28  ppl/word=1667.73  acc=0.0746 wpm(K)=465.02 mins=105.61
+ep=10  steps=68.20  lr=0.000239 loss/word=42.02   ppl/word=4026.04  acc=0.0000 wpm(K)=465.12 mins=105.74
+ep=10  steps=68.30  lr=0.000239 loss/word=411.21  ppl/word=1557.99  acc=0.0804 wpm(K)=465.21 mins=105.87
+ep=10  steps=68.40  lr=0.000239 loss/word=62.20   ppl/word=795.25   acc=0.0235 wpm(K)=465.30 mins=106.01
+ep=10  steps=68.50  lr=0.000239 loss/word=153.07  ppl/word=1115.85  acc=0.0688 wpm(K)=465.39 mins=106.14
+ep=10  steps=68.60  lr=0.000239 loss/word=40.56   ppl/word=3335.33  acc=0.0000 wpm(K)=465.57 mins=106.27
+ep=10  steps=68.70  lr=0.000238 loss/word=86.59   ppl/word=1001.94  acc=0.0399 wpm(K)=465.69 mins=106.40
+ep=11  steps=68.80  lr=0.000238 loss/word=109.59  ppl/word=982.12   acc=0.0511 wpm(K)=465.76 mins=106.53
+ep=11  steps=68.90  lr=0.000238 loss/word=98.67   ppl/word=1031.90  acc=0.0462 wpm(K)=465.96 mins=106.67
+ep=11  steps=69.00  lr=0.000238 loss/word=154.21  ppl/word=1479.81  acc=0.0562 wpm(K)=466.01 mins=106.80
+Eval at step 69000. valid_batch_size=30
+val_step=69000  loss=7.18   acc=0.0555 val_ppl=1312.95
+ep=11  steps=69.10  lr=0.000238 loss/word=53.75   ppl/word=806.39   acc=0.0195 wpm(K)=465.21 mins=107.13
+ep=11  steps=69.20  lr=0.000238 loss/word=85.60   ppl/word=1300.65  acc=0.0236 wpm(K)=465.32 mins=107.26
+ep=11  steps=69.30  lr=0.000237 loss/word=280.34  ppl/word=1257.22  acc=0.0740 wpm(K)=465.44 mins=107.39
+ep=11  steps=69.40  lr=0.000237 loss/word=199.75  ppl/word=1305.21  acc=0.0752 wpm(K)=465.51 mins=107.53
+ep=11  steps=69.50  lr=0.000237 loss/word=101.98  ppl/word=1005.97  acc=0.0360 wpm(K)=465.59 mins=107.66
+ep=11  steps=69.60  lr=0.000237 loss/word=97.92   ppl/word=1056.81  acc=0.0222 wpm(K)=465.65 mins=107.79
+ep=11  steps=69.70  lr=0.000237 loss/word=167.72  ppl/word=1124.34  acc=0.0615 wpm(K)=465.78 mins=107.92
+ep=11  steps=69.80  lr=0.000237 loss/word=348.87  ppl/word=1503.71  acc=0.0760 wpm(K)=465.86 mins=108.05
+ep=11  steps=69.90  lr=0.000236 loss/word=40.52   ppl/word=633.47   acc=0.0149 wpm(K)=466.00 mins=108.19
+ep=11  steps=70.00  lr=0.000236 loss/word=125.28  ppl/word=1028.69  acc=0.0536 wpm(K)=466.05 mins=108.32
+Eval at step 70000. valid_batch_size=30
+val_step=70000  loss=7.18   acc=0.0555 val_ppl=1312.96
+ep=11  steps=70.10  lr=0.000236 loss/word=100.58  ppl/word=1180.42  acc=0.0440 wpm(K)=465.33 mins=108.65
+ep=11  steps=70.20  lr=0.000236 loss/word=112.77  ppl/word=1150.70  acc=0.0410 wpm(K)=465.44 mins=108.78
+ep=11  steps=70.30  lr=0.000236 loss/word=190.46  ppl/word=1093.87  acc=0.0620 wpm(K)=465.52 mins=108.91
+ep=11  steps=70.40  lr=0.000236 loss/word=53.72   ppl/word=706.96   acc=0.0229 wpm(K)=465.66 mins=109.05
+ep=11  steps=70.50  lr=0.000235 loss/word=187.26  ppl/word=1036.67  acc=0.0672 wpm(K)=465.74 mins=109.18
+ep=11  steps=70.60  lr=0.000235 loss/word=185.36  ppl/word=1237.05  acc=0.0624 wpm(K)=465.82 mins=109.31
+ep=11  steps=70.70  lr=0.000235 loss/word=51.94   ppl/word=643.48   acc=0.0156 wpm(K)=465.94 mins=109.44
+ep=11  steps=70.80  lr=0.000235 loss/word=456.70  ppl/word=1569.72  acc=0.0765 wpm(K)=466.08 mins=109.57
+ep=11  steps=70.90  lr=0.000235 loss/word=428.38  ppl/word=1526.18  acc=0.0717 wpm(K)=466.21 mins=109.71
+ep=11  steps=71.00  lr=0.000235 loss/word=181.21  ppl/word=1296.97  acc=0.0705 wpm(K)=466.29 mins=109.84
+Eval at step 71000. valid_batch_size=30
+val_step=71000  loss=7.18   acc=0.0555 val_ppl=1311.13
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=11  steps=71.10  lr=0.000234 loss/word=373.45  ppl/word=1569.73  acc=0.0727 wpm(K)=465.52 mins=110.19
+ep=11  steps=71.20  lr=0.000234 loss/word=191.83  ppl/word=1178.63  acc=0.0668 wpm(K)=465.63 mins=110.32
+ep=11  steps=71.30  lr=0.000234 loss/word=283.09  ppl/word=1356.21  acc=0.0669 wpm(K)=465.78 mins=110.45
+ep=11  steps=71.40  lr=0.000234 loss/word=330.56  ppl/word=1301.62  acc=0.0820 wpm(K)=465.87 mins=110.59
+ep=11  steps=71.50  lr=0.000234 loss/word=210.92  ppl/word=1208.70  acc=0.0747 wpm(K)=465.93 mins=110.72
+ep=11  steps=71.60  lr=0.000234 loss/word=144.11  ppl/word=985.52   acc=0.0732 wpm(K)=466.06 mins=110.85
+ep=11  steps=71.70  lr=0.000233 loss/word=281.11  ppl/word=1448.04  acc=0.0639 wpm(K)=466.13 mins=110.98
+ep=11  steps=71.80  lr=0.000233 loss/word=263.72  ppl/word=1153.10  acc=0.0802 wpm(K)=466.26 mins=111.11
+ep=11  steps=71.90  lr=0.000233 loss/word=64.80   ppl/word=896.89   acc=0.0131 wpm(K)=466.34 mins=111.25
+ep=11  steps=72.00  lr=0.000233 loss/word=175.35  ppl/word=1294.81  acc=0.0575 wpm(K)=466.40 mins=111.38
+Eval at step 72000. valid_batch_size=30
+val_step=72000  loss=7.18   acc=0.0555 val_ppl=1312.72
+ep=11  steps=72.10  lr=0.000233 loss/word=116.23  ppl/word=1101.27  acc=0.0565 wpm(K)=465.65 mins=111.71
+ep=11  steps=72.20  lr=0.000233 loss/word=62.48   ppl/word=838.57   acc=0.0135 wpm(K)=465.75 mins=111.84
+ep=11  steps=72.30  lr=0.000232 loss/word=22.39   ppl/word=391.59   acc=0.0000 wpm(K)=465.79 mins=111.97
+ep=11  steps=72.40  lr=0.000232 loss/word=67.19   ppl/word=827.61   acc=0.0437 wpm(K)=465.89 mins=112.10
+ep=11  steps=72.50  lr=0.000232 loss/word=107.80  ppl/word=1062.83  acc=0.0505 wpm(K)=465.98 mins=112.23
+ep=11  steps=72.60  lr=0.000232 loss/word=400.24  ppl/word=1327.70  acc=0.0797 wpm(K)=466.07 mins=112.36
+ep=11  steps=72.70  lr=0.000232 loss/word=138.77  ppl/word=1260.69  acc=0.0482 wpm(K)=466.21 mins=112.50
+ep=11  steps=72.80  lr=0.000232 loss/word=165.73  ppl/word=1415.01  acc=0.0602 wpm(K)=466.31 mins=112.63
+ep=11  steps=72.90  lr=0.000231 loss/word=117.15  ppl/word=1118.76  acc=0.0506 wpm(K)=466.47 mins=112.77
+ep=11  steps=73.00  lr=0.000231 loss/word=371.05  ppl/word=1566.70  acc=0.0824 wpm(K)=466.54 mins=112.90
+Eval at step 73000. valid_batch_size=30
+val_step=73000  loss=7.18   acc=0.0555 val_ppl=1313.63
+ep=11  steps=73.10  lr=0.000231 loss/word=57.58   ppl/word=853.81   acc=0.0183 wpm(K)=465.82 mins=113.22
+ep=11  steps=73.20  lr=0.000231 loss/word=63.55   ppl/word=786.23   acc=0.0230 wpm(K)=465.94 mins=113.35
+ep=11  steps=73.30  lr=0.000231 loss/word=127.65  ppl/word=1003.92  acc=0.0694 wpm(K)=466.07 mins=113.48
+ep=11  steps=73.40  lr=0.000231 loss/word=131.94  ppl/word=1221.41  acc=0.0438 wpm(K)=466.16 mins=113.61
+ep=11  steps=73.50  lr=0.000231 loss/word=498.13  ppl/word=1747.82  acc=0.0759 wpm(K)=466.23 mins=113.73
+ep=11  steps=73.60  lr=0.000230 loss/word=125.42  ppl/word=1049.25  acc=0.0607 wpm(K)=466.32 mins=113.87
+ep=11  steps=73.70  lr=0.000230 loss/word=253.28  ppl/word=1380.20  acc=0.0696 wpm(K)=466.40 mins=114.00
+ep=11  steps=73.80  lr=0.000230 loss/word=154.08  ppl/word=1394.40  acc=0.0514 wpm(K)=466.47 mins=114.13
+ep=11  steps=73.90  lr=0.000230 loss/word=307.24  ppl/word=1527.89  acc=0.0753 wpm(K)=466.50 mins=114.26
+ep=11  steps=74.00  lr=0.000230 loss/word=255.48  ppl/word=1441.37  acc=0.0676 wpm(K)=466.62 mins=114.39
+Eval at step 74000. valid_batch_size=30
+val_step=74000  loss=7.18   acc=0.0555 val_ppl=1311.25
+ep=11  steps=74.10  lr=0.000230 loss/word=164.86  ppl/word=1212.57  acc=0.0579 wpm(K)=465.86 mins=114.73
+ep=11  steps=74.20  lr=0.000229 loss/word=122.43  ppl/word=1193.43  acc=0.0470 wpm(K)=465.89 mins=114.85
+ep=11  steps=74.30  lr=0.000229 loss/word=287.44  ppl/word=1182.61  acc=0.0923 wpm(K)=465.94 mins=114.98
+ep=11  steps=74.40  lr=0.000229 loss/word=85.54   ppl/word=1201.84  acc=0.0389 wpm(K)=466.02 mins=115.12
+ep=11  steps=74.50  lr=0.000229 loss/word=137.84  ppl/word=1201.78  acc=0.0627 wpm(K)=466.11 mins=115.25
+ep=11  steps=74.60  lr=0.000229 loss/word=99.79   ppl/word=1542.18  acc=0.0253 wpm(K)=466.24 mins=115.38
+ep=11  steps=74.70  lr=0.000229 loss/word=51.04   ppl/word=743.89   acc=0.0162 wpm(K)=466.31 mins=115.51
+ep=11  steps=74.80  lr=0.000229 loss/word=148.08  ppl/word=1191.75  acc=0.0508 wpm(K)=466.42 mins=115.65
+ep=11  steps=74.90  lr=0.000228 loss/word=53.95   ppl/word=764.96   acc=0.0192 wpm(K)=466.53 mins=115.78
+ep=12  steps=75.00  lr=0.000228 loss/word=103.53  ppl/word=1151.56  acc=0.0362 wpm(K)=466.66 mins=115.91
+Eval at step 75000. valid_batch_size=30
+val_step=75000  loss=7.18   acc=0.0555 val_ppl=1313.41
+ep=12  steps=75.10  lr=0.000228 loss/word=281.50  ppl/word=1404.00  acc=0.0636 wpm(K)=465.96 mins=116.24
+ep=12  steps=75.20  lr=0.000228 loss/word=141.11  ppl/word=1085.55  acc=0.0697 wpm(K)=466.03 mins=116.37
+ep=12  steps=75.30  lr=0.000228 loss/word=110.50  ppl/word=1195.45  acc=0.0461 wpm(K)=466.11 mins=116.50
+ep=12  steps=75.40  lr=0.000228 loss/word=143.35  ppl/word=1161.41  acc=0.0615 wpm(K)=466.16 mins=116.63
+ep=12  steps=75.50  lr=0.000227 loss/word=89.40   ppl/word=953.83   acc=0.0336 wpm(K)=466.22 mins=116.76
+ep=12  steps=75.60  lr=0.000227 loss/word=351.99  ppl/word=1710.53  acc=0.0707 wpm(K)=466.35 mins=116.90
+ep=12  steps=75.70  lr=0.000227 loss/word=194.87  ppl/word=1139.22  acc=0.0666 wpm(K)=466.45 mins=117.03
+ep=12  steps=75.80  lr=0.000227 loss/word=90.17   ppl/word=1242.21  acc=0.0272 wpm(K)=466.51 mins=117.16
+ep=12  steps=75.90  lr=0.000227 loss/word=181.61  ppl/word=1317.66  acc=0.0606 wpm(K)=466.57 mins=117.29
+ep=12  steps=76.00  lr=0.000227 loss/word=68.72   ppl/word=886.68   acc=0.0247 wpm(K)=466.60 mins=117.42
+Eval at step 76000. valid_batch_size=30
+val_step=76000  loss=7.18   acc=0.0555 val_ppl=1311.21
+ep=12  steps=76.10  lr=0.000227 loss/word=101.70  ppl/word=1219.21  acc=0.0371 wpm(K)=465.86 mins=117.74
+ep=12  steps=76.20  lr=0.000226 loss/word=133.91  ppl/word=1150.31  acc=0.0493 wpm(K)=465.98 mins=117.88
+ep=12  steps=76.30  lr=0.000226 loss/word=244.16  ppl/word=1534.94  acc=0.0751 wpm(K)=466.05 mins=118.01
+ep=12  steps=76.40  lr=0.000226 loss/word=130.62  ppl/word=1012.62  acc=0.0497 wpm(K)=466.11 mins=118.14
+ep=12  steps=76.50  lr=0.000226 loss/word=359.77  ppl/word=1297.91  acc=0.0803 wpm(K)=466.23 mins=118.27
+ep=12  steps=76.60  lr=0.000226 loss/word=112.91  ppl/word=1244.69  acc=0.0710 wpm(K)=466.32 mins=118.40
+ep=12  steps=76.70  lr=0.000226 loss/word=53.49   ppl/word=780.85   acc=0.0389 wpm(K)=466.42 mins=118.54
+ep=12  steps=76.80  lr=0.000226 loss/word=233.25  ppl/word=1190.01  acc=0.0778 wpm(K)=466.48 mins=118.67
+ep=12  steps=76.90  lr=0.000225 loss/word=76.99   ppl/word=937.54   acc=0.0361 wpm(K)=466.60 mins=118.80
+ep=12  steps=77.00  lr=0.000225 loss/word=211.80  ppl/word=1582.55  acc=0.0554 wpm(K)=466.73 mins=118.94
+Eval at step 77000. valid_batch_size=30
+val_step=77000  loss=7.18   acc=0.0555 val_ppl=1315.68
+ep=12  steps=77.10  lr=0.000225 loss/word=366.65  ppl/word=1580.18  acc=0.0741 wpm(K)=466.02 mins=119.26
+ep=12  steps=77.20  lr=0.000225 loss/word=50.60   ppl/word=851.29   acc=0.0250 wpm(K)=466.11 mins=119.39
+ep=12  steps=77.30  lr=0.000225 loss/word=185.47  ppl/word=1379.09  acc=0.0609 wpm(K)=466.23 mins=119.53
+ep=12  steps=77.40  lr=0.000225 loss/word=80.30   ppl/word=981.41   acc=0.0241 wpm(K)=466.30 mins=119.66
+ep=12  steps=77.50  lr=0.000225 loss/word=163.04  ppl/word=1187.05  acc=0.0597 wpm(K)=466.46 mins=119.79
+ep=12  steps=77.60  lr=0.000224 loss/word=143.53  ppl/word=1265.33  acc=0.0482 wpm(K)=466.60 mins=119.93
+ep=12  steps=77.70  lr=0.000224 loss/word=106.04  ppl/word=962.07   acc=0.0567 wpm(K)=466.68 mins=120.06
+ep=12  steps=77.80  lr=0.000224 loss/word=225.45  ppl/word=1450.95  acc=0.0767 wpm(K)=466.76 mins=120.19
+ep=12  steps=77.90  lr=0.000224 loss/word=421.68  ppl/word=1816.75  acc=0.0712 wpm(K)=466.81 mins=120.32
+ep=12  steps=78.00  lr=0.000224 loss/word=136.58  ppl/word=1151.79  acc=0.0694 wpm(K)=466.88 mins=120.46
+Eval at step 78000. valid_batch_size=30
+val_step=78000  loss=7.18   acc=0.0555 val_ppl=1310.74
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=12  steps=78.10  lr=0.000224 loss/word=457.36  ppl/word=1338.15  acc=0.0753 wpm(K)=466.21 mins=120.81
+ep=12  steps=78.20  lr=0.000223 loss/word=327.77  ppl/word=1371.51  acc=0.0771 wpm(K)=466.31 mins=120.94
+ep=12  steps=78.30  lr=0.000223 loss/word=52.53   ppl/word=693.20   acc=0.0156 wpm(K)=466.41 mins=121.07
+ep=12  steps=78.40  lr=0.000223 loss/word=257.50  ppl/word=1477.92  acc=0.0717 wpm(K)=466.51 mins=121.20
+ep=12  steps=78.50  lr=0.000223 loss/word=91.19   ppl/word=1394.90  acc=0.0298 wpm(K)=466.61 mins=121.34
+ep=12  steps=78.60  lr=0.000223 loss/word=164.51  ppl/word=1354.82  acc=0.0575 wpm(K)=466.65 mins=121.46
+ep=12  steps=78.70  lr=0.000223 loss/word=196.76  ppl/word=1378.72  acc=0.0689 wpm(K)=466.72 mins=121.60
+ep=12  steps=78.80  lr=0.000223 loss/word=392.09  ppl/word=1447.71  acc=0.0742 wpm(K)=466.81 mins=121.73
+ep=12  steps=78.90  lr=0.000223 loss/word=179.72  ppl/word=1289.27  acc=0.0722 wpm(K)=466.93 mins=121.86
+ep=12  steps=79.00  lr=0.000222 loss/word=165.77  ppl/word=1285.38  acc=0.0594 wpm(K)=467.06 mins=122.00
+Eval at step 79000. valid_batch_size=30
+val_step=79000  loss=7.18   acc=0.0555 val_ppl=1310.73
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=12  steps=79.10  lr=0.000222 loss/word=122.09  ppl/word=1084.77  acc=0.0519 wpm(K)=466.36 mins=122.34
+ep=12  steps=79.20  lr=0.000222 loss/word=125.32  ppl/word=1527.16  acc=0.0293 wpm(K)=466.46 mins=122.47
+ep=12  steps=79.30  lr=0.000222 loss/word=288.88  ppl/word=1457.59  acc=0.0646 wpm(K)=466.59 mins=122.61
+ep=12  steps=79.40  lr=0.000222 loss/word=116.24  ppl/word=1278.50  acc=0.0404 wpm(K)=466.64 mins=122.74
+ep=12  steps=79.50  lr=0.000222 loss/word=139.12  ppl/word=1198.76  acc=0.0573 wpm(K)=466.71 mins=122.87
+ep=12  steps=79.60  lr=0.000222 loss/word=454.31  ppl/word=1627.28  acc=0.0783 wpm(K)=466.75 mins=123.00
+ep=12  steps=79.70  lr=0.000221 loss/word=175.61  ppl/word=1345.63  acc=0.0577 wpm(K)=466.81 mins=123.13
+ep=12  steps=79.80  lr=0.000221 loss/word=76.14   ppl/word=853.55   acc=0.0416 wpm(K)=466.93 mins=123.26
+ep=12  steps=79.90  lr=0.000221 loss/word=46.79   ppl/word=569.40   acc=0.0254 wpm(K)=467.01 mins=123.39
+ep=12  steps=80.00  lr=0.000221 loss/word=113.68  ppl/word=874.94   acc=0.0521 wpm(K)=467.07 mins=123.52
+Eval at step 80000. valid_batch_size=30
+val_step=80000  loss=7.18   acc=0.0555 val_ppl=1317.69
+ep=12  steps=80.10  lr=0.000221 loss/word=145.38  ppl/word=1215.31  acc=0.0565 wpm(K)=466.43 mins=123.85
+ep=12  steps=80.20  lr=0.000221 loss/word=292.94  ppl/word=1742.99  acc=0.0653 wpm(K)=466.49 mins=123.98
+ep=12  steps=80.30  lr=0.000221 loss/word=63.92   ppl/word=873.66   acc=0.0166 wpm(K)=466.63 mins=124.11
+ep=12  steps=80.40  lr=0.000220 loss/word=151.90  ppl/word=1182.52  acc=0.0626 wpm(K)=466.71 mins=124.23
+ep=12  steps=80.50  lr=0.000220 loss/word=333.18  ppl/word=1560.94  acc=0.0697 wpm(K)=466.84 mins=124.36
+ep=12  steps=80.60  lr=0.000220 loss/word=58.38   ppl/word=790.04   acc=0.0143 wpm(K)=466.91 mins=124.50
+ep=12  steps=80.70  lr=0.000220 loss/word=112.13  ppl/word=941.39   acc=0.0477 wpm(K)=467.00 mins=124.63
+ep=12  steps=80.80  lr=0.000220 loss/word=342.50  ppl/word=1347.33  acc=0.0855 wpm(K)=467.11 mins=124.76
+ep=12  steps=80.90  lr=0.000220 loss/word=50.71   ppl/word=732.83   acc=0.0163 wpm(K)=467.18 mins=124.89
+ep=12  steps=81.00  lr=0.000220 loss/word=41.76   ppl/word=746.93   acc=0.0149 wpm(K)=467.32 mins=125.03
+Eval at step 81000. valid_batch_size=30
+val_step=81000  loss=7.18   acc=0.0555 val_ppl=1311.93
+ep=12  steps=81.10  lr=0.000219 loss/word=65.42   ppl/word=1001.50  acc=0.0198 wpm(K)=466.67 mins=125.36
+ep=12  steps=81.20  lr=0.000219 loss/word=544.81  ppl/word=1441.25  acc=0.0772 wpm(K)=466.76 mins=125.49
+ep=13  steps=81.30  lr=0.000219 loss/word=60.42   ppl/word=883.86   acc=0.0211 wpm(K)=466.82 mins=125.62
+ep=13  steps=81.40  lr=0.000219 loss/word=68.54   ppl/word=1080.81  acc=0.0064 wpm(K)=466.92 mins=125.76
+ep=13  steps=81.50  lr=0.000219 loss/word=102.39  ppl/word=1130.97  acc=0.0536 wpm(K)=466.99 mins=125.89
+ep=13  steps=81.60  lr=0.000219 loss/word=116.96  ppl/word=972.79   acc=0.0588 wpm(K)=467.08 mins=126.02
+ep=13  steps=81.70  lr=0.000219 loss/word=378.40  ppl/word=1343.93  acc=0.0785 wpm(K)=467.17 mins=126.15
+ep=13  steps=81.80  lr=0.000219 loss/word=172.17  ppl/word=1367.77  acc=0.0577 wpm(K)=467.23 mins=126.28
+ep=13  steps=81.90  lr=0.000218 loss/word=571.04  ppl/word=1561.49  acc=0.0781 wpm(K)=467.31 mins=126.41
+ep=13  steps=82.00  lr=0.000218 loss/word=113.31  ppl/word=1142.26  acc=0.0524 wpm(K)=467.41 mins=126.55
+Eval at step 82000. valid_batch_size=30
+val_step=82000  loss=7.18   acc=0.0555 val_ppl=1318.70
+ep=13  steps=82.10  lr=0.000218 loss/word=74.40   ppl/word=1033.47  acc=0.0233 wpm(K)=466.77 mins=126.88
+ep=13  steps=82.20  lr=0.000218 loss/word=87.33   ppl/word=1293.97  acc=0.0282 wpm(K)=466.83 mins=127.01
+ep=13  steps=82.30  lr=0.000218 loss/word=95.56   ppl/word=1076.35  acc=0.0457 wpm(K)=466.88 mins=127.14
+ep=13  steps=82.40  lr=0.000218 loss/word=122.10  ppl/word=1232.51  acc=0.0546 wpm(K)=466.96 mins=127.27
+ep=13  steps=82.50  lr=0.000218 loss/word=113.67  ppl/word=1152.02  acc=0.0388 wpm(K)=467.03 mins=127.40
+ep=13  steps=82.60  lr=0.000217 loss/word=95.34   ppl/word=1026.08  acc=0.0409 wpm(K)=467.08 mins=127.54
+ep=13  steps=82.70  lr=0.000217 loss/word=94.71   ppl/word=1408.76  acc=0.0167 wpm(K)=467.17 mins=127.67
+ep=13  steps=82.80  lr=0.000217 loss/word=75.38   ppl/word=1023.98  acc=0.0316 wpm(K)=467.30 mins=127.80
+ep=13  steps=82.90  lr=0.000217 loss/word=125.36  ppl/word=1274.78  acc=0.0499 wpm(K)=467.41 mins=127.93
+ep=13  steps=83.00  lr=0.000217 loss/word=138.14  ppl/word=1248.33  acc=0.0565 wpm(K)=467.56 mins=128.07
+Eval at step 83000. valid_batch_size=30
+val_step=83000  loss=7.18   acc=0.0555 val_ppl=1312.00
+ep=13  steps=83.10  lr=0.000217 loss/word=85.34   ppl/word=1321.23  acc=0.0158 wpm(K)=466.92 mins=128.40
+ep=13  steps=83.20  lr=0.000217 loss/word=224.69  ppl/word=1355.13  acc=0.0732 wpm(K)=467.02 mins=128.53
+ep=13  steps=83.30  lr=0.000217 loss/word=207.16  ppl/word=1182.01  acc=0.0736 wpm(K)=467.12 mins=128.67
+ep=13  steps=83.40  lr=0.000216 loss/word=150.80  ppl/word=1123.29  acc=0.0640 wpm(K)=467.22 mins=128.80
+ep=13  steps=83.50  lr=0.000216 loss/word=192.08  ppl/word=1347.45  acc=0.0680 wpm(K)=467.32 mins=128.93
+ep=13  steps=83.60  lr=0.000216 loss/word=87.08   ppl/word=1079.12  acc=0.0326 wpm(K)=467.36 mins=129.06
+ep=13  steps=83.70  lr=0.000216 loss/word=98.50   ppl/word=904.71   acc=0.0540 wpm(K)=467.42 mins=129.20
+ep=13  steps=83.80  lr=0.000216 loss/word=101.41  ppl/word=1011.63  acc=0.0448 wpm(K)=467.50 mins=129.33
+ep=13  steps=83.90  lr=0.000216 loss/word=148.27  ppl/word=988.66   acc=0.0741 wpm(K)=467.55 mins=129.46
+ep=13  steps=84.00  lr=0.000216 loss/word=103.46  ppl/word=1199.18  acc=0.0407 wpm(K)=467.60 mins=129.59
+Eval at step 84000. valid_batch_size=30
+val_step=84000  loss=7.18   acc=0.0555 val_ppl=1311.13
+ep=13  steps=84.10  lr=0.000216 loss/word=153.34  ppl/word=1278.03  acc=0.0656 wpm(K)=466.95 mins=129.91
+ep=13  steps=84.20  lr=0.000215 loss/word=71.23   ppl/word=978.59   acc=0.0302 wpm(K)=467.02 mins=130.04
+ep=13  steps=84.30  lr=0.000215 loss/word=96.57   ppl/word=1237.26  acc=0.0230 wpm(K)=467.14 mins=130.18
+ep=13  steps=84.40  lr=0.000215 loss/word=247.27  ppl/word=1440.52  acc=0.0699 wpm(K)=467.24 mins=130.31
+ep=13  steps=84.50  lr=0.000215 loss/word=356.51  ppl/word=1243.52  acc=0.0812 wpm(K)=467.30 mins=130.44
+ep=13  steps=84.60  lr=0.000215 loss/word=74.20   ppl/word=850.16   acc=0.0426 wpm(K)=467.40 mins=130.57
+ep=13  steps=84.70  lr=0.000215 loss/word=230.58  ppl/word=1456.69  acc=0.0573 wpm(K)=467.52 mins=130.70
+ep=13  steps=84.80  lr=0.000215 loss/word=116.09  ppl/word=1284.07  acc=0.0501 wpm(K)=467.58 mins=130.84
+ep=13  steps=84.90  lr=0.000214 loss/word=188.37  ppl/word=1341.71  acc=0.0741 wpm(K)=467.68 mins=130.97
+ep=13  steps=85.00  lr=0.000214 loss/word=37.47   ppl/word=608.61   acc=0.0107 wpm(K)=467.77 mins=131.10
+Eval at step 85000. valid_batch_size=30
+val_step=85000  loss=7.18   acc=0.0555 val_ppl=1311.73
+ep=13  steps=85.10  lr=0.000214 loss/word=88.36   ppl/word=1039.97  acc=0.0369 wpm(K)=467.11 mins=131.43
+ep=13  steps=85.20  lr=0.000214 loss/word=41.69   ppl/word=6487.55  acc=0.0000 wpm(K)=467.16 mins=131.56
+ep=13  steps=85.30  lr=0.000214 loss/word=210.67  ppl/word=1234.87  acc=0.0676 wpm(K)=467.28 mins=131.69
+ep=13  steps=85.40  lr=0.000214 loss/word=109.70  ppl/word=1350.58  acc=0.0226 wpm(K)=467.36 mins=131.82
+ep=13  steps=85.50  lr=0.000214 loss/word=73.87   ppl/word=873.76   acc=0.0372 wpm(K)=467.41 mins=131.95
+ep=13  steps=85.60  lr=0.000214 loss/word=180.24  ppl/word=1008.02  acc=0.0779 wpm(K)=467.53 mins=132.08
+ep=13  steps=85.70  lr=0.000213 loss/word=235.25  ppl/word=1335.35  acc=0.0621 wpm(K)=467.61 mins=132.22
+ep=13  steps=85.80  lr=0.000213 loss/word=60.43   ppl/word=804.90   acc=0.0450 wpm(K)=467.73 mins=132.35
+ep=13  steps=85.90  lr=0.000213 loss/word=93.86   ppl/word=951.18   acc=0.0502 wpm(K)=467.88 mins=132.49
+ep=13  steps=86.00  lr=0.000213 loss/word=92.63   ppl/word=986.06   acc=0.0488 wpm(K)=467.95 mins=132.62
+Eval at step 86000. valid_batch_size=30
+val_step=86000  loss=7.18   acc=0.0555 val_ppl=1311.42
+ep=13  steps=86.10  lr=0.000213 loss/word=251.38  ppl/word=1350.14  acc=0.0717 wpm(K)=467.35 mins=132.95
+ep=13  steps=86.20  lr=0.000213 loss/word=80.44   ppl/word=1090.90  acc=0.0408 wpm(K)=467.47 mins=133.08
+ep=13  steps=86.30  lr=0.000213 loss/word=83.14   ppl/word=967.60   acc=0.0284 wpm(K)=467.51 mins=133.21
+ep=13  steps=86.40  lr=0.000213 loss/word=70.49   ppl/word=790.88   acc=0.0325 wpm(K)=467.59 mins=133.35
+ep=13  steps=86.50  lr=0.000213 loss/word=196.00  ppl/word=1225.68  acc=0.0680 wpm(K)=467.66 mins=133.48
+ep=13  steps=86.60  lr=0.000212 loss/word=137.22  ppl/word=1321.52  acc=0.0458 wpm(K)=467.72 mins=133.61
+ep=13  steps=86.70  lr=0.000212 loss/word=69.60   ppl/word=1203.78  acc=0.0159 wpm(K)=467.80 mins=133.74
+ep=13  steps=86.80  lr=0.000212 loss/word=312.21  ppl/word=1408.36  acc=0.0704 wpm(K)=467.92 mins=133.88
+ep=13  steps=86.90  lr=0.000212 loss/word=110.20  ppl/word=1063.51  acc=0.0356 wpm(K)=468.01 mins=134.01
+ep=13  steps=87.00  lr=0.000212 loss/word=76.25   ppl/word=966.24   acc=0.0197 wpm(K)=468.04 mins=134.14
+Eval at step 87000. valid_batch_size=30
+val_step=87000  loss=7.18   acc=0.0555 val_ppl=1311.02
+ep=13  steps=87.10  lr=0.000212 loss/word=182.71  ppl/word=1249.25  acc=0.0732 wpm(K)=467.47 mins=134.46
+ep=13  steps=87.20  lr=0.000212 loss/word=234.52  ppl/word=1172.15  acc=0.0800 wpm(K)=467.58 mins=134.59
+ep=13  steps=87.30  lr=0.000212 loss/word=130.44  ppl/word=1074.74  acc=0.0518 wpm(K)=467.64 mins=134.72
+ep=13  steps=87.40  lr=0.000211 loss/word=173.78  ppl/word=1062.83  acc=0.0564 wpm(K)=467.71 mins=134.86
+ep=14  steps=87.50  lr=0.000211 loss/word=123.17  ppl/word=1032.02  acc=0.0581 wpm(K)=467.80 mins=134.99
+ep=14  steps=87.60  lr=0.000211 loss/word=79.61   ppl/word=1095.65  acc=0.0220 wpm(K)=467.89 mins=135.12
+ep=14  steps=87.70  lr=0.000211 loss/word=53.13   ppl/word=709.34   acc=0.0232 wpm(K)=467.93 mins=135.26
+ep=14  steps=87.80  lr=0.000211 loss/word=64.64   ppl/word=987.16   acc=0.0133 wpm(K)=467.98 mins=135.39
+ep=14  steps=87.90  lr=0.000211 loss/word=261.00  ppl/word=1509.85  acc=0.0727 wpm(K)=468.08 mins=135.52
+ep=14  steps=88.00  lr=0.000211 loss/word=117.31  ppl/word=1058.55  acc=0.0427 wpm(K)=468.15 mins=135.66
+Eval at step 88000. valid_batch_size=30
+val_step=88000  loss=7.18   acc=0.0555 val_ppl=1312.81
+ep=14  steps=88.10  lr=0.000211 loss/word=116.77  ppl/word=1079.45  acc=0.0430 wpm(K)=467.58 mins=135.99
+ep=14  steps=88.20  lr=0.000210 loss/word=70.32   ppl/word=793.88   acc=0.0445 wpm(K)=467.65 mins=136.12
+ep=14  steps=88.30  lr=0.000210 loss/word=156.25  ppl/word=1017.78  acc=0.0706 wpm(K)=467.73 mins=136.25
+ep=14  steps=88.40  lr=0.000210 loss/word=262.74  ppl/word=1422.93  acc=0.0725 wpm(K)=467.80 mins=136.38
+ep=14  steps=88.50  lr=0.000210 loss/word=284.07  ppl/word=1351.11  acc=0.0714 wpm(K)=467.91 mins=136.52
+ep=14  steps=88.60  lr=0.000210 loss/word=301.33  ppl/word=1326.80  acc=0.0805 wpm(K)=468.00 mins=136.65
+ep=14  steps=88.70  lr=0.000210 loss/word=317.33  ppl/word=1496.22  acc=0.0756 wpm(K)=468.05 mins=136.78
+ep=14  steps=88.80  lr=0.000210 loss/word=241.62  ppl/word=1780.81  acc=0.0707 wpm(K)=468.16 mins=136.92
+ep=14  steps=88.90  lr=0.000210 loss/word=80.49   ppl/word=1138.47  acc=0.0219 wpm(K)=468.22 mins=137.05
+ep=14  steps=89.00  lr=0.000210 loss/word=118.96  ppl/word=1532.36  acc=0.0347 wpm(K)=468.32 mins=137.19
+Eval at step 89000. valid_batch_size=30
+val_step=89000  loss=7.18   acc=0.0555 val_ppl=1310.98
+ep=14  steps=89.10  lr=0.000209 loss/word=180.97  ppl/word=1355.29  acc=0.0648 wpm(K)=467.75 mins=137.52
+ep=14  steps=89.20  lr=0.000209 loss/word=51.89   ppl/word=708.36   acc=0.0119 wpm(K)=467.82 mins=137.65
+ep=14  steps=89.30  lr=0.000209 loss/word=130.51  ppl/word=995.02   acc=0.0545 wpm(K)=467.92 mins=137.78
+ep=14  steps=89.40  lr=0.000209 loss/word=93.58   ppl/word=1207.12  acc=0.0474 wpm(K)=467.95 mins=137.92
+ep=14  steps=89.50  lr=0.000209 loss/word=137.62  ppl/word=1123.18  acc=0.0590 wpm(K)=467.97 mins=138.05
+ep=14  steps=89.60  lr=0.000209 loss/word=115.36  ppl/word=1018.16  acc=0.0507 wpm(K)=468.02 mins=138.18
+ep=14  steps=89.70  lr=0.000209 loss/word=170.45  ppl/word=1346.62  acc=0.0687 wpm(K)=468.07 mins=138.31
+ep=14  steps=89.80  lr=0.000209 loss/word=106.18  ppl/word=931.56   acc=0.0604 wpm(K)=468.13 mins=138.44
+ep=14  steps=89.90  lr=0.000208 loss/word=294.07  ppl/word=1354.24  acc=0.0782 wpm(K)=468.24 mins=138.57
+ep=14  steps=90.00  lr=0.000208 loss/word=148.85  ppl/word=1488.80  acc=0.0460 wpm(K)=468.33 mins=138.71
+Eval at step 90000. valid_batch_size=30
+val_step=90000  loss=7.18   acc=0.0555 val_ppl=1312.07
+ep=14  steps=90.10  lr=0.000208 loss/word=78.59   ppl/word=847.47   acc=0.0402 wpm(K)=467.71 mins=139.04
+ep=14  steps=90.20  lr=0.000208 loss/word=237.48  ppl/word=1480.27  acc=0.0634 wpm(K)=467.84 mins=139.17
+ep=14  steps=90.30  lr=0.000208 loss/word=274.29  ppl/word=1492.85  acc=0.0749 wpm(K)=467.94 mins=139.31
+ep=14  steps=90.40  lr=0.000208 loss/word=102.07  ppl/word=1027.25  acc=0.0467 wpm(K)=467.99 mins=139.44
+ep=14  steps=90.50  lr=0.000208 loss/word=220.19  ppl/word=1417.46  acc=0.0587 wpm(K)=468.04 mins=139.57
+ep=14  steps=90.60  lr=0.000208 loss/word=324.43  ppl/word=1345.47  acc=0.0763 wpm(K)=468.15 mins=139.70
+ep=14  steps=90.70  lr=0.000208 loss/word=115.71  ppl/word=1236.99  acc=0.0462 wpm(K)=468.19 mins=139.84
+ep=14  steps=90.80  lr=0.000207 loss/word=510.25  ppl/word=1474.06  acc=0.0836 wpm(K)=468.26 mins=139.97
+ep=14  steps=90.90  lr=0.000207 loss/word=189.31  ppl/word=1427.64  acc=0.0564 wpm(K)=468.32 mins=140.10
+ep=14  steps=91.00  lr=0.000207 loss/word=237.85  ppl/word=1497.14  acc=0.0682 wpm(K)=468.40 mins=140.23
+Eval at step 91000. valid_batch_size=30
+val_step=91000  loss=7.18   acc=0.0555 val_ppl=1312.38
+ep=14  steps=91.10  lr=0.000207 loss/word=46.35   ppl/word=631.89   acc=0.0087 wpm(K)=467.83 mins=140.57
+ep=14  steps=91.20  lr=0.000207 loss/word=273.54  ppl/word=1204.09  acc=0.0843 wpm(K)=467.92 mins=140.70
+ep=14  steps=91.30  lr=0.000207 loss/word=439.21  ppl/word=1703.14  acc=0.0651 wpm(K)=468.01 mins=140.83
+ep=14  steps=91.40  lr=0.000207 loss/word=20.14   ppl/word=285.56   acc=0.0000 wpm(K)=468.07 mins=140.96
+ep=14  steps=91.50  lr=0.000207 loss/word=173.78  ppl/word=1192.79  acc=0.0535 wpm(K)=468.16 mins=141.09
+ep=14  steps=91.60  lr=0.000207 loss/word=87.11   ppl/word=826.45   acc=0.0410 wpm(K)=468.26 mins=141.23
+ep=14  steps=91.70  lr=0.000206 loss/word=71.43   ppl/word=1062.93  acc=0.0122 wpm(K)=468.29 mins=141.36
+ep=14  steps=91.80  lr=0.000206 loss/word=50.49   ppl/word=862.48   acc=0.0209 wpm(K)=468.35 mins=141.49
+ep=14  steps=91.90  lr=0.000206 loss/word=93.56   ppl/word=1246.75  acc=0.0238 wpm(K)=468.40 mins=141.62
+ep=14  steps=92.00  lr=0.000206 loss/word=170.63  ppl/word=1451.20  acc=0.0600 wpm(K)=468.45 mins=141.75
+Eval at step 92000. valid_batch_size=30
+val_step=92000  loss=7.18   acc=0.0555 val_ppl=1310.53
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=14  steps=92.10  lr=0.000206 loss/word=131.70  ppl/word=1249.92  acc=0.0457 wpm(K)=467.78 mins=142.10
+ep=14  steps=92.20  lr=0.000206 loss/word=150.79  ppl/word=1245.72  acc=0.0458 wpm(K)=467.83 mins=142.23
+ep=14  steps=92.30  lr=0.000206 loss/word=203.93  ppl/word=1541.41  acc=0.0675 wpm(K)=467.94 mins=142.36
+ep=14  steps=92.40  lr=0.000206 loss/word=170.69  ppl/word=1139.97  acc=0.0567 wpm(K)=468.03 mins=142.50
+ep=14  steps=92.50  lr=0.000205 loss/word=100.11  ppl/word=1124.93  acc=0.0395 wpm(K)=468.08 mins=142.63
+ep=14  steps=92.60  lr=0.000205 loss/word=188.33  ppl/word=1374.96  acc=0.0540 wpm(K)=468.16 mins=142.76
+ep=14  steps=92.70  lr=0.000205 loss/word=47.45   ppl/word=736.41   acc=0.0087 wpm(K)=468.21 mins=142.89
+ep=14  steps=92.80  lr=0.000205 loss/word=173.33  ppl/word=1369.33  acc=0.0651 wpm(K)=468.26 mins=143.02
+ep=14  steps=92.90  lr=0.000205 loss/word=141.76  ppl/word=1133.41  acc=0.0574 wpm(K)=468.34 mins=143.15
+ep=14  steps=93.00  lr=0.000205 loss/word=102.51  ppl/word=1123.75  acc=0.0407 wpm(K)=468.41 mins=143.28
+Eval at step 93000. valid_batch_size=30
+val_step=93000  loss=7.18   acc=0.0555 val_ppl=1310.41
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=14  steps=93.10  lr=0.000205 loss/word=47.99   ppl/word=689.09   acc=0.0170 wpm(K)=467.81 mins=143.63
+ep=14  steps=93.20  lr=0.000205 loss/word=90.41   ppl/word=1243.63  acc=0.0222 wpm(K)=467.89 mins=143.76
+ep=14  steps=93.30  lr=0.000205 loss/word=108.98  ppl/word=958.14   acc=0.0433 wpm(K)=467.97 mins=143.89
+ep=14  steps=93.40  lr=0.000205 loss/word=118.17  ppl/word=956.00   acc=0.0454 wpm(K)=468.05 mins=144.03
+ep=14  steps=93.50  lr=0.000204 loss/word=90.77   ppl/word=975.72   acc=0.0498 wpm(K)=468.07 mins=144.16
+ep=14  steps=93.60  lr=0.000204 loss/word=105.07  ppl/word=1070.46  acc=0.0353 wpm(K)=468.16 mins=144.29
+ep=14  steps=93.70  lr=0.000204 loss/word=80.06   ppl/word=1016.70  acc=0.0378 wpm(K)=468.23 mins=144.43
+ep=15  steps=93.80  lr=0.000204 loss/word=87.11   ppl/word=716.43   acc=0.0472 wpm(K)=468.28 mins=144.56
+ep=15  steps=93.90  lr=0.000204 loss/word=215.95  ppl/word=1250.89  acc=0.0681 wpm(K)=468.30 mins=144.68
+ep=15  steps=94.00  lr=0.000204 loss/word=60.94   ppl/word=872.69   acc=0.0347 wpm(K)=468.40 mins=144.81
+Eval at step 94000. valid_batch_size=30
+val_step=94000  loss=7.18   acc=0.0555 val_ppl=1310.27
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=15  steps=94.10  lr=0.000204 loss/word=107.85  ppl/word=1178.64  acc=0.0512 wpm(K)=467.85 mins=145.14
+ep=15  steps=94.20  lr=0.000204 loss/word=239.72  ppl/word=1509.82  acc=0.0658 wpm(K)=467.93 mins=145.27
+ep=15  steps=94.30  lr=0.000204 loss/word=77.57   ppl/word=881.70   acc=0.0383 wpm(K)=467.95 mins=145.40
+ep=15  steps=94.40  lr=0.000203 loss/word=120.51  ppl/word=1152.78  acc=0.0457 wpm(K)=467.98 mins=145.53
+ep=15  steps=94.50  lr=0.000203 loss/word=57.46   ppl/word=782.01   acc=0.0217 wpm(K)=468.08 mins=145.66
+ep=15  steps=94.60  lr=0.000203 loss/word=107.62  ppl/word=1127.72  acc=0.0388 wpm(K)=468.17 mins=145.80
+ep=15  steps=94.70  lr=0.000203 loss/word=174.01  ppl/word=1344.27  acc=0.0686 wpm(K)=468.21 mins=145.93
+ep=15  steps=94.80  lr=0.000203 loss/word=106.92  ppl/word=976.51   acc=0.0684 wpm(K)=468.29 mins=146.06
+ep=15  steps=94.90  lr=0.000203 loss/word=143.75  ppl/word=1134.01  acc=0.0749 wpm(K)=468.37 mins=146.19
+ep=15  steps=95.00  lr=0.000203 loss/word=195.86  ppl/word=1190.15  acc=0.0734 wpm(K)=468.44 mins=146.32
+Eval at step 95000. valid_batch_size=30
+val_step=95000  loss=7.18   acc=0.0555 val_ppl=1310.21
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=15  steps=95.10  lr=0.000203 loss/word=77.06   ppl/word=1297.20  acc=0.0233 wpm(K)=467.80 mins=146.67
+ep=15  steps=95.20  lr=0.000203 loss/word=76.60   ppl/word=977.78   acc=0.0197 wpm(K)=467.90 mins=146.80
+ep=15  steps=95.30  lr=0.000202 loss/word=122.46  ppl/word=1094.42  acc=0.0536 wpm(K)=467.98 mins=146.93
+ep=15  steps=95.40  lr=0.000202 loss/word=227.49  ppl/word=1429.61  acc=0.0749 wpm(K)=468.15 mins=147.07
+ep=15  steps=95.50  lr=0.000202 loss/word=185.86  ppl/word=1168.52  acc=0.0713 wpm(K)=468.24 mins=147.21
+ep=15  steps=95.60  lr=0.000202 loss/word=157.79  ppl/word=1385.60  acc=0.0573 wpm(K)=468.33 mins=147.34
+ep=15  steps=95.70  lr=0.000202 loss/word=212.52  ppl/word=1452.67  acc=0.0589 wpm(K)=468.41 mins=147.47
+ep=15  steps=95.80  lr=0.000202 loss/word=146.59  ppl/word=1275.09  acc=0.0716 wpm(K)=468.47 mins=147.61
+ep=15  steps=95.90  lr=0.000202 loss/word=94.86   ppl/word=1307.41  acc=0.0260 wpm(K)=468.56 mins=147.74
+ep=15  steps=96.00  lr=0.000202 loss/word=73.70   ppl/word=797.26   acc=0.0340 wpm(K)=468.62 mins=147.87
+Eval at step 96000. valid_batch_size=30
+val_step=96000  loss=7.18   acc=0.0555 val_ppl=1311.91
+ep=15  steps=96.10  lr=0.000202 loss/word=303.41  ppl/word=1280.23  acc=0.0700 wpm(K)=468.10 mins=148.20
+ep=15  steps=96.20  lr=0.000202 loss/word=52.00   ppl/word=665.28   acc=0.0195 wpm(K)=468.15 mins=148.33
+ep=15  steps=96.30  lr=0.000201 loss/word=137.84  ppl/word=1122.88  acc=0.0685 wpm(K)=468.20 mins=148.46
+ep=15  steps=96.40  lr=0.000201 loss/word=50.80   ppl/word=898.78   acc=0.0209 wpm(K)=468.27 mins=148.59
+ep=15  steps=96.50  lr=0.000201 loss/word=112.55  ppl/word=1343.60  acc=0.0300 wpm(K)=468.34 mins=148.73
+ep=15  steps=96.60  lr=0.000201 loss/word=227.01  ppl/word=1481.52  acc=0.0764 wpm(K)=468.39 mins=148.86
+ep=15  steps=96.70  lr=0.000201 loss/word=23.19   ppl/word=378.26   acc=0.0240 wpm(K)=468.46 mins=148.99
+ep=15  steps=96.80  lr=0.000201 loss/word=147.55  ppl/word=1186.88  acc=0.0540 wpm(K)=468.50 mins=149.12
+ep=15  steps=96.90  lr=0.000201 loss/word=99.05   ppl/word=1060.08  acc=0.0352 wpm(K)=468.58 mins=149.25
+ep=15  steps=97.00  lr=0.000201 loss/word=41.02   ppl/word=732.57   acc=0.0000 wpm(K)=468.65 mins=149.38
+Eval at step 97000. valid_batch_size=30
+val_step=97000  loss=7.18   acc=0.0555 val_ppl=1309.98
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=15  steps=97.10  lr=0.000201 loss/word=312.74  ppl/word=1487.54  acc=0.0781 wpm(K)=468.07 mins=149.73
+ep=15  steps=97.20  lr=0.000200 loss/word=43.05   ppl/word=705.73   acc=0.0238 wpm(K)=468.12 mins=149.86
+ep=15  steps=97.30  lr=0.000200 loss/word=161.64  ppl/word=1160.64  acc=0.0723 wpm(K)=468.18 mins=149.99
+ep=15  steps=97.40  lr=0.000200 loss/word=181.47  ppl/word=1130.29  acc=0.0690 wpm(K)=468.22 mins=150.12
+ep=15  steps=97.50  lr=0.000200 loss/word=295.61  ppl/word=1390.77  acc=0.0842 wpm(K)=468.28 mins=150.25
+ep=15  steps=97.60  lr=0.000200 loss/word=148.56  ppl/word=1168.74  acc=0.0624 wpm(K)=468.37 mins=150.39
+ep=15  steps=97.70  lr=0.000200 loss/word=163.96  ppl/word=1417.90  acc=0.0650 wpm(K)=468.45 mins=150.52
+ep=15  steps=97.80  lr=0.000200 loss/word=137.02  ppl/word=1178.31  acc=0.0468 wpm(K)=468.50 mins=150.65
+ep=15  steps=97.90  lr=0.000200 loss/word=91.96   ppl/word=952.61   acc=0.0350 wpm(K)=468.56 mins=150.78
+ep=15  steps=98.00  lr=0.000200 loss/word=34.04   ppl/word=542.58   acc=0.0058 wpm(K)=468.65 mins=150.92
+Eval at step 98000. valid_batch_size=30
+val_step=98000  loss=7.18   acc=0.0555 val_ppl=1310.88
+ep=15  steps=98.10  lr=0.000200 loss/word=61.00   ppl/word=943.41   acc=0.0175 wpm(K)=468.09 mins=151.24
+ep=15  steps=98.20  lr=0.000199 loss/word=32.11   ppl/word=2022.51  acc=0.0000 wpm(K)=468.20 mins=151.37
+ep=15  steps=98.30  lr=0.000199 loss/word=144.82  ppl/word=1234.81  acc=0.0584 wpm(K)=468.25 mins=151.50
+ep=15  steps=98.40  lr=0.000199 loss/word=80.01   ppl/word=922.58   acc=0.0427 wpm(K)=468.37 mins=151.64
+ep=15  steps=98.50  lr=0.000199 loss/word=136.63  ppl/word=1251.83  acc=0.0473 wpm(K)=468.45 mins=151.77
+ep=15  steps=98.60  lr=0.000199 loss/word=85.35   ppl/word=989.29   acc=0.0455 wpm(K)=468.50 mins=151.91
+ep=15  steps=98.70  lr=0.000199 loss/word=291.65  ppl/word=1402.26  acc=0.0815 wpm(K)=468.53 mins=152.04
+ep=15  steps=98.80  lr=0.000199 loss/word=264.59  ppl/word=1725.61  acc=0.0590 wpm(K)=468.63 mins=152.17
+ep=15  steps=98.90  lr=0.000199 loss/word=124.82  ppl/word=1146.64  acc=0.0582 wpm(K)=468.69 mins=152.30
+ep=15  steps=99.00  lr=0.000199 loss/word=118.29  ppl/word=1151.60  acc=0.0447 wpm(K)=468.77 mins=152.44
+Eval at step 99000. valid_batch_size=30
+val_step=99000  loss=7.18   acc=0.0555 val_ppl=1309.84
+Saving model to 'outputs_exp2_v3_nonorm'
+ep=15  steps=99.10  lr=0.000199 loss/word=323.32  ppl/word=1459.85  acc=0.0683 wpm(K)=468.19 mins=152.78
+ep=15  steps=99.20  lr=0.000198 loss/word=81.58   ppl/word=1016.88  acc=0.0265 wpm(K)=468.22 mins=152.91
+ep=15  steps=99.30  lr=0.000198 loss/word=90.59   ppl/word=916.51   acc=0.0518 wpm(K)=468.29 mins=153.04
+ep=15  steps=99.40  lr=0.000198 loss/word=101.24  ppl/word=1180.14  acc=0.0349 wpm(K)=468.33 mins=153.18
+ep=15  steps=99.50  lr=0.000198 loss/word=223.70  ppl/word=1332.04  acc=0.0774 wpm(K)=468.38 mins=153.31
+ep=15  steps=99.60  lr=0.000198 loss/word=74.81   ppl/word=864.59   acc=0.0282 wpm(K)=468.45 mins=153.44
+ep=15  steps=99.70  lr=0.000198 loss/word=141.11  ppl/word=1171.86  acc=0.0579 wpm(K)=468.48 mins=153.57
+ep=15  steps=99.80  lr=0.000198 loss/word=169.33  ppl/word=1191.77  acc=0.0680 wpm(K)=468.56 mins=153.70
+ep=15  steps=99.90  lr=0.000198 loss/word=85.06   ppl/word=1176.35  acc=0.0260 wpm(K)=468.68 mins=153.84
+ep=16  steps=100.00 lr=0.000198 loss/word=71.17   ppl/word=933.54   acc=0.0210 wpm(K)=468.77 mins=153.97
+Eval at step 100000. valid_batch_size=30
+val_step=100000 loss=7.18   acc=0.0555 val_ppl=1310.20
+ep=16  steps=100.10 lr=0.000198 loss/word=105.41  ppl/word=949.24   acc=0.0407 wpm(K)=468.23 mins=154.30
+ep=16  steps=100.20 lr=0.000197 loss/word=132.06  ppl/word=1158.64  acc=0.0551 wpm(K)=468.29 mins=154.43
+ep=16  steps=100.30 lr=0.000197 loss/word=171.29  ppl/word=1049.26  acc=0.0799 wpm(K)=468.32 mins=154.56
+ep=16  steps=100.40 lr=0.000197 loss/word=120.20  ppl/word=1192.14  acc=0.0479 wpm(K)=468.35 mins=154.69
+ep=16  steps=100.50 lr=0.000197 loss/word=99.39   ppl/word=1192.45  acc=0.0334 wpm(K)=468.40 mins=154.82
+ep=16  steps=100.60 lr=0.000197 loss/word=88.79   ppl/word=881.26   acc=0.0358 wpm(K)=468.46 mins=154.95
+ep=16  steps=100.70 lr=0.000197 loss/word=197.37  ppl/word=1277.71  acc=0.0680 wpm(K)=468.53 mins=155.09
+ep=16  steps=100.80 lr=0.000197 loss/word=156.16  ppl/word=1117.26  acc=0.0618 wpm(K)=468.57 mins=155.22
+ep=16  steps=100.90 lr=0.000197 loss/word=52.89   ppl/word=848.23   acc=0.0080 wpm(K)=468.61 mins=155.34
+ep=16  steps=101.00 lr=0.000197 loss/word=183.54  ppl/word=1106.21  acc=0.0788 wpm(K)=468.67 mins=155.47
+Eval at step 101000. valid_batch_size=30
+val_step=101000 loss=7.18   acc=0.0555 val_ppl=1311.77
+ep=16  steps=101.10 lr=0.000197 loss/word=134.37  ppl/word=1556.08  acc=0.0496 wpm(K)=468.16 mins=155.79
+ep=16  steps=101.20 lr=0.000196 loss/word=177.12  ppl/word=1084.50  acc=0.0629 wpm(K)=468.22 mins=155.92
+ep=16  steps=101.30 lr=0.000196 loss/word=165.08  ppl/word=1247.31  acc=0.0634 wpm(K)=468.32 mins=156.05
+ep=16  steps=101.40 lr=0.000196 loss/word=119.16  ppl/word=1279.32  acc=0.0450 wpm(K)=468.37 mins=156.18
+ep=16  steps=101.50 lr=0.000196 loss/word=180.86  ppl/word=1234.69  acc=0.0701 wpm(K)=468.45 mins=156.32
+ep=16  steps=101.60 lr=0.000196 loss/word=151.05  ppl/word=1358.90  acc=0.0507 wpm(K)=468.51 mins=156.45
+ep=16  steps=101.70 lr=0.000196 loss/word=108.61  ppl/word=1239.01  acc=0.0389 wpm(K)=468.58 mins=156.58
+ep=16  steps=101.80 lr=0.000196 loss/word=139.36  ppl/word=1062.27  acc=0.0547 wpm(K)=468.67 mins=156.72
+ep=16  steps=101.90 lr=0.000196 loss/word=83.94   ppl/word=824.92   acc=0.0350 wpm(K)=468.71 mins=156.85
+ep=16  steps=102.00 lr=0.000196 loss/word=25.56   ppl/word=447.59   acc=0.0000 wpm(K)=468.77 mins=156.98
+Eval at step 102000. valid_batch_size=30
+val_step=102000 loss=7.18   acc=0.0555 val_ppl=1312.00
+ep=16  steps=102.10 lr=0.000196 loss/word=116.96  ppl/word=1373.60  acc=0.0386 wpm(K)=468.31 mins=157.31
+ep=16  steps=102.20 lr=0.000196 loss/word=94.85   ppl/word=1005.85  acc=0.0433 wpm(K)=468.34 mins=157.44
+ep=16  steps=102.30 lr=0.000195 loss/word=51.85   ppl/word=704.82   acc=0.0119 wpm(K)=468.41 mins=157.57
+ep=16  steps=102.40 lr=0.000195 loss/word=83.73   ppl/word=1015.79  acc=0.0233 wpm(K)=468.49 mins=157.70
+ep=16  steps=102.50 lr=0.000195 loss/word=93.82   ppl/word=1131.27  acc=0.0468 wpm(K)=468.54 mins=157.84
+ep=16  steps=102.60 lr=0.000195 loss/word=121.85  ppl/word=1124.96  acc=0.0450 wpm(K)=468.59 mins=157.96
+ep=16  steps=102.70 lr=0.000195 loss/word=219.51  ppl/word=1250.38  acc=0.0853 wpm(K)=468.65 mins=158.10
+ep=16  steps=102.80 lr=0.000195 loss/word=117.18  ppl/word=1282.13  acc=0.0496 wpm(K)=468.72 mins=158.23
+ep=16  steps=102.90 lr=0.000195 loss/word=133.46  ppl/word=1176.80  acc=0.0447 wpm(K)=468.75 mins=158.36
+ep=16  steps=103.00 lr=0.000195 loss/word=111.32  ppl/word=1457.89  acc=0.0307 wpm(K)=468.83 mins=158.50
+Eval at step 103000. valid_batch_size=30
+val_step=103000 loss=7.18   acc=0.0555 val_ppl=1312.95
+ep=16  steps=103.10 lr=0.000195 loss/word=135.33  ppl/word=1413.35  acc=0.0419 wpm(K)=468.28 mins=158.83
+ep=16  steps=103.20 lr=0.000195 loss/word=106.28  ppl/word=963.63   acc=0.0606 wpm(K)=468.38 mins=158.96
+ep=16  steps=103.30 lr=0.000194 loss/word=137.27  ppl/word=1020.90  acc=0.0631 wpm(K)=468.43 mins=159.09
+ep=16  steps=103.40 lr=0.000194 loss/word=125.80  ppl/word=1274.49  acc=0.0373 wpm(K)=468.48 mins=159.22
+ep=16  steps=103.50 lr=0.000194 loss/word=67.11   ppl/word=997.55   acc=0.0257 wpm(K)=468.52 mins=159.35
+ep=16  steps=103.60 lr=0.000194 loss/word=132.61  ppl/word=1026.38  acc=0.0654 wpm(K)=468.59 mins=159.48
+ep=16  steps=103.70 lr=0.000194 loss/word=210.68  ppl/word=1510.06  acc=0.0543 wpm(K)=468.62 mins=159.62
+ep=16  steps=103.80 lr=0.000194 loss/word=90.57   ppl/word=1237.41  acc=0.0295 wpm(K)=468.71 mins=159.75
+ep=16  steps=103.90 lr=0.000194 loss/word=174.64  ppl/word=1531.52  acc=0.0604 wpm(K)=468.76 mins=159.88
+ep=16  steps=104.00 lr=0.000194 loss/word=153.79  ppl/word=1466.74  acc=0.0563 wpm(K)=468.86 mins=160.02
+Eval at step 104000. valid_batch_size=30
+val_step=104000 loss=7.18   acc=0.0555 val_ppl=1311.60
+ep=16  steps=104.10 lr=0.000194 loss/word=115.41  ppl/word=1091.00  acc=0.0379 wpm(K)=468.34 mins=160.35
+ep=16  steps=104.20 lr=0.000194 loss/word=231.37  ppl/word=1045.29  acc=0.0770 wpm(K)=468.47 mins=160.48
+ep=16  steps=104.30 lr=0.000194 loss/word=34.66   ppl/word=2760.35  acc=0.0000 wpm(K)=468.52 mins=160.61
+ep=16  steps=104.40 lr=0.000193 loss/word=153.20  ppl/word=1157.10  acc=0.0748 wpm(K)=468.55 mins=160.75
+ep=16  steps=104.50 lr=0.000193 loss/word=178.98  ppl/word=1263.15  acc=0.0611 wpm(K)=468.64 mins=160.88
+ep=16  steps=104.60 lr=0.000193 loss/word=66.95   ppl/word=879.54   acc=0.0095 wpm(K)=468.67 mins=161.01
+ep=16  steps=104.70 lr=0.000193 loss/word=116.57  ppl/word=1109.78  acc=0.0526 wpm(K)=468.73 mins=161.14
+ep=16  steps=104.80 lr=0.000193 loss/word=188.99  ppl/word=1282.98  acc=0.0675 wpm(K)=468.80 mins=161.28
+ep=16  steps=104.90 lr=0.000193 loss/word=172.24  ppl/word=1333.50  acc=0.0614 wpm(K)=468.88 mins=161.41
+ep=16  steps=105.00 lr=0.000193 loss/word=114.83  ppl/word=1025.57  acc=0.0509 wpm(K)=468.95 mins=161.54
+Eval at step 105000. valid_batch_size=30
+val_step=105000 loss=7.18   acc=0.0555 val_ppl=1310.02
+ep=16  steps=105.10 lr=0.000193 loss/word=56.32   ppl/word=812.29   acc=0.0149 wpm(K)=468.42 mins=161.87
+ep=16  steps=105.20 lr=0.000193 loss/word=188.25  ppl/word=1268.88  acc=0.0676 wpm(K)=468.50 mins=162.01
+ep=16  steps=105.30 lr=0.000193 loss/word=90.80   ppl/word=860.36   acc=0.0465 wpm(K)=468.53 mins=162.14
+ep=16  steps=105.40 lr=0.000193 loss/word=259.48  ppl/word=1268.86  acc=0.0869 wpm(K)=468.56 mins=162.27
+ep=16  steps=105.50 lr=0.000192 loss/word=79.47   ppl/word=984.43   acc=0.0190 wpm(K)=468.63 mins=162.40
+ep=16  steps=105.60 lr=0.000192 loss/word=266.08  ppl/word=1265.20  acc=0.0713 wpm(K)=468.69 mins=162.53
+ep=16  steps=105.70 lr=0.000192 loss/word=177.15  ppl/word=1227.28  acc=0.0527 wpm(K)=468.75 mins=162.67
+ep=16  steps=105.80 lr=0.000192 loss/word=83.63   ppl/word=955.21   acc=0.0308 wpm(K)=468.81 mins=162.80
+ep=16  steps=105.90 lr=0.000192 loss/word=155.50  ppl/word=1458.85  acc=0.0483 wpm(K)=468.85 mins=162.93
+ep=16  steps=106.00 lr=0.000192 loss/word=78.52   ppl/word=923.44   acc=0.0353 wpm(K)=468.93 mins=163.07
+Eval at step 106000. valid_batch_size=30
+val_step=106000 loss=7.18   acc=0.0555 val_ppl=1310.39
+ep=16  steps=106.10 lr=0.000192 loss/word=201.93  ppl/word=1344.69  acc=0.0691 wpm(K)=468.40 mins=163.40
+ep=17  steps=106.20 lr=0.000192 loss/word=53.59   ppl/word=731.54   acc=0.0192 wpm(K)=468.44 mins=163.53
+ep=17  steps=106.30 lr=0.000192 loss/word=85.16   ppl/word=1276.95  acc=0.0184 wpm(K)=468.53 mins=163.66
+ep=17  steps=106.40 lr=0.000192 loss/word=443.48  ppl/word=1463.79  acc=0.0786 wpm(K)=468.60 mins=163.79
+ep=17  steps=106.50 lr=0.000192 loss/word=140.74  ppl/word=1203.10  acc=0.0567 wpm(K)=468.61 mins=163.92
+ep=17  steps=106.60 lr=0.000191 loss/word=72.62   ppl/word=1095.74  acc=0.0241 wpm(K)=468.66 mins=164.06
+ep=17  steps=106.70 lr=0.000191 loss/word=254.67  ppl/word=1304.92  acc=0.0704 wpm(K)=468.68 mins=164.19
+ep=17  steps=106.80 lr=0.000191 loss/word=99.61   ppl/word=1136.99  acc=0.0486 wpm(K)=468.71 mins=164.32
+ep=17  steps=106.90 lr=0.000191 loss/word=76.56   ppl/word=807.16   acc=0.0246 wpm(K)=468.77 mins=164.46
+ep=17  steps=107.00 lr=0.000191 loss/word=213.30  ppl/word=1564.38  acc=0.0722 wpm(K)=468.81 mins=164.59
+Eval at step 107000. valid_batch_size=30
+val_step=107000 loss=7.18   acc=0.0555 val_ppl=1310.37
+ep=17  steps=107.10 lr=0.000191 loss/word=270.65  ppl/word=1307.15  acc=0.0696 wpm(K)=468.28 mins=164.92
+ep=17  steps=107.20 lr=0.000191 loss/word=51.38   ppl/word=663.93   acc=0.0198 wpm(K)=468.38 mins=165.05
+ep=17  steps=107.30 lr=0.000191 loss/word=96.79   ppl/word=1462.38  acc=0.0376 wpm(K)=468.43 mins=165.19
+ep=17  steps=107.40 lr=0.000191 loss/word=92.32   ppl/word=1346.56  acc=0.0439 wpm(K)=468.48 mins=165.32
+ep=17  steps=107.50 lr=0.000191 loss/word=49.33   ppl/word=628.40   acc=0.0204 wpm(K)=468.54 mins=165.45
+ep=17  steps=107.60 lr=0.000191 loss/word=135.97  ppl/word=1141.93  acc=0.0696 wpm(K)=468.63 mins=165.59
+ep=17  steps=107.70 lr=0.000190 loss/word=65.11   ppl/word=848.01   acc=0.0194 wpm(K)=468.68 mins=165.72
+ep=17  steps=107.80 lr=0.000190 loss/word=165.96  ppl/word=1134.64  acc=0.0543 wpm(K)=468.77 mins=165.86
+ep=17  steps=107.90 lr=0.000190 loss/word=572.39  ppl/word=1918.81  acc=0.0697 wpm(K)=468.84 mins=165.99
+ep=17  steps=108.00 lr=0.000190 loss/word=94.75   ppl/word=909.76   acc=0.0404 wpm(K)=468.87 mins=166.11
+Eval at step 108000. valid_batch_size=30
+val_step=108000 loss=7.18   acc=0.0555 val_ppl=1310.54
+ep=17  steps=108.10 lr=0.000190 loss/word=159.11  ppl/word=1314.29  acc=0.0649 wpm(K)=468.43 mins=166.43
+ep=17  steps=108.20 lr=0.000190 loss/word=117.85  ppl/word=1214.39  acc=0.0508 wpm(K)=468.51 mins=166.56
+ep=17  steps=108.30 lr=0.000190 loss/word=120.78  ppl/word=1510.27  acc=0.0341 wpm(K)=468.59 mins=166.69
+ep=17  steps=108.40 lr=0.000190 loss/word=106.11  ppl/word=1130.38  acc=0.0518 wpm(K)=468.65 mins=166.82
+ep=17  steps=108.50 lr=0.000190 loss/word=267.26  ppl/word=1223.05  acc=0.0748 wpm(K)=468.73 mins=166.96
+ep=17  steps=108.60 lr=0.000190 loss/word=418.12  ppl/word=1515.37  acc=0.0679 wpm(K)=468.79 mins=167.09
+ep=17  steps=108.70 lr=0.000190 loss/word=125.47  ppl/word=1266.95  acc=0.0516 wpm(K)=468.84 mins=167.22
+ep=17  steps=108.80 lr=0.000189 loss/word=168.17  ppl/word=1104.66  acc=0.0599 wpm(K)=468.86 mins=167.35
+ep=17  steps=108.90 lr=0.000189 loss/word=133.20  ppl/word=1174.71  acc=0.0514 wpm(K)=468.89 mins=167.48
+ep=17  steps=109.00 lr=0.000189 loss/word=37.48   ppl/word=631.24   acc=0.0430 wpm(K)=468.95 mins=167.62
+Eval at step 109000. valid_batch_size=30
+val_step=109000 loss=7.18   acc=0.0555 val_ppl=1312.31
+ep=17  steps=109.10 lr=0.000189 loss/word=61.17   ppl/word=873.67   acc=0.0138 wpm(K)=468.40 mins=167.95
+ep=17  steps=109.20 lr=0.000189 loss/word=258.67  ppl/word=1126.31  acc=0.0900 wpm(K)=468.45 mins=168.08
+ep=17  steps=109.30 lr=0.000189 loss/word=311.74  ppl/word=1322.36  acc=0.0713 wpm(K)=468.50 mins=168.22
+ep=17  steps=109.40 lr=0.000189 loss/word=106.58  ppl/word=1024.24  acc=0.0467 wpm(K)=468.57 mins=168.35
+ep=17  steps=109.50 lr=0.000189 loss/word=96.34   ppl/word=1069.21  acc=0.0339 wpm(K)=468.64 mins=168.48
+ep=17  steps=109.60 lr=0.000189 loss/word=183.81  ppl/word=1503.77  acc=0.0622 wpm(K)=468.67 mins=168.62
+ep=17  steps=109.70 lr=0.000189 loss/word=192.99  ppl/word=1382.20  acc=0.0574 wpm(K)=468.72 mins=168.75
+ep=17  steps=109.80 lr=0.000189 loss/word=126.00  ppl/word=1195.18  acc=0.0492 wpm(K)=468.79 mins=168.88
+ep=17  steps=109.90 lr=0.000189 loss/word=69.06   ppl/word=879.14   acc=0.0245 wpm(K)=468.81 mins=169.01
+ep=17  steps=110.00 lr=0.000188 loss/word=49.97   ppl/word=647.94   acc=0.0243 wpm(K)=468.84 mins=169.14
+Eval at step 110000. valid_batch_size=30
+val_step=110000 loss=7.18   acc=0.0555 val_ppl=1311.15
+ep=17  steps=110.10 lr=0.000188 loss/word=130.19  ppl/word=1085.85  acc=0.0621 wpm(K)=468.31 mins=169.48
+ep=17  steps=110.20 lr=0.000188 loss/word=100.25  ppl/word=907.54   acc=0.0488 wpm(K)=468.39 mins=169.61
+ep=17  steps=110.30 lr=0.000188 loss/word=708.18  ppl/word=1783.93  acc=0.0849 wpm(K)=468.47 mins=169.75
+ep=17  steps=110.40 lr=0.000188 loss/word=65.73   ppl/word=966.32   acc=0.0163 wpm(K)=468.52 mins=169.88
+ep=17  steps=110.50 lr=0.000188 loss/word=84.20   ppl/word=1094.52  acc=0.0234 wpm(K)=468.61 mins=170.01
+ep=17  steps=110.60 lr=0.000188 loss/word=47.38   ppl/word=795.44   acc=0.0220 wpm(K)=468.65 mins=170.15
+ep=17  steps=110.70 lr=0.000188 loss/word=123.92  ppl/word=1076.56  acc=0.0599 wpm(K)=468.73 mins=170.28
+ep=17  steps=110.80 lr=0.000188 loss/word=91.16   ppl/word=1148.81  acc=0.0483 wpm(K)=468.77 mins=170.41
+ep=17  steps=110.90 lr=0.000188 loss/word=52.89   ppl/word=724.77   acc=0.0117 wpm(K)=468.83 mins=170.55
+ep=17  steps=111.00 lr=0.000188 loss/word=163.79  ppl/word=1435.72  acc=0.0624 wpm(K)=468.92 mins=170.68
+Eval at step 111000. valid_batch_size=30
+val_step=111000 loss=7.18   acc=0.0555 val_ppl=1310.49
+ep=17  steps=111.10 lr=0.000188 loss/word=34.11   ppl/word=638.29   acc=0.0000 wpm(K)=468.45 mins=171.01
+ep=17  steps=111.20 lr=0.000187 loss/word=152.57  ppl/word=1384.31  acc=0.0578 wpm(K)=468.54 mins=171.15
+ep=17  steps=111.30 lr=0.000187 loss/word=170.29  ppl/word=1252.25  acc=0.0615 wpm(K)=468.61 mins=171.28
+ep=17  steps=111.40 lr=0.000187 loss/word=65.49   ppl/word=881.51   acc=0.0324 wpm(K)=468.66 mins=171.41
+ep=17  steps=111.50 lr=0.000187 loss/word=199.19  ppl/word=1101.49  acc=0.0692 wpm(K)=468.69 mins=171.55
+ep=17  steps=111.60 lr=0.000187 loss/word=137.81  ppl/word=1049.06  acc=0.0568 wpm(K)=468.78 mins=171.68
+ep=17  steps=111.70 lr=0.000187 loss/word=78.71   ppl/word=840.85   acc=0.0401 wpm(K)=468.84 mins=171.82
+ep=17  steps=111.80 lr=0.000187 loss/word=147.53  ppl/word=1395.41  acc=0.0521 wpm(K)=468.91 mins=171.95
+ep=17  steps=111.90 lr=0.000187 loss/word=74.83   ppl/word=803.57   acc=0.0335 wpm(K)=468.98 mins=172.08
+ep=17  steps=112.00 lr=0.000187 loss/word=418.05  ppl/word=1466.01  acc=0.0747 wpm(K)=469.03 mins=172.21
+Eval at step 112000. valid_batch_size=30
+val_step=112000 loss=7.18   acc=0.0555 val_ppl=1313.48
+ep=17  steps=112.10 lr=0.000187 loss/word=211.59  ppl/word=1364.28  acc=0.0682 wpm(K)=468.57 mins=172.54
+ep=17  steps=112.20 lr=0.000187 loss/word=91.89   ppl/word=1325.64  acc=0.0391 wpm(K)=468.63 mins=172.68
+ep=17  steps=112.30 lr=0.000187 loss/word=49.67   ppl/word=657.15   acc=0.0122 wpm(K)=468.68 mins=172.81
+ep=17  steps=112.40 lr=0.000186 loss/word=126.06  ppl/word=1113.88  acc=0.0522 wpm(K)=468.75 mins=172.94
+ep=18  steps=112.50 lr=0.000186 loss/word=189.21  ppl/word=1132.66  acc=0.0790 wpm(K)=468.80 mins=173.07
+ep=18  steps=112.60 lr=0.000186 loss/word=64.49   ppl/word=927.93   acc=0.0232 wpm(K)=468.85 mins=173.21
+ep=18  steps=112.70 lr=0.000186 loss/word=84.62   ppl/word=1134.23  acc=0.0260 wpm(K)=468.93 mins=173.34
+ep=18  steps=112.80 lr=0.000186 loss/word=83.01   ppl/word=1127.10  acc=0.0265 wpm(K)=468.95 mins=173.47
+ep=18  steps=112.90 lr=0.000186 loss/word=200.84  ppl/word=1574.59  acc=0.0584 wpm(K)=469.01 mins=173.60
+ep=18  steps=113.00 lr=0.000186 loss/word=214.11  ppl/word=1305.53  acc=0.0681 wpm(K)=469.06 mins=173.74
+Eval at step 113000. valid_batch_size=30
+val_step=113000 loss=7.18   acc=0.0555 val_ppl=1313.64
+ep=18  steps=113.10 lr=0.000186 loss/word=57.99   ppl/word=831.96   acc=0.0072 wpm(K)=468.58 mins=174.06
+ep=18  steps=113.20 lr=0.000186 loss/word=69.63   ppl/word=1056.44  acc=0.0281 wpm(K)=468.61 mins=174.19
+ep=18  steps=113.30 lr=0.000186 loss/word=73.29   ppl/word=1144.69  acc=0.0180 wpm(K)=468.67 mins=174.32
+ep=18  steps=113.40 lr=0.000186 loss/word=166.02  ppl/word=1106.13  acc=0.0726 wpm(K)=468.77 mins=174.46
+ep=18  steps=113.50 lr=0.000186 loss/word=158.52  ppl/word=1229.46  acc=0.0603 wpm(K)=468.83 mins=174.59
+ep=18  steps=113.60 lr=0.000185 loss/word=110.84  ppl/word=1107.39  acc=0.0474 wpm(K)=468.88 mins=174.72
+ep=18  steps=113.70 lr=0.000185 loss/word=163.12  ppl/word=1436.77  acc=0.0585 wpm(K)=468.92 mins=174.85
+ep=18  steps=113.80 lr=0.000185 loss/word=199.56  ppl/word=1187.80  acc=0.0798 wpm(K)=468.99 mins=174.99
+ep=18  steps=113.90 lr=0.000185 loss/word=151.71  ppl/word=1125.21  acc=0.0521 wpm(K)=469.03 mins=175.11
+ep=18  steps=114.00 lr=0.000185 loss/word=92.34   ppl/word=1080.54  acc=0.0260 wpm(K)=469.08 mins=175.25
+Eval at step 114000. valid_batch_size=30
+val_step=114000 loss=7.18   acc=0.0555 val_ppl=1315.05
+ep=18  steps=114.10 lr=0.000185 loss/word=131.80  ppl/word=1257.06  acc=0.0525 wpm(K)=468.65 mins=175.58
+ep=18  steps=114.20 lr=0.000185 loss/word=92.82   ppl/word=1198.61  acc=0.0453 wpm(K)=468.75 mins=175.72
+ep=18  steps=114.30 lr=0.000185 loss/word=172.90  ppl/word=1332.46  acc=0.0468 wpm(K)=468.84 mins=175.85
+ep=18  steps=114.40 lr=0.000185 loss/word=223.96  ppl/word=1241.57  acc=0.0815 wpm(K)=468.91 mins=175.98
+ep=18  steps=114.50 lr=0.000185 loss/word=23.91   ppl/word=413.24   acc=0.0000 wpm(K)=468.97 mins=176.12
+ep=18  steps=114.60 lr=0.000185 loss/word=307.08  ppl/word=1359.40  acc=0.0786 wpm(K)=469.00 mins=176.24
+ep=18  steps=114.70 lr=0.000185 loss/word=158.21  ppl/word=1369.68  acc=0.0599 wpm(K)=469.04 mins=176.37
+ep=18  steps=114.80 lr=0.000184 loss/word=94.54   ppl/word=1254.92  acc=0.0425 wpm(K)=469.07 mins=176.51
+ep=18  steps=114.90 lr=0.000184 loss/word=432.84  ppl/word=1541.02  acc=0.0705 wpm(K)=469.16 mins=176.64
+ep=18  steps=115.00 lr=0.000184 loss/word=90.77   ppl/word=991.83   acc=0.0356 wpm(K)=469.24 mins=176.77
+Eval at step 115000. valid_batch_size=30
+val_step=115000 loss=7.18   acc=0.0555 val_ppl=1310.27
+ep=18  steps=115.10 lr=0.000184 loss/word=83.86   ppl/word=833.41   acc=0.0551 wpm(K)=468.78 mins=177.09
+ep=18  steps=115.20 lr=0.000184 loss/word=182.60  ppl/word=1334.02  acc=0.0640 wpm(K)=468.85 mins=177.22
+ep=18  steps=115.30 lr=0.000184 loss/word=115.31  ppl/word=1113.60  acc=0.0418 wpm(K)=468.95 mins=177.35
+ep=18  steps=115.40 lr=0.000184 loss/word=150.74  ppl/word=1023.05  acc=0.0647 wpm(K)=469.02 mins=177.47
+ep=18  steps=115.50 lr=0.000184 loss/word=273.93  ppl/word=1311.81  acc=0.0770 wpm(K)=469.11 mins=177.60
+ep=18  steps=115.60 lr=0.000184 loss/word=108.48  ppl/word=993.86   acc=0.0417 wpm(K)=469.18 mins=177.73
+ep=18  steps=115.70 lr=0.000184 loss/word=530.22  ppl/word=1553.44  acc=0.0849 wpm(K)=469.22 mins=177.87
+ep=18  steps=115.80 lr=0.000184 loss/word=117.18  ppl/word=1091.82  acc=0.0560 wpm(K)=469.29 mins=178.00
+ep=18  steps=115.90 lr=0.000184 loss/word=160.73  ppl/word=1053.61  acc=0.0582 wpm(K)=469.35 mins=178.13
+ep=18  steps=116.00 lr=0.000184 loss/word=115.98  ppl/word=1191.28  acc=0.0458 wpm(K)=469.39 mins=178.26
+Eval at step 116000. valid_batch_size=30
+val_step=116000 loss=7.18   acc=0.0555 val_ppl=1310.19
+ep=18  steps=116.10 lr=0.000183 loss/word=414.54  ppl/word=1511.48  acc=0.0745 wpm(K)=468.93 mins=178.59
+ep=18  steps=116.20 lr=0.000183 loss/word=149.67  ppl/word=1285.89  acc=0.0538 wpm(K)=469.01 mins=178.72
+ep=18  steps=116.30 lr=0.000183 loss/word=140.22  ppl/word=1211.54  acc=0.0633 wpm(K)=469.09 mins=178.86
+ep=18  steps=116.40 lr=0.000183 loss/word=81.25   ppl/word=841.88   acc=0.0570 wpm(K)=469.13 mins=178.99
+ep=18  steps=116.50 lr=0.000183 loss/word=70.96   ppl/word=1015.67  acc=0.0274 wpm(K)=469.19 mins=179.12
+ep=18  steps=116.60 lr=0.000183 loss/word=247.18  ppl/word=1117.11  acc=0.0701 wpm(K)=469.25 mins=179.25
+ep=18  steps=116.70 lr=0.000183 loss/word=206.87  ppl/word=1323.04  acc=0.0608 wpm(K)=469.31 mins=179.39
+ep=18  steps=116.80 lr=0.000183 loss/word=73.82   ppl/word=941.18   acc=0.0319 wpm(K)=469.37 mins=179.52
+ep=18  steps=116.90 lr=0.000183 loss/word=472.49  ppl/word=1607.90  acc=0.0713 wpm(K)=469.41 mins=179.65
+ep=18  steps=117.00 lr=0.000183 loss/word=94.28   ppl/word=1151.26  acc=0.0304 wpm(K)=469.48 mins=179.78
+Eval at step 117000. valid_batch_size=30
+val_step=117000 loss=7.18   acc=0.0555 val_ppl=1310.08
+ep=18  steps=117.10 lr=0.000183 loss/word=33.10   ppl/word=547.13   acc=0.0000 wpm(K)=469.00 mins=180.11
+ep=18  steps=117.20 lr=0.000183 loss/word=47.65   ppl/word=694.80   acc=0.0215 wpm(K)=469.06 mins=180.24
+ep=18  steps=117.30 lr=0.000182 loss/word=729.52  ppl/word=1873.08  acc=0.0755 wpm(K)=469.09 mins=180.37
+ep=18  steps=117.40 lr=0.000182 loss/word=160.70  ppl/word=1252.04  acc=0.0569 wpm(K)=469.12 mins=180.50
+ep=18  steps=117.50 lr=0.000182 loss/word=106.43  ppl/word=1089.54  acc=0.0390 wpm(K)=469.17 mins=180.63
+ep=18  steps=117.60 lr=0.000182 loss/word=242.24  ppl/word=1541.84  acc=0.0691 wpm(K)=469.19 mins=180.76
+ep=18  steps=117.70 lr=0.000182 loss/word=300.93  ppl/word=1272.82  acc=0.0772 wpm(K)=469.29 mins=180.89
+ep=18  steps=117.80 lr=0.000182 loss/word=37.93   ppl/word=556.35   acc=0.0000 wpm(K)=469.38 mins=181.03
+ep=18  steps=117.90 lr=0.000182 loss/word=76.36   ppl/word=956.87   acc=0.0197 wpm(K)=469.44 mins=181.16
+ep=18  steps=118.00 lr=0.000182 loss/word=35.26   ppl/word=825.51   acc=0.0060 wpm(K)=469.51 mins=181.29
+Eval at step 118000. valid_batch_size=30
+val_step=118000 loss=7.18   acc=0.0555 val_ppl=1310.58
+ep=18  steps=118.10 lr=0.000182 loss/word=264.07  ppl/word=1257.78  acc=0.0709 wpm(K)=469.04 mins=181.62
+ep=18  steps=118.20 lr=0.000182 loss/word=62.78   ppl/word=885.88   acc=0.0135 wpm(K)=469.12 mins=181.76
+ep=18  steps=118.30 lr=0.000182 loss/word=106.21  ppl/word=1028.76  acc=0.0449 wpm(K)=469.19 mins=181.89
+ep=18  steps=118.40 lr=0.000182 loss/word=685.20  ppl/word=1628.03  acc=0.0813 wpm(K)=469.26 mins=182.03
+ep=18  steps=118.50 lr=0.000182 loss/word=37.90   ppl/word=572.34   acc=0.0052 wpm(K)=469.33 mins=182.16
+ep=18  steps=118.60 lr=0.000181 loss/word=36.11   ppl/word=498.94   acc=0.0161 wpm(K)=469.35 mins=182.29
+ep=19  steps=118.70 lr=0.000181 loss/word=244.44  ppl/word=1445.72  acc=0.0707 wpm(K)=469.37 mins=182.42
+ep=19  steps=118.80 lr=0.000181 loss/word=140.77  ppl/word=1090.67  acc=0.0575 wpm(K)=469.47 mins=182.55
+ep=19  steps=118.90 lr=0.000181 loss/word=194.00  ppl/word=1235.37  acc=0.0780 wpm(K)=469.51 mins=182.68
+ep=19  steps=119.00 lr=0.000181 loss/word=403.81  ppl/word=1569.84  acc=0.0752 wpm(K)=469.61 mins=182.82
+Eval at step 119000. valid_batch_size=30
+val_step=119000 loss=7.18   acc=0.0555 val_ppl=1310.39
+ep=19  steps=119.10 lr=0.000181 loss/word=78.13   ppl/word=1018.43  acc=0.0139 wpm(K)=469.12 mins=183.15
+ep=19  steps=119.20 lr=0.000181 loss/word=142.00  ppl/word=1471.43  acc=0.0578 wpm(K)=469.16 mins=183.27
+ep=19  steps=119.30 lr=0.000181 loss/word=96.17   ppl/word=1143.77  acc=0.0389 wpm(K)=469.17 mins=183.40
+ep=19  steps=119.40 lr=0.000181 loss/word=207.40  ppl/word=1337.29  acc=0.0640 wpm(K)=469.21 mins=183.54
+ep=19  steps=119.50 lr=0.000181 loss/word=347.49  ppl/word=1386.58  acc=0.0846 wpm(K)=469.28 mins=183.67
+ep=19  steps=119.60 lr=0.000181 loss/word=189.66  ppl/word=1220.17  acc=0.0726 wpm(K)=469.32 mins=183.80
+ep=19  steps=119.70 lr=0.000181 loss/word=90.79   ppl/word=886.87   acc=0.0444 wpm(K)=469.35 mins=183.93
+ep=19  steps=119.80 lr=0.000181 loss/word=182.69  ppl/word=1216.27  acc=0.0717 wpm(K)=469.39 mins=184.06
+ep=19  steps=119.90 lr=0.000180 loss/word=68.38   ppl/word=932.17   acc=0.0187 wpm(K)=469.45 mins=184.19
+ep=19  steps=120.00 lr=0.000180 loss/word=137.76  ppl/word=991.24   acc=0.0548 wpm(K)=469.49 mins=184.32
+Eval at step 120000. valid_batch_size=30
+val_step=120000 loss=7.18   acc=0.0555 val_ppl=1310.54
+ep=19  steps=120.10 lr=0.000180 loss/word=266.56  ppl/word=1503.46  acc=0.0643 wpm(K)=469.05 mins=184.65
+ep=19  steps=120.20 lr=0.000180 loss/word=168.80  ppl/word=1103.33  acc=0.0661 wpm(K)=469.09 mins=184.78
+ep=19  steps=120.30 lr=0.000180 loss/word=68.67   ppl/word=959.86   acc=0.0344 wpm(K)=469.19 mins=184.91
+ep=19  steps=120.40 lr=0.000180 loss/word=115.61  ppl/word=956.77   acc=0.0594 wpm(K)=469.23 mins=185.05
+ep=19  steps=120.50 lr=0.000180 loss/word=301.01  ppl/word=1374.91  acc=0.0788 wpm(K)=469.34 mins=185.18
+ep=19  steps=120.60 lr=0.000180 loss/word=284.78  ppl/word=1440.64  acc=0.0702 wpm(K)=469.38 mins=185.31
+ep=19  steps=120.70 lr=0.000180 loss/word=46.39   ppl/word=692.03   acc=0.0132 wpm(K)=469.40 mins=185.44
+ep=19  steps=120.80 lr=0.000180 loss/word=204.79  ppl/word=997.74   acc=0.0811 wpm(K)=469.42 mins=185.57
+ep=19  steps=120.90 lr=0.000180 loss/word=64.36   ppl/word=958.02   acc=0.0267 wpm(K)=469.47 mins=185.70
+ep=19  steps=121.00 lr=0.000180 loss/word=160.21  ppl/word=1237.27  acc=0.0625 wpm(K)=469.49 mins=185.83
+Eval at step 121000. valid_batch_size=30
+val_step=121000 loss=7.18   acc=0.0555 val_ppl=1312.10
+ep=19  steps=121.10 lr=0.000180 loss/word=229.90  ppl/word=1346.73  acc=0.0744 wpm(K)=469.05 mins=186.16
+ep=19  steps=121.20 lr=0.000180 loss/word=178.65  ppl/word=1192.79  acc=0.0719 wpm(K)=469.10 mins=186.29
+ep=19  steps=121.30 lr=0.000179 loss/word=46.83   ppl/word=675.92   acc=0.0304 wpm(K)=469.17 mins=186.43
+ep=19  steps=121.40 lr=0.000179 loss/word=284.91  ppl/word=1445.65  acc=0.0758 wpm(K)=469.24 mins=186.56
+ep=19  steps=121.50 lr=0.000179 loss/word=88.87   ppl/word=1140.41  acc=0.0322 wpm(K)=469.30 mins=186.69
+ep=19  steps=121.60 lr=0.000179 loss/word=161.35  ppl/word=1424.75  acc=0.0591 wpm(K)=469.34 mins=186.82
+ep=19  steps=121.70 lr=0.000179 loss/word=155.21  ppl/word=1323.25  acc=0.0550 wpm(K)=469.38 mins=186.95
+ep=19  steps=121.80 lr=0.000179 loss/word=255.53  ppl/word=1491.12  acc=0.0760 wpm(K)=469.43 mins=187.09
+ep=19  steps=121.90 lr=0.000179 loss/word=93.55   ppl/word=1005.77  acc=0.0462 wpm(K)=469.48 mins=187.22
+ep=19  steps=122.00 lr=0.000179 loss/word=121.33  ppl/word=1148.45  acc=0.0454 wpm(K)=469.54 mins=187.35
+Eval at step 122000. valid_batch_size=30
+val_step=122000 loss=7.18   acc=0.0555 val_ppl=1311.00
+ep=19  steps=122.10 lr=0.000179 loss/word=76.84   ppl/word=943.45   acc=0.0362 wpm(K)=469.10 mins=187.68
+ep=19  steps=122.20 lr=0.000179 loss/word=449.53  ppl/word=1592.60  acc=0.0769 wpm(K)=469.19 mins=187.81
+ep=19  steps=122.30 lr=0.000179 loss/word=94.81   ppl/word=1303.26  acc=0.0426 wpm(K)=469.24 mins=187.93
+ep=19  steps=122.40 lr=0.000179 loss/word=274.35  ppl/word=1258.52  acc=0.0789 wpm(K)=469.25 mins=188.06
+ep=19  steps=122.50 lr=0.000179 loss/word=252.64  ppl/word=1372.94  acc=0.0795 wpm(K)=469.34 mins=188.19
+ep=19  steps=122.60 lr=0.000178 loss/word=250.43  ppl/word=1439.32  acc=0.0762 wpm(K)=469.41 mins=188.32
+ep=19  steps=122.70 lr=0.000178 loss/word=110.65  ppl/word=1259.80  acc=0.0444 wpm(K)=469.49 mins=188.44
+ep=19  steps=122.80 lr=0.000178 loss/word=368.90  ppl/word=1501.32  acc=0.0644 wpm(K)=469.57 mins=188.57
+ep=19  steps=122.90 lr=0.000178 loss/word=203.31  ppl/word=1423.65  acc=0.0681 wpm(K)=469.61 mins=188.70
+ep=19  steps=123.00 lr=0.000178 loss/word=274.63  ppl/word=1368.11  acc=0.0731 wpm(K)=469.69 mins=188.83
+Eval at step 123000. valid_batch_size=30
+val_step=123000 loss=7.18   acc=0.0555 val_ppl=1310.91
+ep=19  steps=123.10 lr=0.000178 loss/word=332.75  ppl/word=1484.87  acc=0.0789 wpm(K)=469.25 mins=189.16
+ep=19  steps=123.20 lr=0.000178 loss/word=159.40  ppl/word=1387.25  acc=0.0596 wpm(K)=469.30 mins=189.30
+ep=19  steps=123.30 lr=0.000178 loss/word=162.12  ppl/word=1185.03  acc=0.0709 wpm(K)=469.37 mins=189.43
+ep=19  steps=123.40 lr=0.000178 loss/word=76.68   ppl/word=1108.84  acc=0.0371 wpm(K)=469.41 mins=189.56
+ep=19  steps=123.50 lr=0.000178 loss/word=278.30  ppl/word=1338.50  acc=0.0711 wpm(K)=469.47 mins=189.69
+ep=19  steps=123.60 lr=0.000178 loss/word=79.87   ppl/word=981.33   acc=0.0485 wpm(K)=469.54 mins=189.83
+ep=19  steps=123.70 lr=0.000178 loss/word=129.66  ppl/word=1247.62  acc=0.0550 wpm(K)=469.61 mins=189.96
+ep=19  steps=123.80 lr=0.000178 loss/word=72.68   ppl/word=973.62   acc=0.0266 wpm(K)=469.68 mins=190.10
+ep=19  steps=123.90 lr=0.000178 loss/word=152.30  ppl/word=1035.53  acc=0.0598 wpm(K)=469.75 mins=190.23
+ep=19  steps=124.00 lr=0.000177 loss/word=561.26  ppl/word=1708.21  acc=0.0742 wpm(K)=469.81 mins=190.36
+Eval at step 124000. valid_batch_size=30
+val_step=124000 loss=7.18   acc=0.0555 val_ppl=1311.06
+ep=19  steps=124.10 lr=0.000177 loss/word=174.50  ppl/word=1228.35  acc=0.0662 wpm(K)=469.39 mins=190.69
+ep=19  steps=124.20 lr=0.000177 loss/word=626.45  ppl/word=1787.12  acc=0.0669 wpm(K)=469.45 mins=190.82
+ep=19  steps=124.30 lr=0.000177 loss/word=167.52  ppl/word=1372.84  acc=0.0647 wpm(K)=469.51 mins=190.96
+ep=19  steps=124.40 lr=0.000177 loss/word=57.04   ppl/word=820.93   acc=0.0221 wpm(K)=469.55 mins=191.09
+ep=19  steps=124.50 lr=0.000177 loss/word=339.97  ppl/word=1628.93  acc=0.0632 wpm(K)=469.62 mins=191.22
+ep=19  steps=124.60 lr=0.000177 loss/word=230.47  ppl/word=1193.34  acc=0.0749 wpm(K)=469.70 mins=191.35
+ep=19  steps=124.70 lr=0.000177 loss/word=141.31  ppl/word=1324.80  acc=0.0429 wpm(K)=469.78 mins=191.49
+ep=19  steps=124.80 lr=0.000177 loss/word=92.86   ppl/word=1070.14  acc=0.0258 wpm(K)=469.85 mins=191.62
+ep=19  steps=124.90 lr=0.000177 loss/word=61.01   ppl/word=800.76   acc=0.0308 wpm(K)=469.89 mins=191.75
+ep=20  steps=125.00 lr=0.000177 loss/word=93.95   ppl/word=885.62   acc=0.0542 wpm(K)=469.93 mins=191.88
+Eval at step 125000. valid_batch_size=30
+val_step=125000 loss=7.18   acc=0.0555 val_ppl=1309.88
+ep=20  steps=125.10 lr=0.000177 loss/word=244.30  ppl/word=1236.26  acc=0.0656 wpm(K)=469.49 mins=192.21
+ep=20  steps=125.20 lr=0.000177 loss/word=89.46   ppl/word=1077.37  acc=0.0341 wpm(K)=469.52 mins=192.34
+ep=20  steps=125.30 lr=0.000177 loss/word=103.71  ppl/word=1337.75  acc=0.0195 wpm(K)=469.60 mins=192.48
+ep=20  steps=125.40 lr=0.000176 loss/word=137.62  ppl/word=1229.36  acc=0.0533 wpm(K)=469.65 mins=192.61
+ep=20  steps=125.50 lr=0.000176 loss/word=188.92  ppl/word=1138.92  acc=0.0687 wpm(K)=469.70 mins=192.74
+ep=20  steps=125.60 lr=0.000176 loss/word=39.04   ppl/word=647.29   acc=0.0052 wpm(K)=469.74 mins=192.87
+ep=20  steps=125.70 lr=0.000176 loss/word=530.00  ppl/word=1619.76  acc=0.0819 wpm(K)=469.81 mins=193.00
+ep=20  steps=125.80 lr=0.000176 loss/word=162.49  ppl/word=1084.58  acc=0.0632 wpm(K)=469.84 mins=193.13
+ep=20  steps=125.90 lr=0.000176 loss/word=151.78  ppl/word=1163.64  acc=0.0625 wpm(K)=469.91 mins=193.27
+ep=20  steps=126.00 lr=0.000176 loss/word=307.31  ppl/word=1381.35  acc=0.0765 wpm(K)=469.96 mins=193.40
+Eval at step 126000. valid_batch_size=30
+val_step=126000 loss=7.18   acc=0.0555 val_ppl=1312.34
+ep=20  steps=126.10 lr=0.000176 loss/word=186.67  ppl/word=1215.49  acc=0.0737 wpm(K)=469.52 mins=193.74
+ep=20  steps=126.20 lr=0.000176 loss/word=93.51   ppl/word=1200.50  acc=0.0355 wpm(K)=469.57 mins=193.87
+ep=20  steps=126.30 lr=0.000176 loss/word=491.09  ppl/word=1483.84  acc=0.0762 wpm(K)=469.60 mins=194.00
+ep=20  steps=126.40 lr=0.000176 loss/word=436.46  ppl/word=1527.73  acc=0.0672 wpm(K)=469.67 mins=194.13
+ep=20  steps=126.50 lr=0.000176 loss/word=34.06   ppl/word=739.33   acc=0.0121 wpm(K)=469.66 mins=194.26
+ep=20  steps=126.60 lr=0.000176 loss/word=510.12  ppl/word=1714.64  acc=0.0734 wpm(K)=469.73 mins=194.40
+ep=20  steps=126.70 lr=0.000176 loss/word=78.93   ppl/word=856.95   acc=0.0428 wpm(K)=469.78 mins=194.53
+ep=20  steps=126.80 lr=0.000176 loss/word=114.49  ppl/word=1245.73  acc=0.0350 wpm(K)=469.80 mins=194.66
+ep=20  steps=126.90 lr=0.000175 loss/word=112.19  ppl/word=1172.52  acc=0.0295 wpm(K)=469.83 mins=194.79
+ep=20  steps=127.00 lr=0.000175 loss/word=109.05  ppl/word=1059.49  acc=0.0479 wpm(K)=469.88 mins=194.92
+Eval at step 127000. valid_batch_size=30
+val_step=127000 loss=7.18   acc=0.0555 val_ppl=1310.34
+ep=20  steps=127.10 lr=0.000175 loss/word=38.60   ppl/word=496.16   acc=0.0151 wpm(K)=469.44 mins=195.25
+ep=20  steps=127.20 lr=0.000175 loss/word=154.91  ppl/word=1449.55  acc=0.0529 wpm(K)=469.48 mins=195.38
+ep=20  steps=127.30 lr=0.000175 loss/word=54.01   ppl/word=750.93   acc=0.0192 wpm(K)=469.56 mins=195.51
+ep=20  steps=127.40 lr=0.000175 loss/word=230.05  ppl/word=1495.74  acc=0.0735 wpm(K)=469.62 mins=195.65
+ep=20  steps=127.50 lr=0.000175 loss/word=106.32  ppl/word=1436.07  acc=0.0342 wpm(K)=469.69 mins=195.78
+ep=20  steps=127.60 lr=0.000175 loss/word=96.79   ppl/word=1236.70  acc=0.0253 wpm(K)=469.74 mins=195.91
+ep=20  steps=127.70 lr=0.000175 loss/word=75.32   ppl/word=823.39   acc=0.0334 wpm(K)=469.77 mins=196.04
+ep=20  steps=127.80 lr=0.000175 loss/word=378.83  ppl/word=1530.93  acc=0.0738 wpm(K)=469.81 mins=196.18
+ep=20  steps=127.90 lr=0.000175 loss/word=350.14  ppl/word=1574.53  acc=0.0815 wpm(K)=469.86 mins=196.31
+ep=20  steps=128.00 lr=0.000175 loss/word=409.38  ppl/word=1551.89  acc=0.0774 wpm(K)=469.95 mins=196.44
+Eval at step 128000. valid_batch_size=30
+val_step=128000 loss=7.18   acc=0.0555 val_ppl=1309.86
+ep=20  steps=128.10 lr=0.000175 loss/word=77.04   ppl/word=857.33   acc=0.0384 wpm(K)=469.53 mins=196.77
+ep=20  steps=128.20 lr=0.000175 loss/word=155.90  ppl/word=1283.54  acc=0.0617 wpm(K)=469.59 mins=196.90
+ep=20  steps=128.30 lr=0.000174 loss/word=88.78   ppl/word=1132.60  acc=0.0272 wpm(K)=469.65 mins=197.04
+ep=20  steps=128.40 lr=0.000174 loss/word=237.54  ppl/word=1536.34  acc=0.0753 wpm(K)=469.69 mins=197.17
+ep=20  steps=128.50 lr=0.000174 loss/word=161.78  ppl/word=1437.79  acc=0.0478 wpm(K)=469.73 mins=197.30
+ep=20  steps=128.60 lr=0.000174 loss/word=72.33   ppl/word=819.91   acc=0.0261 wpm(K)=469.80 mins=197.43
+ep=20  steps=128.70 lr=0.000174 loss/word=112.86  ppl/word=1080.97  acc=0.0484 wpm(K)=469.85 mins=197.57
+ep=20  steps=128.80 lr=0.000174 loss/word=45.65   ppl/word=641.53   acc=0.0088 wpm(K)=469.87 mins=197.70
+ep=20  steps=128.90 lr=0.000174 loss/word=93.23   ppl/word=1420.32  acc=0.0389 wpm(K)=469.92 mins=197.83
+ep=20  steps=129.00 lr=0.000174 loss/word=169.64  ppl/word=1081.93  acc=0.0605 wpm(K)=470.00 mins=197.96
+Eval at step 129000. valid_batch_size=30
+val_step=129000 loss=7.18   acc=0.0555 val_ppl=1310.27
+ep=20  steps=129.10 lr=0.000174 loss/word=76.12   ppl/word=1239.04  acc=0.0263 wpm(K)=469.58 mins=198.29
+ep=20  steps=129.20 lr=0.000174 loss/word=175.45  ppl/word=1116.34  acc=0.0725 wpm(K)=469.63 mins=198.43
+ep=20  steps=129.30 lr=0.000174 loss/word=64.19   ppl/word=823.07   acc=0.0163 wpm(K)=469.68 mins=198.56
+ep=20  steps=129.40 lr=0.000174 loss/word=79.94   ppl/word=987.70   acc=0.0377 wpm(K)=469.73 mins=198.68
+ep=20  steps=129.50 lr=0.000174 loss/word=65.94   ppl/word=966.41   acc=0.0163 wpm(K)=469.78 mins=198.81
+ep=20  steps=129.60 lr=0.000174 loss/word=254.21  ppl/word=1584.89  acc=0.0616 wpm(K)=469.83 mins=198.93
+ep=20  steps=129.70 lr=0.000174 loss/word=105.51  ppl/word=1134.24  acc=0.0479 wpm(K)=469.88 mins=199.06
+ep=20  steps=129.80 lr=0.000173 loss/word=247.86  ppl/word=1284.94  acc=0.0794 wpm(K)=469.94 mins=199.19
+ep=20  steps=129.90 lr=0.000173 loss/word=237.53  ppl/word=1364.44  acc=0.0741 wpm(K)=469.97 mins=199.32
+ep=20  steps=130.00 lr=0.000173 loss/word=260.23  ppl/word=1303.35  acc=0.0715 wpm(K)=470.09 mins=199.45
+Eval at step 130000. valid_batch_size=30
+val_step=130000 loss=7.18   acc=0.0555 val_ppl=1311.23
+ep=20  steps=130.10 lr=0.000173 loss/word=64.06   ppl/word=760.53   acc=0.0227 wpm(K)=469.71 mins=199.77
+ep=20  steps=130.20 lr=0.000173 loss/word=74.06   ppl/word=1086.32  acc=0.0236 wpm(K)=469.76 mins=199.89
+ep=20  steps=130.30 lr=0.000173 loss/word=114.89  ppl/word=964.75   acc=0.0505 wpm(K)=469.81 mins=200.02
+ep=20  steps=130.40 lr=0.000173 loss/word=45.67   ppl/word=642.87   acc=0.0133 wpm(K)=469.87 mins=200.16
+ep=20  steps=130.50 lr=0.000173 loss/word=58.03   ppl/word=835.38   acc=0.0109 wpm(K)=469.88 mins=200.29
+ep=20  steps=130.60 lr=0.000173 loss/word=206.82  ppl/word=1320.60  acc=0.0738 wpm(K)=469.90 mins=200.42
+ep=20  steps=130.70 lr=0.000173 loss/word=336.02  ppl/word=1304.08  acc=0.0787 wpm(K)=469.95 mins=200.55
+ep=20  steps=130.80 lr=0.000173 loss/word=112.04  ppl/word=924.19   acc=0.0648 wpm(K)=469.99 mins=200.68
+ep=20  steps=130.90 lr=0.000173 loss/word=88.87   ppl/word=1046.59  acc=0.0391 wpm(K)=470.02 mins=200.81
+ep=20  steps=131.00 lr=0.000173 loss/word=553.46  ppl/word=1748.51  acc=0.0734 wpm(K)=470.07 mins=200.94
+Eval at step 131000. valid_batch_size=30
+val_step=131000 loss=7.18   acc=0.0555 val_ppl=1312.95
+ep=20  steps=131.10 lr=0.000173 loss/word=74.76   ppl/word=828.78   acc=0.0365 wpm(K)=469.65 mins=201.27
+ep=21  steps=131.20 lr=0.000173 loss/word=305.56  ppl/word=1467.86  acc=0.0723 wpm(K)=469.71 mins=201.40
+ep=21  steps=131.30 lr=0.000172 loss/word=174.21  ppl/word=1110.13  acc=0.0704 wpm(K)=469.76 mins=201.53
+ep=21  steps=131.40 lr=0.000172 loss/word=122.27  ppl/word=969.06   acc=0.0457 wpm(K)=469.80 mins=201.67
+ep=21  steps=131.50 lr=0.000172 loss/word=243.27  ppl/word=1199.75  acc=0.0719 wpm(K)=469.86 mins=201.80
+ep=21  steps=131.60 lr=0.000172 loss/word=201.80  ppl/word=1236.23  acc=0.0684 wpm(K)=469.92 mins=201.93
+ep=21  steps=131.70 lr=0.000172 loss/word=274.52  ppl/word=1380.51  acc=0.0716 wpm(K)=469.97 mins=202.06
+ep=21  steps=131.80 lr=0.000172 loss/word=125.10  ppl/word=1357.09  acc=0.0450 wpm(K)=470.02 mins=202.19
+ep=21  steps=131.90 lr=0.000172 loss/word=250.65  ppl/word=1339.46  acc=0.0754 wpm(K)=470.04 mins=202.32
+ep=21  steps=132.00 lr=0.000172 loss/word=121.06  ppl/word=1254.37  acc=0.0589 wpm(K)=470.08 mins=202.45
+Eval at step 132000. valid_batch_size=30
+val_step=132000 loss=7.18   acc=0.0555 val_ppl=1311.53
+ep=21  steps=132.10 lr=0.000172 loss/word=89.57   ppl/word=1086.45  acc=0.0220 wpm(K)=469.68 mins=202.77
+ep=21  steps=132.20 lr=0.000172 loss/word=22.26   ppl/word=359.96   acc=0.0000 wpm(K)=469.73 mins=202.91
+ep=21  steps=132.30 lr=0.000172 loss/word=134.32  ppl/word=1189.30  acc=0.0544 wpm(K)=469.83 mins=203.04
+ep=21  steps=132.40 lr=0.000172 loss/word=63.11   ppl/word=877.53   acc=0.0168 wpm(K)=469.89 mins=203.18
+ep=21  steps=132.50 lr=0.000172 loss/word=45.43   ppl/word=740.73   acc=0.0227 wpm(K)=469.95 mins=203.31
+ep=21  steps=132.60 lr=0.000172 loss/word=133.67  ppl/word=1262.67  acc=0.0518 wpm(K)=469.99 mins=203.44
+ep=21  steps=132.70 lr=0.000172 loss/word=291.53  ppl/word=1382.56  acc=0.0783 wpm(K)=470.03 mins=203.57
+ep=21  steps=132.80 lr=0.000172 loss/word=514.93  ppl/word=1448.24  acc=0.0830 wpm(K)=470.08 mins=203.70
+ep=21  steps=132.90 lr=0.000171 loss/word=235.14  ppl/word=1162.94  acc=0.0863 wpm(K)=470.12 mins=203.84
+ep=21  steps=133.00 lr=0.000171 loss/word=98.70   ppl/word=1117.07  acc=0.0400 wpm(K)=470.18 mins=203.97
+Eval at step 133000. valid_batch_size=30
+val_step=133000 loss=7.18   acc=0.0555 val_ppl=1311.49
+ep=21  steps=133.10 lr=0.000171 loss/word=192.16  ppl/word=1385.94  acc=0.0612 wpm(K)=469.75 mins=204.30
+ep=21  steps=133.20 lr=0.000171 loss/word=204.50  ppl/word=1218.36  acc=0.0662 wpm(K)=469.80 mins=204.43
+ep=21  steps=133.30 lr=0.000171 loss/word=348.19  ppl/word=1433.82  acc=0.0776 wpm(K)=469.85 mins=204.56
+ep=21  steps=133.40 lr=0.000171 loss/word=83.08   ppl/word=979.73   acc=0.0389 wpm(K)=469.86 mins=204.70
+ep=21  steps=133.50 lr=0.000171 loss/word=204.71  ppl/word=1047.28  acc=0.0849 wpm(K)=469.91 mins=204.82
+ep=21  steps=133.60 lr=0.000171 loss/word=237.04  ppl/word=1344.24  acc=0.0741 wpm(K)=469.94 mins=204.95
+ep=21  steps=133.70 lr=0.000171 loss/word=82.12   ppl/word=889.48   acc=0.0336 wpm(K)=469.97 mins=205.08
+ep=21  steps=133.80 lr=0.000171 loss/word=355.84  ppl/word=1649.99  acc=0.0735 wpm(K)=470.03 mins=205.22
+ep=21  steps=133.90 lr=0.000171 loss/word=175.56  ppl/word=1111.51  acc=0.0749 wpm(K)=470.08 mins=205.35
+ep=21  steps=134.00 lr=0.000171 loss/word=252.78  ppl/word=1561.59  acc=0.0664 wpm(K)=470.14 mins=205.48
+Eval at step 134000. valid_batch_size=30
+val_step=134000 loss=7.18   acc=0.0555 val_ppl=1310.36
+ep=21  steps=134.10 lr=0.000171 loss/word=83.44   ppl/word=1168.99  acc=0.0291 wpm(K)=469.73 mins=205.81
+ep=21  steps=134.20 lr=0.000171 loss/word=303.12  ppl/word=1312.43  acc=0.0777 wpm(K)=469.75 mins=205.94
+ep=21  steps=134.30 lr=0.000171 loss/word=108.03  ppl/word=1094.18  acc=0.0425 wpm(K)=469.80 mins=206.07
+ep=21  steps=134.40 lr=0.000170 loss/word=77.22   ppl/word=1141.51  acc=0.0228 wpm(K)=469.84 mins=206.21
+ep=21  steps=134.50 lr=0.000170 loss/word=325.69  ppl/word=1411.95  acc=0.0703 wpm(K)=469.90 mins=206.34
+ep=21  steps=134.60 lr=0.000170 loss/word=196.68  ppl/word=1266.16  acc=0.0579 wpm(K)=469.95 mins=206.47
+ep=21  steps=134.70 lr=0.000170 loss/word=144.80  ppl/word=1233.56  acc=0.0492 wpm(K)=470.02 mins=206.61
+ep=21  steps=134.80 lr=0.000170 loss/word=52.09   ppl/word=707.75   acc=0.0197 wpm(K)=470.04 mins=206.74
+ep=21  steps=134.90 lr=0.000170 loss/word=469.94  ppl/word=1469.97  acc=0.0820 wpm(K)=470.10 mins=206.87
+ep=21  steps=135.00 lr=0.000170 loss/word=58.88   ppl/word=968.71   acc=0.0182 wpm(K)=470.14 mins=207.00
+Eval at step 135000. valid_batch_size=30
+val_step=135000 loss=7.18   acc=0.0555 val_ppl=1309.89
+ep=21  steps=135.10 lr=0.000170 loss/word=243.56  ppl/word=1274.53  acc=0.0734 wpm(K)=469.74 mins=207.33
+ep=21  steps=135.20 lr=0.000170 loss/word=288.76  ppl/word=1312.51  acc=0.0800 wpm(K)=469.80 mins=207.46
+ep=21  steps=135.30 lr=0.000170 loss/word=94.62   ppl/word=1106.20  acc=0.0417 wpm(K)=469.86 mins=207.59
+ep=21  steps=135.40 lr=0.000170 loss/word=96.37   ppl/word=1088.85  acc=0.0295 wpm(K)=469.91 mins=207.73
+ep=21  steps=135.50 lr=0.000170 loss/word=151.20  ppl/word=1066.09  acc=0.0663 wpm(K)=469.98 mins=207.86
+ep=21  steps=135.60 lr=0.000170 loss/word=83.10   ppl/word=1074.43  acc=0.0236 wpm(K)=470.03 mins=207.99
+ep=21  steps=135.70 lr=0.000170 loss/word=135.04  ppl/word=1165.50  acc=0.0507 wpm(K)=470.08 mins=208.12
+ep=21  steps=135.80 lr=0.000170 loss/word=132.70  ppl/word=1199.05  acc=0.0467 wpm(K)=470.11 mins=208.25
+ep=21  steps=135.90 lr=0.000170 loss/word=350.58  ppl/word=1257.00  acc=0.0852 wpm(K)=470.14 mins=208.38
+ep=21  steps=136.00 lr=0.000169 loss/word=228.45  ppl/word=1296.07  acc=0.0686 wpm(K)=470.22 mins=208.52
+Eval at step 136000. valid_batch_size=30
+val_step=136000 loss=7.18   acc=0.0555 val_ppl=1309.91
+ep=21  steps=136.10 lr=0.000169 loss/word=140.51  ppl/word=1331.90  acc=0.0544 wpm(K)=469.81 mins=208.85
+ep=21  steps=136.20 lr=0.000169 loss/word=134.11  ppl/word=1262.09  acc=0.0566 wpm(K)=469.83 mins=208.98
+ep=21  steps=136.30 lr=0.000169 loss/word=101.42  ppl/word=1141.14  acc=0.0412 wpm(K)=469.88 mins=209.11
+ep=21  steps=136.40 lr=0.000169 loss/word=135.72  ppl/word=1030.24  acc=0.0639 wpm(K)=469.95 mins=209.24
+ep=21  steps=136.50 lr=0.000169 loss/word=86.52   ppl/word=1013.99  acc=0.0450 wpm(K)=470.00 mins=209.38
+ep=21  steps=136.60 lr=0.000169 loss/word=82.68   ppl/word=1075.53  acc=0.0343 wpm(K)=470.05 mins=209.51
+ep=21  steps=136.70 lr=0.000169 loss/word=96.84   ppl/word=1221.12  acc=0.0298 wpm(K)=470.07 mins=209.64
+ep=21  steps=136.80 lr=0.000169 loss/word=54.92   ppl/word=777.95   acc=0.0227 wpm(K)=470.14 mins=209.77
+ep=21  steps=136.90 lr=0.000169 loss/word=312.95  ppl/word=1440.42  acc=0.0741 wpm(K)=470.20 mins=209.90
+ep=21  steps=137.00 lr=0.000169 loss/word=208.68  ppl/word=1180.78  acc=0.0752 wpm(K)=470.26 mins=210.03
+Eval at step 137000. valid_batch_size=30
+val_step=137000 loss=7.18   acc=0.0555 val_ppl=1310.26
+ep=21  steps=137.10 lr=0.000169 loss/word=133.40  ppl/word=1229.58  acc=0.0567 wpm(K)=469.89 mins=210.35
+ep=21  steps=137.20 lr=0.000169 loss/word=259.37  ppl/word=1354.37  acc=0.0747 wpm(K)=469.94 mins=210.47
+ep=21  steps=137.30 lr=0.000169 loss/word=392.04  ppl/word=1330.65  acc=0.0803 wpm(K)=470.04 mins=210.60
+ep=21  steps=137.40 lr=0.000169 loss/word=57.36   ppl/word=811.74   acc=0.0255 wpm(K)=470.08 mins=210.73
+ep=22  steps=137.50 lr=0.000169 loss/word=199.84  ppl/word=1298.63  acc=0.0717 wpm(K)=470.17 mins=210.86
+ep=22  steps=137.60 lr=0.000168 loss/word=97.66   ppl/word=1215.49  acc=0.0500 wpm(K)=470.22 mins=210.99
+ep=22  steps=137.70 lr=0.000168 loss/word=132.71  ppl/word=1199.56  acc=0.0618 wpm(K)=470.28 mins=211.12
+ep=22  steps=137.80 lr=0.000168 loss/word=114.99  ppl/word=996.09   acc=0.0600 wpm(K)=470.31 mins=211.24
+ep=22  steps=137.90 lr=0.000168 loss/word=299.50  ppl/word=1399.81  acc=0.0809 wpm(K)=470.38 mins=211.37
+ep=22  steps=138.00 lr=0.000168 loss/word=83.45   ppl/word=1363.19  acc=0.0351 wpm(K)=470.46 mins=211.51
+Eval at step 138000. valid_batch_size=30
+val_step=138000 loss=7.18   acc=0.0555 val_ppl=1310.14
+ep=22  steps=138.10 lr=0.000168 loss/word=66.40   ppl/word=1013.13  acc=0.0261 wpm(K)=470.05 mins=211.84
+ep=22  steps=138.20 lr=0.000168 loss/word=35.75   ppl/word=537.07   acc=0.0000 wpm(K)=470.10 mins=211.97
+ep=22  steps=138.30 lr=0.000168 loss/word=78.68   ppl/word=869.41   acc=0.0269 wpm(K)=470.18 mins=212.10
+ep=22  steps=138.40 lr=0.000168 loss/word=208.16  ppl/word=1351.38  acc=0.0606 wpm(K)=470.20 mins=212.23
+ep=22  steps=138.50 lr=0.000168 loss/word=284.02  ppl/word=1497.81  acc=0.0708 wpm(K)=470.24 mins=212.37
+ep=22  steps=138.60 lr=0.000168 loss/word=235.02  ppl/word=1482.76  acc=0.0728 wpm(K)=470.32 mins=212.50
+ep=22  steps=138.70 lr=0.000168 loss/word=158.53  ppl/word=1230.49  acc=0.0547 wpm(K)=470.35 mins=212.63
+ep=22  steps=138.80 lr=0.000168 loss/word=64.42   ppl/word=986.98   acc=0.0134 wpm(K)=470.40 mins=212.76
+ep=22  steps=138.90 lr=0.000168 loss/word=86.25   ppl/word=1205.70  acc=0.0180 wpm(K)=470.41 mins=212.89
+ep=22  steps=139.00 lr=0.000168 loss/word=227.89  ppl/word=1132.76  acc=0.0723 wpm(K)=470.45 mins=213.02
+Eval at step 139000. valid_batch_size=30
+val_step=139000 loss=7.18   acc=0.0555 val_ppl=1309.95
+ep=22  steps=139.10 lr=0.000168 loss/word=102.85  ppl/word=1167.90  acc=0.0322 wpm(K)=470.07 mins=213.35
+ep=22  steps=139.20 lr=0.000168 loss/word=103.81  ppl/word=1191.92  acc=0.0490 wpm(K)=470.11 mins=213.48
+ep=22  steps=139.30 lr=0.000167 loss/word=52.65   ppl/word=635.63   acc=0.0077 wpm(K)=470.18 mins=213.61
+ep=22  steps=139.40 lr=0.000167 loss/word=34.20   ppl/word=625.12   acc=0.0000 wpm(K)=470.20 mins=213.74
+ep=22  steps=139.50 lr=0.000167 loss/word=65.52   ppl/word=828.81   acc=0.0128 wpm(K)=470.24 mins=213.88
+ep=22  steps=139.60 lr=0.000167 loss/word=104.79  ppl/word=1081.26  acc=0.0396 wpm(K)=470.36 mins=214.01
+ep=22  steps=139.70 lr=0.000167 loss/word=196.57  ppl/word=1261.47  acc=0.0636 wpm(K)=470.40 mins=214.14
+ep=22  steps=139.80 lr=0.000167 loss/word=201.92  ppl/word=1354.82  acc=0.0703 wpm(K)=470.43 mins=214.27
+ep=22  steps=139.90 lr=0.000167 loss/word=268.48  ppl/word=1434.41  acc=0.0685 wpm(K)=470.48 mins=214.41
+ep=22  steps=140.00 lr=0.000167 loss/word=363.17  ppl/word=1287.59  acc=0.0826 wpm(K)=470.53 mins=214.54
+Eval at step 140000. valid_batch_size=30
+val_step=140000 loss=7.18   acc=0.0555 val_ppl=1310.01
+ep=22  steps=140.10 lr=0.000167 loss/word=117.40  ppl/word=914.34   acc=0.0599 wpm(K)=470.10 mins=214.87
+ep=22  steps=140.20 lr=0.000167 loss/word=68.47   ppl/word=921.56   acc=0.0218 wpm(K)=470.14 mins=215.00
+ep=22  steps=140.30 lr=0.000167 loss/word=283.53  ppl/word=1266.49  acc=0.0795 wpm(K)=470.18 mins=215.13
+ep=22  steps=140.40 lr=0.000167 loss/word=47.28   ppl/word=679.59   acc=0.0172 wpm(K)=470.21 mins=215.26
+ep=22  steps=140.50 lr=0.000167 loss/word=158.23  ppl/word=1100.42  acc=0.0609 wpm(K)=470.24 mins=215.39
+ep=22  steps=140.60 lr=0.000167 loss/word=166.41  ppl/word=1093.86  acc=0.0578 wpm(K)=470.28 mins=215.52
+ep=22  steps=140.70 lr=0.000167 loss/word=64.88   ppl/word=775.95   acc=0.0192 wpm(K)=470.33 mins=215.66
+ep=22  steps=140.80 lr=0.000167 loss/word=275.09  ppl/word=1368.55  acc=0.0845 wpm(K)=470.38 mins=215.78
+ep=22  steps=140.90 lr=0.000167 loss/word=217.46  ppl/word=1230.45  acc=0.0654 wpm(K)=470.38 mins=215.91
+ep=22  steps=141.00 lr=0.000166 loss/word=151.76  ppl/word=1010.27  acc=0.0698 wpm(K)=470.45 mins=216.05
+Eval at step 141000. valid_batch_size=30
+val_step=141000 loss=7.18   acc=0.0555 val_ppl=1310.58
+ep=22  steps=141.10 lr=0.000166 loss/word=76.48   ppl/word=1067.37  acc=0.0199 wpm(K)=470.06 mins=216.38
+ep=22  steps=141.20 lr=0.000166 loss/word=249.70  ppl/word=1320.16  acc=0.0773 wpm(K)=470.11 mins=216.50
+ep=22  steps=141.30 lr=0.000166 loss/word=132.25  ppl/word=941.84   acc=0.0583 wpm(K)=470.19 mins=216.64
+ep=22  steps=141.40 lr=0.000166 loss/word=421.70  ppl/word=1619.99  acc=0.0756 wpm(K)=470.25 mins=216.77
+ep=22  steps=141.50 lr=0.000166 loss/word=57.44   ppl/word=839.50   acc=0.0073 wpm(K)=470.27 mins=216.90
+ep=22  steps=141.60 lr=0.000166 loss/word=146.27  ppl/word=1282.73  acc=0.0596 wpm(K)=470.30 mins=217.03
+ep=22  steps=141.70 lr=0.000166 loss/word=75.71   ppl/word=938.02   acc=0.0339 wpm(K)=470.34 mins=217.16
+ep=22  steps=141.80 lr=0.000166 loss/word=171.15  ppl/word=1297.80  acc=0.0720 wpm(K)=470.40 mins=217.30
+ep=22  steps=141.90 lr=0.000166 loss/word=558.32  ppl/word=1736.89  acc=0.0752 wpm(K)=470.43 mins=217.43
+ep=22  steps=142.00 lr=0.000166 loss/word=147.12  ppl/word=1080.47  acc=0.0608 wpm(K)=470.49 mins=217.56
+Eval at step 142000. valid_batch_size=30
+val_step=142000 loss=7.18   acc=0.0555 val_ppl=1311.17
+ep=22  steps=142.10 lr=0.000166 loss/word=148.36  ppl/word=1133.91  acc=0.0563 wpm(K)=470.09 mins=217.89
+ep=22  steps=142.20 lr=0.000166 loss/word=82.56   ppl/word=1085.04  acc=0.0212 wpm(K)=470.13 mins=218.02
+ep=22  steps=142.30 lr=0.000166 loss/word=71.01   ppl/word=864.73   acc=0.0268 wpm(K)=470.16 mins=218.15
+ep=22  steps=142.40 lr=0.000166 loss/word=79.10   ppl/word=935.29   acc=0.0324 wpm(K)=470.22 mins=218.28
+ep=22  steps=142.50 lr=0.000166 loss/word=136.45  ppl/word=1023.26  acc=0.0603 wpm(K)=470.27 mins=218.41
+ep=22  steps=142.60 lr=0.000166 loss/word=88.23   ppl/word=1029.53  acc=0.0295 wpm(K)=470.31 mins=218.55
+ep=22  steps=142.70 lr=0.000165 loss/word=175.50  ppl/word=1070.86  acc=0.0770 wpm(K)=470.36 mins=218.68
+ep=22  steps=142.80 lr=0.000165 loss/word=85.23   ppl/word=1109.27  acc=0.0360 wpm(K)=470.38 mins=218.81
+ep=22  steps=142.90 lr=0.000165 loss/word=91.34   ppl/word=1145.07  acc=0.0458 wpm(K)=470.42 mins=218.94
+ep=22  steps=143.00 lr=0.000165 loss/word=68.10   ppl/word=784.10   acc=0.0306 wpm(K)=470.46 mins=219.07
+Eval at step 143000. valid_batch_size=30
+val_step=143000 loss=7.18   acc=0.0555 val_ppl=1311.49
+ep=22  steps=143.10 lr=0.000165 loss/word=86.65   ppl/word=879.80   acc=0.0342 wpm(K)=470.09 mins=219.40
+ep=22  steps=143.20 lr=0.000165 loss/word=250.14  ppl/word=1372.13  acc=0.0713 wpm(K)=470.13 mins=219.54
+ep=22  steps=143.30 lr=0.000165 loss/word=295.82  ppl/word=1445.46  acc=0.0792 wpm(K)=470.18 mins=219.67
+ep=22  steps=143.40 lr=0.000165 loss/word=54.35   ppl/word=892.52   acc=0.0039 wpm(K)=470.25 mins=219.80
+ep=22  steps=143.50 lr=0.000165 loss/word=110.87  ppl/word=1049.72  acc=0.0471 wpm(K)=470.28 mins=219.93
+ep=22  steps=143.60 lr=0.000165 loss/word=228.38  ppl/word=1223.10  acc=0.0652 wpm(K)=470.30 mins=220.06
+ep=23  steps=143.70 lr=0.000165 loss/word=233.22  ppl/word=1229.53  acc=0.0896 wpm(K)=470.32 mins=220.19
+ep=23  steps=143.80 lr=0.000165 loss/word=198.22  ppl/word=1187.29  acc=0.0737 wpm(K)=470.36 mins=220.32
+ep=23  steps=143.90 lr=0.000165 loss/word=153.97  ppl/word=1358.34  acc=0.0527 wpm(K)=470.42 mins=220.46
+ep=23  steps=144.00 lr=0.000165 loss/word=190.35  ppl/word=1210.94  acc=0.0664 wpm(K)=470.45 mins=220.59
+Eval at step 144000. valid_batch_size=30
+val_step=144000 loss=7.18   acc=0.0555 val_ppl=1316.41
+ep=23  steps=144.10 lr=0.000165 loss/word=212.94  ppl/word=1132.30  acc=0.0753 wpm(K)=470.08 mins=220.92
+ep=23  steps=144.20 lr=0.000165 loss/word=85.10   ppl/word=1345.61  acc=0.0291 wpm(K)=470.11 mins=221.05
+ep=23  steps=144.30 lr=0.000165 loss/word=37.63   ppl/word=480.92   acc=0.0205 wpm(K)=470.15 mins=221.18
+ep=23  steps=144.40 lr=0.000164 loss/word=333.56  ppl/word=1255.00  acc=0.0809 wpm(K)=470.22 mins=221.31
+ep=23  steps=144.50 lr=0.000164 loss/word=109.10  ppl/word=1139.78  acc=0.0423 wpm(K)=470.29 mins=221.44
+ep=23  steps=144.60 lr=0.000164 loss/word=68.05   ppl/word=796.44   acc=0.0215 wpm(K)=470.36 mins=221.57
+ep=23  steps=144.70 lr=0.000164 loss/word=197.08  ppl/word=1491.86  acc=0.0614 wpm(K)=470.45 mins=221.70
+ep=23  steps=144.80 lr=0.000164 loss/word=121.66  ppl/word=1446.09  acc=0.0523 wpm(K)=470.47 mins=221.83
+ep=23  steps=144.90 lr=0.000164 loss/word=122.94  ppl/word=1182.67  acc=0.0504 wpm(K)=470.49 mins=221.96
+ep=23  steps=145.00 lr=0.000164 loss/word=74.84   ppl/word=901.33   acc=0.0398 wpm(K)=470.53 mins=222.09
+Eval at step 145000. valid_batch_size=30
+val_step=145000 loss=7.18   acc=0.0555 val_ppl=1310.74
+ep=23  steps=145.10 lr=0.000164 loss/word=165.35  ppl/word=1262.33  acc=0.0634 wpm(K)=470.18 mins=222.42
+ep=23  steps=145.20 lr=0.000164 loss/word=83.34   ppl/word=827.07   acc=0.0453 wpm(K)=470.24 mins=222.55
+ep=23  steps=145.30 lr=0.000164 loss/word=434.75  ppl/word=1536.88  acc=0.0701 wpm(K)=470.30 mins=222.69
+ep=23  steps=145.40 lr=0.000164 loss/word=240.80  ppl/word=1527.78  acc=0.0590 wpm(K)=470.32 mins=222.82
+ep=23  steps=145.50 lr=0.000164 loss/word=384.03  ppl/word=1390.41  acc=0.0777 wpm(K)=470.36 mins=222.95
+ep=23  steps=145.60 lr=0.000164 loss/word=49.79   ppl/word=666.97   acc=0.0204 wpm(K)=470.38 mins=223.08
+ep=23  steps=145.70 lr=0.000164 loss/word=107.86  ppl/word=1179.17  acc=0.0533 wpm(K)=470.43 mins=223.21
+ep=23  steps=145.80 lr=0.000164 loss/word=153.36  ppl/word=1131.16  acc=0.0544 wpm(K)=470.51 mins=223.34
+ep=23  steps=145.90 lr=0.000164 loss/word=59.12   ppl/word=839.24   acc=0.0107 wpm(K)=470.54 mins=223.48
+ep=23  steps=146.00 lr=0.000164 loss/word=237.92  ppl/word=1459.05  acc=0.0746 wpm(K)=470.60 mins=223.61
+Eval at step 146000. valid_batch_size=30
+val_step=146000 loss=7.18   acc=0.0555 val_ppl=1309.99
+ep=23  steps=146.10 lr=0.000164 loss/word=45.94   ppl/word=903.14   acc=0.0139 wpm(K)=470.22 mins=223.94
+ep=23  steps=146.20 lr=0.000163 loss/word=61.46   ppl/word=751.73   acc=0.0269 wpm(K)=470.28 mins=224.07
+ep=23  steps=146.30 lr=0.000163 loss/word=115.20  ppl/word=1266.97  acc=0.0446 wpm(K)=470.34 mins=224.20
+ep=23  steps=146.40 lr=0.000163 loss/word=158.14  ppl/word=1245.91  acc=0.0732 wpm(K)=470.37 mins=224.34
+ep=23  steps=146.50 lr=0.000163 loss/word=262.70  ppl/word=1604.33  acc=0.0615 wpm(K)=470.41 mins=224.47
+ep=23  steps=146.60 lr=0.000163 loss/word=134.84  ppl/word=1208.29  acc=0.0461 wpm(K)=470.44 mins=224.60
+ep=23  steps=146.70 lr=0.000163 loss/word=68.97   ppl/word=927.96   acc=0.0186 wpm(K)=470.46 mins=224.73
+ep=23  steps=146.80 lr=0.000163 loss/word=49.27   ppl/word=797.23   acc=0.0169 wpm(K)=470.53 mins=224.87
+ep=23  steps=146.90 lr=0.000163 loss/word=150.20  ppl/word=1290.78  acc=0.0581 wpm(K)=470.57 mins=224.99
+ep=23  steps=147.00 lr=0.000163 loss/word=204.07  ppl/word=1173.03  acc=0.0660 wpm(K)=470.62 mins=225.13
+Eval at step 147000. valid_batch_size=30
+val_step=147000 loss=7.18   acc=0.0555 val_ppl=1311.24
+ep=23  steps=147.10 lr=0.000163 loss/word=199.49  ppl/word=1139.56  acc=0.0706 wpm(K)=470.28 mins=225.46
+ep=23  steps=147.20 lr=0.000163 loss/word=383.30  ppl/word=1527.55  acc=0.0693 wpm(K)=470.39 mins=225.60
+ep=23  steps=147.30 lr=0.000163 loss/word=230.82  ppl/word=1239.63  acc=0.0665 wpm(K)=470.44 mins=225.73
+ep=23  steps=147.40 lr=0.000163 loss/word=83.58   ppl/word=1039.52  acc=0.0312 wpm(K)=470.48 mins=225.86
+ep=23  steps=147.50 lr=0.000163 loss/word=359.07  ppl/word=1285.71  acc=0.0735 wpm(K)=470.53 mins=226.00
+ep=23  steps=147.60 lr=0.000163 loss/word=41.08   ppl/word=715.51   acc=0.0150 wpm(K)=470.57 mins=226.13
+ep=23  steps=147.70 lr=0.000163 loss/word=239.58  ppl/word=1422.43  acc=0.0653 wpm(K)=470.64 mins=226.26
+ep=23  steps=147.80 lr=0.000163 loss/word=105.45  ppl/word=1439.79  acc=0.0302 wpm(K)=470.67 mins=226.39
+ep=23  steps=147.90 lr=0.000163 loss/word=281.34  ppl/word=1448.15  acc=0.0711 wpm(K)=470.73 mins=226.52
+ep=23  steps=148.00 lr=0.000162 loss/word=166.31  ppl/word=1510.93  acc=0.0523 wpm(K)=470.78 mins=226.66
+Eval at step 148000. valid_batch_size=30
+val_step=148000 loss=7.18   acc=0.0555 val_ppl=1309.84
+ep=23  steps=148.10 lr=0.000162 loss/word=214.12  ppl/word=1286.74  acc=0.0763 wpm(K)=470.41 mins=226.99
+ep=23  steps=148.20 lr=0.000162 loss/word=37.97   ppl/word=492.23   acc=0.0153 wpm(K)=470.46 mins=227.12
+ep=23  steps=148.30 lr=0.000162 loss/word=56.29   ppl/word=734.06   acc=0.0110 wpm(K)=470.50 mins=227.25
+ep=23  steps=148.40 lr=0.000162 loss/word=75.50   ppl/word=1416.02  acc=0.0180 wpm(K)=470.53 mins=227.38
+ep=23  steps=148.50 lr=0.000162 loss/word=177.24  ppl/word=1348.24  acc=0.0648 wpm(K)=470.60 mins=227.52
+ep=23  steps=148.60 lr=0.000162 loss/word=40.39   ppl/word=620.45   acc=0.0149 wpm(K)=470.67 mins=227.65
+ep=23  steps=148.70 lr=0.000162 loss/word=403.81  ppl/word=1398.71  acc=0.0818 wpm(K)=470.70 mins=227.78
+ep=23  steps=148.80 lr=0.000162 loss/word=598.13  ppl/word=1610.48  acc=0.0775 wpm(K)=470.73 mins=227.91
+ep=23  steps=148.90 lr=0.000162 loss/word=225.19  ppl/word=1194.74  acc=0.0767 wpm(K)=470.80 mins=228.04
+ep=23  steps=149.00 lr=0.000162 loss/word=84.26   ppl/word=1184.27  acc=0.0315 wpm(K)=470.84 mins=228.17
+Eval at step 149000. valid_batch_size=30
+val_step=149000 loss=7.18   acc=0.0555 val_ppl=1311.64
+ep=23  steps=149.10 lr=0.000162 loss/word=42.80   ppl/word=584.32   acc=0.0093 wpm(K)=470.47 mins=228.50
+ep=23  steps=149.20 lr=0.000162 loss/word=109.50  ppl/word=1136.73  acc=0.0382 wpm(K)=470.52 mins=228.63
+ep=23  steps=149.30 lr=0.000162 loss/word=160.04  ppl/word=1290.28  acc=0.0713 wpm(K)=470.56 mins=228.77
+ep=23  steps=149.40 lr=0.000162 loss/word=222.30  ppl/word=1369.04  acc=0.0609 wpm(K)=470.57 mins=228.90
+ep=23  steps=149.50 lr=0.000162 loss/word=32.75   ppl/word=2102.30  acc=0.0000 wpm(K)=470.59 mins=229.03
+ep=23  steps=149.60 lr=0.000162 loss/word=177.05  ppl/word=1233.27  acc=0.0666 wpm(K)=470.63 mins=229.16
+ep=23  steps=149.70 lr=0.000162 loss/word=216.41  ppl/word=1163.53  acc=0.0815 wpm(K)=470.69 mins=229.29
+ep=23  steps=149.80 lr=0.000161 loss/word=400.39  ppl/word=1426.93  acc=0.0828 wpm(K)=470.72 mins=229.42
+ep=23  steps=149.90 lr=0.000161 loss/word=52.59   ppl/word=631.38   acc=0.0268 wpm(K)=470.75 mins=229.55
+ep=24  steps=150.00 lr=0.000161 loss/word=460.27  ppl/word=1759.19  acc=0.0690 wpm(K)=470.79 mins=229.68
+Eval at step 150000. valid_batch_size=30
+val_step=150000 loss=7.18   acc=0.0555 val_ppl=1309.96
+Reach 150000 steps. Stop training
+Eval at step 150000. valid_batch_size=30
+val_step=150000 loss=7.18   acc=0.0555 val_ppl=1309.96
