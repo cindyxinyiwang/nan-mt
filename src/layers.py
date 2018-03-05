@@ -99,7 +99,6 @@ class ScaledDotProdAttn(nn.Module):
       attn: [batch_size, d_v].
     """
 
-
     batch_q, len_q, d_q = q.size()
     batch_k, len_k, d_k = k.size()
     batch_v, len_v, d_v = v.size()
@@ -233,11 +232,10 @@ class PositionwiseFF(nn.Module):
   def forward(self, x):
     residual = x
     batch_size, x_len, d_model = x.size()
-    x = self.layer_norm(x.view(-1, d_model))
-    x = self.relu(self.w_1(x))
+    x = self.relu(self.w_1(x.view(-1, d_model)))
     x = self.w_2(x).view(batch_size, x_len, d_model)
     x = self.dropout(x)
-    return x + residual
+    return self.layer_norm(x + residual)
 
 
 class EncoderLayer(nn.Module):

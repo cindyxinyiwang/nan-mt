@@ -31,7 +31,7 @@ python3 src/main.py \
   --n_train_steps=150000 \
   --n_warm_ups=750 \
   --dropout=0.1 \
-  --cuda \
   --label_smoothing=0.1 \
+  --cuda \
   "$@"
 
