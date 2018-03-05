@@ -175,7 +175,7 @@ class Transformer(nn.Module):
 
     if hparams.label_smoothing is not None:
       self.softmax = nn.Softmax(dim=-1)
-      smooth = np.full([1, 1, hparams.vocab_size], 1 / hparams.vocab_size,
+      smooth = np.full([1, 1, hparams.trg_vocab_size], 1 / hparams.trg_vocab_size,
                        dtype=np.float32)
       self.smooth = torch.FloatTensor(smooth)
       if self.hparams.cuda:
@@ -192,7 +192,7 @@ class Transformer(nn.Module):
     if label_smoothing and (self.hparams.label_smoothing is not None):
       smooth = self.hparams.label_smoothing
       probs = ((1.0 - smooth) * self.softmax(logits) +
-               smooth / self.hparams.vocab_size)
+               smooth / self.hparams.trg_vocab_size)
       logits = torch.log(probs)
       logits[:, :, self.hparams.pad_id] = -np.inf
 

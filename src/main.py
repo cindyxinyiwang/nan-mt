@@ -251,6 +251,7 @@ def train():
       logits = logits.view(-1, hparams.trg_vocab_size)
       labels = y_train[:, 1:].contiguous().view(-1)
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
+
       tr_ppl = np.exp(tr_loss.data[0] / y_count)
       tr_loss = tr_loss.div(batch_size)
 

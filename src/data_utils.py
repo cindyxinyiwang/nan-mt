@@ -239,8 +239,8 @@ class DataLoader(object):
       if is_training and len(target_line) > self.hparams.max_len:
         continue
       if self.hparams.max_seq_len > 0:
-        source_tokens = source_tokens[:min(self.hparams.max_seq_len-1, len(source_tokens))]
-        target_tokens = target_tokens[:min(self.hparams.max_seq_len-1, len(target_tokens))]
+        source_tokens = source_tokens[:min(self.hparams.max_seq_len-2, len(source_tokens))]
+        target_tokens = target_tokens[:min(self.hparams.max_seq_len-2, len(target_tokens))]
       source_tokens += [self.hparams.eos]
       target_tokens += [self.hparams.eos]
 
