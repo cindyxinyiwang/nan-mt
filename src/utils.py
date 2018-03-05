@@ -107,3 +107,23 @@ def count_params(params):
     num_params += param.numel()
   return num_params
 
+
+def grad_clip(params, grad_bound=None):
+  """Clipping gradients at L-2 norm grad_bound. Returns the L-2 norm."""
+
+  params = list(filter(lambda p: p.grad is not None, params))
+  total_norm = 0
+  for p in params:
+    if p.grad is None:
+      continue
+    param_norm = p.grad.data.norm(2)
+    total_norm += param_norm ** 2
+  total_norm = total_norm ** 0.5
+
+  if grad_bound is not None:
+    clip_coef = grad_bound / (total_norm + 1e-6)
+    if clip_coef < 1:
+      for p in params:
+        p.grad.data.mul_(clip_coef)
+  return total_norm
+

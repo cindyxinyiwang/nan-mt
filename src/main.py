@@ -65,6 +65,7 @@ add_argument(parser, "share_emb_and_softmax", type="bool", default=True, help="s
 
 add_argument(parser, "dropout", type="float", default=0.1, help="probability of dropping")
 add_argument(parser, "label_smoothing", type="float", default=None, help="")
+add_argument(parser, "grad_bound", type="float", default=None, help="L2 norm")
 
 
 add_argument(parser, "patience", type="int", default=-1,
@@ -176,7 +177,8 @@ def train():
       n_warm_ups=args.n_warm_ups,
       share_emb_and_softmax=args.share_emb_and_softmax,
       dropout=args.dropout,
-      label_smoothing=args.label_smoothing
+      label_smoothing=args.label_smoothing,
+      grad_bound=args.grad_bound,
     )
   data = DataLoader(hparams=hparams)
 
@@ -194,8 +196,8 @@ def train():
   num_params = count_params(model.trainable_parameters())
   print("Model has {0} params".format(num_params))
   lr = hparams.lr_fixed if hparams.lr_fixed is not None else 1e-4
-  optim = torch.optim.Adam(model.trainable_parameters(), lr=lr,
-                           betas=(0.9, 0.98), eps=1e-09)
+  trainable_params = [p for p in model.trainable_parameters()]
+  optim = torch.optim.Adam(trainable_params, lr=lr, betas=(0.9, 0.98), eps=1e-6)
   if args.load_model:
     optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
     print("Loading optim from '{0}'".format(optim_file_name))
@@ -247,7 +249,7 @@ def train():
       optim.zero_grad()
       logits = model.forward(
         x_train, x_mask, x_pos_emb_indices,
-        y_train[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous())
+        y_train[:, :-1].contiguous(), y_mask[:, :-1].contiguous(), y_pos_emb_indices[:, :-1].contiguous())
       logits = logits.view(-1, hparams.vocab_size)
       labels = y_train[:, 1:].contiguous().view(-1)
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
@@ -264,6 +266,7 @@ def train():
       set_lr(optim, lr)
 
       tr_loss.backward()
+      grad_norm = grad_clip(trainable_params, grad_bound=hparams.grad_bound)
       optim.step()
 
       step += 1
@@ -275,6 +278,7 @@ def train():
         log_string += " steps={0:<6.2f}".format(step / 1000)
         log_string += " lr={0:<8.6f}".format(lr)
         log_string += " loss={0:<7.2f}".format(tr_loss.data[0])
+        log_string += " |g|={0:<5.2f}".format(grad_norm)
         log_string += " ppl={0:<8.2f}".format(tr_ppl)
         log_string += " acc={0:<5.4f}".format(tr_acc.data[0] / y_count)
         log_string += " wpm(K)={0:<5.2f}".format(

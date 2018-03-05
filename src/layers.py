@@ -210,7 +210,8 @@ class MultiHeadAttn(nn.Module):
     outputs = self.w_proj(outputs).view(batch_size, len_q, self.d_model)
 
     # residual
-    outputs = self.layer_norm(outputs + residual)
+    # outputs = self.layer_norm(outputs + residual)
+    outputs = outputs + residual
 
     return outputs
 
@@ -235,7 +236,9 @@ class PositionwiseFF(nn.Module):
     x = self.relu(self.w_1(x.view(-1, d_model)))
     x = self.w_2(x).view(batch_size, x_len, d_model)
     x = self.dropout(x)
-    return self.layer_norm(x + residual)
+    x += residual
+    x = self.layer_norm(x)
+    return x
 
 
 class EncoderLayer(nn.Module):

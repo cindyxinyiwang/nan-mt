@@ -177,13 +177,13 @@ class Transformer(nn.Module):
     dec_output = self.decoder(
       enc_output, x_mask, y_train, y_mask, y_pos_emb_indices)
     logits = self.w_logit(dec_output)
-    logits[:, :, self.hparams.pad_id] = -np.inf
+    logits.data[:, :, self.hparams.pad_id] = -float("inf")
     if label_smoothing and (self.hparams.label_smoothing is not None):
       smooth = self.hparams.label_smoothing
       probs = ((1.0 - smooth) * self.softmax(logits) +
                smooth / self.hparams.vocab_size)
       logits = torch.log(probs)
-      logits[:, :, self.hparams.pad_id] = -np.inf
+      logits.data[:, :, self.hparams.pad_id] = -float("inf")
 
     return logits
 
