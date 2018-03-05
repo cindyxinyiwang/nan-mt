@@ -33,10 +33,14 @@ class DataLoader(object):
 
     # vocab
     (self.source_word_to_index,
-     self.source_index_to_word) = self._build_vocab(self.hparams.source_vocab)
+     self.source_index_to_word) = self._build_vocab(self.hparams.source_train)
+    print("source vocab size: {}".format(len(self.source_word_to_index)))
+    self.hparams.src_vocab_size = len(self.source_word_to_index)
 
     (self.target_word_to_index,
-     self.target_index_to_word) = self._build_vocab(self.hparams.target_vocab)
+     self.target_index_to_word) = self._build_vocab(self.hparams.target_train)
+    print("target vocab size: {}".format(len(self.target_word_to_index)))
+    self.hparams.trg_vocab_size = len(self.target_word_to_index)
 
     if decode:
       self.x_test, self.y_test = self._build_parallel(
@@ -188,13 +192,13 @@ class DataLoader(object):
       ([0] * len(sentence)) + ([1] * (max_len - len(sentence)))
       for sentence in sentences]
     pos_emb_indices = [
-      [i for i in range(len(sentence))] + ([-1] * (max_len - len(sentence)))
+      [i for i in range(1, len(sentence)+1)] + ([0] * (max_len - len(sentence)))
       for sentence in sentences
     ]
 
     padded_sentences = Variable(torch.LongTensor(padded_sentences))
     mask = torch.ByteTensor(mask)
-    pos_emb_indices = Variable(torch.FloatTensor(pos_emb_indices))
+    pos_emb_indices = Variable(torch.LongTensor(pos_emb_indices))
 
     if self.hparams.cuda:
       padded_sentences = padded_sentences.cuda()
@@ -230,10 +234,15 @@ class DataLoader(object):
         continue
 
       source_indices, target_indices = [self.hparams.bos_id], [self.hparams.bos_id]
-      source_tokens = source_line.split(" ")
-      target_tokens = target_line.split(" ")
+      source_tokens = source_line.split()[:-1]
+      target_tokens = target_line.split()[:-1]
       if is_training and len(target_line) > self.hparams.max_len:
         continue
+      if self.hparams.max_seq_len > 0:
+        source_tokens = source_tokens[:min(self.hparams.max_seq_len-1, len(source_tokens))]
+        target_tokens = target_tokens[:min(self.hparams.max_seq_len-1, len(target_tokens))]
+      source_tokens += [self.hparams.eos]
+      target_tokens += [self.hparams.eos]
 
       total_sents += 1
 
@@ -280,6 +289,35 @@ class DataLoader(object):
 
     return source_data, target_data
 
+  def _build_vocab(self, train_file):
+    print("-" * 80)
+    print("Building vocab from {}".format(train_file))
+
+    word_to_index = {
+      self.hparams.bos: self.hparams.bos_id,
+      self.hparams.eos: self.hparams.eos_id,
+      self.hparams.pad: self.hparams.pad_id,
+      self.hparams.unk: self.hparams.unk_id
+    }
+
+    index_to_word = {
+      self.hparams.bos_id: self.hparams.bos,
+      self.hparams.eos_id: self.hparams.eos,
+      self.hparams.pad_id: self.hparams.pad,
+      self.hparams.unk_id: self.hparams.unk      
+    }
+
+    file_name = os.path.join(self.hparams.data_path, train_file)
+    with open(file_name, 'r', encoding='utf-8') as myfile:
+      for line in myfile:
+        words = line.split()
+        for w in words:
+          if w not in word_to_index:
+            i = len(word_to_index)
+            word_to_index[w] = i 
+            index_to_word[i] = w
+    return word_to_index, index_to_word
+  '''
   def _build_vocab(self, file_name):
     """Build word_to_index and index_to word dicts."""
 
@@ -318,4 +356,4 @@ class DataLoader(object):
     print("Done. vocab_size = {0}".format(len(word_to_index)))
 
     return word_to_index, index_to_word
-
+  '''

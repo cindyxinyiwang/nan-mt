@@ -30,10 +30,12 @@ class Iwslt16EnDeBpe32SharedParams(Hparams):
     self.unk = "<unk>"
     self.bos = "<s>"
     self.eos = "</s>"
-    self.unk_id = 27997
-    self.eos_id = 27998
-    self.bos_id = 27999
+    self.unk_id = 1
+    self.bos_id = 2
+    self.eos_id = 3
 
     self.pad = "<pad>"
-    self.pad_id = 28000
+    self.pad_id = 0
+
+    self.max_seq_len = 90
 

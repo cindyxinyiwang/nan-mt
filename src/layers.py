@@ -125,7 +125,6 @@ class ScaledDotProdAttn(nn.Module):
 
     # [batch_size, len_q, len_k]
     attn = torch.bmm(q, k.transpose(1, 2)) / self.temp
-    first_attn = torch.mm(q[0], k[0].transpose(0, 1))
 
     # attn_mask: [batch_size, len_q, len_k]
     if not attn_mask is None:
@@ -136,7 +135,7 @@ class ScaledDotProdAttn(nn.Module):
     # softmax along the len_k dimension
     # [batch_size, len_q, len_k]
     attn = self.softmax(attn.view(size[0] * size[1], -1)).view(
-      batch_q, len_q, len_k)
+      size[0], size[1], -1)
 
     # [batch_size, len_q, len_k == len_v]
     attn = self.dropout(attn)
@@ -219,13 +218,14 @@ class MultiHeadAttn(nn.Module):
     outputs = self.attention(q_batch, k_batch, v_batch, attn_mask=attn_mask)
 
     # [n_heads * batch_size, len_q, d_v] -> [batch_size, len_q, n_heads * d_v]
-    outputs = outputs.view(self.n_heads, batch_size, len_q, self.d_v).permute(
-      1, 2, 0, 3).contiguous().view(batch_size, len_q, self.n_heads * self.d_v)
+    #outputs = outputs.view(self.n_heads, batch_size, len_q, self.d_v).permute(
+    #  1, 2, 0, 3).contiguous().view(batch_size, len_q, self.n_heads * self.d_v)
+    outputs = torch.cat(torch.split(outputs, batch_size, dim=0), dim=-1)
 
     # [batch_size, len_q, d_model]
-    outputs = outputs.view(batch_size * len_q, self.n_heads * self.d_v)
-    outputs = self.w_proj(outputs).view(batch_size, len_q, self.d_model)
-
+    #outputs = outputs.view(batch_size * len_q, self.n_heads * self.d_v)
+    #outputs = self.w_proj(outputs).view(batch_size, len_q, self.d_model)
+    outputs = self.w_proj(outputs)
     # residual
     outputs = self.layer_norm(outputs + residual)
 
@@ -237,20 +237,20 @@ class PositionwiseFF(nn.Module):
     super(PositionwiseFF, self).__init__()
     self.d_model = d_model
     self.d_inner = d_inner
-    self.w_1 = nn.Linear(d_model, d_inner, bias=False)
-    self.w_2 = nn.Linear(d_inner, d_model, bias=False)
+    self.w_1 = nn.Conv1d(d_model, d_inner, 1)
+    self.w_2 = nn.Conv1d(d_inner, d_model, 1)
     self.dropout = nn.Dropout(dropout)
     self.relu = nn.ReLU()
     self.layer_norm = LayerNormalization(d_model)
 
-    init.xavier_normal(self.w_1.weight)
-    init.xavier_normal(self.w_2.weight)
+    #init.xavier_normal(self.w_1.weight)
+    #init.xavier_normal(self.w_2.weight)
 
   def forward(self, x):
     residual = x
     batch_size, x_len, d_model = x.size()
-    output = self.relu(self.w_1(x.view(-1, d_model)))
-    output = self.w_2(output).view(batch_size, x_len, d_model)
+    output = self.relu(self.w_1(x.transpose(1, 2)))
+    output = self.w_2(output).transpose(2, 1)
     output = self.dropout(output)
     return self.layer_norm(output + residual)
     #return x 

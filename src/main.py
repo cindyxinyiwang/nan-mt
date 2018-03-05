@@ -104,7 +104,7 @@ def eval(model, data, crit, step, hparams, valid_batch_size=20):
       x_valid, x_mask, x_pos_emb_indices,
       y_valid[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous(),
       label_smoothing=False)
-    logits = logits.view(-1, hparams.vocab_size)
+    logits = logits.view(-1, hparams.trg_vocab_size)
     n_batches += 1
     # if n_batches >= 1:
     #   print(logits[5])
@@ -248,7 +248,7 @@ def train():
       logits = model.forward(
         x_train, x_mask, x_pos_emb_indices,
         y_train[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous())
-      logits = logits.view(-1, hparams.vocab_size)
+      logits = logits.view(-1, hparams.trg_vocab_size)
       labels = y_train[:, 1:].contiguous().view(-1)
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
       tr_ppl = np.exp(tr_loss.data[0] / y_count)

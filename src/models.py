@@ -23,8 +23,11 @@ class Encoder(nn.Module):
     self.hparams = hparams
     assert self.hparams.d_word_vec == self.hparams.d_model
 
-    self.pos_emb = PositionalEmbedding(hparams)
-    self.word_emb = nn.Embedding(self.hparams.vocab_size,
+    #self.pos_emb = PositionalEmbedding(hparams)
+    n_position = self.hparams.max_seq_len + 1  # add 1 to account for bos token at index 0
+    self.pos_emb = nn.Embedding(n_position, self.hparams.d_word_vec, padding_idx=self.hparams.pad_id)
+    self.pos_emb.weight.data = position_encoding_init(n_position, self.hparams.d_word_vec)
+    self.word_emb = nn.Embedding(self.hparams.src_vocab_size,
                                  self.hparams.d_word_vec,
                                  padding_idx=hparams.pad_id)
 
@@ -60,16 +63,18 @@ class Encoder(nn.Module):
     batch_size, max_len = x_train.size()
 
     # [batch_size, max_len, 1] -> [batch_size, max_len, d_word_vec]
-    pos_emb_mask = x_mask.unsqueeze(2).expand(
-      -1, -1, self.hparams.d_word_vec)
-    pos_emb = self.pos_emb(x_pos_emb_indices, pos_emb_mask)
+    #pos_emb_mask = x_mask.unsqueeze(2).expand(
+    #  -1, -1, self.hparams.d_word_vec)
+    #pos_emb = self.pos_emb(x_pos_emb_indices, pos_emb_mask)
+    pos_emb = self.pos_emb(x_pos_emb_indices)
 
     # [batch_size, max_len, d_word_vec]
     word_emb = self.word_emb(x_train)
     enc_input = word_emb + pos_emb
 
     # [batch_size, 1, max_len] -> [batch_size, len_q, len_k]
-    attn_mask = x_mask.unsqueeze(1).expand(-1, max_len, -1).contiguous()
+    #attn_mask = x_mask.unsqueeze(1).expand(-1, max_len, -1).contiguous()
+    attn_mask = get_attn_padding_mask(x_train, x_train, pad_id=self.hparams.pad_id)
     enc_output = self.dropout(enc_input)
     for enc_layer in self.layer_stack:
       enc_output = enc_layer(enc_output, attn_mask=attn_mask)
@@ -83,8 +88,12 @@ class Decoder(nn.Module):
     super(Decoder, self).__init__()
     self.hparams = hparams
 
-    self.pos_emb = PositionalEmbedding(self.hparams)
-    self.word_emb = nn.Embedding(self.hparams.vocab_size,
+    #self.pos_emb = PositionalEmbedding(self.hparams)
+    n_position = self.hparams.max_seq_len + 1
+    self.pos_emb = nn.Embedding(n_position, self.hparams.d_word_vec, padding_idx=self.hparams.pad_id)
+    self.pos_emb.weight.data = position_encoding_init(n_position, self.hparams.d_word_vec)
+
+    self.word_emb = nn.Embedding(self.hparams.trg_vocab_size,
                                  self.hparams.d_word_vec,
                                  padding_idx=hparams.pad_id)
 
@@ -102,7 +111,7 @@ class Decoder(nn.Module):
       self.layer_stack = self.layer_stack.cuda()
       self.dropout = self.dropout.cuda()
 
-  def forward(self, x_states, x_mask, y_train, y_mask, y_pos_emb_indices):
+  def forward(self, x_states, x_train, x_mask, y_train, y_mask, y_pos_emb_indices):
     """Performs a forward pass.
 
     Args:
@@ -123,9 +132,10 @@ class Decoder(nn.Module):
     batch_size, y_len = y_mask.size()
 
     # [batch_size, y_len, 1] -> [batch_size, y_len, d_word_vec]
-    pos_emb_mask = y_mask.unsqueeze(2).expand(
-      -1, -1, self.hparams.d_word_vec)
-    pos_emb = self.pos_emb(y_pos_emb_indices, pos_emb_mask)
+    #pos_emb_mask = y_mask.unsqueeze(2).expand(
+    #  -1, -1, self.hparams.d_word_vec)
+    #pos_emb = self.pos_emb(y_pos_emb_indices, pos_emb_mask)
+    pos_emb = self.pos_emb(y_pos_emb_indices)
 
     # [batch_size, x_len, d_word_vec]
     word_emb = self.word_emb(y_train)
@@ -133,11 +143,12 @@ class Decoder(nn.Module):
 
     # [batch_size, 1, y_len] -> [batch_size, y_len, y_len]
     y_time_mask = get_attn_subsequent_mask(y_train, pad_id=self.hparams.pad_id)
-    y_attn_mask = y_mask.unsqueeze(1).expand(-1, y_len, -1).contiguous()
-    y_attn_mask = y_attn_mask | y_time_mask
+    y_attn_sub_mask = get_attn_padding_mask(y_train, y_train, pad_id=self.hparams.pad_id)
+    y_attn_mask = torch.gt(y_time_mask + y_attn_sub_mask, 0)
 
     # [batch_size, 1, x_len] -> [batch_size, y_len, x_len]
-    x_attn_mask = x_mask.unsqueeze(1).expand(-1, y_len, -1).contiguous()
+    #x_attn_mask = x_mask.unsqueeze(1).expand(-1, y_len, -1)
+    x_attn_mask = get_attn_padding_mask(y_train, x_train, pad_id=self.hparams.pad_id)
 
     dec_output = self.dropout(dec_input)
     for dec_layer in self.layer_stack:
@@ -153,7 +164,7 @@ class Transformer(nn.Module):
     self.encoder = Encoder(hparams)
     self.dropout = nn.Dropout(hparams.dropout)
     self.decoder = Decoder(hparams)
-    self.w_logit = nn.Linear(hparams.d_model, hparams.vocab_size, bias=False)
+    self.w_logit = nn.Linear(hparams.d_model, hparams.trg_vocab_size, bias=False)
     if hparams.share_emb_and_softmax:
       self.w_logit.weight = self.decoder.word_emb.weight
 
@@ -175,7 +186,7 @@ class Transformer(nn.Module):
 
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
     dec_output = self.decoder(
-      enc_output, x_mask, y_train, y_mask, y_pos_emb_indices)
+      enc_output, x_train, x_mask, y_train, y_mask, y_pos_emb_indices)
     logits = self.w_logit(dec_output)
     logits[:, :, self.hparams.pad_id] = -np.inf
     if label_smoothing and (self.hparams.label_smoothing is not None):
@@ -188,8 +199,11 @@ class Transformer(nn.Module):
     return logits
 
   def trainable_parameters(self):
-    params = self.parameters()
-    return params
+    ''' Avoid updating the position encoding '''
+    enc_freezed_param_ids = set(map(id, self.encoder.pos_emb.parameters()))
+    dec_freezed_param_ids = set(map(id, self.decoder.pos_emb.parameters()))
+    freezed_param_ids = enc_freezed_param_ids | dec_freezed_param_ids
+    return (p for p in self.parameters() if id(p) not in freezed_param_ids)
 
   def translate_batch(self, x_train, x_mask, x_pos_emb_indices, beam_size, max_len):
     """
