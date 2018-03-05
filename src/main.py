@@ -57,7 +57,7 @@ add_argument(parser, "d_v", type="int", default=64, help="dim of attn values")
 add_argument(parser, "n_layers", type="int", default=5, help="number of layers in a Transformer stack")
 add_argument(parser, "n_heads", type="int", default=2 , help="number of attention heads")
 add_argument(parser, "batch_size", type="int", default=32, help="")
-add_argument(parser, "lr_fixed", type="int", default=None, help="")
+add_argument(parser, "lr", type="int", default=None, help="")
 add_argument(parser, "n_train_steps", type="int", default=100000, help="")
 add_argument(parser, "n_warm_ups", type="int", default=750, help="")
 
@@ -66,6 +66,7 @@ add_argument(parser, "share_emb_and_softmax", type="bool", default=True, help="s
 add_argument(parser, "dropout", type="float", default=0.1, help="probability of dropping")
 add_argument(parser, "label_smoothing", type="float", default=None, help="")
 add_argument(parser, "grad_bound", type="float", default=None, help="L2 norm")
+add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
 
 
 add_argument(parser, "patience", type="int", default=-1,
@@ -172,13 +173,14 @@ def train():
       n_layers=args.n_layers,
       n_heads=args.n_heads,
       batch_size=args.batch_size,
-      lr_fixed=args.lr_fixed,
+      lr=args.lr,
       n_train_steps=args.n_train_steps,
       n_warm_ups=args.n_warm_ups,
       share_emb_and_softmax=args.share_emb_and_softmax,
       dropout=args.dropout,
       label_smoothing=args.label_smoothing,
       grad_bound=args.grad_bound,
+      init_range=args.init_range,
     )
   data = DataLoader(hparams=hparams)
 
@@ -189,21 +191,21 @@ def train():
     model_file_name = os.path.join(args.output_dir, "model.pt")
     print("Loading model from '{0}'".format(model_file_name))
     model = torch.load(model_file_name)
-  else: model = Transformer(hparams=hparams)
+  else:
+    model = Transformer(hparams=hparams)
   crit = get_criterion(hparams)
 
-  # build or load optimizer
-  num_params = count_params(model.trainable_parameters())
-  print("Model has {0} params".format(num_params))
-  lr = hparams.lr_fixed if hparams.lr_fixed is not None else 1e-4
   trainable_params = [p for p in model.trainable_parameters()]
-  optim = torch.optim.Adam(trainable_params, lr=lr, betas=(0.9, 0.98), eps=1e-6)
+  num_params = count_params(trainable_params)
+  print("Model has {0} params".format(num_params))
+
+  # build or load optimizer
+  optim = torch.optim.SGD(trainable_params, lr=hparams.lr)
   if args.load_model:
     optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
     print("Loading optim from '{0}'".format(optim_file_name))
     optimizer_state = torch.load(optim_file_name)
     optim.load_state_dict(optimizer_state)
-
     try:
       step_file_name = os.path.join(args.output_dir, "step.pt")
       step = torch.load(step_file_name)
@@ -217,7 +219,11 @@ def train():
   print("Start training")
   best_val_acc = 1e10  # hparams.vocab_size
   start_time = time.time()
+  actual_start_time = time.time()
   target_words = 0
+  total_loss = 0
+  total_corrects = 0
+  lr = hparams.lr
   n_train_batches = data.train_size // hparams.batch_size
 
   while True:
@@ -229,20 +235,9 @@ def train():
        (y_train, y_mask, y_pos_emb_indices, y_count),
        batch_size) = data.next_train()
 
+      # book keeping count
       # Since you are shifting y_train, i.e. y_train[:, :-1] and y_train[:, 1:]
       y_count -= batch_size  
-
-      ## DEBUG
-      # print(y_train)
-      # y = y_train.cpu().data.numpy()
-      # for _y in y:
-      #   log_string = ""
-      #   for __y in _y:
-      #     log_string += "{0:<10} ".format(data.source_index_to_word[__y])
-      #   print(log_string)
-      ## END OF DEBUG
-
-      # book keeping count
       target_words += y_count
 
       # forward pass
@@ -253,7 +248,8 @@ def train():
       logits = logits.view(-1, hparams.vocab_size)
       labels = y_train[:, 1:].contiguous().view(-1)
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
-      tr_ppl = np.exp(tr_loss.data[0] / y_count)
+      total_loss += tr_loss.data[0]
+      total_corrects += tr_acc.data[0]
       tr_loss = tr_loss.div(batch_size)
 
       # set learning rate
@@ -272,15 +268,15 @@ def train():
       step += 1
       if step % args.log_every == 0:
         curr_time = time.time()
-        elapsed = (curr_time - start_time) / 60.0
+        elapsed = (curr_time - actual_start_time) / 60.0
         epoch = step // n_train_batches
         log_string = "ep={0:<3d}".format(epoch)
         log_string += " steps={0:<6.2f}".format(step / 1000)
         log_string += " lr={0:<8.6f}".format(lr)
         log_string += " loss={0:<7.2f}".format(tr_loss.data[0])
         log_string += " |g|={0:<5.2f}".format(grad_norm)
-        log_string += " ppl={0:<8.2f}".format(tr_ppl)
-        log_string += " acc={0:<5.4f}".format(tr_acc.data[0] / y_count)
+        log_string += " ppl={0:<8.2f}".format(np.exp(total_loss / target_words))
+        log_string += " acc={0:<5.4f}".format(total_corrects / target_words)
         log_string += " wpm(K)={0:<5.2f}".format(
           target_words / (1000 * elapsed))
         log_string += " mins={0:<5.2f}".format(elapsed)
@@ -296,6 +292,12 @@ def train():
         if val_acc < best_val_acc:
           best_val_acc = val_acc
           save_checkpoint(step, model, optim, hparams, args.output_dir)
+        else:
+          lr /= 2.0
+        actual_start_time = time.time()
+        target_words = 0
+        total_loss = 0
+        total_corrects = 0
 
       if step >= hparams.n_train_steps:
         break

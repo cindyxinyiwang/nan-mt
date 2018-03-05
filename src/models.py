@@ -27,15 +27,10 @@ class Encoder(nn.Module):
     self.word_emb = nn.Embedding(self.hparams.vocab_size,
                                  self.hparams.d_word_vec,
                                  padding_idx=hparams.pad_id)
+    self.emb_scale = np.sqrt(self.hparams.d_model)
 
     self.layer_stack = nn.ModuleList(
-      [EncoderLayer(self.hparams.d_model,
-                    self.hparams.d_inner,
-                    self.hparams.n_heads,
-                    self.hparams.d_k,
-                    self.hparams.d_v,
-                    dropout=self.hparams.dropout)
-       for _ in range(self.hparams.n_layers)])
+      [EncoderLayer(hparams) for _ in range(self.hparams.n_layers)])
 
     self.dropout = nn.Dropout(self.hparams.dropout)
     if self.hparams.cuda:
@@ -65,7 +60,7 @@ class Encoder(nn.Module):
     pos_emb = self.pos_emb(x_pos_emb_indices, pos_emb_mask)
 
     # [batch_size, max_len, d_word_vec]
-    word_emb = self.word_emb(x_train)
+    word_emb = self.word_emb(x_train) * self.emb_scale
     enc_input = word_emb + pos_emb
 
     # [batch_size, 1, max_len] -> [batch_size, len_q, len_k]
@@ -87,12 +82,10 @@ class Decoder(nn.Module):
     self.word_emb = nn.Embedding(self.hparams.vocab_size,
                                  self.hparams.d_word_vec,
                                  padding_idx=hparams.pad_id)
+    self.emb_scale = np.sqrt(self.hparams.d_model)
 
     self.layer_stack = nn.ModuleList(
-      [DecoderLayer(self.hparams.d_model, self.hparams.d_inner,
-                    self.hparams.n_heads, self.hparams.d_k, self.hparams.d_v,
-                    dropout=self.hparams.dropout)
-       for _ in range(self.hparams.n_layers)])
+      [DecoderLayer(hparams) for _ in range(self.hparams.n_layers)])
 
     self.dropout = nn.Dropout(self.hparams.dropout)
 
@@ -128,7 +121,7 @@ class Decoder(nn.Module):
     pos_emb = self.pos_emb(y_pos_emb_indices, pos_emb_mask)
 
     # [batch_size, x_len, d_word_vec]
-    word_emb = self.word_emb(y_train)
+    word_emb = self.word_emb(y_train) * self.emb_scale
     dec_input = word_emb + pos_emb
 
     # [batch_size, 1, y_len] -> [batch_size, y_len, y_len]
@@ -160,7 +153,8 @@ class Transformer(nn.Module):
     if self.hparams.cuda:
       self.w_logit = self.w_logit.cuda()
 
-    init.xavier_normal(self.w_logit.weight)
+    init_param(self.w_logit.weight, init_type="uniform",
+               init_range=self.hparams.init_range)
 
     if hparams.label_smoothing is not None:
       self.softmax = nn.Softmax(dim=-1)
@@ -176,6 +170,7 @@ class Transformer(nn.Module):
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
     dec_output = self.decoder(
       enc_output, x_mask, y_train, y_mask, y_pos_emb_indices)
+    dec_output = self.dropout(dec_output)
     logits = self.w_logit(dec_output)
     logits.data[:, :, self.hparams.pad_id] = -float("inf")
     if label_smoothing and (self.hparams.label_smoothing is not None):

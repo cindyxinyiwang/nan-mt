@@ -59,10 +59,10 @@ class DataLoader(object):
       self.reset_valid()
 
   def reset_train(self):
+    self.n_train_batches = ((self.train_size + self.hparams.batch_size - 1) //
+                            self.hparams.batch_size)
+    self.train_queue = np.random.permutation(self.n_train_batches)
     self.train_index = 0
-    self.train_queue = np.random.uniform(
-      low=0, high=self.train_size - self.hparams.batch_size, size=[1000])
-    self.train_queue = self.train_queue.astype(np.int32)
 
   def reset_valid(self):
     self.valid_index = 0
@@ -140,7 +140,7 @@ class DataLoader(object):
       end_of_epoch: whether we reach the end of training examples.
     """
 
-    start_index = self.train_queue[self.train_index] 
+    start_index = self.train_queue[self.train_index] * self.hparams.batch_size
     end_index = min(start_index + self.hparams.batch_size, self.train_size)
     batch_size = float(end_index - start_index)
 
@@ -151,11 +151,8 @@ class DataLoader(object):
     y_train, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_train)
 
     # shuffle if reaches the end of data
-    if self.train_index >= 999:
-      self.train_index = 0
-      self.train_queue = np.random.uniform(
-        low=0, high=self.train_size - self.hparams.batch_size, size=[1000])
-      self.train_queue = self.train_queue.astype(np.int32)
+    if self.train_index >= self.n_train_batches - 1:
+      self.reset_train()
     else:
       self.train_index += 1
 

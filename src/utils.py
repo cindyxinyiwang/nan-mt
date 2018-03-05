@@ -11,6 +11,7 @@ from datetime import datetime
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.init as init
 
 
 def add_argument(parser, name, type, default, help):
@@ -102,10 +103,24 @@ def set_lr(optim, lr):
 
 
 def count_params(params):
-  num_params = 0
-  for param in params:
-    num_params += param.numel()
+  num_params = sum(p.data.nelement() for p in params)
   return num_params
+
+
+def init_param(p, init_type="xavier_normal", init_range=None):
+  if init_type == "xavier_normal":
+    init.xavier_normal(p)
+  elif init_type == "xavier_uniform":
+    init.xavier_uniform(p)
+  elif init_type == "kaiming_normal":
+    init.kaiming_normal(p)
+  elif init_type == "kaiming_uniform":
+    init.kaiming_uniform(p)
+  elif init_type == "uniform":
+    assert init_range is not None and init_range > 0
+    init.uniform(p, -init_range, init_range)
+  else:
+    raise ValueError("Unknown init_type '{0}'".format(init_type))
 
 
 def grad_clip(params, grad_bound=None):
