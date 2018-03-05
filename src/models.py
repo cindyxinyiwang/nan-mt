@@ -24,7 +24,7 @@ class Encoder(nn.Module):
     assert self.hparams.d_word_vec == self.hparams.d_model
 
     self.pos_emb = PositionalEmbedding(hparams)
-    self.word_emb = nn.Embedding(self.hparams.vocab_size,
+    self.word_emb = nn.Embedding(self.hparams.source_vocab_size,
                                  self.hparams.d_word_vec,
                                  padding_idx=hparams.pad_id)
     self.emb_scale = np.sqrt(self.hparams.d_model)
@@ -79,7 +79,7 @@ class Decoder(nn.Module):
     self.hparams = hparams
 
     self.pos_emb = PositionalEmbedding(self.hparams)
-    self.word_emb = nn.Embedding(self.hparams.vocab_size,
+    self.word_emb = nn.Embedding(self.hparams.target_vocab_size,
                                  self.hparams.d_word_vec,
                                  padding_idx=hparams.pad_id)
     self.emb_scale = np.sqrt(self.hparams.d_model)
@@ -146,7 +146,7 @@ class Transformer(nn.Module):
     self.encoder = Encoder(hparams)
     self.dropout = nn.Dropout(hparams.dropout)
     self.decoder = Decoder(hparams)
-    self.w_logit = nn.Linear(hparams.d_model, hparams.vocab_size, bias=False)
+    self.w_logit = nn.Linear(hparams.d_model, hparams.target_vocab_size, bias=False)
     if hparams.share_emb_and_softmax:
       self.w_logit.weight = self.decoder.word_emb.weight
 
@@ -158,7 +158,7 @@ class Transformer(nn.Module):
 
     if hparams.label_smoothing is not None:
       self.softmax = nn.Softmax(dim=-1)
-      smooth = np.full([1, 1, hparams.vocab_size], 1 / hparams.vocab_size,
+      smooth = np.full([1, 1, hparams.target_vocab_size], 1 / hparams.target_vocab_size,
                        dtype=np.float32)
       self.smooth = torch.FloatTensor(smooth)
       if self.hparams.cuda:
@@ -176,7 +176,7 @@ class Transformer(nn.Module):
     if label_smoothing and (self.hparams.label_smoothing is not None):
       smooth = self.hparams.label_smoothing
       probs = ((1.0 - smooth) * self.softmax(logits) +
-               smooth / self.hparams.vocab_size)
+               smooth / self.hparams.target_vocab_size)
       logits = torch.log(probs)
       logits.data[:, :, self.hparams.pad_id] = -float("inf")
 
@@ -204,7 +204,7 @@ class Transformer(nn.Module):
                                               x_mask.size(1))
 
     batch_size, src_seq_len = x_train.size()
-    trg_vocab_size = self.hparams.vocab_size
+    trg_vocab_size = self.hparams.target_vocab_size
 
     beams = [Beam(beam_size, self.hparams) for _ in range(batch_size)]
     beam_to_inst = {beam_idx: inst_idx for inst_idx, beam_idx in enumerate(range(batch_size))}
@@ -279,7 +279,7 @@ class Transformer(nn.Module):
       x_train, x_mask, x_pos_emb_indices,
       y_train[:, 0:1], y_mask[:, 0:1], y_pos_emb_indices[:, 0:1].contiguous(),
       label_smoothing=False)
-    logits = logits.view(-1, self.hparams.vocab_size)
+    logits = logits.view(-1, self.hparams.target_vocab_size)
     labels = y_train[:, 1:2].contiguous().view(-1)
     #tr_loss, _ = get_performance(crit, logits[1:], labels[1:])
     # print(logits[0][labels[0]].data, labels[0].data)
@@ -293,7 +293,7 @@ class Transformer(nn.Module):
       x_train, x_mask, x_pos_emb_indices,
       y_train[:, 0:2], y_mask[:, 0:2], y_pos_emb_indices[:, 0:2].contiguous(),
       label_smoothing=False)
-    logits = logits.view(-1, self.hparams.vocab_size)
+    logits = logits.view(-1, self.hparams.target_vocab_size)
     labels = y_train[:, 1:3].contiguous().view(-1)
     #tr_loss, _ = get_performance(crit, logits[1:], labels[1:])
     print(logits[0][labels[0]].data, labels[0].data)
@@ -304,7 +304,7 @@ class Transformer(nn.Module):
       x_train, x_mask, x_pos_emb_indices,
       y_train[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous(),
       label_smoothing=False)
-    logits = logits.view(-1, self.hparams.vocab_size)
+    logits = logits.view(-1, self.hparams.target_vocab_size)
     labels = y_train[:, 1:].contiguous().view(-1)
     tr_loss, _ = get_performance(crit, logits, labels, self.hparams)
     print("train loss of total word: {}".format(tr_loss.data[0]))
@@ -313,7 +313,7 @@ class Transformer(nn.Module):
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
     batch_size, src_seq_len = x_train.size()
     batch_size, trg_seq_len = y_train.size()
-    trg_vocab_size = self.hparams.vocab_size
+    trg_vocab_size = self.hparams.target_vocab_size
 
     dec_loss = 0.
     for i in range(trg_seq_len-1):
@@ -334,7 +334,7 @@ class Transformer(nn.Module):
       # select the dec output for next word
       dec_output = dec_output[:, -1, :]
       logits = self.w_logit(dec_output)
-      logits = logits.view(-1, self.hparams.vocab_size)
+      logits = logits.view(-1, self.hparams.target_vocab_size)
       labels = y_train[:, len_dec].contiguous().view(-1)
       #if i == 0:
         #print('use pad id')

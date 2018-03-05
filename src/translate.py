@@ -78,17 +78,6 @@ while not end_of_epoch:
    (y_test, y_mask, y_pos_emb_indices, y_count),
    batch_size, end_of_epoch) = data.next_test(test_batch_size=hparams.batch_size)
 
-  ## DEBUG
-  # print("x_test", x_test)
-  # print("y_test", y_test)
-  # y = y_test.cpu().data.numpy()
-  # for _y in y:
-  #   log_string = ""
-  #   for __y in _y:
-  #     log_string += "{0:<10} ".format(data.source_index_to_word[__y])
-  #   print(log_string)
-  ## END OF DEBUG
-
   num_sentences += batch_size
 
   # The normal, correct way:
@@ -115,6 +104,7 @@ while not end_of_epoch:
     out_file.flush()
   
   print("Translated {0} sentences".format(num_sentences))
+  sys.stdout.flush()
 
 out_file.close()
 

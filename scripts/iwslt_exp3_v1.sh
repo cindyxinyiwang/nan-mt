@@ -9,17 +9,17 @@ python3 src/main.py \
   --eval_every=2000 \
   --reset_output_dir \
   --no_load_model \
-  --data_path="data/bpe_28k_shared/en-de/" \
+  --data_path="data/bpe_24k_shared/en-de/" \
   --source_train="train.en" \
   --target_train="train.de" \
   --source_valid="dev2010.en" \
   --target_valid="dev2010.de" \
-  --source_vocab="shared_28000.vocab" \
-  --target_vocab="shared_28000.vocab" \
+  --source_vocab="vocab.en" \
+  --target_vocab="vocab.de" \
   --source_test="tst2014.en" \
   --target_test="tst2014.de" \
   --batch_size=32 \
-  --n_train_sents=250000 \
+  --n_train_sents=25000 \
   --max_len=750 \
   --d_word_vec=256 \
   --d_model=256 \

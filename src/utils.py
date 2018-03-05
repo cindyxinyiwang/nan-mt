@@ -67,7 +67,7 @@ class Logger(object):
 
 
 def get_criterion(hparams):
-  weights = torch.ones(hparams.vocab_size)
+  weights = torch.ones(hparams.target_vocab_size)
   weights[hparams.pad_id] = 0
   crit = nn.CrossEntropyLoss(weights, size_average=False, reduce=False)
   if hparams.cuda:

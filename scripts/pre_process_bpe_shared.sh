@@ -1,6 +1,6 @@
 #!/bin/bash
 
-vocab_size=28000
+vocab_size=24000
 
 languages=("en" "de")
 file_names=(
@@ -13,7 +13,7 @@ file_names=(
   "tst2014"
 )
 
-output_path="data/bpe_28k_shared/en-de"
+output_path="data/bpe_24k_shared/en-de"
 
 mkdir -p ${output_path}
 

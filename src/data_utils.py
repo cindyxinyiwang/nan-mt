@@ -34,9 +34,16 @@ class DataLoader(object):
     # vocab
     (self.source_word_to_index,
      self.source_index_to_word) = self._build_vocab(self.hparams.source_vocab)
+    self.source_vocab_size = len(self.source_word_to_index)
 
     (self.target_word_to_index,
      self.target_index_to_word) = self._build_vocab(self.hparams.target_vocab)
+    self.target_vocab_size = len(self.target_word_to_index)
+
+    assert self.source_word_to_index[self.hparams.pad] == self.target_word_to_index[self.hparams.pad]
+    assert self.source_word_to_index[self.hparams.unk] == self.target_word_to_index[self.hparams.unk]
+    assert self.source_word_to_index[self.hparams.bos] == self.target_word_to_index[self.hparams.bos]
+    assert self.source_word_to_index[self.hparams.eos] == self.target_word_to_index[self.hparams.eos]
 
     if decode:
       self.x_test, self.y_test = self._build_parallel(
@@ -79,10 +86,10 @@ class DataLoader(object):
     # pad data
     x_test = self.x_test[start_index: end_index]
     y_test = self.y_test[start_index: end_index]
-    x_test, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_test,
-                                                           volatile=True)
-    y_test, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_test,
-                                                           volatile=True)
+    x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
+      sentences=x_test, pad_id=self.pad_id, volatile=True)
+    y_test, y_mask, y_pos_emb_indices, y_count = self._pad(
+      sentences=y_test, pad_id=self.pad_id, volatile=True)
 
     if end_index >= self.test_size:
       end_of_epoch = True
@@ -113,10 +120,10 @@ class DataLoader(object):
     # pad data
     x_valid = self.x_valid[start_index : end_index]
     y_valid = self.y_valid[start_index : end_index]
-    x_valid, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_valid,
-                                                            volatile=True)
-    y_valid, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_valid,
-                                                            volatile=True)
+    x_valid, x_mask, x_pos_emb_indices, x_count = self._pad(
+      sentences=x_valid, pad_id=self.pad_id, volatile=True)
+    y_valid, y_mask, y_pos_emb_indices, y_count = self._pad(
+      sentences=y_valid, pad_id=self.pad_id, volatile=True)
 
     # shuffle if reaches the end of data
     if end_index >= self.valid_size:
@@ -147,8 +154,10 @@ class DataLoader(object):
     # pad data
     x_train = self.x_train[start_index : end_index]
     y_train = self.y_train[start_index : end_index]
-    x_train, x_mask, x_pos_emb_indices, x_count = self._pad(sentences=x_train)
-    y_train, y_mask, y_pos_emb_indices, y_count = self._pad(sentences=y_train)
+    x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
+      sentences=x_train, pad_id=self.pad_id)
+    y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
+      sentences=y_train, pad_id=self.pad_id)
 
     # shuffle if reaches the end of data
     if self.train_index >= self.n_train_batches - 1:
@@ -160,7 +169,7 @@ class DataLoader(object):
             (y_train, y_mask, y_pos_emb_indices, y_count),
             batch_size)
 
-  def _pad(self, sentences, volatile=False):
+  def _pad(self, sentences, pad_id, volatile=False):
     """Pad all instances in [data] to the longest length.
 
     Args:
@@ -179,7 +188,7 @@ class DataLoader(object):
     max_len = max(lengths)
 
     padded_sentences = [
-      sentence + ([self.hparams.pad_id] * (max_len - len(sentence)))
+      sentence + ([pad_id] * (max_len - len(sentence)))
       for sentence in sentences]
     mask = [
       ([0] * len(sentence)) + ([1] * (max_len - len(sentence)))
@@ -226,7 +235,7 @@ class DataLoader(object):
       if not source_line or not target_line:
         continue
 
-      source_indices, target_indices = [self.hparams.bos_id], [self.hparams.bos_id]
+      source_indices, target_indices = [self.bos_id], [self.bos_id]
       source_tokens = source_line.split(" ")
       target_tokens = target_line.split(" ")
       if is_training and len(target_line) > self.hparams.max_len:
@@ -250,8 +259,8 @@ class DataLoader(object):
         target_index = self.target_word_to_index[target_token]
         target_indices.append(target_index)
 
-      assert source_indices[-1] == self.hparams.eos_id
-      assert target_indices[-1] == self.hparams.eos_id
+      assert source_indices[-1] == self.eos_id
+      assert target_indices[-1] == self.eos_id
 
       source_lens.append(len(source_indices))
       source_data.append(source_indices)
@@ -291,27 +300,26 @@ class DataLoader(object):
       line = line.strip()
       if not line:
         continue
-      word, index = line.split("\t")
-      if not word or not index:
+      word_index = line.split("~~")
+      if len(word_index) != 2:
+        print("Weird line: '{0}'. split_len={1}".format(line, len(word_index)))
         continue
-      if index.startswith("-"):
-        index = -int(index)
-      elif word == self.hparams.unk:
-        index = self.hparams.unk_id
-      elif word == self.hparams.eos:
-        index = self.hparams.eos_id
-      elif word == self.hparams.bos:
-        index = self.hparams.bos_id
-      else:
-        raise ValueError("Wrong word '{0}' or index '{1}'".format(word, index))
+      word, index = word_index
+      index = int(index)
       word_to_index[word] = index
       index_to_word[index] = word
+      if word == self.hparams.unk:
+        self.unk_id = index
+      elif word == self.hparams.bos:
+        self.bos_id = index
+      elif word == self.hparams.eos:
+        self.eos_id = index
+      elif word == self.hparams.pad:
+        self.pad_id = index
 
-    # adding pad
-    word_to_index[self.hparams.pad_id] = len(index_to_word)
-    index_to_word[len(index_to_word)] = self.hparams.pad
-
-    assert len(word_to_index) == len(index_to_word)
+    assert len(word_to_index) == len(index_to_word), (
+      "|word_to_index|={0} != |index_to_word|={1}".format(len(word_to_index),
+                                                        len(index_to_word)))
     print("Done. vocab_size = {0}".format(len(word_to_index)))
 
     return word_to_index, index_to_word

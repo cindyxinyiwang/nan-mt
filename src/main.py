@@ -57,7 +57,6 @@ add_argument(parser, "d_v", type="int", default=64, help="dim of attn values")
 add_argument(parser, "n_layers", type="int", default=5, help="number of layers in a Transformer stack")
 add_argument(parser, "n_heads", type="int", default=2 , help="number of attention heads")
 add_argument(parser, "batch_size", type="int", default=32, help="")
-add_argument(parser, "lr", type="int", default=None, help="")
 add_argument(parser, "n_train_steps", type="int", default=100000, help="")
 add_argument(parser, "n_warm_ups", type="int", default=750, help="")
 
@@ -67,6 +66,7 @@ add_argument(parser, "dropout", type="float", default=0.1, help="probability of 
 add_argument(parser, "label_smoothing", type="float", default=None, help="")
 add_argument(parser, "grad_bound", type="float", default=None, help="L2 norm")
 add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
+add_argument(parser, "lr", type="float", default=None, help="")
 
 
 add_argument(parser, "patience", type="int", default=-1,
@@ -106,7 +106,7 @@ def eval(model, data, crit, step, hparams, valid_batch_size=20):
       x_valid, x_mask, x_pos_emb_indices,
       y_valid[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous(),
       label_smoothing=False)
-    logits = logits.view(-1, hparams.vocab_size)
+    logits = logits.view(-1, hparams.target_vocab_size)
     n_batches += 1
     # if n_batches >= 1:
     #   print(logits[5])
@@ -183,6 +183,12 @@ def train():
       init_range=args.init_range,
     )
   data = DataLoader(hparams=hparams)
+  hparams.add_param("source_vocab_size", data.source_vocab_size)
+  hparams.add_param("target_vocab_size", data.target_vocab_size)
+  hparams.add_param("pad_id", data.pad_id)
+  hparams.add_param("unk_id", data.unk_id)
+  hparams.add_param("bos_id", data.bos_id)
+  hparams.add_param("eos_id", data.eos_id)
 
   # build or load model model
   print("-" * 80)
@@ -217,7 +223,7 @@ def train():
   # train loop
   print("-" * 80)
   print("Start training")
-  best_val_acc = 1e10  # hparams.vocab_size
+  best_val_acc = 1e10  # hparams.target_vocab_size
   start_time = time.time()
   actual_start_time = time.time()
   target_words = 0
@@ -245,7 +251,7 @@ def train():
       logits = model.forward(
         x_train, x_mask, x_pos_emb_indices,
         y_train[:, :-1].contiguous(), y_mask[:, :-1].contiguous(), y_pos_emb_indices[:, :-1].contiguous())
-      logits = logits.view(-1, hparams.vocab_size)
+      logits = logits.view(-1, hparams.target_vocab_size)
       labels = y_train[:, 1:].contiguous().view(-1)
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
       total_loss += tr_loss.data[0]
@@ -253,12 +259,6 @@ def train():
       tr_loss = tr_loss.div(batch_size)
 
       # set learning rate
-      if hparams.lr_fixed is None or step <= hparams.n_warm_ups:
-        lr = (np.minimum(1.0 / np.sqrt(step + 1),
-                         (step + 1) / (np.sqrt(hparams.n_warm_ups) ** 3)) /
-              np.sqrt(hparams.d_model))
-      else:
-        lr = hparams.lr_fixed
       set_lr(optim, lr)
 
       tr_loss.backward()

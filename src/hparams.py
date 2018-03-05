@@ -26,14 +26,13 @@ class Iwslt16EnDeBpe32SharedParams(Hparams):
     super(Iwslt16EnDeBpe32SharedParams, self).__init__(**kwargs)
     self.dataset = "IWSLT 2016 En-De with BPE 32K Shared Vocab"
 
-    self.vocab_size = 28000 + 1
     self.unk = "<unk>"
     self.bos = "<s>"
     self.eos = "</s>"
-    self.unk_id = 27997
-    self.eos_id = 27998
-    self.bos_id = 27999
-
     self.pad = "<pad>"
-    self.pad_id = 28000
+
+    self.unk_id = None
+    self.eos_id = None
+    self.bos_id = None
+    self.pad_id = None
 
