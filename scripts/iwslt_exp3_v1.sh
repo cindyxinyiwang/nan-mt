@@ -18,22 +18,23 @@ python3 src/main.py \
   --target_vocab="vocab.de" \
   --source_test="tst2014.en" \
   --target_test="tst2014.de" \
-  --batch_size=32 \
-  --n_train_sents=25000 \
+  --batch_size=64 \
+  --n_train_sents=250000 \
   --max_len=750 \
   --d_word_vec=256 \
   --d_model=256 \
-  --d_inner=384 \
+  --d_inner=512 \
   --n_layers=5 \
   --d_k=64 \
   --d_v=64 \
   --n_heads=4 \
-  --n_train_steps=100000 \
+  --n_train_steps=80000 \
   --n_warm_ups=750 \
   --dropout=0.1 \
   --share_emb_and_softmax \
   --cuda \
   --lr=20.0 \
+  --lr_dec=2.0 \
   --init_range=0.08 \
   --grad_bound=0.05 \
   "$@"

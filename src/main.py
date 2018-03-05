@@ -66,7 +66,8 @@ add_argument(parser, "dropout", type="float", default=0.1, help="probability of 
 add_argument(parser, "label_smoothing", type="float", default=None, help="")
 add_argument(parser, "grad_bound", type="float", default=None, help="L2 norm")
 add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
-add_argument(parser, "lr", type="float", default=None, help="")
+add_argument(parser, "lr", type="float", default=20.0, help="initial lr")
+add_argument(parser, "lr_dec", type="float", default=2.0, help="decrease lr when val_ppl does not improve")
 
 
 add_argument(parser, "patience", type="int", default=-1,
@@ -173,7 +174,6 @@ def train():
       n_layers=args.n_layers,
       n_heads=args.n_heads,
       batch_size=args.batch_size,
-      lr=args.lr,
       n_train_steps=args.n_train_steps,
       n_warm_ups=args.n_warm_ups,
       share_emb_and_softmax=args.share_emb_and_softmax,
@@ -181,6 +181,8 @@ def train():
       label_smoothing=args.label_smoothing,
       grad_bound=args.grad_bound,
       init_range=args.init_range,
+      lr=args.lr,
+      lr_dec=args.lr_dec
     )
   data = DataLoader(hparams=hparams)
   hparams.add_param("source_vocab_size", data.source_vocab_size)
@@ -212,24 +214,23 @@ def train():
     print("Loading optim from '{0}'".format(optim_file_name))
     optimizer_state = torch.load(optim_file_name)
     optim.load_state_dict(optimizer_state)
-    try:
-      step_file_name = os.path.join(args.output_dir, "step.pt")
-      step = torch.load(step_file_name)
-    except:
-      step = 0
-  else:
+
+  try:
+    extra_file_name = os.path.join(args.output_dir, "extra.pt")
+    step, best_val_ppl, lr = torch.load(extra_file_name)
+  except:
     step = 0
+    best_val_ppl = hparams.target_vocab_size
+    lr = args.lr
 
   # train loop
   print("-" * 80)
   print("Start training")
-  best_val_acc = 1e10  # hparams.target_vocab_size
   start_time = time.time()
   actual_start_time = time.time()
   target_words = 0
   total_loss = 0
   total_corrects = 0
-  lr = hparams.lr
   n_train_batches = data.train_size // hparams.batch_size
 
   while True:
@@ -250,7 +251,7 @@ def train():
       optim.zero_grad()
       logits = model.forward(
         x_train, x_mask, x_pos_emb_indices,
-        y_train[:, :-1].contiguous(), y_mask[:, :-1].contiguous(), y_pos_emb_indices[:, :-1].contiguous())
+        y_train[:, :-1], y_mask[:, :-1].contiguous(), y_pos_emb_indices[:, :-1].contiguous())
       logits = logits.view(-1, hparams.target_vocab_size)
       labels = y_train[:, 1:].contiguous().view(-1)
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
@@ -259,6 +260,8 @@ def train():
       tr_loss = tr_loss.div(batch_size)
 
       # set learning rate
+      if step < hparams.n_warm_ups:
+        lr = hparams.lr * (step + 1) / hparams.n_warm_ups
       set_lr(optim, lr)
 
       tr_loss.backward()
@@ -272,7 +275,7 @@ def train():
         epoch = step // n_train_batches
         log_string = "ep={0:<3d}".format(epoch)
         log_string += " steps={0:<6.2f}".format(step / 1000)
-        log_string += " lr={0:<8.6f}".format(lr)
+        log_string += " lr={0:<6.3f}".format(lr)
         log_string += " loss={0:<7.2f}".format(tr_loss.data[0])
         log_string += " |g|={0:<5.2f}".format(grad_norm)
         log_string += " ppl={0:<8.2f}".format(np.exp(total_loss / target_words))
@@ -288,12 +291,13 @@ def train():
 
       # eval
       if step % args.eval_every == 0:
-        val_acc = eval(model, data, crit, step, hparams, valid_batch_size=30)
-        if val_acc < best_val_acc:
-          best_val_acc = val_acc
-          save_checkpoint(step, model, optim, hparams, args.output_dir)
+        val_ppl = eval(model, data, crit, step, hparams, valid_batch_size=30)
+        if val_ppl < best_val_ppl:
+          best_val_ppl = val_ppl
+          save_checkpoint([step, best_val_ppl, lr], model, optim, hparams,
+                          args.output_dir)
         else:
-          lr /= 2.0
+          lr /= hparams.lr_dec
         actual_start_time = time.time()
         target_words = 0
         total_loss = 0
@@ -306,10 +310,11 @@ def train():
     # stop if trained for more than n_train_steps
     if step >= hparams.n_train_steps:
       print("Reach {0} steps. Stop training".format(step))
-      val_acc = eval(model, data, crit, step, hparams, valid_batch_size=30)
-      if val_acc < best_val_acc:
-        best_val_acc = val_acc
-        save_checkpoint(step, model, optim, hparams, args.output_dir)
+      val_ppl = eval(model, data, crit, step, hparams, valid_batch_size=30)
+      if val_ppl < best_val_ppl:
+        best_val_ppl = val_ppl
+        save_checkpoint([step, best_val_ppl, lr], model, optim, hparams,
+                        args.output_dir)
       break
 
 def main():
