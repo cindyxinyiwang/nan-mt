@@ -153,7 +153,7 @@ class Transformer(nn.Module):
     if self.hparams.cuda:
       self.w_logit = self.w_logit.cuda()
 
-    init_param(self.w_logit.weight, init_type="uniform",
+    init_param(self.w_logit.weight, init_type="kaiming_uniform",
                init_range=self.hparams.init_range)
 
     if hparams.label_smoothing is not None:

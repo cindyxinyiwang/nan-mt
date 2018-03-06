@@ -231,7 +231,7 @@ def train():
     lr = args.lr
     best_val_bleu = 0.
     cur_attempt = 0
-  ppl_thresh = 60.
+  ppl_thresh = 15.0
   set_patience = args.patience >= 0
   # train loop
   print("-" * 80)
@@ -287,7 +287,7 @@ def train():
         log_string += " steps={0:<6.2f}".format(step / 1000)
         log_string += " lr={0:<6.3f}".format(lr)
         log_string += " loss={0:<7.2f}".format(tr_loss.data[0])
-        log_string += " |g|={0:<5.2f}".format(grad_norm)
+        log_string += " |g|={0:<6.2f}".format(grad_norm)
         log_string += " ppl={0:<8.2f}".format(np.exp(total_loss / target_words))
         log_string += " acc={0:<5.4f}".format(total_corrects / target_words)
         log_string += " wpm(K)={0:<5.2f}".format(
@@ -301,7 +301,8 @@ def train():
 
       # eval
       if step % args.eval_every == 0:
-        val_ppl, val_bleu = eval(model, data, crit, step, hparams, best_val_ppl<ppl_thresh, valid_batch_size=30)
+        val_ppl, val_bleu = eval(model, data, crit, step, hparams,
+                                 best_val_ppl<ppl_thresh, valid_batch_size=20)
         if args.eval_bleu and not val_bleu is None:
           save = val_bleu > best_val_bleu
         else:
@@ -311,8 +312,8 @@ def train():
         if val_ppl < best_val_ppl:
           best_val_ppl = val_ppl
         if save:
-          save_checkpoint([step, best_val_ppl, best_val_bleu, lr], model, optim, hparams,
-                          args.output_dir)
+          save_checkpoint([step, best_val_ppl, best_val_bleu, cur_attempt, lr],
+                          model, optim, hparams, args.output_dir)
           cur_attempt = 0
         else:
           lr /= hparams.lr_dec
@@ -335,7 +336,8 @@ def train():
       stop = True
     if stop:
       print("Reach {0} steps. Stop training".format(step))
-      val_ppl, val_bleu = eval(model, data, crit, step, hparams, best_val_ppl<ppl_thresh, valid_batch_size=30)
+      val_ppl, val_bleu = eval(model, data, crit, step, hparams,
+                               best_val_ppl<ppl_thresh, valid_batch_size=20)
       if args.eval_bleu and not val_bleu is None:
         save = val_bleu > best_val_bleu
       else:
@@ -343,8 +345,8 @@ def train():
       if not val_bleu is None and val_bleu > best_val_bleu:
         best_val_bleu = val_bleu
       if save:
-        save_checkpoint([step, best_val_ppl, best_val_bleu, lr], model, optim, hparams,
-                        args.output_dir)
+        save_checkpoint([step, best_val_ppl, best_val_bleu, cur_attempt, lr],
+                        model, optim, hparams, args.output_dir)
       break
 
 def main():
