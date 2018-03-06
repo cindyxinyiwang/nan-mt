@@ -76,7 +76,7 @@ add_argument(parser, "patience", type="int", default=-1,
 args = parser.parse_args()
 
 
-def eval(model, data, crit, step, hparams, valid_batch_size=20):
+def eval(model, data, crit, step, hparams, eval_bleu=False, valid_batch_size=20):
   print("Eval at step {0}. valid_batch_size={1}".format(step, valid_batch_size))
   model.eval()
   data.reset_valid()
@@ -85,7 +85,7 @@ def eval(model, data, crit, step, hparams, valid_batch_size=20):
   valid_acc = 0
   n_batches = 0
   valid_bleu = None
-  if args.eval_bleu:
+  if eval_bleu:
     valid_hyp_file = os.path.join(args.output_dir, "dev.trans_{0}".format(step))
     out_file = open(valid_hyp_file, 'w', encoding='utf-8')
   while True:
@@ -120,7 +120,7 @@ def eval(model, data, crit, step, hparams, valid_batch_size=20):
     # print("{0:<5d} / {1:<5d}".format(val_acc.data[0], y_count))
 
     # BLEU eval
-    if args.eval_bleu:
+    if eval_bleu:
       all_hyps, all_scores = model.translate_batch(
         x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)
       filtered_tokens = set([hparams.bos_id, hparams.eos_id])
@@ -138,14 +138,17 @@ def eval(model, data, crit, step, hparams, valid_batch_size=20):
   log_string += " loss={0:<6.2f}".format(valid_loss / valid_words)
   log_string += " acc={0:<5.4f}".format(valid_acc / valid_words)
   log_string += " val_ppl={0:<.2f}".format(val_ppl)
-  if args.eval_bleu:
+  if eval_bleu:
     out_file.close()
     ref_file = os.path.join(hparams.data_path, hparams.target_valid)
     bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {0} < {1}".format(ref_file, valid_hyp_file))
     log_string += " {}".format(bleu_str)
+    bleu_str = bleu_str.split('\n')[-1].strip()
+    reg = re.compile("BLEU = ([^,]*).*")
+    valid_bleu = float(reg.match(bleu_str).group(1))
   print(log_string)
   model.train()
-  return val_ppl
+  return val_ppl, valid_bleu
 
 
 def train():
@@ -217,11 +220,14 @@ def train():
 
   try:
     extra_file_name = os.path.join(args.output_dir, "extra.pt")
-    step, best_val_ppl, lr = torch.load(extra_file_name)
+    step, best_val_ppl, best_val_bleu, lr = torch.load(extra_file_name)
   except:
     step = 0
     best_val_ppl = hparams.target_vocab_size
     lr = args.lr
+
+    best_val_bleu = 0.
+  ppl_thresh = 60.
 
   # train loop
   print("-" * 80)
@@ -291,10 +297,17 @@ def train():
 
       # eval
       if step % args.eval_every == 0:
-        val_ppl = eval(model, data, crit, step, hparams, valid_batch_size=30)
+        val_ppl, val_bleu = eval(model, data, crit, step, hparams, best_val_ppl<ppl_thresh, valid_batch_size=30)
+        if args.eval_bleu and not val_bleu is None:
+          save = val_bleu > best_val_bleu
+        else:
+          save = val_ppl < best_val_ppl
+        if not val_bleu is None and val_bleu > best_val_bleu:
+          best_val_bleu = val_bleu
         if val_ppl < best_val_ppl:
           best_val_ppl = val_ppl
-          save_checkpoint([step, best_val_ppl, lr], model, optim, hparams,
+        if save:
+          save_checkpoint([step, best_val_ppl, best_val_bleu, lr], model, optim, hparams,
                           args.output_dir)
         else:
           lr /= hparams.lr_dec
@@ -310,10 +323,15 @@ def train():
     # stop if trained for more than n_train_steps
     if step >= hparams.n_train_steps:
       print("Reach {0} steps. Stop training".format(step))
-      val_ppl = eval(model, data, crit, step, hparams, valid_batch_size=30)
-      if val_ppl < best_val_ppl:
-        best_val_ppl = val_ppl
-        save_checkpoint([step, best_val_ppl, lr], model, optim, hparams,
+      val_ppl, val_bleu = eval(model, data, crit, step, hparams, best_val_ppl<ppl_thresh, valid_batch_size=30)
+      if args.eval_bleu and not val_bleu is None:
+        save = val_bleu > best_val_bleu
+      else:
+        save = val_ppl < best_val_ppl
+      if not val_bleu is None and val_bleu > best_val_bleu:
+        best_val_bleu = val_bleu
+      if save:
+        save_checkpoint([step, best_val_ppl, best_val_bleu, lr], model, optim, hparams,
                         args.output_dir)
       break
 
