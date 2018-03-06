@@ -236,10 +236,10 @@ class Transformer(nn.Module):
       y_partial = Variable(y_partial, volatile=True)
       y_mask = torch.ByteTensor([([0] * len_dec_seq) for _ in range(n_remain_sents*beam_size)])
 
-      y_partial_pos = torch.arange(len_dec_seq).unsqueeze(0)
+      y_partial_pos = torch.arange(len_dec_seq).long().unsqueeze(0)
       # size: (n_remain_sents * beam, seq_len)
       y_partial_pos = y_partial_pos.repeat(n_remain_sents * beam_size, 1)
-      y_partial_pos = Variable(torch.FloatTensor(y_partial_pos), volatile=True)
+      y_partial_pos = Variable(torch.LongTensor(y_partial_pos), volatile=True)
 
       if self.hparams.cuda:
         y_partial = y_partial.cuda()
@@ -250,7 +250,7 @@ class Transformer(nn.Module):
         x_mask = x_mask.cuda()
 
       dec_output = self.decoder(
-        enc_output, x_mask, y_partial, y_mask, y_partial_pos)
+        enc_output, x_train, x_mask, y_partial, y_mask, y_partial_pos)
 
       # select the dec output for next word
       dec_output = dec_output[:, -1, :]
