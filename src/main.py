@@ -193,9 +193,12 @@ def train():
   # build or load optimizer
   num_params = count_params(model.trainable_parameters())
   print("Model has {0} params".format(num_params))
-  lr = hparams.lr_fixed if hparams.lr_fixed is not None else 1e-4
-  optim = torch.optim.Adam(model.trainable_parameters(), lr=lr,
-                           betas=(0.9, 0.98), eps=1e-09)
+  #lr = hparams.lr_fixed if hparams.lr_fixed is not None else 1e-4
+  #optim = torch.optim.Adam(model.trainable_parameters(), lr=lr,
+  #                         betas=(0.9, 0.98), eps=1e-09)
+  optim = ScheduledOptim(torch.optim.Adam(model.trainable_parameters(), betas=(0.9, 0.98), eps=1e-09),
+              hparams.d_model, hparams.n_warm_ups)
+  lr = optim.lr
   if args.load_model:
     optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
     print("Loading optim from '{0}'".format(optim_file_name))
@@ -227,6 +230,10 @@ def train():
        (y_train, y_mask, y_pos_emb_indices, y_count),
        batch_size) = data.next_train()
 
+      #print(x_train)
+      #print(x_mask)
+      #print(x_pos_emb_indices)
+      #print(batch_size)
       # Since you are shifting y_train, i.e. y_train[:, :-1] and y_train[:, 1:]
       y_count -= batch_size  
 
@@ -254,18 +261,20 @@ def train():
 
       tr_ppl = np.exp(tr_loss.data[0] / y_count)
       tr_loss = tr_loss.div(batch_size)
-
+      #print(tr_loss.data)
       # set learning rate
-      if hparams.lr_fixed is None or step <= hparams.n_warm_ups:
-        lr = (np.minimum(1.0 / np.sqrt(step + 1),
-                         (step + 1) / (np.sqrt(hparams.n_warm_ups) ** 3)) /
-              np.sqrt(hparams.d_model))
-      else:
-        lr = hparams.lr_fixed
-      set_lr(optim, lr)
+      #if hparams.lr_fixed is None or step <= hparams.n_warm_ups:
+      #  lr = (np.minimum(1.0 / np.sqrt(step + 1),
+      #                   (step + 1) / (np.sqrt(hparams.n_warm_ups) ** 3)) /
+      #        np.sqrt(hparams.d_model))
+      #else:
+      #  lr = hparams.lr_fixed
+      #set_lr(optim, lr)
+      lr = optim.lr
 
       tr_loss.backward()
       optim.step()
+      optim.update_learning_rate()
 
       step += 1
       if step % args.log_every == 0:

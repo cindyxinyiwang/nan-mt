@@ -68,8 +68,10 @@ class Logger(object):
 def get_criterion(hparams):
   weights = torch.ones(hparams.trg_vocab_size)
   weights[hparams.pad_id] = 0
+  #print(weights)
   #crit = nn.CrossEntropyLoss(weights, size_average=False, reduce=False)
-  crit = nn.CrossEntropyLoss(weights, size_average=False)
+  crit = nn.CrossEntropyLoss(size_average=False, ignore_index=hparams.pad_id)
+  #crit = nn.NLLLoss(size_average=False, ignore_index=hparams.pad_id)
   if hparams.cuda:
     crit = crit.cuda()
   return crit
@@ -79,9 +81,18 @@ def get_performance(crit, logits, labels, hparams):
   mask = (labels == hparams.pad_id)
   #loss = crit(logits, labels).masked_fill_(mask, 0).sum()
   loss = crit(logits, labels)
+  '''
+  print(logits.data)
+  ls = nn.LogSoftmax()
+  ll = ls(logits)
+  print(ll.data)
+  for i in range(labels.size()[0]):
+    print(i, ll[i][labels[i]].data, labels[i])
+  loss = crit(ll, labels)
+  print(loss.data)
+  '''
   _, preds = torch.max(logits, dim=1)
   acc = torch.eq(preds, labels).int().masked_fill_(mask, 0).sum()
-
   return loss, acc
 
 def get_attn_padding_mask(seq_q, seq_k, pad_id):
@@ -138,3 +149,32 @@ def count_params(params):
     num_params += param.numel()
   return num_params
 
+
+class ScheduledOptim(object):
+  '''A simple wrapper class for learning rate scheduling'''
+
+  def __init__(self, optimizer, d_model, n_warmup_steps):
+      self.optimizer = optimizer
+      self.d_model = d_model
+      self.n_warmup_steps = n_warmup_steps
+      self.n_current_steps = 0
+      self.lr = 0.001
+
+  def step(self):
+      "Step by the inner optimizer"
+      self.optimizer.step()
+
+  def zero_grad(self):
+      "Zero out the gradients by the inner optimizer"
+      self.optimizer.zero_grad()
+
+  def update_learning_rate(self):
+      ''' Learning rate scheduling per step '''
+
+      self.n_current_steps += 1
+      new_lr = np.power(self.d_model, -0.5) * np.min([
+          np.power(self.n_current_steps, -0.5),
+          np.power(self.n_warmup_steps, -1.5) * self.n_current_steps])
+      self.lr = new_lr
+      for param_group in self.optimizer.param_groups:
+          param_group['lr'] = new_lr
