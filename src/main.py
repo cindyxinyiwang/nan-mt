@@ -200,11 +200,10 @@ def train():
               hparams.d_model, hparams.n_warm_ups)
   lr = optim.lr
   if args.load_model:
-    optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
-    print("Loading optim from '{0}'".format(optim_file_name))
-    optimizer_state = torch.load(optim_file_name)
-    optim.load_state_dict(optimizer_state)
-
+    #optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
+    #print("Loading optim from '{0}'".format(optim_file_name))
+    #optimizer_state = torch.load(optim_file_name)
+    #optim.load_state_dict(optimizer_state)
     try:
       step_file_name = os.path.join(args.output_dir, "step.pt")
       step = torch.load(step_file_name)

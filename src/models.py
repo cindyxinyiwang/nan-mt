@@ -150,7 +150,9 @@ class Decoder(nn.Module):
     # [batch_size, 1, x_len] -> [batch_size, y_len, x_len]
     #x_attn_mask = x_mask.unsqueeze(1).expand(-1, y_len, -1)
     x_attn_mask = get_attn_padding_mask(y_train, x_train, pad_id=self.hparams.pad_id)
-
+    #print(y_attn_mask.size())
+    #print(x_attn_mask.size())
+    #print(x_train.size())
     dec_output = self.dropout(dec_input)
     for dec_layer in self.layer_stack:
       dec_output = dec_layer(dec_output, x_states,
@@ -224,7 +226,8 @@ class Transformer(nn.Module):
                                               x_mask.size(1))
 
     batch_size, src_seq_len = x_train.size()
-    trg_vocab_size = self.hparams.vocab_size
+    x_train = x_train.repeat(1, beam_size).view(x_train.size(0)*beam_size, x_train.size(1))
+    trg_vocab_size = self.hparams.trg_vocab_size
 
     beams = [Beam(beam_size, self.hparams) for _ in range(batch_size)]
     beam_to_inst = {beam_idx: inst_idx for inst_idx, beam_idx in enumerate(range(batch_size))}
@@ -235,7 +238,8 @@ class Transformer(nn.Module):
       y_partial = torch.stack([b.get_partial_y() for b in beams if not b.done]).view(-1, len_dec_seq)
       y_partial = Variable(y_partial, volatile=True)
       y_mask = torch.ByteTensor([([0] * len_dec_seq) for _ in range(n_remain_sents*beam_size)])
-
+      #print(y_partial.size())
+      #print(y_mask.size())
       y_partial_pos = torch.arange(len_dec_seq).long().unsqueeze(0)
       # size: (n_remain_sents * beam, seq_len)
       y_partial_pos = y_partial_pos.repeat(n_remain_sents * beam_size, 1)
@@ -278,6 +282,7 @@ class Transformer(nn.Module):
       enc_output = select_active_enc_info(enc_output, active_inst_idx_list,
                                           n_remain_sents, src_seq_len, self.hparams.d_model)
       x_mask = select_active_enc_mask(x_mask, active_inst_idx_list, n_remain_sents, src_seq_len)
+      x_train = select_active_x_train(x_train, active_inst_idx_list, n_remain_sents, src_seq_len)
 
       n_remain_sents = len(active_inst_idx_list)
 
@@ -380,6 +385,12 @@ def select_active_enc_mask(enc_mask, active_inst_idx_list, n_remain_sents, src_s
   active_enc_mask = original_enc_mask.index_select(0, active_inst_idx_list).contiguous()
   active_enc_mask = active_enc_mask.view(-1, src_seq_len).contiguous()
   return active_enc_mask
+
+def select_active_x_train(x_train, active_inst_idx_list, n_remain_sents, src_seq_len):
+  original_x_train = x_train.data.view(n_remain_sents, -1).contiguous()
+  active_x_train = original_x_train.index_select(0, active_inst_idx_list).contiguous()
+  active_x_train = active_x_train.view(-1, src_seq_len).contiguous()
+  return Variable(active_x_train, volatile=True)
 
 class Beam(object):
 

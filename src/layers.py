@@ -295,6 +295,8 @@ class DecoderLayer(nn.Module):
     """
 
     output = self.y_attn(dec_input, dec_input, dec_input, attn_mask=y_attn_mask)
+    #print(y_attn_mask.size())
+    #print(x_attn_mask.size())
     output = self.x_attn(output, enc_output, enc_output, attn_mask=x_attn_mask)
     output = self.pos_ffn(output)
     return output

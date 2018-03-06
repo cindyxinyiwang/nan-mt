@@ -47,7 +47,7 @@ def save_checkpoint(step, model, optimizer, hparams, path):
   print("Saving model to '{0}'".format(path))
   torch.save(step, os.path.join(path, "step.pt"))
   torch.save(model, os.path.join(path, "model.pt"))
-  torch.save(optimizer.state_dict(), os.path.join(path, "optimizer.pt"))
+  #torch.save(optimizer.state_dict(), os.path.join(path, "optimizer.pt"))
   torch.save(hparams, os.path.join(path, "hparams.pt"))
 
 
