@@ -142,12 +142,12 @@ class MultiHeadAttn(nn.Module):
     self.w_q = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_k))
     self.w_k = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_k))
     self.w_v = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_v))
-    init_param(self.w_q, init_type="uniform", init_range=hparams.init_range)
-    init_param(self.w_k, init_type="uniform", init_range=hparams.init_range)
-    init_param(self.w_v, init_type="uniform", init_range=hparams.init_range)
+    init_param(self.w_q, init_type="kaiming_uniform", init_range=hparams.init_range)
+    init_param(self.w_k, init_type="kaiming_uniform", init_range=hparams.init_range)
+    init_param(self.w_v, init_type="kaiming_uniform", init_range=hparams.init_range)
 
     self.w_proj = nn.Linear(hparams.n_heads * hparams.d_v, hparams.d_model, bias=False)
-    init_param(self.w_proj.weight, init_type="uniform", init_range=hparams.init_range)
+    init_param(self.w_proj.weight, init_type="kaiming_uniform", init_range=hparams.init_range)
 
   def forward(self, q, k, v, attn_mask=None):
     """Performs the following computations:
@@ -225,8 +225,8 @@ class PositionwiseFF(nn.Module):
     self.relu = nn.ReLU()
     self.layer_norm = LayerNormalization(hparams.d_model)
 
-    init_param(self.w_1.weight, init_type="uniform", init_range=hparams.init_range)
-    init_param(self.w_2.weight, init_type="uniform", init_range=hparams.init_range)
+    init_param(self.w_1.weight, init_type="kaiming_uniform", init_range=hparams.init_range)
+    init_param(self.w_2.weight, init_type="kaiming_uniform", init_range=hparams.init_range)
 
 
   def forward(self, x):

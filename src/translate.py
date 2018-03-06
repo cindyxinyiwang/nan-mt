@@ -64,8 +64,6 @@ hparams = TranslationHparams(
 )
 
 hparams.add_param("filtered_tokens", set([hparams.pad_id, hparams.eos_id, hparams.bos_id]))
-
-hparams.cuda = True
 model.hparams.cuda = hparams.cuda
 
 data = DataLoader(hparams=hparams, decode=True)

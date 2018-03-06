@@ -277,7 +277,7 @@ def train():
         log_string += " steps={0:<6.2f}".format(step / 1000)
         log_string += " lr={0:<6.3f}".format(lr)
         log_string += " loss={0:<7.2f}".format(tr_loss.data[0])
-        log_string += " |g|={0:<5.2f}".format(grad_norm)
+        log_string += " |g|={0:<6.2f}".format(grad_norm)
         log_string += " ppl={0:<8.2f}".format(np.exp(total_loss / target_words))
         log_string += " acc={0:<5.4f}".format(total_corrects / target_words)
         log_string += " wpm(K)={0:<5.2f}".format(
