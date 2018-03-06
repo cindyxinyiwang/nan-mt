@@ -67,9 +67,7 @@ class Logger(object):
 
 
 def get_criterion(hparams):
-  weights = torch.ones(hparams.target_vocab_size)
-  weights[hparams.pad_id] = 0
-  crit = nn.CrossEntropyLoss(weights, size_average=False, reduce=False)
+  crit = nn.CrossEntropyLoss(ignore_index=hparams.pad_id, size_average=False)
   if hparams.cuda:
     crit = crit.cuda()
   return crit
@@ -77,7 +75,7 @@ def get_criterion(hparams):
 
 def get_performance(crit, logits, labels, hparams):
   mask = (labels == hparams.pad_id)
-  loss = crit(logits, labels).masked_fill_(mask, 0).sum()
+  loss = crit(logits, labels)
   _, preds = torch.max(logits, dim=1)
   acc = torch.eq(preds, labels).int().masked_fill_(mask, 0).sum()
 

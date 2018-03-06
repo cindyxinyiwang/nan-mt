@@ -5,11 +5,11 @@ export CUDA_VISIBLE_DEVICES="2"
 
 python3 src/main.py \
   --clean_mem_every=5 \
-  --output_dir="outputs_exp3_v4" \
+  --output_dir="outputs_exp3_v6" \
   --log_every=100 \
   --eval_every=2000 \
-  --no_reset_output_dir \
-  --load_model \
+  --reset_output_dir \
+  --no_load_model \
   --data_path="data/bpe_24k_shared/en-de/" \
   --source_train="train.en" \
   --target_train="train.de" \
@@ -19,9 +19,9 @@ python3 src/main.py \
   --target_vocab="vocab.de" \
   --source_test="tst2014.en" \
   --target_test="tst2014.de" \
-  --batch_size=32 \
+  --batch_size=48 \
   --n_train_sents=250000 \
-  --max_len=250 \
+  --max_len=300 \
   --d_word_vec=512 \
   --d_model=512 \
   --d_inner=1024 \
@@ -29,14 +29,14 @@ python3 src/main.py \
   --d_k=64 \
   --d_v=64 \
   --n_heads=8 \
-  --n_train_steps=80000 \
-  --n_warm_ups=2000 \
+  --n_train_steps=100000 \
+  --n_warm_ups=4000 \
   --dropout=0.1 \
   --share_emb_and_softmax \
   --cuda \
   --lr=20.0 \
-  --lr_dec=1.5 \
-  --init_range=0.08 \
-  --grad_bound=0.10 \
+  --lr_dec=1.2 \
+  --init_range=0.04 \
+  --grad_bound=0.05 \
   "$@"
 

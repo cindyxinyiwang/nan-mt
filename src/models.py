@@ -153,7 +153,7 @@ class Transformer(nn.Module):
     if self.hparams.cuda:
       self.w_logit = self.w_logit.cuda()
 
-    init_param(self.w_logit.weight, init_type="kaiming_uniform",
+    init_param(self.w_logit.weight, init_type="uniform",
                init_range=self.hparams.init_range)
 
     if hparams.label_smoothing is not None:
@@ -172,13 +172,11 @@ class Transformer(nn.Module):
       enc_output, x_mask, y_train, y_mask, y_pos_emb_indices)
     dec_output = self.dropout(dec_output)
     logits = self.w_logit(dec_output)
-    logits.data[:, :, self.hparams.pad_id] = -float("inf")
     if label_smoothing and (self.hparams.label_smoothing is not None):
       smooth = self.hparams.label_smoothing
       probs = ((1.0 - smooth) * self.softmax(logits) +
                smooth / self.hparams.target_vocab_size)
       logits = torch.log(probs)
-      logits.data[:, :, self.hparams.pad_id] = -float("inf")
 
     return logits
 

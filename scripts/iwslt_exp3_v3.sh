@@ -8,8 +8,8 @@ python3 src/main.py \
   --output_dir="outputs_exp3_v3" \
   --log_every=100 \
   --eval_every=2000 \
-  --reset_output_dir \
-  --no_load_model \
+  --no_reset_output_dir \
+  --load_model \
   --data_path="data/bpe_24k_shared/en-de/" \
   --source_train="train.en" \
   --target_train="train.de" \
