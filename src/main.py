@@ -71,7 +71,7 @@ add_argument(parser, "lr_dec", type="float", default=2.0, help="decrease lr when
 
 
 add_argument(parser, "patience", type="int", default=-1,
-             help="how many more steps to take before stop. Ignore n_train_stop if patience is set")
+             help="how many more steps to take before stop. Ignore n_train_step if patience is set")
 
 args = parser.parse_args()
 
@@ -220,15 +220,15 @@ def train():
 
   try:
     extra_file_name = os.path.join(args.output_dir, "extra.pt")
-    step, best_val_ppl, best_val_bleu, lr = torch.load(extra_file_name)
+    step, best_val_ppl, best_val_bleu, cur_attempt, lr = torch.load(extra_file_name)
   except:
     step = 0
     best_val_ppl = hparams.target_vocab_size
     lr = args.lr
-
     best_val_bleu = 0.
+    cur_attempt = 0
   ppl_thresh = 60.
-
+  set_patience = args.patience >= 0
   # train loop
   print("-" * 80)
   print("Start training")
@@ -309,19 +309,27 @@ def train():
         if save:
           save_checkpoint([step, best_val_ppl, best_val_bleu, lr], model, optim, hparams,
                           args.output_dir)
+          cur_attempt = 0
         else:
           lr /= hparams.lr_dec
+          cur_attempt += 1
         actual_start_time = time.time()
         target_words = 0
         total_loss = 0
         total_corrects = 0
 
-      if step >= hparams.n_train_steps:
-        break
-
+      if set_patience:
+        if cur_attempt >= args.patience: break
+      else:
+        if step >= hparams.n_train_steps: break
 
     # stop if trained for more than n_train_steps
-    if step >= hparams.n_train_steps:
+    stop = False
+    if set_patience and cur_attempt >= args.patience: 
+      stop = True
+    elif not set_patience and step > hparams.n_train_steps:
+      stop = True
+    if stop:
       print("Reach {0} steps. Stop training".format(step))
       val_ppl, val_bleu = eval(model, data, crit, step, hparams, best_val_ppl<ppl_thresh, valid_batch_size=30)
       if args.eval_bleu and not val_bleu is None:
