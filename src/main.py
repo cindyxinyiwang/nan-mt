@@ -44,6 +44,7 @@ add_argument(parser, "source_train", type="str", default=None, help="source trai
 add_argument(parser, "target_train", type="str", default=None, help="target train file")
 add_argument(parser, "source_valid", type="str", default=None, help="source valid file")
 add_argument(parser, "target_valid", type="str", default=None, help="target valid file")
+add_argument(parser, "target_valid_ref", type="str", default=None, help="target valid file for reference")
 add_argument(parser, "source_vocab", type="str", default=None, help="source vocab file")
 add_argument(parser, "target_vocab", type="str", default=None, help="target vocab file")
 add_argument(parser, "source_test", type="str", default=None, help="source test file")
@@ -140,7 +141,10 @@ def eval(model, data, crit, step, hparams, eval_bleu=False, valid_batch_size=20)
   log_string += " val_ppl={0:<.2f}".format(val_ppl)
   if eval_bleu:
     out_file.close()
-    ref_file = os.path.join(hparams.data_path, hparams.target_valid)
+    if args.target_valid_ref:
+      ref_file = args.target_valid_ref
+    else:
+      ref_file = os.path.join(hparams.data_path, args.target_valid)
     bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {0} < {1}".format(ref_file, valid_hyp_file))
     log_string += " {}".format(bleu_str)
     bleu_str = bleu_str.split('\n')[-1].strip()
