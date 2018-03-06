@@ -75,6 +75,7 @@ class Encoder(nn.Module):
     # [batch_size, 1, max_len] -> [batch_size, len_q, len_k]
     #attn_mask = x_mask.unsqueeze(1).expand(-1, max_len, -1).contiguous()
     attn_mask = get_attn_padding_mask(x_train, x_train, pad_id=self.hparams.pad_id)
+
     enc_output = self.dropout(enc_input)
     for enc_layer in self.layer_stack:
       enc_output = enc_layer(enc_output, attn_mask=attn_mask)

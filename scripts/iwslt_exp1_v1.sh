@@ -21,7 +21,7 @@ python3.6 src/main.py \
   --target_vocab="shared_28000.vocab" \
   --source_test="tst2014.en" \
   --target_test="tst2014.de" \
-  --batch_size=32 \
+  --batch_size=2 \
   --n_train_sents=25000 \
   --max_len=1500 \
   --d_word_vec=128 \
