@@ -63,9 +63,8 @@ hparams = TranslationHparams(
   out_file=out_file,
 )
 
-hparams.add_param("filtered_tokens", set([hparams.pad_id, hparams.eos_id, hparams.bos_id]))
+hparams.add_param("filtered_tokens", set([model.hparams.pad_id, model.hparams.eos_id, model.hparams.bos_id]))
 model.hparams.cuda = hparams.cuda
-
 data = DataLoader(hparams=hparams, decode=True)
 
 out_file = open(hparams.out_file, 'w', encoding='utf-8')
