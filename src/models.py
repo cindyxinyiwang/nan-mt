@@ -139,7 +139,7 @@ class Decoder(nn.Module):
     return dec_output
 
 class Transformer(nn.Module):
-  def __init__(self, hparams, *args, **kwargs):
+  def __init__(self, hparams, init_type="uniform", *args, **kwargs):
     super(Transformer, self).__init__()
 
     self.hparams = hparams
@@ -153,7 +153,7 @@ class Transformer(nn.Module):
     if self.hparams.cuda:
       self.w_logit = self.w_logit.cuda()
 
-    init_param(self.w_logit.weight, init_type="uniform",
+    init_param(self.w_logit.weight, init_type=init_type,
                init_range=self.hparams.init_range)
 
     if hparams.label_smoothing is not None:

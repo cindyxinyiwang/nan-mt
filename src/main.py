@@ -69,6 +69,8 @@ add_argument(parser, "grad_bound", type="float", default=None, help="L2 norm")
 add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
 add_argument(parser, "lr", type="float", default=20.0, help="initial lr")
 add_argument(parser, "lr_dec", type="float", default=2.0, help="decrease lr when val_ppl does not improve")
+add_argument(parser, "optim", type="str", default="sgd", help="sgd|adam")
+add_argument(parser, "init_type", type="str", default="uniform", help="uniform|xavier_uniform|xavier_normal|kaiming_uniform|kaiming_normal")
 
 
 add_argument(parser, "patience", type="int", default=-1,
@@ -207,7 +209,8 @@ def train():
     print("Loading model from '{0}'".format(model_file_name))
     model = torch.load(model_file_name)
   else:
-    model = Transformer(hparams=hparams)
+    print("Initialize with {}".format(args.init_type))
+    model = Transformer(hparams=hparams, init_type=args.init_type)
   crit = get_criterion(hparams)
 
   trainable_params = [p for p in model.trainable_parameters()]
@@ -215,7 +218,12 @@ def train():
   print("Model has {0} params".format(num_params))
 
   # build or load optimizer
-  optim = torch.optim.SGD(trainable_params, lr=hparams.lr)
+  if args.optim == 'adam':
+    print("Using adam optimizer...")
+    optim = torch.optim.Adam(trainable_params, lr=hparams.lr, betas=(0.9, 0.98), eps=1e-05)
+  else:
+    print("Using sgd optimizer...")
+    optim = torch.optim.SGD(trainable_params, lr=hparams.lr)
   if args.load_model:
     optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
     print("Loading optim from '{0}'".format(optim_file_name))
