@@ -3,7 +3,7 @@
 *.pyc
 outputs*
 outputs/*
-
+!archived_exp/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
