@@ -158,8 +158,9 @@ class Transformer(nn.Module):
 
     if hparams.label_smoothing is not None:
       self.softmax = nn.Softmax(dim=-1)
-      smooth = np.full([1, 1, hparams.target_vocab_size], 1 / hparams.target_vocab_size,
-                       dtype=np.float32)
+      smooth = np.full(
+        [1, 1, hparams.target_vocab_size], 1 / hparams.target_vocab_size,
+        dtype=np.float32)
       self.smooth = torch.FloatTensor(smooth)
       if self.hparams.cuda:
         self.smooth = self.smooth.cuda()

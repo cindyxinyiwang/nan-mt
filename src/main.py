@@ -60,6 +60,7 @@ add_argument(parser, "n_heads", type="int", default=2 , help="number of attentio
 add_argument(parser, "batch_size", type="int", default=32, help="")
 add_argument(parser, "n_train_steps", type="int", default=100000, help="")
 add_argument(parser, "n_warm_ups", type="int", default=750, help="")
+add_argument(parser, "optim_switch", type="int", default=20000, help="Switch from adam to SGD")
 
 add_argument(parser, "share_emb_and_softmax", type="bool", default=True, help="share embedding and softmax")
 
@@ -67,7 +68,8 @@ add_argument(parser, "dropout", type="float", default=0.1, help="probability of 
 add_argument(parser, "label_smoothing", type="float", default=None, help="")
 add_argument(parser, "grad_bound", type="float", default=None, help="L2 norm")
 add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
-add_argument(parser, "lr", type="float", default=20.0, help="initial lr")
+add_argument(parser, "lr_adam", type="float", default=20.0, help="initial lr")
+add_argument(parser, "lr_sgd", type="float", default=20.0, help="initial lr")
 add_argument(parser, "lr_dec", type="float", default=2.0, help="decrease lr when val_ppl does not improve")
 
 
@@ -116,7 +118,8 @@ def eval(model, data, crit, step, hparams, eval_bleu=False, valid_batch_size=20)
     labels = y_valid[:, 1:].contiguous().view(-1)
 
     val_loss, val_acc = get_performance(crit, logits, labels, hparams)
-    valid_loss += val_loss.data[0]
+    # valid_loss += val_loss.data[0]
+    valid_loss += val_loss.data[0] * y_count
     valid_acc += val_acc.data[0]
     # print("{0:<5d} / {1:<5d}".format(val_acc.data[0], y_count))
 
@@ -188,7 +191,9 @@ def train():
       label_smoothing=args.label_smoothing,
       grad_bound=args.grad_bound,
       init_range=args.init_range,
-      lr=args.lr,
+      optim_switch=args.optim_switch,
+      lr_adam=args.lr_adam,
+      lr_sgd=args.lr_sgd,
       lr_dec=args.lr_dec
     )
   data = DataLoader(hparams=hparams)
@@ -210,28 +215,36 @@ def train():
     model = Transformer(hparams=hparams)
   crit = get_criterion(hparams)
 
-  trainable_params = [p for p in model.trainable_parameters()]
+  trainable_params = [
+    p for p in model.trainable_parameters() if p.requires_grad]
   num_params = count_params(trainable_params)
   print("Model has {0} params".format(num_params))
 
   # build or load optimizer
-  optim = torch.optim.SGD(trainable_params, lr=hparams.lr)
   if args.load_model:
     optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
     print("Loading optim from '{0}'".format(optim_file_name))
     optimizer_state = torch.load(optim_file_name)
     optim.load_state_dict(optimizer_state)
-
-  try:
-    extra_file_name = os.path.join(args.output_dir, "extra.pt")
-    step, best_val_ppl, best_val_bleu, cur_attempt, lr = torch.load(extra_file_name)
-  except:
+    try:
+      extra_file_name = os.path.join(args.output_dir, "extra.pt")
+      (step,
+       best_val_ppl,
+       best_val_bleu,
+       cur_attempt,
+       lr) = torch.load(extra_file_name)
+    except:
+      raise RuntimeError("Cannot load checkpoint!")
+  else:
+    optim = torch.optim.Adam(trainable_params, lr=hparams.lr_adam,
+                             betas=(0.9, 0.98), eps=1e-8)
     step = 0
-    best_val_ppl = hparams.target_vocab_size
-    lr = args.lr
-    best_val_bleu = 0.
+    best_val_ppl = 1e10
+    best_val_bleu = 0
     cur_attempt = 0
-  ppl_thresh = 15.0
+    lr = hparams.lr_adam
+
+  ppl_thresh = 10.0
   set_patience = args.patience >= 0
   # train loop
   print("-" * 80)
@@ -265,13 +278,17 @@ def train():
       logits = logits.view(-1, hparams.target_vocab_size)
       labels = y_train[:, 1:].contiguous().view(-1)
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
-      total_loss += tr_loss.data[0]
+      total_loss += tr_loss.data[0] * y_count
       total_corrects += tr_acc.data[0]
-      tr_loss = tr_loss.div(batch_size)
+      # tr_loss = tr_loss.div(batch_size)
 
       # set learning rate
       if step < hparams.n_warm_ups:
-        lr = hparams.lr * (step + 1) / hparams.n_warm_ups
+        if step < hparams.optim_switch:
+          base_lr = hparams.lr_adam 
+        else:
+          base_lr = hparams.lr_sgd 
+        lr = base_lr * (step + 1) / hparams.n_warm_ups
       set_lr(optim, lr)
 
       tr_loss.backward()
@@ -281,19 +298,26 @@ def train():
       step += 1
       if step % args.log_every == 0:
         curr_time = time.time()
+        since_start = (curr_time - start_time) / 60.0
         elapsed = (curr_time - actual_start_time) / 60.0
         epoch = step // n_train_batches
         log_string = "ep={0:<3d}".format(epoch)
         log_string += " steps={0:<6.2f}".format(step / 1000)
-        log_string += " lr={0:<6.3f}".format(lr)
+        log_string += " lr={0:<9.7f}".format(lr)
         log_string += " loss={0:<7.2f}".format(tr_loss.data[0])
         log_string += " |g|={0:<6.2f}".format(grad_norm)
         log_string += " ppl={0:<8.2f}".format(np.exp(total_loss / target_words))
         log_string += " acc={0:<5.4f}".format(total_corrects / target_words)
         log_string += " wpm(K)={0:<5.2f}".format(
           target_words / (1000 * elapsed))
-        log_string += " mins={0:<5.2f}".format(elapsed)
+        log_string += " mins={0:<5.2f}".format(since_start)
         print(log_string)
+
+      if step == hparams.optim_switch:
+        lr = hparams.lr_sgd
+        print(("Reached {0} steps. Switching from Adam to SGD "
+               "with learning_rate {1:<9.7f}").format(step, lr))
+        optim = torch.optim.SGD(trainable_params, lr=hparams.lr_sgd)
 
       # clean up GPU memory
       if step % args.clean_mem_every == 0:

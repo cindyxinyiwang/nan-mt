@@ -43,7 +43,7 @@ def plot_result():
   for folder_name, color, marker in zip(folder_names, colors, markers):
     full_name = os.path.join(FLAGS.output_dir, folder_name, "stdout")
 
-    valid_step, valid_acc, valid_ppl = [], [], []
+    valid_acc, valid_ppl = {}, {}
 
     with open(full_name, "r") as finp:
       lines = finp.read().split("\n")
@@ -54,46 +54,58 @@ def plot_result():
         continue
       if line.startswith("val_step"):
         tokens = line.split(" ")
+        step, acc, ppl = None, None, None
         for token in tokens:
           token = token.strip()
           if not token:
             continue
           if token.startswith("val_step="):
             step = int(token.split("=")[-1]) // 1000
-            valid_step.append(step)
           elif token.startswith("acc="):
             acc = float(token.split("=")[-1])
-            valid_acc.append(acc)
           elif token.startswith("val_ppl="):
             ppl = float(token.split("=")[-1])
-            valid_ppl.append(ppl)
+        if (step is not None) and (acc is not None) and (ppl is not None):
+          valid_acc[step] = acc
+          valid_ppl[step] = ppl
 
-    steps = np.array(valid_step, dtype=np.int32)
+    steps, accs, ppls = [], [], []
+    for step, acc in sorted(valid_acc.iteritems()):
+      steps.append(step)
+      accs.append(acc)
+    for _, ppl in sorted(valid_ppl.iteritems()):
+      ppls.append(ppl)
+
+    steps = np.array(steps, dtype=np.int32)
     xmin = min(xmin, np.min(steps))
     xmax = max(xmax, np.max(steps))
     if "acc" in FLAGS.plot_name:
-      plt.plot(steps, valid_acc, color=color, linestyle="-", marker=marker,
+      plt.plot(steps, accs, color=color, linestyle="-", marker=marker,
                label="{}_valid".format(folder_name))
     else:
       assert "ppl" in FLAGS.plot_name, "What do you want to plot?"
-      plt.plot(steps, valid_ppl, color=color, linestyle="-", marker=marker,
+      plt.plot(steps, np.log(ppls), color=color, linestyle="-", marker=marker,
                label="{}_valid".format(folder_name))
 
   if "ppl" in FLAGS.plot_name:
-    xmin = 4.0
-    ymin = 10.0  # min(ymin, min(np.min(valid_acc), np.min(test_acc)))
-    ymax = 120.0  # max(ymax, max(np.max(valid_acc), np.max(test_acc)))
-    plt.yticks(np.arange(ymin, ymax + 10.0, 10.0))
+    xmin = 0.0
+    xmax = 100.0
+    ymin = 2.42  # min(ymin, min(np.min(valid_acc), np.min(test_acc)))
+    ymax = 5.00  # max(ymax, max(np.max(valid_acc), np.max(test_acc)))
+    dist = (ymax - ymin) / 10
+    plt.yticks(np.arange(ymin, ymax + dist, dist))
   else:
-    xmin = 2.0
-    ymin = 0.10  # min(ymin, min(np.min(valid_acc), np.min(test_acc)))
-    ymax = 0.50  # max(ymax, max(np.max(valid_acc), np.max(test_acc)))
+    xmin = 0.0
+    xmax = 100.0
+    ymin = 0.25  # min(ymin, min(np.min(valid_acc), np.min(test_acc)))
+    ymax = 0.55  # max(ymax, max(np.max(valid_acc), np.max(test_acc)))
 
-  plt.xticks(np.arange(0, xmax + 10.0, 10.0))
+  dist = (xmax - xmin) / 10
+  plt.xticks(np.arange(0, xmax + dist, dist))
   plt.gca().set_xlabel("Step (x1000)")
   plt.gca().set_xlim(xmin=xmin, xmax=xmax)
   plt.gca().set_ylim(ymin=ymin, ymax=ymax)
-  plt.gca().set_ylabel("ppl" if "ppl" in FLAGS.plot_name else "acc")
+  plt.gca().set_ylabel("log ppl" if "ppl" in FLAGS.plot_name else "acc")
   plt.gca().set_title(FLAGS.plot_name)
   plt.gca().grid(True)
   plt.legend(loc="lower right" if "acc" in FLAGS.plot_name else "upper right",

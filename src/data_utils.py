@@ -26,6 +26,7 @@ class DataLoader(object):
     """
 
     self.hparams = hparams
+    self.decode = decode
 
     print("-" * 80)
     print("Building data for '{0}' from '{1}'".format(
@@ -45,7 +46,7 @@ class DataLoader(object):
     assert self.source_word_to_index[self.hparams.bos] == self.target_word_to_index[self.hparams.bos]
     assert self.source_word_to_index[self.hparams.eos] == self.target_word_to_index[self.hparams.eos]
 
-    if decode:
+    if self.decode:
       self.x_test, self.y_test = self._build_parallel(
         self.hparams.source_test, self.hparams.target_test, is_training=False)
       self.test_size = len(self.x_test)
@@ -238,7 +239,7 @@ class DataLoader(object):
       source_indices, target_indices = [self.bos_id], [self.bos_id]
       source_tokens = source_line.split(" ")
       target_tokens = target_line.split(" ")
-      if len(target_line) > self.hparams.max_len:
+      if (not self.decode) and len(target_line) > self.hparams.max_len:
         continue
 
       total_sents += 1

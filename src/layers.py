@@ -49,9 +49,9 @@ class PositionalEmbedding(nn.Module):
 
     batch_size, max_len = pos_emb_indices.size()
     pos_emb_indices = pos_emb_indices.view([batch_size, max_len, 1])
-    pos_emb_sin = torch.sin(pos_emb_indices / self.freq).unsqueeze(3)
-    pos_emb_cos = torch.cos(pos_emb_indices / self.freq).unsqueeze(3)
-    pos_emb = torch.cat([pos_emb_sin, pos_emb_cos], dim=3).contiguous().view(
+    pos_emb_sin = torch.sin(pos_emb_indices / self.freq).unsqueeze(-1)
+    pos_emb_cos = torch.cos(pos_emb_indices / self.freq).unsqueeze(-1)
+    pos_emb = torch.cat([pos_emb_sin, pos_emb_cos], dim=-1).contiguous().view(
       batch_size, max_len, self.hparams.d_word_vec)
     pos_emb.data.masked_fill_(mask, float(0))
 

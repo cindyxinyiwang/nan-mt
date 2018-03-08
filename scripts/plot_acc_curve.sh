@@ -1,9 +1,16 @@
 folder_lists=(
-  "archived_exp/outputs_exp3_v2"
+  # "archived_exp/outputs_exp3_v2"
   # "archived_exp/outputs_exp3_v3"
-  "archived_exp/outputs_exp3_v4"
-  "outputs_exp3_v5"
-  # "outputs_exp3_v6"
+  # "archived_exp/outputs_exp3_v4"
+  # "archived_exp/outputs_exp3_v5"
+  # "archived_exp/outputs_exp3_v6"
+  # "archived_exp/outputs_exp3_v9"  # <-- Dev PPL 17.69
+  # "archived_exp/outputs_exp3_v10"
+  # "archived_exp/outputs_exp3_v11"
+  # "outputs_exp4_v1"
+  # "outputs_exp4_v2"
+  "outputs_exp4_v6"
+  "outputs_exp4_v7"
 )
 
 folder_names=""
