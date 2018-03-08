@@ -36,3 +36,5 @@ class Iwslt16EnDeBpe32SharedParams(Hparams):
     self.bos_id = None
     self.pad_id = None
 
+    self.tiny = 0.
+    self.inf = float("inf")

@@ -11,6 +11,7 @@ import sys
 import time
 import subprocess
 import re
+import random
 
 import numpy as np
 
@@ -58,6 +59,7 @@ add_argument(parser, "d_v", type="int", default=64, help="dim of attn values")
 add_argument(parser, "n_layers", type="int", default=5, help="number of layers in a Transformer stack")
 add_argument(parser, "n_heads", type="int", default=2 , help="number of attention heads")
 add_argument(parser, "batch_size", type="int", default=32, help="")
+add_argument(parser, "batcher", type="str", default="sent", help="sent|word. Batch either by number of words or number of sentences")
 add_argument(parser, "n_train_steps", type="int", default=100000, help="")
 add_argument(parser, "n_warm_ups", type="int", default=750, help="")
 
@@ -69,13 +71,14 @@ add_argument(parser, "grad_bound", type="float", default=None, help="L2 norm")
 add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
 add_argument(parser, "lr", type="float", default=20.0, help="initial lr")
 add_argument(parser, "lr_dec", type="float", default=2.0, help="decrease lr when val_ppl does not improve")
+add_argument(parser, "lr_schedule", type="bool", default=False, help="enable lr schedule")
 add_argument(parser, "optim", type="str", default="sgd", help="sgd|adam")
 add_argument(parser, "init_type", type="str", default="uniform", help="uniform|xavier_uniform|xavier_normal|kaiming_uniform|kaiming_normal")
-
+add_argument(parser, "loss_norm", type="str", default="sent", help="sent|word. normalize loss in a minibatch by number of words or number of sentences")
 
 add_argument(parser, "patience", type="int", default=-1,
              help="how many more steps to take before stop. Ignore n_train_step if patience is set")
-
+add_argument(parser, "seed", type="int", default=19920206, help="random seed")
 args = parser.parse_args()
 
 
@@ -183,6 +186,7 @@ def train():
       n_layers=args.n_layers,
       n_heads=args.n_heads,
       batch_size=args.batch_size,
+      batcher=args.batcher,
       n_train_steps=args.n_train_steps,
       n_warm_ups=args.n_warm_ups,
       share_emb_and_softmax=args.share_emb_and_softmax,
@@ -191,7 +195,8 @@ def train():
       grad_bound=args.grad_bound,
       init_range=args.init_range,
       lr=args.lr,
-      lr_dec=args.lr_dec
+      lr_dec=args.lr_dec,
+      loss_norm=args.loss_norm
     )
   data = DataLoader(hparams=hparams)
   hparams.add_param("source_vocab_size", data.source_vocab_size)
@@ -224,6 +229,7 @@ def train():
   else:
     print("Using sgd optimizer...")
     optim = torch.optim.SGD(trainable_params, lr=hparams.lr)
+  print("Using transformer lr schedule:{}".format(args.lr_schedule))
   if args.load_model:
     optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
     print("Loading optim from '{0}'".format(optim_file_name))
@@ -249,7 +255,6 @@ def train():
   target_words = 0
   total_loss = 0
   total_corrects = 0
-  n_train_batches = data.train_size // hparams.batch_size
 
   while True:
     # training activities
@@ -275,11 +280,22 @@ def train():
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
       total_loss += tr_loss.data[0]
       total_corrects += tr_acc.data[0]
-      tr_loss = tr_loss.div(batch_size)
+      if hparams.loss_norm == "sent":
+        loss_div = batch_size
+      else:
+        assert hparams.loss_norm == "word"
+        loss_div = (1 - y_mask[:, 1:].int()).sum()
+        num = (1 - x_mask.int()).sum() + (1 - y_mask.int()).sum()
+        #print(loss_div, num, hparams.batch_size, lr)      
+      tr_loss = tr_loss.div(loss_div)
 
       # set learning rate
-      if step < hparams.n_warm_ups:
-        lr = hparams.lr * (step + 1) / hparams.n_warm_ups
+      if args.lr_schedule:
+        s = step + 1
+        lr = pow(hparams.d_model, -0.5) * min(pow(s, -0.5), s * pow(hparams.n_warm_ups, -1.5))
+      else:
+        if step < hparams.n_warm_ups:
+          lr = hparams.lr * (step + 1) / hparams.n_warm_ups
       set_lr(optim, lr)
 
       tr_loss.backward()
@@ -290,10 +306,9 @@ def train():
       if step % args.log_every == 0:
         curr_time = time.time()
         elapsed = (curr_time - actual_start_time) / 60.0
-        epoch = step // n_train_batches
-        log_string = "ep={0:<3d}".format(epoch)
+        log_string = "ep={0:<3d}".format(data.train_epoch)
         log_string += " steps={0:<6.2f}".format(step / 1000)
-        log_string += " lr={0:<6.3f}".format(lr)
+        log_string += " lr={0:<7.7f}".format(lr)
         log_string += " loss={0:<7.2f}".format(tr_loss.data[0])
         log_string += " |g|={0:<6.2f}".format(grad_norm)
         log_string += " ppl={0:<8.2f}".format(np.exp(total_loss / target_words))
@@ -358,6 +373,11 @@ def train():
       break
 
 def main():
+  random.seed(args.seed)
+  np.random.seed(args.seed)
+  torch.manual_seed(args.seed)
+  torch.cuda.manual_seed_all(args.seed)
+
   if not os.path.isdir(args.output_dir):
     print("-" * 80)
     print("Path {} does not exist. Creating.".format(args.output_dir))

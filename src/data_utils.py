@@ -57,6 +57,7 @@ class DataLoader(object):
         self.hparams.source_train, self.hparams.target_train, is_training=True,
         sort=True)
       self.train_size = len(self.x_train)
+      self.train_epoch = -1
       self.reset_train()
 
       # valid data
@@ -64,12 +65,11 @@ class DataLoader(object):
         self.hparams.source_valid, self.hparams.target_valid, is_training=False)
       self.valid_size = len(self.x_valid)
       self.reset_valid()
-
+      
   def reset_train(self):
-    self.n_train_batches = ((self.train_size + self.hparams.batch_size - 1) //
-                            self.hparams.batch_size)
-    self.train_queue = np.random.permutation(self.n_train_batches)
-    self.train_index = 0
+    self.train_index_pos = 0 # current training index for train_instance_index list
+    self.train_index_list = np.random.permutation(len(self.x_train))[:self.train_size]
+    self.train_epoch += 1
 
   def reset_valid(self):
     self.valid_index = 0
@@ -146,24 +146,35 @@ class DataLoader(object):
         and [batch_size].
       end_of_epoch: whether we reach the end of training examples.
     """
-
-    start_index = self.train_queue[self.train_index] * self.hparams.batch_size
-    end_index = min(start_index + self.hparams.batch_size, self.train_size)
-    batch_size = float(end_index - start_index)
-
+    if self.hparams.batcher == "word":
+      word_count = 0
+      x_train, y_train = [], []
+      while self.train_index_pos < self.train_size:
+        idx = self.train_index_list[self.train_index_pos]
+        x = self.x_train[idx]
+        y = self.y_train[idx]
+        word_count += (len(x) + len(y))
+        x_train.append(x)
+        y_train.append(y)
+        self.train_index_pos += 1
+        if word_count > self.hparams.batch_size: break
+    else:
+      start_index = self.train_index_pos
+      end_index = min(self.train_index_pos+self.hparams.batch_size, self.train_size)
+      batch_indices = self.train_index_list[start_index: end_index]
+      x_train = self.x_train[batch_indices]
+      y_train = self.y_train[batch_indices]
+      self.train_index_pos = end_index
+    batch_size = len(x_train)
     # pad data
-    x_train = self.x_train[start_index : end_index]
-    y_train = self.y_train[start_index : end_index]
     x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
       sentences=x_train, pad_id=self.pad_id)
     y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
       sentences=y_train, pad_id=self.pad_id)
 
     # shuffle if reaches the end of data
-    if self.train_index >= self.n_train_batches - 1:
+    if self.train_index_pos > self.train_size - 1:
       self.reset_train()
-    else:
-      self.train_index += 1
 
     return ((x_train, x_mask, x_pos_emb_indices, x_count),
             (y_train, y_mask, y_pos_emb_indices, y_count),
@@ -284,7 +295,7 @@ class DataLoader(object):
       source_data = [source_data[index] for index in indices]
       target_data = [target_data[index] for index in indices]
 
-    return source_data, target_data
+    return np.array(source_data), np.array(target_data)
 
   def _build_vocab(self, file_name):
     """Build word_to_index and index_to word dicts."""
