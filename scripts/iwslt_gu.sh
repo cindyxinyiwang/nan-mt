@@ -5,7 +5,7 @@
 python src/main.py \
   --clean_mem_every=5 \
   --output_dir="outputs_gu" \
-  --log_every=250 \
+  --log_every=100 \
   --eval_every=1000 \
   --no_load_model \
   --reset_output_dir \
