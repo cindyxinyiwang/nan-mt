@@ -53,7 +53,8 @@ class PositionalEmbedding(nn.Module):
     pos_emb_cos = torch.cos(pos_emb_indices / self.freq).unsqueeze(-1)
     pos_emb = torch.cat([pos_emb_sin, pos_emb_cos], dim=-1).contiguous().view(
       batch_size, max_len, self.hparams.d_word_vec)
-    pos_emb.data.masked_fill_(mask, float(0))
+    #pos_emb.data.masked_fill_(mask, float(0))
+    pos_emb.data.masked_fill_(mask, self.hparams.tiny)
 
     return pos_emb
 
@@ -80,6 +81,7 @@ class ScaledDotProdAttn(nn.Module):
     self.temp = np.power(hparams.d_model, 0.5)
     self.dropout = nn.Dropout(hparams.dropout)
     self.softmax = nn.Softmax(dim=-1)
+    self.hparams = hparams
 
   def forward(self, q, k, v, attn_mask=None):
     """Compute Softmax(q * k.T / sqrt(dim)) * v
@@ -111,7 +113,8 @@ class ScaledDotProdAttn(nn.Module):
 
     # attn_mask: [batch_size, len_q, len_k]
     if not attn_mask is None:
-      attn.data.masked_fill_(attn_mask, -float("inf"))
+      #attn.data.masked_fill_(attn_mask, -float("inf"))
+      attn.data.masked_fill_(attn_mask, -self.hparams.inf)
     size = attn.size()
     assert len(size) > 2 and len_q == size[1] and len_k == size[2]
 

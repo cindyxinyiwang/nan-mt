@@ -11,6 +11,7 @@ import sys
 import time
 import subprocess
 import re
+import random
 
 import numpy as np
 
@@ -36,15 +37,18 @@ add_argument(parser, "beam_size", type="int", default=5, help="beam size for dev
 
 add_argument(parser, "cuda", type="bool", default=False, help="GPU or not")
 
-add_argument(parser, "max_len", type="int", default=300, help="maximum len considered on the target side")
-add_argument(parser, "n_train_sents", type="int", default=None, help="max number of training sentences to load")
+add_argument(parser, "max_len", type="int", default=300,
+             help="maximum len considered on the target side")
+add_argument(parser, "n_train_sents", type="int", default=None,
+             help="max number of training sentences to load")
 
 add_argument(parser, "data_path", type="str", default=None, help="path to all data")
 add_argument(parser, "source_train", type="str", default=None, help="source train file")
 add_argument(parser, "target_train", type="str", default=None, help="target train file")
 add_argument(parser, "source_valid", type="str", default=None, help="source valid file")
 add_argument(parser, "target_valid", type="str", default=None, help="target valid file")
-add_argument(parser, "target_valid_ref", type="str", default=None, help="target valid file for reference")
+add_argument(parser, "target_valid_ref", type="str", default=None,
+             help="target valid file for reference")
 add_argument(parser, "source_vocab", type="str", default=None, help="source vocab file")
 add_argument(parser, "target_vocab", type="str", default=None, help="target vocab file")
 add_argument(parser, "source_test", type="str", default=None, help="source test file")
@@ -58,9 +62,11 @@ add_argument(parser, "d_v", type="int", default=64, help="dim of attn values")
 add_argument(parser, "n_layers", type="int", default=5, help="number of layers in a Transformer stack")
 add_argument(parser, "n_heads", type="int", default=2 , help="number of attention heads")
 add_argument(parser, "batch_size", type="int", default=32, help="")
+add_argument(parser, "batcher", type="str", default="sent",
+             help="sent|word. Batch either by number of words or number of sentences")
 add_argument(parser, "n_train_steps", type="int", default=100000, help="")
 add_argument(parser, "n_warm_ups", type="int", default=750, help="")
-add_argument(parser, "optim_switch", type="int", default=20000, help="Switch from adam to SGD")
+add_argument(parser, "optim_switch", type="int", default=None, help="Switch from adam to SGD")
 
 add_argument(parser, "share_emb_and_softmax", type="bool", default=True, help="share embedding and softmax")
 
@@ -71,16 +77,23 @@ add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
 add_argument(parser, "lr_adam", type="float", default=20.0, help="initial lr")
 add_argument(parser, "lr_sgd", type="float", default=20.0, help="initial lr")
 add_argument(parser, "lr_dec", type="float", default=2.0, help="decrease lr when val_ppl does not improve")
-
+add_argument(parser, "lr_schedule", type="bool", default=False, help="enable lr schedule")
+add_argument(parser, "optim", type="str", default="sgd", help="sgd|adam")
+add_argument(parser, "init_type", type="str", default="uniform",
+             help="uniform|xavier_uniform|xavier_normal|kaiming_uniform|kaiming_normal")
+add_argument(parser, "loss_norm", type="str", default="sent",
+             help="sent|word. normalize loss in a minibatch by number of words or number of sentences")
 
 add_argument(parser, "patience", type="int", default=-1,
              help="how many more steps to take before stop. Ignore n_train_step if patience is set")
-
+add_argument(parser, "seed", type="int", default=19920206, help="random seed")
 args = parser.parse_args()
 
 
-def eval(model, data, crit, step, hparams, eval_bleu=False, valid_batch_size=20):
+def eval(model, data, crit, step, hparams, eval_bleu=False,
+         valid_batch_size=20):
   print("Eval at step {0}. valid_batch_size={1}".format(step, valid_batch_size))
+
   model.eval()
   data.reset_valid()
   valid_words = 0
@@ -119,7 +132,7 @@ def eval(model, data, crit, step, hparams, eval_bleu=False, valid_batch_size=20)
 
     val_loss, val_acc = get_performance(crit, logits, labels, hparams)
     # valid_loss += val_loss.data[0]
-    valid_loss += val_loss.data[0] * y_count
+    valid_loss += val_loss.data[0]
     valid_acc += val_acc.data[0]
     # print("{0:<5d} / {1:<5d}".format(val_acc.data[0], y_count))
 
@@ -184,6 +197,7 @@ def train():
       n_layers=args.n_layers,
       n_heads=args.n_heads,
       batch_size=args.batch_size,
+      batcher=args.batcher,
       n_train_steps=args.n_train_steps,
       n_warm_ups=args.n_warm_ups,
       share_emb_and_softmax=args.share_emb_and_softmax,
@@ -194,7 +208,8 @@ def train():
       optim_switch=args.optim_switch,
       lr_adam=args.lr_adam,
       lr_sgd=args.lr_sgd,
-      lr_dec=args.lr_dec
+      lr_dec=args.lr_dec,
+      loss_norm=args.loss_norm
     )
   data = DataLoader(hparams=hparams)
   hparams.add_param("source_vocab_size", data.source_vocab_size)
@@ -212,7 +227,8 @@ def train():
     print("Loading model from '{0}'".format(model_file_name))
     model = torch.load(model_file_name)
   else:
-    model = Transformer(hparams=hparams)
+    print("Initialize with {}".format(args.init_type))
+    model = Transformer(hparams=hparams, init_type=args.init_type)
   crit = get_criterion(hparams)
 
   trainable_params = [
@@ -221,6 +237,15 @@ def train():
   print("Model has {0} params".format(num_params))
 
   # build or load optimizer
+  if args.optim == 'adam':
+    print("Using adam optimizer...")
+    optim = torch.optim.Adam(trainable_params, lr=hparams.lr_adam,
+                             betas=(0.9, 0.98), eps=1e-05)
+  else:
+    print("Using sgd optimizer...")
+    optim = torch.optim.SGD(trainable_params, lr=hparams.lr_sgd)
+  print("Using transformer lr schedule:{}".format(args.lr_schedule))
+
   if args.load_model:
     optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
     print("Loading optim from '{0}'".format(optim_file_name))
@@ -254,7 +279,7 @@ def train():
   target_words = 0
   total_loss = 0
   total_corrects = 0
-  n_train_batches = data.train_size // hparams.batch_size
+  n_train_batches = data.n_train_batches
 
   while True:
     # training activities
@@ -278,29 +303,42 @@ def train():
       logits = logits.view(-1, hparams.target_vocab_size)
       labels = y_train[:, 1:].contiguous().view(-1)
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
-      total_loss += tr_loss.data[0] * y_count
+      total_loss += tr_loss.data[0]
       total_corrects += tr_acc.data[0]
-      # tr_loss = tr_loss.div(batch_size)
+
+      # normalizing tr_loss
+      if hparams.loss_norm == "sent":
+        loss_div = batch_size
+      elif hparams.loss_norm == "word":
+        assert y_count == (1 - y_mask[:, 1:].int()).sum()
+        loss_div = y_count
+      else:
+        raise ValueError("Unknown batcher '{0}'".format(hparams.batcher))
 
       # set learning rate
-      if step < hparams.n_warm_ups:
-        if step < hparams.optim_switch:
-          base_lr = hparams.lr_adam 
-        else:
-          base_lr = hparams.lr_sgd 
-        lr = base_lr * (step + 1) / hparams.n_warm_ups
+      if args.lr_schedule:
+        s = step + 1
+        lr = pow(hparams.d_model, -0.5) * min(pow(s, -0.5), s * pow(hparams.n_warm_ups, -1.5))
+      else:
+        if step < hparams.n_warm_ups:
+          if step < hparams.optim_switch:
+            base_lr = hparams.lr_adam 
+          else:
+            base_lr = hparams.lr_sgd 
+          lr = base_lr * (step + 1) / hparams.n_warm_ups
+
+      tr_loss.div_(loss_div).backward()
       set_lr(optim, lr)
 
-      tr_loss.backward()
       grad_norm = grad_clip(trainable_params, grad_bound=hparams.grad_bound)
       optim.step()
 
       step += 1
       if step % args.log_every == 0:
+        epoch = step // data.n_train_batches
         curr_time = time.time()
         since_start = (curr_time - start_time) / 60.0
         elapsed = (curr_time - actual_start_time) / 60.0
-        epoch = step // n_train_batches
         log_string = "ep={0:<3d}".format(epoch)
         log_string += " steps={0:<6.2f}".format(step / 1000)
         log_string += " lr={0:<9.7f}".format(lr)
@@ -374,6 +412,11 @@ def train():
       break
 
 def main():
+  random.seed(args.seed)
+  np.random.seed(args.seed)
+  torch.manual_seed(args.seed)
+  torch.cuda.manual_seed_all(args.seed)
+
   if not os.path.isdir(args.output_dir):
     print("-" * 80)
     print("Path {} does not exist. Creating.".format(args.output_dir))

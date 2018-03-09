@@ -67,7 +67,7 @@ class Logger(object):
 
 
 def get_criterion(hparams):
-  crit = nn.CrossEntropyLoss(ignore_index=hparams.pad_id, size_average=True)
+  crit = nn.CrossEntropyLoss(ignore_index=hparams.pad_id, size_average=False)
   if hparams.cuda:
     crit = crit.cuda()
   return crit

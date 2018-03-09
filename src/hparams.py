@@ -24,7 +24,7 @@ class Iwslt16EnDeBpe32SharedParams(Hparams):
 
   def __init__(self, **kwargs):
     super(Iwslt16EnDeBpe32SharedParams, self).__init__(**kwargs)
-    self.dataset = "IWSLT 2016 En-De with BPE 32K Shared Vocab"
+    self.dataset = "IWSLT 2016 En-De with BPE Shared Vocab"
 
     self.unk = "<unk>"
     self.bos = "<s>"
@@ -36,3 +36,5 @@ class Iwslt16EnDeBpe32SharedParams(Hparams):
     self.bos_id = None
     self.pad_id = None
 
+    self.tiny = 0.
+    self.inf = float("inf")

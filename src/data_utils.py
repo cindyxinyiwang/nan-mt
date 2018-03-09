@@ -57,7 +57,10 @@ class DataLoader(object):
       self.x_train, self.y_train = self._build_parallel(
         self.hparams.source_train, self.hparams.target_train, is_training=True,
         sort=True)
+
+      # signifies that x_train, y_train are not ready for batching
       self.train_size = len(self.x_train)
+      self.n_train_batches = None  
       self.reset_train()
 
       # valid data
@@ -66,9 +69,37 @@ class DataLoader(object):
       self.valid_size = len(self.x_valid)
       self.reset_valid()
 
+
   def reset_train(self):
-    self.n_train_batches = ((self.train_size + self.hparams.batch_size - 1) //
-                            self.hparams.batch_size)
+    """Shuffle training data. Prepare the batching scheme if necessary."""
+
+    if self.hparams.batcher == "word":
+      if self.n_train_batches is None:
+        start_indices, end_indices = [], []
+        start_index = 0
+        while start_index < self.train_size:
+          end_index = start_index
+          word_count = 0
+          while (end_index + 1 < self.train_size and
+                 (word_count +
+                  len(self.x_train[end_index + 1]) +
+                  len(self.y_train[end_index + 1])) <= self.hparams.batch_size):
+            end_index += 1
+            word_count += (len(self.x_train[end_index]) +
+                           len(self.y_train[end_index]))
+          start_indices.append(start_index)
+          end_indices.append(end_index + 1)
+          start_index = end_index + 1
+        assert len(start_indices) == len(end_indices)
+        self.n_train_batches = len(start_indices)
+        self.start_indices = start_indices
+        self.end_indices = end_indices
+    elif self.hparams.batcher == "sent":
+      if self.n_train_batches is None:
+        self.n_train_batches = ((self.train_size + self.hparams.batch_size - 1)
+                                // self.hparams.batch_size)
+    else:
+      raise ValueError("Unknown batcher scheme '{0}'".format(self.batcher))
     self.train_queue = np.random.permutation(self.n_train_batches)
     self.train_index = 0
 
@@ -147,24 +178,30 @@ class DataLoader(object):
         and [batch_size].
       end_of_epoch: whether we reach the end of training examples.
     """
+    if self.hparams.batcher == "word":
+      start_index = self.start_indices[self.train_queue[self.train_index]]
+      end_index = self.end_indices[self.train_queue[self.train_index]]
+    elif self.hparams.batcher == "sent":
+      start_index = (self.train_queue[self.train_index] *
+                     self.hparams.batch_size)
+      end_index = min(start_index + self.hparams.batch_size, self.train_size)
+    else:
+      raise ValueError("Unknown batcher '{0}'".format(self.hparams.batcher))
 
-    start_index = self.train_queue[self.train_index] * self.hparams.batch_size
-    end_index = min(start_index + self.hparams.batch_size, self.train_size)
-    batch_size = float(end_index - start_index)
-
-    # pad data
     x_train = self.x_train[start_index : end_index]
     y_train = self.y_train[start_index : end_index]
+    self.train_index += 1
+    batch_size = len(x_train)
+
+    # pad data
     x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
       sentences=x_train, pad_id=self.pad_id)
     y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
       sentences=y_train, pad_id=self.pad_id)
 
     # shuffle if reaches the end of data
-    if self.train_index >= self.n_train_batches - 1:
+    if self.train_index > self.n_train_batches - 1:
       self.reset_train()
-    else:
-      self.train_index += 1
 
     return ((x_train, x_mask, x_pos_emb_indices, x_count),
             (y_train, y_mask, y_pos_emb_indices, y_count),
@@ -285,7 +322,7 @@ class DataLoader(object):
       source_data = [source_data[index] for index in indices]
       target_data = [target_data[index] for index in indices]
 
-    return source_data, target_data
+    return np.array(source_data), np.array(target_data)
 
   def _build_vocab(self, file_name):
     """Build word_to_index and index_to word dicts."""

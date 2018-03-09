@@ -1,11 +1,11 @@
 #!/bin/bash
 
 export PYTHONPATH="$(pwd)"
-export CUDA_VISIBLE_DEVICES="0"
+export CUDA_VISIBLE_DEVICES="2"
 
 python3 src/main.py \
   --clean_mem_every=5 \
-  --output_dir="outputs_exp4_v7" \
+  --output_dir="outputs_exp4_v8" \
   --log_every=100 \
   --eval_every=2000 \
   --reset_output_dir \
@@ -21,9 +21,9 @@ python3 src/main.py \
   --target_test="tst2014.de" \
   --share_emb_and_softmax \
   --cuda \
-  --batch_size=128 \
-  --batcher="sent" \
-  --loss_norm="sent" \
+  --batch_size=2048 \
+  --batcher="word" \
+  --loss_norm="word" \
   --n_train_sents=250000 \
   --max_len=300 \
   --d_word_vec=288 \
@@ -34,7 +34,7 @@ python3 src/main.py \
   --d_v=64 \
   --n_heads=2 \
   --n_train_steps=100000 \
-  --n_warm_ups=1500 \
+  --n_warm_ups=746 \
   --dropout=0.18 \
   --lr_adam=0.0003 \
   --lr_sgd=0.25 \
