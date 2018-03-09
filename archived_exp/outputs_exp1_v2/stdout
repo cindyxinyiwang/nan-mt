@@ -1,0 +1,88 @@
+--------------------------------------------------------------------------------
+Creating a Hparams object
+--------------------------------------------------------------------------------
+Building data for 'IWSLT 2016 En-De with BPE 32K Shared Vocab' from 'data/bpe_28k_shared/en-de/'
+--------------------------------------------------------------------------------
+Loading vocab from 'shared_28000.vocab'
+Done. vocab_size = 28001
+--------------------------------------------------------------------------------
+Loading vocab from 'shared_28000.vocab'
+Done. vocab_size = 28001
+--------------------------------------------------------------------------------
+Loading parallel data from 'dev2010.en' and 'dev2010.de'
+   903 pairs. src_unk=0. tgt_unk=13
+Heuristic sort based on source lens
+--------------------------------------------------------------------------------
+Loading parallel data from 'dev2010.en' and 'dev2010.de'
+   903 pairs. src_unk=0. tgt_unk=13
+--------------------------------------------------------------------------------
+Creating model
+Model has 12235264 params
+--------------------------------------------------------------------------------
+Start training
+ep=3   steps=0.10   lr=0.000430 loss=306.89  ppl=2804.65  acc=0.0251 wpm(K)=1049.01 mins=0.08 
+ep=7   steps=0.20   lr=0.000861 loss=101.22  ppl=566.06   acc=0.1076 wpm(K)=1068.41 mins=0.16 
+ep=10  steps=0.30   lr=0.001291 loss=85.50   ppl=172.84   acc=0.1883 wpm(K)=1085.99 mins=0.24 
+ep=14  steps=0.40   lr=0.001721 loss=38.04   ppl=31.77    acc=0.3835 wpm(K)=1066.77 mins=0.32 
+ep=17  steps=0.50   lr=0.002152 loss=68.52   ppl=15.34    acc=0.4483 wpm(K)=1064.78 mins=0.39 
+ep=21  steps=0.60   lr=0.002582 loss=50.39   ppl=4.60     acc=0.6932 wpm(K)=1065.45 mins=0.47 
+ep=25  steps=0.70   lr=0.003012 loss=6.87    ppl=1.53     acc=0.9398 wpm(K)=1062.83 mins=0.54 
+ep=28  steps=0.80   lr=0.003125 loss=8.56    ppl=1.73     acc=0.9004 wpm(K)=1066.58 mins=0.62 
+ep=32  steps=0.90   lr=0.002946 loss=7.93    ppl=1.82     acc=0.8729 wpm(K)=1065.75 mins=0.70 
+ep=35  steps=1.00   lr=0.002795 loss=8.85    ppl=2.48     acc=0.8199 wpm(K)=1072.55 mins=0.78 
+Eval at step 1000. valid_batch_size=30
+val_step=1000   loss=0.67   acc=0.9008 val_ppl=1.95
+Saving model to 'outputs_exp1_v2'
+ep=39  steps=1.10   lr=0.002665 loss=8.97    ppl=1.71     acc=0.8955 wpm(K)=1053.80 mins=0.88 
+ep=42  steps=1.20   lr=0.002552 loss=3.38    ppl=1.18     acc=0.9833 wpm(K)=1051.03 mins=0.95 
+ep=46  steps=1.30   lr=0.002451 loss=4.65    ppl=1.23     acc=0.9735 wpm(K)=1050.89 mins=1.03 
+ep=50  steps=1.40   lr=0.002362 loss=8.18    ppl=1.20     acc=0.9793 wpm(K)=1054.61 mins=1.11 
+ep=53  steps=1.50   lr=0.002282 loss=4.80    ppl=1.26     acc=0.9728 wpm(K)=1054.82 mins=1.18 
+ep=57  steps=1.60   lr=0.002210 loss=3.40    ppl=1.32     acc=0.9621 wpm(K)=1052.23 mins=1.26 
+ep=60  steps=1.70   lr=0.002144 loss=6.59    ppl=1.34     acc=0.9498 wpm(K)=1052.43 mins=1.33 
+ep=64  steps=1.80   lr=0.002083 loss=7.09    ppl=1.31     acc=0.9569 wpm(K)=1051.47 mins=1.41 
+ep=67  steps=1.90   lr=0.002028 loss=3.47    ppl=1.18     acc=0.9803 wpm(K)=1051.02 mins=1.48 
+ep=71  steps=2.00   lr=0.001976 loss=3.04    ppl=1.13     acc=0.9975 wpm(K)=1051.66 mins=1.56 
+Eval at step 2000. valid_batch_size=30
+val_step=2000   loss=0.31   acc=0.9746 val_ppl=1.36
+Saving model to 'outputs_exp1_v2'
+ep=75  steps=2.10   lr=0.001929 loss=4.38    ppl=1.24     acc=0.9727 wpm(K)=1041.96 mins=1.65 
+ep=78  steps=2.20   lr=0.001884 loss=6.83    ppl=1.22     acc=0.9709 wpm(K)=1044.22 mins=1.73 
+ep=82  steps=2.30   lr=0.001843 loss=7.90    ppl=1.33     acc=0.9479 wpm(K)=1045.78 mins=1.81 
+ep=85  steps=2.40   lr=0.001804 loss=2.28    ppl=1.21     acc=0.9768 wpm(K)=1045.33 mins=1.88 
+ep=89  steps=2.50   lr=0.001768 loss=6.66    ppl=1.23     acc=0.9714 wpm(K)=1043.28 mins=1.95 
+ep=92  steps=2.60   lr=0.001733 loss=1.92    ppl=1.14     acc=0.9938 wpm(K)=1043.33 mins=2.03 
+ep=96  steps=2.70   lr=0.001701 loss=4.58    ppl=1.15     acc=0.9916 wpm(K)=1043.05 mins=2.10 
+ep=100 steps=2.80   lr=0.001670 loss=4.97    ppl=1.14     acc=0.9900 wpm(K)=1045.85 mins=2.18 
+ep=103 steps=2.90   lr=0.001641 loss=1.77    ppl=1.16     acc=0.9895 wpm(K)=1045.04 mins=2.25 
+ep=107 steps=3.00   lr=0.001614 loss=6.88    ppl=1.16     acc=0.9879 wpm(K)=1044.81 mins=2.33 
+Eval at step 3000. valid_batch_size=30
+val_step=3000   loss=0.35   acc=0.9690 val_ppl=1.42
+ep=110 steps=3.10   lr=0.001588 loss=2.32    ppl=1.12     acc=1.0000 wpm(K)=1038.97 mins=2.42 
+ep=114 steps=3.20   lr=0.001562 loss=1.95    ppl=1.12     acc=0.9963 wpm(K)=1037.55 mins=2.49 
+ep=117 steps=3.30   lr=0.001539 loss=4.29    ppl=1.21     acc=0.9699 wpm(K)=1037.37 mins=2.57 
+ep=121 steps=3.40   lr=0.001516 loss=2.84    ppl=1.13     acc=0.9959 wpm(K)=1038.08 mins=2.64 
+ep=125 steps=3.50   lr=0.001494 loss=2.29    ppl=1.13     acc=0.9949 wpm(K)=1038.88 mins=2.72 
+ep=128 steps=3.60   lr=0.001473 loss=5.36    ppl=1.15     acc=0.9878 wpm(K)=1038.72 mins=2.79 
+ep=132 steps=3.70   lr=0.001453 loss=2.73    ppl=1.14     acc=0.9923 wpm(K)=1040.23 mins=2.87 
+ep=135 steps=3.80   lr=0.001434 loss=2.58    ppl=1.16     acc=0.9892 wpm(K)=1040.24 mins=2.95 
+ep=139 steps=3.90   lr=0.001415 loss=3.25    ppl=1.12     acc=0.9989 wpm(K)=1040.76 mins=3.02 
+ep=142 steps=4.00   lr=0.001398 loss=4.40    ppl=1.12     acc=0.9984 wpm(K)=1041.95 mins=3.10 
+Eval at step 4000. valid_batch_size=30
+val_step=4000   loss=0.33   acc=0.9758 val_ppl=1.39
+ep=146 steps=4.10   lr=0.001380 loss=10.03   ppl=1.15     acc=0.9904 wpm(K)=1037.94 mins=3.19 
+ep=150 steps=4.20   lr=0.001364 loss=1.90    ppl=1.15     acc=0.9858 wpm(K)=1037.74 mins=3.26 
+ep=153 steps=4.30   lr=0.001348 loss=2.77    ppl=1.13     acc=0.9945 wpm(K)=1037.60 mins=3.34 
+ep=157 steps=4.40   lr=0.001333 loss=1.36    ppl=1.15     acc=0.9904 wpm(K)=1037.26 mins=3.41 
+ep=160 steps=4.50   lr=0.001318 loss=1.93    ppl=1.13     acc=0.9961 wpm(K)=1037.13 mins=3.49 
+ep=164 steps=4.60   lr=0.001303 loss=2.53    ppl=1.13     acc=0.9970 wpm(K)=1037.17 mins=3.56 
+ep=167 steps=4.70   lr=0.001289 loss=1.89    ppl=1.13     acc=0.9961 wpm(K)=1037.27 mins=3.64 
+ep=171 steps=4.80   lr=0.001276 loss=1.27    ppl=1.12     acc=0.9971 wpm(K)=1038.15 mins=3.71 
+ep=175 steps=4.90   lr=0.001263 loss=2.39    ppl=1.12     acc=1.0000 wpm(K)=1039.54 mins=3.79 
+ep=178 steps=5.00   lr=0.001250 loss=1.27    ppl=1.12     acc=0.9972 wpm(K)=1039.74 mins=3.87 
+Eval at step 5000. valid_batch_size=30
+val_step=5000   loss=0.30   acc=0.9789 val_ppl=1.35
+Saving model to 'outputs_exp1_v2'
+Reach 5000 steps. Stop training
+Eval at step 5000. valid_batch_size=30
+val_step=5000   loss=0.30   acc=0.9789 val_ppl=1.35

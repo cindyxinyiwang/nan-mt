@@ -18,8 +18,8 @@ python src/main.py \
   --target_vocab="vocab.de" \
   --source_test="tst2014.en" \
   --target_test="tst2014.de" \
-  --batcher word \
-  --loss_norm word \
+  --batcher="word" \
+  --loss_norm="word" \
   --batch_size=2048 \
   --n_train_sents=250000 \
   --max_len=300 \
@@ -36,8 +36,8 @@ python src/main.py \
   --share_emb_and_softmax \
   --lr_dec=1 \
   --lr_schedule \
-  --optim adam \
-  --init_type xavier_uniform \
+  --optim="adam" \
+  --init_type="xavier_normal" \
   --seed 19920206 \
   "$@"
 
