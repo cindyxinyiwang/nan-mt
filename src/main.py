@@ -77,6 +77,7 @@ add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
 add_argument(parser, "lr_adam", type="float", default=20.0, help="initial lr")
 add_argument(parser, "lr_sgd", type="float", default=20.0, help="initial lr")
 add_argument(parser, "lr_dec", type="float", default=2.0, help="decrease lr when val_ppl does not improve")
+add_argument(parser, "l2_reg", type="float", default=0.0, help="L2 weight penalty")
 add_argument(parser, "lr_schedule", type="bool", default=False, help="enable lr schedule")
 add_argument(parser, "optim", type="str", default="sgd", help="sgd|adam")
 add_argument(parser, "init_type", type="str", default="uniform",
@@ -209,6 +210,7 @@ def train():
       lr_adam=args.lr_adam,
       lr_sgd=args.lr_sgd,
       lr_dec=args.lr_dec,
+      l2_reg=args.l2_reg,
       loss_norm=args.loss_norm
     )
   data = DataLoader(hparams=hparams)
@@ -218,6 +220,8 @@ def train():
   hparams.add_param("unk_id", data.unk_id)
   hparams.add_param("bos_id", data.bos_id)
   hparams.add_param("eos_id", data.eos_id)
+  hparams.add_param("l2_reg", args.l2_reg)
+  hparams.add_param("n_train_steps", args.n_train_steps)
 
   # build or load model model
   print("-" * 80)
@@ -240,11 +244,12 @@ def train():
   if args.optim == 'adam':
     print("Using adam optimizer...")
     optim = torch.optim.Adam(trainable_params, lr=hparams.lr_adam,
-                             betas=(0.9, 0.98), eps=1e-05)
+                             weight_decay=hparams.l2_reg)
   else:
     print("Using sgd optimizer...")
-    optim = torch.optim.SGD(trainable_params, lr=hparams.lr_sgd)
-  print("Using transformer lr schedule:{}".format(args.lr_schedule))
+    optim = torch.optim.SGD(trainable_params, lr=hparams.lr_sgd,
+                            weight_decay=hparams.l2_reg)
+  print("Using transformer lr schedule: {}".format(args.lr_schedule))
 
   if args.load_model:
     optim_file_name = os.path.join(args.output_dir, "optimizer.pt")
@@ -262,7 +267,7 @@ def train():
       raise RuntimeError("Cannot load checkpoint!")
   else:
     optim = torch.optim.Adam(trainable_params, lr=hparams.lr_adam,
-                             betas=(0.9, 0.98), eps=1e-8)
+                             weight_decay=hparams.l2_reg)
     step = 0
     best_val_ppl = 1e10
     best_val_bleu = 0
@@ -276,9 +281,7 @@ def train():
   print("Start training")
   start_time = time.time()
   actual_start_time = time.time()
-  target_words = 0
-  total_loss = 0
-  total_corrects = 0
+  target_words, total_loss, total_corrects = 0, 0, 0
   n_train_batches = data.n_train_batches
 
   while True:
@@ -321,7 +324,7 @@ def train():
         lr = pow(hparams.d_model, -0.5) * min(pow(s, -0.5), s * pow(hparams.n_warm_ups, -1.5))
       else:
         if step < hparams.n_warm_ups:
-          if step < hparams.optim_switch:
+          if hparams.optim_switch is not None and step < hparams.optim_switch:
             base_lr = hparams.lr_adam 
           else:
             base_lr = hparams.lr_sgd 
@@ -355,7 +358,8 @@ def train():
         lr = hparams.lr_sgd
         print(("Reached {0} steps. Switching from Adam to SGD "
                "with learning_rate {1:<9.7f}").format(step, lr))
-        optim = torch.optim.SGD(trainable_params, lr=hparams.lr_sgd)
+        optim = torch.optim.SGD(trainable_params, lr=hparams.lr_sgd,
+                                weight_decay=hparams.l2_reg)
 
       # clean up GPU memory
       if step % args.clean_mem_every == 0:

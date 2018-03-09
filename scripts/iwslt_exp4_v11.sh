@@ -5,7 +5,7 @@ export CUDA_VISIBLE_DEVICES="2"
 
 python3 src/main.py \
   --clean_mem_every=5 \
-  --output_dir="outputs_exp4_v8" \
+  --output_dir="outputs_exp4_v11" \
   --log_every=100 \
   --eval_every=2000 \
   --reset_output_dir \
@@ -21,11 +21,11 @@ python3 src/main.py \
   --target_test="tst2014.de" \
   --share_emb_and_softmax \
   --cuda \
-  --batch_size=3072 \
+  --batch_size=6000 \
   --batcher="word" \
   --loss_norm="word" \
   --n_train_sents=250000 \
-  --max_len=300 \
+  --max_len=1000 \
   --d_word_vec=288 \
   --d_model=288 \
   --d_inner=507 \
@@ -33,10 +33,10 @@ python3 src/main.py \
   --d_k=64 \
   --d_v=64 \
   --n_heads=2 \
-  --n_train_steps=100000 \
-  --n_warm_ups=746 \
-  --dropout=0.18 \
-  --lr_adam=0.0003 \
+  --n_train_steps=200000 \
+  --n_warm_ups=4000 \
+  --dropout=0.08 \
+  --lr_adam=0.001 \
   --lr_sgd=0.25 \
   --optim="adam" \
   --optim_switch=50000 \

@@ -11,7 +11,7 @@ folder_lists=(
   # "archived_exp/outputs_exp4_v2"
   # "archived_exp/outputs_exp4_v6"  # <-- Dev PPL: 14.63. Dev BLEU: 11.01
   "outputs_exp4_v7"
-  "outputs_exp4_v8"
+  "outputs_exp4_v9"
 )
 
 folder_names=""

@@ -8,8 +8,8 @@ python3 src/main.py \
   --output_dir="outputs_exp4_v7" \
   --log_every=100 \
   --eval_every=2000 \
-  --reset_output_dir \
-  --no_load_model \
+  --no_reset_output_dir \
+  --load_model \
   --data_path="data/bpe_32k_shared/en-de/" \
   --source_train="train.en" \
   --target_train="train.de" \
@@ -33,12 +33,12 @@ python3 src/main.py \
   --d_k=64 \
   --d_v=64 \
   --n_heads=2 \
-  --n_train_steps=100000 \
+  --n_train_steps=200000 \
   --n_warm_ups=1500 \
   --dropout=0.18 \
   --lr_adam=0.0003 \
   --lr_sgd=0.25 \
-  --optim="adam" \
+  --optim="sgd" \
   --optim_switch=50000 \
   --lr_dec=1.1 \
   --init_range=0.03 \
