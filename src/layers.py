@@ -60,7 +60,7 @@ class PositionalEmbedding(nn.Module):
 
 
 class LayerNormalization(nn.Module):
-  def __init__(self, d_hid, eps=1e-5):
+  def __init__(self, d_hid, eps=1e-9):
     super(LayerNormalization, self).__init__()
 
     self.d_hid = d_hid
@@ -98,7 +98,7 @@ class ScaledDotProdAttn(nn.Module):
       len_k == len_v
 
     Returns:
-      attn: [batch_size, d_v].
+      attn: [batch_size, len_q, d_v].
     """
 
     batch_q, len_q, d_q = q.size()
@@ -112,7 +112,7 @@ class ScaledDotProdAttn(nn.Module):
     attn = torch.bmm(q, k.transpose(1, 2)) / self.temp
 
     # attn_mask: [batch_size, len_q, len_k]
-    if not attn_mask is None:
+    if attn_mask is not None:
       #attn.data.masked_fill_(attn_mask, -float("inf"))
       attn.data.masked_fill_(attn_mask, -self.hparams.inf)
     size = attn.size()
@@ -120,13 +120,13 @@ class ScaledDotProdAttn(nn.Module):
 
     # softmax along the len_k dimension
     # [batch_size, len_q, len_k]
-    attn = self.softmax(attn)
+    attn = self.softmax(attn).contiguous()
 
     # [batch_size, len_q, len_k == len_v]
     attn = self.dropout(attn)
 
     # [batch_size, len_q, d_v]
-    output = torch.bmm(attn, v)
+    output = torch.bmm(attn, v).contiguous()
 
     return output
 
@@ -141,16 +141,40 @@ class MultiHeadAttn(nn.Module):
     self.layer_norm = LayerNormalization(hparams.d_model)
 
     # projection of concatenated attn
+    n_heads = self.hparams.n_heads
+    d_model = self.hparams.d_model
+    d_q = self.hparams.d_k
+    d_k = self.hparams.d_k
+    d_v = self.hparams.d_v
 
-    self.w_q = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_k))
-    self.w_k = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_k))
-    self.w_v = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_v))
-    init_param(self.w_q, init_type="uniform", init_range=hparams.init_range)
-    init_param(self.w_k, init_type="uniform", init_range=hparams.init_range)
-    init_param(self.w_v, init_type="uniform", init_range=hparams.init_range)
+    Q, K, V = [], [], []
+    for head_id in range(n_heads):
+      q = nn.Linear(d_model, d_q, bias=False)
+      k = nn.Linear(d_model, d_k, bias=False)
+      v = nn.Linear(d_model, d_v, bias=False)
+      init_param(q.weight, init_type="uniform", init_range=hparams.init_range)
+      init_param(k.weight, init_type="uniform", init_range=hparams.init_range)
+      init_param(v.weight, init_type="uniform", init_range=hparams.init_range)
+      if self.hparams.cuda:
+        q = q.cuda()
+        k = k.cuda()
+        v = v.cuda()
+      Q.append(q)
+      K.append(k)
+      V.append(v)
+    self.Q, self.K, self.V = Q, K, V
 
-    self.w_proj = nn.Linear(hparams.n_heads * hparams.d_v, hparams.d_model, bias=False)
+    # self.w_q = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_k))
+    # self.w_k = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_k))
+    # self.w_v = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_v))
+    # init_param(self.w_q, init_type="uniform", init_range=hparams.init_range)
+    # init_param(self.w_k, init_type="uniform", init_range=hparams.init_range)
+    # init_param(self.w_v, init_type="uniform", init_range=hparams.init_range)
+
+    self.w_proj = nn.Linear(n_heads * d_v, d_model, bias=False)
     init_param(self.w_proj.weight, init_type="uniform", init_range=hparams.init_range)
+    if self.hparams.cuda:
+      self.w_proj = self.w_proj.cuda()
 
   def forward(self, q, k, v, attn_mask=None):
     """Performs the following computations:
@@ -168,7 +192,7 @@ class MultiHeadAttn(nn.Module):
       both sentences and time steps are batched together for efficiency.
 
     Returns:
-      outputs: [batch_size, len_q, d_v].
+      outputs: [batch_size, len_q, d_model].
     """
 
     n_heads = self.hparams.n_heads
@@ -176,45 +200,59 @@ class MultiHeadAttn(nn.Module):
     d_q = self.hparams.d_k
     d_k = self.hparams.d_k
     d_v = self.hparams.d_v
+    batch_size = q.size(0)
 
     residual = q 
-    
-    batch_size, len_q, input_d_q = q.size()
-    batch_size, len_k, input_d_k = k.size()
-    batch_size, len_v, input_d_v = v.size()
 
-    assert (input_d_q == self.hparams.d_model and
-            input_d_k == self.hparams.d_model and
-            input_d_v == self.hparams.d_model and
-            len_k == len_v)
+    heads = []
+    for Q, K, V in zip(self.Q, self.K, self.V):
+      head_q, head_k, head_v = Q(q), K(k), V(v)
+      head = self.attention(head_q, head_k, head_v, attn_mask=attn_mask)
+      heads.append(head)
 
-    # [n_heads, batch_size * len_{q,k,v}, d_model]
-    q_batch = q.repeat(n_heads, 1, 1).view(n_heads, batch_size * len_q, d_model)
-    k_batch = k.repeat(n_heads, 1, 1).view(n_heads, batch_size * len_k, d_model)
-    v_batch = v.repeat(n_heads, 1, 1).view(n_heads, batch_size * len_v, d_model)
-
-    # [n_heads, batch_size * len_, d_] -> [n_heads * batch_size, len_, d_]
-    q_batch = torch.bmm(q_batch, self.w_q).view(n_heads * batch_size, len_q, d_q)
-    k_batch = torch.bmm(k_batch, self.w_k).view(n_heads * batch_size, len_k, d_k)
-    v_batch = torch.bmm(v_batch, self.w_v).view(n_heads * batch_size, len_v, d_v)
-
-    # [n_heads * batch_size, len_q, len_k]
-    if not attn_mask is None:
-      attn_mask = attn_mask.repeat(n_heads, 1, 1)
-    outputs = self.attention(q_batch, k_batch, v_batch, attn_mask=attn_mask)
-
-    # [n_heads * batch_size, len_q, d_v] -> [batch_size, len_q, n_heads * d_v]
-    outputs = outputs.view(n_heads, batch_size, len_q, d_v).permute(
-      1, 2, 0, 3).contiguous().view(batch_size, len_q, n_heads * d_v)
-
-    # [batch_size, len_q, d_model]
-    outputs = outputs.view(batch_size * len_q, n_heads * d_v)
-    outputs = self.w_proj(outputs).view(batch_size, len_q, d_model)
-
-    # residual
+    outputs = torch.cat(heads, dim=-1).contiguous().view(batch_size, -1, n_heads * d_v)
+    outputs = self.w_proj(outputs)
     outputs = self.layer_norm(outputs + residual)
 
     return outputs
+    
+    # batch_size, len_q, input_d_q = q.size()
+    # batch_size, len_k, input_d_k = k.size()
+    # batch_size, len_v, input_d_v = v.size()
+
+    # assert (input_d_q == self.hparams.d_model and
+    #         input_d_k == self.hparams.d_model and
+    #         input_d_v == self.hparams.d_model and
+    #         len_k == len_v)
+
+    # # [n_heads, batch_size * len_{q,k,v}, d_model]
+    # q_batch = q.repeat(n_heads, 1, 1).view(n_heads, batch_size * len_q, d_model)
+    # k_batch = k.repeat(n_heads, 1, 1).view(n_heads, batch_size * len_k, d_model)
+    # v_batch = v.repeat(n_heads, 1, 1).view(n_heads, batch_size * len_v, d_model)
+
+    # # [n_heads, batch_size * len_, d_] -> [n_heads * batch_size, len_, d_]
+    # q_batch = torch.bmm(q_batch, self.w_q).view(n_heads * batch_size, len_q, d_q)
+    # k_batch = torch.bmm(k_batch, self.w_k).view(n_heads * batch_size, len_k, d_k)
+    # v_batch = torch.bmm(v_batch, self.w_v).view(n_heads * batch_size, len_v, d_v)
+
+    # # [n_heads * batch_size, len_q, len_k]
+    # if not attn_mask is None:
+    #   attn_mask = attn_mask.repeat(n_heads, 1, 1)
+    # outputs = self.attention(q_batch, k_batch, v_batch, attn_mask=attn_mask)
+
+    # # [n_heads * batch_size, len_q, d_v] -> [batch_size, len_q, n_heads * d_v]
+    # outputs = outputs.contiguous().view(
+    #   n_heads, batch_size, len_q, d_v).permute(1, 2, 0, 3).contiguous().view(
+    #     batch_size, len_q, n_heads * d_v)
+
+    # # [batch_size, len_q, d_model]
+    # outputs = outputs.view(batch_size * len_q, n_heads * d_v)
+    # outputs = self.w_proj(outputs).view(batch_size, len_q, d_model)
+
+    # # residual
+    # outputs = self.layer_norm(outputs + residual)
+
+    # return outputs
 
 
 class PositionwiseFF(nn.Module):
