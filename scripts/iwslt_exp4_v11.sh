@@ -35,7 +35,7 @@ python3 src/main.py \
   --n_heads=2 \
   --n_train_steps=200000 \
   --n_warm_ups=4000 \
-  --dropout=0.08 \
+  --dropout=0.15 \
   --lr_adam=0.001 \
   --lr_sgd=0.25 \
   --optim="adam" \
