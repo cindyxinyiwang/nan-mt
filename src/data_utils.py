@@ -276,7 +276,7 @@ class DataLoader(object):
       source_indices, target_indices = [self.bos_id], [self.bos_id]
       source_tokens = source_line.split(" ")
       target_tokens = target_line.split(" ")
-      if (not self.decode) and len(target_line) > self.hparams.max_len:
+      if is_training and len(target_line) > self.hparams.max_len:
         continue
 
       total_sents += 1

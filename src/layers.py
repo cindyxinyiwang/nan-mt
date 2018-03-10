@@ -14,49 +14,51 @@ from torch.autograd import Variable
 from utils import init_param
 
 
-INF = np.float32(np.inf)
-NEG_INF = float(np.float32(-np.inf))
-
-
 class PositionalEmbedding(nn.Module):
   def __init__(self, hparams):
     super(PositionalEmbedding, self).__init__()
 
     self.hparams = hparams
 
-    # precompute frequencies
-    assert self.hparams.d_word_vec % 2 == 0
-    freq = np.arange(start=0, stop=1.0, step=2 / self.hparams.d_word_vec,
-                     dtype=np.float32)
-    freq = np.power(10000.0, -freq)
+    if self.hparams.pos_emb_size is not None:
+      self.emb = nn.Embedding(self.hparams.pos_emb_size,
+                              self.hparams.d_word_vec,
+                              padding_idx=0)
+      if self.hparams.cuda:
+        self.emb = self.emb.cuda()
+    else:
+      d_word_vec = self.hparams.d_word_vec
+      freq = torch.arange(0, d_word_vec, 2) / d_word_vec
+      self.freq = 1.0 / (10000.0 ** Variable(freq))
+      if self.hparams.cuda:
+        self.freq = self.freq.cuda()
 
-    self.freq = Variable(torch.FloatTensor(freq).view(
-      [1, 1, self.hparams.d_word_vec // 2]))
-
-    if self.hparams.cuda:
-      self.freq = self.freq.cuda()
-
-  def forward(self, pos_emb_indices, mask):
+  def forward(self, x):
     """Compute positional embeddings.
 
     Args:
-      pos_emb_indices: Tensor of size [batch_size, max_len].
-      mask: Tensor of size [batch_size, max_len]. 0 means to ignore.
+      x: Tensor of size [batch_size, max_len]
 
     Returns:
-      pos_emb: Tensor of size [batch_size, max_len, d_word_vec].
+      emb: Tensor of size [batch_size, max_len, d_word_vec].
     """
 
-    batch_size, max_len = pos_emb_indices.size()
-    pos_emb_indices = pos_emb_indices.view([batch_size, max_len, 1])
-    pos_emb_sin = torch.sin(pos_emb_indices / self.freq).unsqueeze(-1)
-    pos_emb_cos = torch.cos(pos_emb_indices / self.freq).unsqueeze(-1)
-    pos_emb = torch.cat([pos_emb_sin, pos_emb_cos], dim=-1).contiguous().view(
-      batch_size, max_len, self.hparams.d_word_vec)
-    #pos_emb.data.masked_fill_(mask, float(0))
-    pos_emb.data.masked_fill_(mask, self.hparams.tiny)
+    d_word_vec = self.hparams.d_word_vec
+    batch_size, max_len = x.size()
+    pos = Variable(torch.arange(0, max_len))
+    if self.hparams.cuda:
+      pos = pos.cuda()
+    if self.hparams.pos_emb_size is not None:
+      pos = pos.add_(1).long().unsqueeze(0).expand_as(x).contiguous()
+      emb = self.emb(pos)
+    else:
+      emb = pos.float().unsqueeze(-1) @ self.freq.unsqueeze(0)
+      sin = torch.sin(emb).unsqueeze(-1)
+      cos = torch.cos(emb).unsqueeze(-1)
+      emb = torch.cat([sin, cos], dim=-1).contiguous().view(max_len, d_word_vec)
+      emb = emb.unsqueeze(0).expand(batch_size, -1, -1)
 
-    return pos_emb
+    return emb
 
 
 class LayerNormalization(nn.Module):

@@ -67,6 +67,8 @@ add_argument(parser, "batcher", type="str", default="sent",
 add_argument(parser, "n_train_steps", type="int", default=100000, help="")
 add_argument(parser, "n_warm_ups", type="int", default=750, help="")
 add_argument(parser, "optim_switch", type="int", default=None, help="Switch from adam to SGD")
+add_argument(parser, "pos_emb_size", type="int", default=None,
+             help="Number of positional embedding steps. None means sinusoid")
 
 add_argument(parser, "share_emb_and_softmax", type="bool", default=True, help="share embedding and softmax")
 
@@ -212,7 +214,8 @@ def train():
       lr_dec=args.lr_dec,
       l2_reg=args.l2_reg,
       loss_norm=args.loss_norm,
-      init_type=args.init_type
+      init_type=args.init_type,
+      pos_emb_size=args.pos_emb_size,
     )
   data = DataLoader(hparams=hparams)
   hparams.add_param("source_vocab_size", data.source_vocab_size)
