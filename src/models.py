@@ -224,7 +224,7 @@ class Transformer(nn.Module):
       y_partial = Variable(y_partial, volatile=True)
       y_mask = torch.ByteTensor([([0] * len_dec_seq) for _ in range(n_remain_sents*beam_size)])
 
-      y_partial_pos = torch.arange(len_dec_seq).unsqueeze(0)
+      y_partial_pos = torch.arange(1, len_dec_seq+1).unsqueeze(0)
       # size: (n_remain_sents * beam, seq_len)
       y_partial_pos = y_partial_pos.repeat(n_remain_sents * beam_size, 1)
       y_partial_pos = Variable(torch.FloatTensor(y_partial_pos), volatile=True)
