@@ -1,12 +1,12 @@
 #!/bin/bash
 
 export PYTHONPATH="$(pwd)"
-export CUDA_VISIBLE_DEVICES="0"
+export CUDA_VISIBLE_DEVICES="2"
 
 # just modify the path to the model
 
 python3.6 src/translate.py \
-  --model_dir="outputs_exp4_v6" \
+  --model_dir="outputs_exp4_v9" \
   --data_path="data/bpe_32k_shared/en-de/" \
   --source_vocab="vocab.en" \
   --target_vocab="vocab.de" \

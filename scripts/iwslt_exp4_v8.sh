@@ -21,7 +21,7 @@ python3 src/main.py \
   --target_test="tst2014.de" \
   --share_emb_and_softmax \
   --cuda \
-  --batch_size=2048 \
+  --batch_size=3072 \
   --batcher="word" \
   --loss_norm="word" \
   --n_train_sents=250000 \

@@ -89,7 +89,7 @@ def plot_result():
 
   if "ppl" in FLAGS.plot_name:
     xmin = 0.0
-    xmax = 100.0
+    xmax = 50.0
     ymin = 2.42  # min(ymin, min(np.min(valid_acc), np.min(test_acc)))
     ymax = 5.00  # max(ymax, max(np.max(valid_acc), np.max(test_acc)))
     dist = (ymax - ymin) / 10

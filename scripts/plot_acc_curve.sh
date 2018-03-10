@@ -9,9 +9,11 @@ folder_lists=(
   # "archived_exp/outputs_exp3_v11"
   # "archived_exp/outputs_exp4_v1"
   # "archived_exp/outputs_exp4_v2"
-  # "archived_exp/outputs_exp4_v6"  # <-- Dev PPL: 14.63. Dev BLEU: 11.01
-  "outputs_exp4_v7"
-  "outputs_exp4_v8"
+  "archived_exp/outputs_exp4_v6"  # <-- Dev PPL: 14.63. Dev BLEU: 11.01
+  # "archived_exp/outputs_exp4_v7"
+  # "archived_exp/outputs_exp4_v9"
+  # "archived_exp/outputs_exp4_v10"
+  "outputs_exp4_v11"
 )
 
 folder_names=""
