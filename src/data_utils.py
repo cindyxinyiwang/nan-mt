@@ -232,7 +232,7 @@ class DataLoader(object):
       ([0] * len(sentence)) + ([1] * (max_len - len(sentence)))
       for sentence in sentences]
     pos_emb_indices = [
-      [i for i in range(len(sentence))] + ([-1] * (max_len - len(sentence)))
+      [i+1 for i in range(len(sentence))] + ([0] * (max_len - len(sentence)))
       for sentence in sentences
     ]
 

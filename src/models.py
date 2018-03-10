@@ -23,7 +23,11 @@ class Encoder(nn.Module):
     self.hparams = hparams
     assert self.hparams.d_word_vec == self.hparams.d_model
 
-    self.pos_emb = PositionalEmbedding(hparams)
+    #self.pos_emb = PositionalEmbedding(hparams)
+    self.pos_emb = nn.Embedding(1100,
+                                 self.hparams.d_word_vec,
+                                 padding_idx=0)
+
     self.word_emb = nn.Embedding(self.hparams.source_vocab_size,
                                  self.hparams.d_word_vec,
                                  padding_idx=hparams.pad_id)
@@ -55,10 +59,10 @@ class Encoder(nn.Module):
     batch_size, max_len = x_train.size()
 
     # [batch_size, max_len, 1] -> [batch_size, max_len, d_word_vec]
-    pos_emb_mask = x_mask.unsqueeze(2).expand(
-      -1, -1, self.hparams.d_word_vec)
-    pos_emb = self.pos_emb(x_pos_emb_indices, pos_emb_mask)
-
+    #pos_emb_mask = x_mask.unsqueeze(2).expand(
+    #  -1, -1, self.hparams.d_word_vec)
+    #pos_emb = self.pos_emb(x_pos_emb_indices, pos_emb_mask)
+    pos_emb = self.pos_emb(x_pos_emb_indices.long())
     # [batch_size, max_len, d_word_vec]
     word_emb = self.word_emb(x_train) * self.emb_scale
     enc_input = word_emb + pos_emb
@@ -78,7 +82,11 @@ class Decoder(nn.Module):
     super(Decoder, self).__init__()
     self.hparams = hparams
 
-    self.pos_emb = PositionalEmbedding(self.hparams)
+    #self.pos_emb = PositionalEmbedding(hparams)
+    self.pos_emb = nn.Embedding(1100,
+                                 self.hparams.d_word_vec,
+                                 padding_idx=0)
+
     self.word_emb = nn.Embedding(self.hparams.target_vocab_size,
                                  self.hparams.d_word_vec,
                                  padding_idx=hparams.pad_id)
@@ -116,9 +124,10 @@ class Decoder(nn.Module):
     batch_size, y_len = y_mask.size()
 
     # [batch_size, y_len, 1] -> [batch_size, y_len, d_word_vec]
-    pos_emb_mask = y_mask.unsqueeze(2).expand(
-      -1, -1, self.hparams.d_word_vec)
-    pos_emb = self.pos_emb(y_pos_emb_indices, pos_emb_mask)
+    #pos_emb_mask = y_mask.unsqueeze(2).expand(
+    #  -1, -1, self.hparams.d_word_vec)
+    #pos_emb = self.pos_emb(y_pos_emb_indices, pos_emb_mask)
+    pos_emb = self.pos_emb(y_pos_emb_indices.long())
 
     # [batch_size, x_len, d_word_vec]
     word_emb = self.word_emb(y_train) * self.emb_scale
