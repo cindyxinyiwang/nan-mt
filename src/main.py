@@ -211,7 +211,8 @@ def train():
       lr_sgd=args.lr_sgd,
       lr_dec=args.lr_dec,
       l2_reg=args.l2_reg,
-      loss_norm=args.loss_norm
+      loss_norm=args.loss_norm,
+      init_type=args.init_type
     )
   data = DataLoader(hparams=hparams)
   hparams.add_param("source_vocab_size", data.source_vocab_size)
@@ -231,12 +232,13 @@ def train():
     print("Loading model from '{0}'".format(model_file_name))
     model = torch.load(model_file_name)
   else:
-    print("Initialize with {}".format(args.init_type))
-    model = Transformer(hparams=hparams, init_type=args.init_type)
+    print("Initialize with {}".format(hparams.init_type))
+    model = Transformer(hparams=hparams, init_type=hparams.init_type)
   crit = get_criterion(hparams)
 
   trainable_params = [
     p for p in model.trainable_parameters() if p.requires_grad]
+
   num_params = count_params(trainable_params)
   print("Model has {0} params".format(num_params))
 

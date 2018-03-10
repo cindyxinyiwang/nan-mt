@@ -21,11 +21,11 @@ python3 src/main.py \
   --target_test="tst2014.de" \
   --share_emb_and_softmax \
   --cuda \
-  --batch_size=6000 \
+  --batch_size=6400 \
   --batcher="word" \
   --loss_norm="word" \
   --n_train_sents=250000 \
-  --max_len=1000 \
+  --max_len=2000 \
   --d_word_vec=288 \
   --d_model=288 \
   --d_inner=507 \

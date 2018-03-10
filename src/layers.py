@@ -155,21 +155,16 @@ class MultiHeadAttn(nn.Module):
       init_param(q.weight, init_type="uniform", init_range=hparams.init_range)
       init_param(k.weight, init_type="uniform", init_range=hparams.init_range)
       init_param(v.weight, init_type="uniform", init_range=hparams.init_range)
-      if self.hparams.cuda:
-        q = q.cuda()
-        k = k.cuda()
-        v = v.cuda()
       Q.append(q)
       K.append(k)
       V.append(v)
-    self.Q, self.K, self.V = Q, K, V
-
-    # self.w_q = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_k))
-    # self.w_k = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_k))
-    # self.w_v = nn.Parameter(torch.FloatTensor(hparams.n_heads, hparams.d_model, hparams.d_v))
-    # init_param(self.w_q, init_type="uniform", init_range=hparams.init_range)
-    # init_param(self.w_k, init_type="uniform", init_range=hparams.init_range)
-    # init_param(self.w_v, init_type="uniform", init_range=hparams.init_range)
+    self.Q = nn.ModuleList(Q)
+    self.K = nn.ModuleList(K)
+    self.V = nn.ModuleList(V)
+    if self.hparams.cuda:
+      self.Q = self.Q.cuda()
+      self.K = self.K.cuda()
+      self.V = self.V.cuda()
 
     self.w_proj = nn.Linear(n_heads * d_v, d_model, bias=False)
     init_param(self.w_proj.weight, init_type="uniform", init_range=hparams.init_range)
@@ -195,14 +190,14 @@ class MultiHeadAttn(nn.Module):
       outputs: [batch_size, len_q, d_model].
     """
 
+    residual = q 
+
     n_heads = self.hparams.n_heads
     d_model = self.hparams.d_model
     d_q = self.hparams.d_k
     d_k = self.hparams.d_k
     d_v = self.hparams.d_v
     batch_size = q.size(0)
-
-    residual = q 
 
     heads = []
     for Q, K, V in zip(self.Q, self.K, self.V):
@@ -215,44 +210,6 @@ class MultiHeadAttn(nn.Module):
     outputs = self.layer_norm(outputs + residual)
 
     return outputs
-    
-    # batch_size, len_q, input_d_q = q.size()
-    # batch_size, len_k, input_d_k = k.size()
-    # batch_size, len_v, input_d_v = v.size()
-
-    # assert (input_d_q == self.hparams.d_model and
-    #         input_d_k == self.hparams.d_model and
-    #         input_d_v == self.hparams.d_model and
-    #         len_k == len_v)
-
-    # # [n_heads, batch_size * len_{q,k,v}, d_model]
-    # q_batch = q.repeat(n_heads, 1, 1).view(n_heads, batch_size * len_q, d_model)
-    # k_batch = k.repeat(n_heads, 1, 1).view(n_heads, batch_size * len_k, d_model)
-    # v_batch = v.repeat(n_heads, 1, 1).view(n_heads, batch_size * len_v, d_model)
-
-    # # [n_heads, batch_size * len_, d_] -> [n_heads * batch_size, len_, d_]
-    # q_batch = torch.bmm(q_batch, self.w_q).view(n_heads * batch_size, len_q, d_q)
-    # k_batch = torch.bmm(k_batch, self.w_k).view(n_heads * batch_size, len_k, d_k)
-    # v_batch = torch.bmm(v_batch, self.w_v).view(n_heads * batch_size, len_v, d_v)
-
-    # # [n_heads * batch_size, len_q, len_k]
-    # if not attn_mask is None:
-    #   attn_mask = attn_mask.repeat(n_heads, 1, 1)
-    # outputs = self.attention(q_batch, k_batch, v_batch, attn_mask=attn_mask)
-
-    # # [n_heads * batch_size, len_q, d_v] -> [batch_size, len_q, n_heads * d_v]
-    # outputs = outputs.contiguous().view(
-    #   n_heads, batch_size, len_q, d_v).permute(1, 2, 0, 3).contiguous().view(
-    #     batch_size, len_q, n_heads * d_v)
-
-    # # [batch_size, len_q, d_model]
-    # outputs = outputs.view(batch_size * len_q, n_heads * d_v)
-    # outputs = self.w_proj(outputs).view(batch_size, len_q, d_model)
-
-    # # residual
-    # outputs = self.layer_norm(outputs + residual)
-
-    # return outputs
 
 
 class PositionwiseFF(nn.Module):
