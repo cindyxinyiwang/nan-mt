@@ -28,6 +28,7 @@ class PositionalEmbedding(nn.Module):
         self.emb = self.emb.cuda()
     else:
       d_word_vec = self.hparams.d_word_vec
+      self.emb_scale = self.hparams.init_range * d_word_vec
       freq = torch.arange(0, d_word_vec, 2) / d_word_vec
       self.freq = 1.0 / (10000.0 ** Variable(freq))
       if self.hparams.cuda:
@@ -53,8 +54,8 @@ class PositionalEmbedding(nn.Module):
       emb = self.emb(pos)
     else:
       emb = pos.float().unsqueeze(-1) @ self.freq.unsqueeze(0)
-      sin = torch.sin(emb).unsqueeze(-1)
-      cos = torch.cos(emb).unsqueeze(-1)
+      sin = torch.sin(emb).mul_(self.emb_scale).unsqueeze(-1)
+      cos = torch.cos(emb).mul_(self.emb_scale).unsqueeze(-1)
       emb = torch.cat([sin, cos], dim=-1).contiguous().view(max_len, d_word_vec)
       emb = emb.unsqueeze(0).expand(batch_size, -1, -1)
 

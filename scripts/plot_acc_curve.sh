@@ -15,9 +15,10 @@ folder_lists=(
   # "archived_exp/outputs_exp5_v1"
   # "archived_exp/outputs_exp5_v2"
   "archived_exp/outputs_exp5_v3"
-  # "outputs_exp5_v6"
-  # "outputs_exp5_v7"
+  # "archived_exp/outputs_exp5_v6"
+  # "archived_exp/outputs_exp5_v7"
   "outputs_exp6_v1"
+  "outputs_exp6_v2"
 )
 
 folder_names=""
