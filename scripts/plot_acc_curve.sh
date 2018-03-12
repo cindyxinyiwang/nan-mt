@@ -14,11 +14,15 @@ folder_lists=(
   # "archived_exp/outputs_exp4_v9"
   # "archived_exp/outputs_exp5_v1"
   # "archived_exp/outputs_exp5_v2"
-  "archived_exp/outputs_exp5_v3"
+  # "archived_exp/outputs_exp5_v3"  # <-- Dev PPL: 12.61. Dev BLEU: 15.16
   # "archived_exp/outputs_exp5_v6"
   # "archived_exp/outputs_exp5_v7"
-  "outputs_exp6_v1"
-  "outputs_exp6_v2"
+  # "archived_exp/outputs_exp6_v1"
+  # "archived_exp/outputs_exp6_v2"  # Dev PPL: 11.09. Dev BLEU: 22.89
+  "outputs_exp6_v3"
+  # "outputs_exp6_v4"
+  "outputs_exp6_v5"
+  "outputs_exp6_v6"
 )
 
 folder_names=""
