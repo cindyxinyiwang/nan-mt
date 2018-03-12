@@ -38,6 +38,7 @@ add_argument(parser, "merge_bpe", type="bool", default=True, help="")
 add_argument(parser, "source_vocab", type="str", default=None, help="name of source vocab file")
 add_argument(parser, "target_vocab", type="str", default=None, help="name of target vocab file")
 add_argument(parser, "n_train_sents", type="int", default=None, help="max number of training sentences to load")
+add_argument(parser, "out_file", type="str", default="trans", help="output file for hypothesis")
 
 
 args = parser.parse_args()
@@ -46,7 +47,7 @@ model_file_name = os.path.join(args.model_dir, "model.pt")
 model = torch.load(model_file_name)
 model.eval()
 
-out_file = os.path.join(args.model_dir, "trans")
+out_file = os.path.join(args.model_dir, args.out_file)
 
 hparams = TranslationHparams(
   data_path=args.data_path,
@@ -88,6 +89,7 @@ while not end_of_epoch:
   # sys.exit(0)
 
   for h in all_hyps:
+    #print(h)
     h_best = h[0]
     h_best_words = map(lambda wi: data.target_index_to_word[wi],
                        filter(lambda wi: wi not in hparams.filtered_tokens, h_best))

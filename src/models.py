@@ -202,8 +202,9 @@ class Transformer(nn.Module):
       len_dec_seq = i+1 
       # (n_remain_sents * beam, seq_len)
       y_partial = torch.stack([b.get_partial_y() for b in beams if not b.done]).view(-1, len_dec_seq)
+
       y_partial = Variable(y_partial, volatile=True)
-      y_mask = torch.ByteTensor([([0] * len_dec_seq) for _ in range(n_remain_sents*beam_size)])
+      y_mask = torch.ByteTensor([([0] * len_dec_seq) for _ in range(n_remain_sents * beam_size)])
 
       y_partial_pos = torch.arange(1, len_dec_seq+1).unsqueeze(0)
       # size: (n_remain_sents * beam, seq_len)
@@ -256,7 +257,10 @@ class Transformer(nn.Module):
       scores, idxs = torch.sort(beam.scores, dim=0, descending=True)
       all_scores += [scores[:n_best]]
       hyps = [beam.get_y(i) for i in idxs[:n_best]]
-      all_hyp += [hyps]
+
+      #hyps, scores = beam.get_hyp(n_best)
+      all_hyp.append(hyps)
+      all_scores.append(scores)
     return all_hyp, all_scores
     
   def debug_translate_batch(self,
@@ -350,6 +354,31 @@ def select_active_enc_mask(enc_mask, active_inst_idx_list, n_remain_sents, src_s
   active_enc_mask = active_enc_mask.view(-1, src_seq_len).contiguous()
   return active_enc_mask
 
+class PolyNorm(object):
+  def __init__(self, m=1., norm_search=True):
+    self.m = m 
+    self.norm_search = norm_search
+
+  def norm_partial(self, scores_to_add, scores_so_far, next_ys):
+    """
+    scores_to_add: [beam_size, trg_vocab_size]
+    scores_so_far: [beam_size,]
+    next_ys: [beam_size, prev_trg_len]
+    """
+    beam_size, trg_vocab_size = scores_to_add.size()
+    prev_trg_len = len(next_ys)
+
+    scores_so_far = scores_so_far.unsqueeze(1).expand_as(scores_to_add)
+    if self.norm_partial:
+      return (scores_so_far * pow(prev_trg_len, self.m) + scores_to_add) / pow(prev_trg_len+1, self.m)
+    else:
+      return scores_so_far + scores_to_add
+
+  def norm_complete(self, finished_list):
+    if not self.norm_partial:
+      for f in finished_list:
+        f[1] = f[1] / pow(len(f[0]), self.m)
+
 class Beam(object):
 
   def __init__(self, size, hparams):
@@ -367,6 +396,13 @@ class Beam(object):
     self.next_ys = [self.tt.LongTensor(size).fill_(hparams.bos_id)]
     self.next_ys[0][0] = hparams.bos_id 
 
+    self.active_hyp_size = size 
+    self.active_beam_idx = [i for i in range(size)]
+    self.finished = []
+
+    self.len_norm = PolyNorm()
+    #self.len_norm = None
+
   def advance(self, word_scores, step=0):
     """Add word to the beam.
 
@@ -381,9 +417,14 @@ class Beam(object):
     # print(indices)
     # if step >= 2:
     #   sys.exit(0)
-
     if len(self.prev_ks) > 0:
-      beam_score = self.scores.unsqueeze(1).expand_as(word_scores) + word_scores
+      if not self.len_norm is None:
+        beam_score = self.len_norm.norm_partial(word_scores, self.scores, self.next_ys)
+      else:
+        beam_score = self.scores.unsqueeze(1).expand_as(word_scores) + word_scores
+      #for i in range(self.next_ys[-1].size(0)):
+      #  if self.next_ys[-1][i] == self.hparams.eos_id:
+      #    beam_score[i] = -float("inf")
     else:
       # for the first step, all rows in word_scores are the same
       beam_score = word_scores[0]
@@ -400,6 +441,10 @@ class Beam(object):
     self.next_ys.append(next_y)
 
     if self.next_ys[-1][0] == self.hparams.eos_id:
+      #self.active_hyp_size -= 1
+      #self.finished.append((self.get_y(0), self.scores[0]))
+      #self.done = (self.active_hyp_size == 0)
+
       self.done = True
     return self.done
 
@@ -424,3 +469,15 @@ class Beam(object):
       k = self.prev_ks[j][k]
     return hyp[::-1]
 
+  def get_hyp(self, n=1):
+    if len(self.finished) < self.size:
+      _, keys = torch.sort(self.scores, dim=0, descending=True)
+      for k in keys[:(self.size-len(self.finished))]:
+        self.finished.append((self.get_y(k), self.scores[k]))
+    if not self.len_norm is None:
+      self.norm_complete(self.finished)
+    self.finished.sort(key=lambda a: -a[1])
+    scores = [s for _, s in self.finished]
+    hyps = [h for h, _ in self.finished]
+    return hyps, scores
+    
