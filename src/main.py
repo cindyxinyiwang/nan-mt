@@ -164,8 +164,9 @@ def eval(model, data, crit, step, hparams, eval_bleu=False,
       ref_file = args.target_valid_ref
     else:
       ref_file = os.path.join(hparams.data_path, args.target_valid)
-    bleu_str = subprocess.getoutput("./multi-bleu.perl -lc {0} < {1}".format(ref_file, valid_hyp_file))
-    log_string += " {}".format(bleu_str)
+    bleu_str = subprocess.getoutput(
+      "./multi-bleu.perl {0} < {1}".format(ref_file, valid_hyp_file))
+    log_string += "\n{}".format(bleu_str)
     bleu_str = bleu_str.split('\n')[-1].strip()
     reg = re.compile("BLEU = ([^,]*).*")
     valid_bleu = float(reg.match(bleu_str).group(1))
@@ -279,7 +280,7 @@ def train():
     cur_attempt = 0
     lr = hparams.lr_adam
 
-  ppl_thresh = 10.0
+  ppl_thresh = 8.0
   set_patience = args.patience >= 0
   # train loop
   print("-" * 80)
@@ -373,15 +374,23 @@ def train():
       # eval
       if step % args.eval_every == 0:
         val_ppl, val_bleu = eval(model, data, crit, step, hparams,
-                                 best_val_ppl<ppl_thresh, valid_batch_size=20)
-        if args.eval_bleu and not val_bleu is None:
-          save = val_bleu > best_val_bleu
+                                 best_val_ppl < ppl_thresh, valid_batch_size=20)
+
+        # determine whether to update best_val_ppl or best_val_bleu
+        based_on_bleu = args.eval_bleu and (best_val_ppl < ppl_thresh)
+        if based_on_bleu:
+          if best_val_bleu <= val_bleu:
+            best_val_bleu = val_bleu
+            save = True
+          else:
+            save = False
         else:
-          save = val_ppl < best_val_ppl
-        if not val_bleu is None and val_bleu > best_val_bleu:
-          best_val_bleu = val_bleu
-        if val_ppl < best_val_ppl:
-          best_val_ppl = val_ppl
+          if best_val_ppl >= val_ppl:
+            best_val_ppl = val_ppl
+            save = True
+          else:
+            save = False
+
         if save:
           save_checkpoint([step, best_val_ppl, best_val_bleu, cur_attempt, lr],
                           model, optim, hparams, args.output_dir)
@@ -389,6 +398,7 @@ def train():
         else:
           lr /= hparams.lr_dec
           cur_attempt += 1
+
         actual_start_time = time.time()
         target_words = 0
         total_loss = 0
