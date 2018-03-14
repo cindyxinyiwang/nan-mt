@@ -69,7 +69,6 @@ class DataLoader(object):
       self.valid_size = len(self.x_valid)
       self.reset_valid()
 
-
   def reset_train(self):
     """Shuffle training data. Prepare the batching scheme if necessary."""
 

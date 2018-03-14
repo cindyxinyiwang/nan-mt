@@ -22,7 +22,8 @@ folder_lists=(
   "outputs_exp6_v3"
   # "outputs_exp6_v4"
   "outputs_exp6_v5"
-  "outputs_exp6_v6"
+  # "outputs_exp6_v6"
+  "outputs_exp6_v9"
 )
 
 folder_names=""
