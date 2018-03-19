@@ -41,10 +41,7 @@ def match(M_hr, M_hh, n, ngram_cov, cuda=False):
   o_ref = M_hr_n.sum(dim=2)
   #print("o_hyp", o_hyp)
   #print("o_ref", o_ref)
-  zero = torch.FloatTensor([0.])
-  if cuda:
-    zero = zero.cuda()
-  zero_mask = torch.eq(o_hyp, zero)
+  zero_mask = torch.eq(o_hyp, 0.)
   o_hyp = o_hyp.masked_fill_(zero_mask, 1)
   div = torch.div(o_ref, o_hyp)
   #print("div", div)
@@ -100,6 +97,14 @@ def main(output_dir, hyp_file, ref_file):
   h, r, _, _= data.next_test(32)
   hyp, hyp_mask, _, _ = h
   ref, ref_mask, _, _ = r
+  extra_mask = torch.eq(hyp.data, hparams.bos_id)
+  hyp_mask = hyp_mask | extra_mask
+  extra_mask = torch.eq(hyp.data, hparams.eos_id)
+  hyp_mask = hyp_mask | extra_mask
+  extra_mask = torch.eq(ref.data, hparams.bos_id)
+  ref_mask = ref_mask | extra_mask
+  extra_mask = torch.eq(ref.data, hparams.eos_id)
+  ref_mask = ref_mask | extra_mask
 
   ngram_cov_list = [None, NgramConv(2, hparams.cuda), NgramConv(3, hparams.cuda), NgramConv(4, hparams.cuda)]
   print("bleu score: ", bleu(hyp.data, ref.data, hyp_mask, ref_mask, ngram_cov_list, hparams.cuda))
