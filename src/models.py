@@ -410,13 +410,6 @@ class Beam(object):
     """
     trg_vocab_size = word_scores.size(1)
 
-    # scores, indices = torch.max(word_scores, dim=1)
-    # scores = scores.cpu().numpy()
-    # indices = indices.cpu().numpy()
-    # print(scores)
-    # print(indices)
-    # if step >= 2:
-    #   sys.exit(0)
     if len(self.prev_ks) > 0:
       if not self.len_norm is None:
         beam_score = self.len_norm.norm_partial(word_scores, self.scores, self.next_ys)
@@ -441,9 +434,9 @@ class Beam(object):
     self.next_ys.append(next_y)
 
     if self.next_ys[-1][0] == self.hparams.eos_id:
-      #self.active_hyp_size -= 1
-      #self.finished.append((self.get_y(0), self.scores[0]))
-      #self.done = (self.active_hyp_size == 0)
+      # self.active_hyp_size -= 1
+      # self.finished.append((self.get_y(0), self.scores[0]))
+      # self.done = (self.active_hyp_size == 0)
 
       self.done = True
     return self.done

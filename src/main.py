@@ -78,8 +78,10 @@ add_argument(parser, "grad_bound", type="float", default=None, help="L2 norm")
 add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
 add_argument(parser, "lr_adam", type="float", default=20.0, help="initial lr")
 add_argument(parser, "lr_sgd", type="float", default=20.0, help="initial lr")
-add_argument(parser, "lr_dec", type="float", default=2.0, help="decrease lr when val_ppl does not improve")
-add_argument(parser, "l2_reg", type="float", default=0.0, help="L2 weight penalty")
+add_argument(parser, "lr_dec", type="float", default=2.0,
+             help="decrease lr when val_ppl does not improve")
+add_argument(parser, "l2_reg", type="float", default=0.0,
+             help="L2 weight penalty")
 add_argument(parser, "lr_schedule", type="bool", default=False, help="enable lr schedule")
 add_argument(parser, "optim", type="str", default="sgd", help="sgd|adam")
 add_argument(parser, "init_type", type="str", default="uniform",
