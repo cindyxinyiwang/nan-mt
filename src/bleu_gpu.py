@@ -28,28 +28,27 @@ def match(M_hr, M_hh, n, ngram_cov, cuda=False):
   return: m [batch_size, 1]
   """
   batch_size, hyp_len, ref_len = M_hr.size()
-  #assert hyp_len == ref_len
   if n > 1:
     M_hr_v = Variable(M_hr.unsqueeze(1).float(), requires_grad=False)
     M_hh_v = Variable(M_hh.unsqueeze(1).float(), requires_grad=False)
-    M_hr_n = torch.eq(ngram_cov.forward(M_hr_v).squeeze(1), n).data.long()
-    M_hh_n = torch.eq(ngram_cov.forward(M_hh_v).squeeze(1), n).data.long()
+    M_hr_n = torch.eq(ngram_cov.forward(M_hr_v).squeeze(1), n).data.float()
+    M_hh_n = torch.eq(ngram_cov.forward(M_hh_v).squeeze(1), n).data.float()
   else:
-    M_hr_n = M_hr.long()
-    M_hh_n = M_hh.long()
+    M_hr_n = M_hr.float()
+    M_hh_n = M_hh.float()
   # [batch_size, hyp_len]
   o_hyp = M_hh_n.sum(dim=2)
   o_ref = M_hr_n.sum(dim=2)
-
-  zero = torch.LongTensor([0])
+  #print("o_hyp", o_hyp)
+  #print("o_ref", o_ref)
+  zero = torch.FloatTensor([0.])
   if cuda:
     zero = zero.cuda()
   zero_mask = torch.eq(o_hyp, zero)
-
   o_hyp = o_hyp.masked_fill_(zero_mask, 1)
   div = torch.div(o_ref, o_hyp)
-
-  one = torch.LongTensor([1])
+  #print("div", div)
+  one = torch.FloatTensor([1.])
   if cuda: 
     one = one.cuda()
   m = torch.min(div, one)
@@ -79,7 +78,8 @@ def bleu(hyp, ref, hyp_mask, ref_mask, ngram_cov_list, cuda=False):
     match_i = match(M_hr, M_hh, i, ngram_cov_list[i-1], cuda)
     l_hi = inv_hyp_mask.int().sum() - batch_size * i + batch_size
     prec_i = match_i.sum() / l_hi
-    print(i, prec_i)
+    #print(i, "match_i", match_i)
+    #print(i, "correct: {}".format(match_i.sum()), "total: {}".format(l_hi), prec_i)
     result += np.log(prec_i) 
   bp = min(1., np.exp(1. - inv_ref_mask.int().sum()/inv_hyp_mask.int().sum()))
   #print(bp)
@@ -94,16 +94,12 @@ def main(output_dir, hyp_file, ref_file):
   hparams.batch_size = 32
   hparams.source_vocab = hparams.target_vocab = "vocab.de"
   hparams.data_path = "data/bleu/"
-  hparams.cuda = True
+  hparams.cuda = False
   data = DataLoader(hparams=hparams, decode=True)
 
   h, r, _, _= data.next_test(32)
   hyp, hyp_mask, _, _ = h
   ref, ref_mask, _, _ = r
-  #print(hyp)
-  #print(ref)
-  #print(hyp_mask)
-  #print(ref_mask)
 
   ngram_cov_list = [None, NgramConv(2, hparams.cuda), NgramConv(3, hparams.cuda), NgramConv(4, hparams.cuda)]
   print("bleu score: ", bleu(hyp.data, ref.data, hyp_mask, ref_mask, ngram_cov_list, hparams.cuda))
@@ -117,4 +113,3 @@ if __name__ == "__main__":
   #b = bleu(hyp, ref, hyp_mask, ref_mask, ngram_cov_list)
   #print(b)
   main("outputs_exp6_v1", "trans-head32", "ref-head32")
-  
