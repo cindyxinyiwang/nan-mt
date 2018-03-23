@@ -33,6 +33,7 @@ add_argument(parser, "source_test", type="str", default=None, help="name of sour
 add_argument(parser, "target_test", type="str", default=None, help="name of target test file")
 add_argument(parser, "beam_size", type="int", default=None, help="beam size")
 add_argument(parser, "max_len", type="int", default=300, help="maximum len considered on the target side")
+add_argument(parser, "non_batch_translate", type="bool", default=False, help="use non-batched translation")
 add_argument(parser, "batch_size", type="int", default=32, help="")
 add_argument(parser, "merge_bpe", type="bool", default=True, help="")
 add_argument(parser, "source_vocab", type="str", default=None, help="name of source vocab file")
@@ -79,8 +80,14 @@ while not end_of_epoch:
   num_sentences += batch_size
 
   # The normal, correct way:
-  all_hyps, all_scores = model.translate_batch(
-    x_test, x_mask, x_pos_emb_indices, hparams.beam_size, hparams.max_len)
+  if args.non_batch_translate:
+    print("non batched translate...")
+    all_hyps, all_scores = model.translate(
+      x_test, x_mask, x_pos_emb_indices, hparams.beam_size, hparams.max_len)
+  else:
+    print("batched translate...")
+    all_hyps, all_scores = model.translate_batch(
+      x_test, x_mask, x_pos_emb_indices, hparams.beam_size, hparams.max_len)
 
   # For debugging:
   # model.debug_translate_batch(
