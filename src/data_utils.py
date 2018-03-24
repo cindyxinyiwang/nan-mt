@@ -41,10 +41,14 @@ class DataLoader(object):
      self.target_index_to_word) = self._build_vocab(self.hparams.target_vocab)
     self.target_vocab_size = len(self.target_word_to_index)
 
-    assert self.source_word_to_index[self.hparams.pad] == self.target_word_to_index[self.hparams.pad]
-    assert self.source_word_to_index[self.hparams.unk] == self.target_word_to_index[self.hparams.unk]
-    assert self.source_word_to_index[self.hparams.bos] == self.target_word_to_index[self.hparams.bos]
-    assert self.source_word_to_index[self.hparams.eos] == self.target_word_to_index[self.hparams.eos]
+    assert (self.source_word_to_index[self.hparams.pad] ==
+            self.target_word_to_index[self.hparams.pad])
+    assert (self.source_word_to_index[self.hparams.unk] ==
+            self.target_word_to_index[self.hparams.unk])
+    assert (self.source_word_to_index[self.hparams.bos] ==
+            self.target_word_to_index[self.hparams.bos])
+    assert (self.source_word_to_index[self.hparams.eos] ==
+            self.target_word_to_index[self.hparams.eos])
 
     if self.decode:
       self.x_test, self.y_test = self._build_parallel(
@@ -68,6 +72,9 @@ class DataLoader(object):
         self.hparams.source_valid, self.hparams.target_valid, is_training=False)
       self.valid_size = len(self.x_valid)
       self.reset_valid()
+
+    if self.hparams.raml:
+      self.softmax = torch.nn.Softmax(dim=-1)
 
   def reset_train(self):
     """Shuffle training data. Prepare the batching scheme if necessary."""
@@ -195,18 +202,29 @@ class DataLoader(object):
     # pad data
     x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
       sentences=x_train, pad_id=self.pad_id)
-    y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
-      sentences=y_train, pad_id=self.pad_id)
+    if self.hparams.raml:
+      y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
+        sentences=y_train, pad_id=self.pad_id, raml=True,
+        vocab_size=self.hparams.target_vocab_size)
+    else:
+      y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
+        sentences=y_train, pad_id=self.pad_id)
 
     # shuffle if reaches the end of data
     if self.train_index > self.n_train_batches - 1:
       self.reset_train()
 
-    return ((x_train, x_mask, x_pos_emb_indices, x_count),
-            (y_train, y_mask, y_pos_emb_indices, y_count),
-            batch_size)
+    if self.hparams.raml:
+      return ((x_train, x_mask, x_pos_emb_indices, x_count),
+              (y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count),
+              batch_size)
+    else:
+      return ((x_train, x_mask, x_pos_emb_indices, x_count),
+              (y_train, y_mask, y_pos_emb_indices, y_count),
+              batch_size)
 
-  def _pad(self, sentences, pad_id, volatile=False):
+  def _pad(self, sentences, pad_id, volatile=False,
+           raml=False, vocab_size=None):
     """Pad all instances in [data] to the longest length.
 
     Args:
@@ -217,9 +235,14 @@ class DataLoader(object):
       mask: Variable of size [batch_size, max_len]. 1 means to ignore.
       pos_emb_indices: Variable of size [batch_size, max_len]. indices to use
         when computing positional embedding.
-      sum_len: total words
+      sum_len: total number of words.
+      raml: if True, the sentences will be replaced by their samples according
+        to the exp payoff distribution, ie. exp(-HammingDist(s, sents)).
+      vocab_size: if raml is True, vocab_size has to be specified for negative
+        sampling.
     """
 
+    batch_size = len(sentences)
     lengths = [len(sentence) for sentence in sentences]
     sum_len = sum(lengths)
     max_len = max(lengths)
@@ -244,7 +267,42 @@ class DataLoader(object):
       mask = mask.cuda()
       pos_emb_indices = pos_emb_indices.cuda()
 
-    return padded_sentences, mask, pos_emb_indices, sum_len
+    if not raml:
+      return padded_sentences, mask, pos_emb_indices, sum_len
+
+    assert vocab_size is not None
+    # first, sample the number of words to corrupt for each sentence
+    logits = torch.arange(max_len).mul_(-1).unsqueeze(0).expand_as(
+      padded_sentences).contiguous().masked_fill_(mask, -self.hparams.inf)
+    logits = Variable(logits, volatile=True)
+    if self.hparams.cuda:
+      logits = logits.cuda()
+    probs = self.softmax(logits)
+    num_words = torch.distributions.Categorical(probs).sample()
+
+    # sample the indices
+    lengths = torch.FloatTensor(lengths)
+    if self.hparams.cuda:
+      lengths = lengths.cuda()
+
+    # something's wrong here!!! Samples don't make sense
+    corrupt_pos = num_words.data.float().div_(lengths).unsqueeze(
+      1).expand_as(padded_sentences).contiguous().masked_fill_(
+        mask, 0)
+    corrupt_pos = torch.bernoulli(corrupt_pos, out=corrupt_pos)
+    total_words = int(corrupt_pos.sum())
+
+    # sample the corrupts, which will be added to padded_sentences
+    corrupt_val = torch.LongTensor(total_words).random_(0, vocab_size-1)
+    corrupts = torch.zeros(batch_size, max_len).long().masked_scatter_(
+      corrupt_pos.byte(), corrupt_val)
+    if self.hparams.cuda:
+      corrupts = corrupts.cuda()
+
+    sample_sentences = padded_sentences.add(Variable(corrupts)).remainder_(
+      vocab_size).masked_fill_(Variable(mask), pad_id)
+
+    return sample_sentences, padded_sentences, mask, pos_emb_indices, sum_len
 
   def _build_parallel(self, source_file, target_file, is_training, sort=False):
     """Build pair of data."""

@@ -26,72 +26,118 @@ from models import *
 
 parser = argparse.ArgumentParser(description="Neural MT")
 
-add_argument(parser, "load_model", type="bool", default=False, help="load an existing model")
-add_argument(parser, "reset_output_dir", type="bool", default=False, help="delete output directory if it exists")
-add_argument(parser, "output_dir", type="str", default="outputs", help="path to output directory")
-add_argument(parser, "log_every", type="int", default=50, help="how many steps to write log")
-add_argument(parser, "eval_every", type="int", default=500, help="how many steps to compute valid ppl")
-add_argument(parser, "clean_mem_every", type="int", default=10, help="how many steps to clean memory")
-add_argument(parser, "eval_bleu", type="bool", default=False, help="if calculate BLEU score for dev set")
-add_argument(parser, "beam_size", type="int", default=5, help="beam size for dev BLEU")
+add_argument(parser, "load_model", type="bool", default=False,
+             help="load an existing model")
+add_argument(parser, "reset_output_dir", type="bool", default=False,
+             help="delete output directory if it exists")
+add_argument(parser, "output_dir", type="str", default="outputs",
+             help="path to output directory")
+add_argument(parser, "log_every", type="int", default=50,
+             help="how many steps to write log")
+add_argument(parser, "eval_every", type="int", default=500,
+             help="how many steps to compute valid ppl")
+add_argument(parser, "clean_mem_every", type="int", default=10,
+             help="how many steps to clean memory")
+add_argument(parser, "eval_bleu", type="bool", default=False,
+             help="if calculate BLEU score for dev set")
+add_argument(parser, "beam_size", type="int", default=5,
+             help="beam size for dev BLEU")
 
-add_argument(parser, "cuda", type="bool", default=False, help="GPU or not")
+add_argument(parser, "cuda", type="bool", default=False,
+             help="GPU or not")
 
 add_argument(parser, "max_len", type="int", default=300,
              help="maximum len considered on the target side")
 add_argument(parser, "n_train_sents", type="int", default=None,
              help="max number of training sentences to load")
 
-add_argument(parser, "data_path", type="str", default=None, help="path to all data")
-add_argument(parser, "source_train", type="str", default=None, help="source train file")
-add_argument(parser, "target_train", type="str", default=None, help="target train file")
-add_argument(parser, "source_valid", type="str", default=None, help="source valid file")
-add_argument(parser, "target_valid", type="str", default=None, help="target valid file")
+add_argument(parser, "data_path", type="str", default=None,
+             help="path to all data")
+add_argument(parser, "source_train", type="str", default=None,
+             help="source train file")
+add_argument(parser, "target_train", type="str", default=None,
+             help="target train file")
+add_argument(parser, "source_valid", type="str", default=None,
+             help="source valid file")
+add_argument(parser, "target_valid", type="str", default=None,
+             help="target valid file")
 add_argument(parser, "target_valid_ref", type="str", default=None,
              help="target valid file for reference")
-add_argument(parser, "source_vocab", type="str", default=None, help="source vocab file")
-add_argument(parser, "target_vocab", type="str", default=None, help="target vocab file")
-add_argument(parser, "source_test", type="str", default=None, help="source test file")
-add_argument(parser, "target_test", type="str", default=None, help="target test file")
+add_argument(parser, "source_vocab", type="str", default=None,
+             help="source vocab file")
+add_argument(parser, "target_vocab", type="str", default=None,
+             help="target vocab file")
+add_argument(parser, "source_test", type="str", default=None,
+             help="source test file")
+add_argument(parser, "target_test", type="str", default=None,
+             help="target test file")
 
-add_argument(parser, "d_word_vec", type="int", default=288, help="size of word and positional embeddings")
-add_argument(parser, "d_model", type="int", default=288, help="size of hidden states")
-add_argument(parser, "d_inner", type="int", default=512, help="hidden dimension of the position-wise ff")
-add_argument(parser, "d_k", type="int", default=64, help="dim of attn keys")
-add_argument(parser, "d_v", type="int", default=64, help="dim of attn values")
-add_argument(parser, "n_layers", type="int", default=5, help="number of layers in a Transformer stack")
-add_argument(parser, "n_heads", type="int", default=2 , help="number of attention heads")
-add_argument(parser, "batch_size", type="int", default=32, help="")
+add_argument(parser, "d_word_vec", type="int", default=288,
+             help="size of word and positional embeddings")
+add_argument(parser, "d_model", type="int", default=288,
+             help="size of hidden states")
+add_argument(parser, "d_inner", type="int", default=512,
+             help="hidden dimension of the position-wise ff")
+add_argument(parser, "d_k", type="int", default=64,
+             help="dim of attn keys")
+add_argument(parser, "d_v", type="int", default=64,
+             help="dim of attn values")
+add_argument(parser, "n_layers", type="int", default=5,
+             help="number of layers in a Transformer stack")
+add_argument(parser, "n_heads", type="int", default=2 ,
+             help="number of attention heads")
+add_argument(parser, "batch_size", type="int", default=32,
+             help="")
 add_argument(parser, "batcher", type="str", default="sent",
-             help="sent|word. Batch either by number of words or number of sentences")
-add_argument(parser, "n_train_steps", type="int", default=100000, help="")
-add_argument(parser, "n_warm_ups", type="int", default=750, help="")
-add_argument(parser, "optim_switch", type="int", default=None, help="Switch from adam to SGD")
+             help=("sent|word. Batch either by number of words or "
+                   "number of sentences"))
+add_argument(parser, "n_train_steps", type="int", default=100000,
+             help="")
+add_argument(parser, "n_warm_ups", type="int", default=750,
+             help="")
+add_argument(parser, "optim_switch", type="int", default=None,
+             help="Switch from adam to SGD")
 add_argument(parser, "pos_emb_size", type="int", default=None,
              help="Number of positional embedding steps. None means sinusoid")
 
-add_argument(parser, "share_emb_and_softmax", type="bool", default=True, help="share embedding and softmax")
+add_argument(parser, "raml", type="bool", default=False,
+             help="Train using RAML")
 
-add_argument(parser, "dropout", type="float", default=0.1, help="probability of dropping")
-add_argument(parser, "label_smoothing", type="float", default=None, help="")
-add_argument(parser, "grad_bound", type="float", default=None, help="L2 norm")
-add_argument(parser, "init_range", type="float", default=0.1, help="L2 norm")
-add_argument(parser, "lr_adam", type="float", default=20.0, help="initial lr")
-add_argument(parser, "lr_sgd", type="float", default=20.0, help="initial lr")
+add_argument(parser, "share_emb_and_softmax", type="bool", default=True,
+             help="share embedding and softmax")
+
+add_argument(parser, "dropout", type="float", default=0.1,
+             help="probability of dropping")
+add_argument(parser, "label_smoothing", type="float", default=None,
+             help="")
+add_argument(parser, "grad_bound", type="float", default=None,
+             help="L2 norm")
+add_argument(parser, "init_range", type="float", default=0.1,
+             help="L2 norm")
+add_argument(parser, "lr_adam", type="float", default=20.0,
+             help="initial lr")
+add_argument(parser, "lr_sgd", type="float", default=20.0,
+             help="initial lr")
 add_argument(parser, "lr_dec", type="float", default=2.0,
              help="decrease lr when val_ppl does not improve")
 add_argument(parser, "l2_reg", type="float", default=0.0,
              help="L2 weight penalty")
-add_argument(parser, "lr_schedule", type="bool", default=False, help="enable lr schedule")
-add_argument(parser, "optim", type="str", default="sgd", help="sgd|adam")
+add_argument(parser, "lr_schedule", type="bool", default=False,
+             help="enable lr schedule")
+add_argument(parser, "optim", type="str", default="sgd",
+             help="sgd|adam")
 add_argument(parser, "init_type", type="str", default="uniform",
-             help="uniform|xavier_uniform|xavier_normal|kaiming_uniform|kaiming_normal")
+             help=("uniform|xavier_uniform|xavier_normal|"
+                   "kaiming_uniform|kaiming_normal"))
 add_argument(parser, "loss_norm", type="str", default="sent",
-             help="sent|word. normalize loss in a minibatch by number of words or number of sentences")
+             help=("sent|word. normalize loss in a minibatch by "
+                  "number of words or number of sentences"))
 
 add_argument(parser, "patience", type="int", default=-1,
-             help="how many more steps to take before stop. Ignore n_train_step if patience is set")
-add_argument(parser, "seed", type="int", default=19920206, help="random seed")
+             help=("how many more steps to take before stop. "
+                   "Ignore n_train_step if patience is set"))
+add_argument(parser, "seed", type="int", default=19920206,
+             help="random seed")
 args = parser.parse_args()
 
 
@@ -219,6 +265,7 @@ def train():
       loss_norm=args.loss_norm,
       init_type=args.init_type,
       pos_emb_size=args.pos_emb_size,
+      raml=args.raml
     )
   data = DataLoader(hparams=hparams)
   hparams.add_param("source_vocab_size", data.source_vocab_size)
@@ -297,9 +344,14 @@ def train():
     model.train()
     while True:
       # next batch
-      ((x_train, x_mask, x_pos_emb_indices, x_count),
-       (y_train, y_mask, y_pos_emb_indices, y_count),
-       batch_size) = data.next_train()
+      if hparams.raml:
+        ((x_train, x_mask, x_pos_emb_indices, x_count),
+         (y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count),
+         batch_size) = data.next_train()
+      else:
+        ((x_train, x_mask, x_pos_emb_indices, x_count),
+         (y_train, y_mask, y_pos_emb_indices, y_count),
+         batch_size) = data.next_train()
 
       # book keeping count
       # Since you are shifting y_train, i.e. y_train[:, :-1] and y_train[:, 1:]
@@ -329,7 +381,8 @@ def train():
       # set learning rate
       if args.lr_schedule:
         s = step + 1
-        lr = pow(hparams.d_model, -0.5) * min(pow(s, -0.5), s * pow(hparams.n_warm_ups, -1.5))
+        lr = pow(hparams.d_model, -0.5) * min(
+          pow(s, -0.5), s * pow(hparams.n_warm_ups, -1.5))
       else:
         if step < hparams.n_warm_ups:
           if hparams.optim_switch is not None and step < hparams.optim_switch:
