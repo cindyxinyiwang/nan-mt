@@ -48,6 +48,7 @@ add_argument(parser, "cuda", type="bool", default=False,
 
 add_argument(parser, "max_len", type="int", default=300,
              help="maximum len considered on the target side")
+add_argument(parser, "non_batch_translate", type="bool", default=False, help="do not use batched beam search")
 add_argument(parser, "n_train_sents", type="int", default=None,
              help="max number of training sentences to load")
 
@@ -189,8 +190,14 @@ def eval(model, data, crit, step, hparams, eval_bleu=False,
 
     # BLEU eval
     if eval_bleu:
-      all_hyps, all_scores = model.translate_batch(
-        x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)
+      if args.non_batch_translate:
+        print("non-batched translate...")
+        all_hyps, all_scores = model.translate(
+          x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)        
+      else:
+        print("batched translate...")
+        all_hyps, all_scores = model.translate_batch(
+          x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)
       filtered_tokens = set([hparams.bos_id, hparams.eos_id])
       for h in all_hyps:
         h_best = h[0]
