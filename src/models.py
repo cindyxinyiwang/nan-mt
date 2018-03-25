@@ -174,8 +174,70 @@ class Transformer(nn.Module):
   def trainable_parameters(self):
     params = self.parameters()
     return params
-
+  
   def translate(self, x_train_batch, x_mask_batch, x_pos_emb_indices_batch, beam_size, max_len):
+    class Hyp(object):
+      def __init__(self, state=None, y=None, ctx_tm1=None, score=None):
+        self.state = state
+        self.y = y 
+        self.ctx_tm1 = ctx_tm1
+        self.score = score
+    batch_size = x_train_batch.size(0)
+    all_hyp, all_scores = [], []
+    for i in range(batch_size): 
+      x_train, x_mask, x_pos_emb_indices = x_train_batch[i, :].unsqueeze(0), x_mask_batch[i, :].unsqueeze(0), x_pos_emb_indices_batch[i, :].unsqueeze(0)
+      # translate one sentence
+      enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
+      len_dec_seq = 0
+      completed_hyp = []
+      completed_hyp_scores = []
+      active_hyp = [Hyp(y=[self.hparams.bos_id], score=0.)]
+      length = 0
+      while len(completed_hyp) < beam_size and length < max_len:
+        length += 1
+        new_hyp_score_list = []
+        for i, hyp in enumerate(active_hyp):
+          y_partial = Variable(torch.LongTensor(hyp.y).unsqueeze(0), volatile=True)
+          y_mask = torch.ByteTensor([0] * length).unsqueeze(0)
+          y_partial_pos = Variable(torch.arange(1, length+1).unsqueeze(0), volatile=True)
+          if self.hparams.cuda:
+            y_partial = y_partial.cuda()
+            y_partial_pos = y_partial_pos.cuda()
+            y_mask = y_mask.cuda()
+          dec_output = self.decoder(enc_output, x_mask, y_partial, y_mask, y_partial_pos)
+          dec_output = dec_output[:,-1,:]
+          logits = self.w_logit(dec_output)
+          probs = torch.nn.functional.softmax(logits, dim=1)
+          new_hyp_scores = hyp.score + probs.data
+          new_hyp_score_list.append(new_hyp_scores)
+        live_hyp_num = beam_size - len(completed_hyp)
+        new_hyp_scores = np.concatenate(new_hyp_score_list).flatten()
+        new_hyp_pos = (-new_hyp_scores).argsort()[:live_hyp_num]
+        prev_hyp_ids = new_hyp_pos / self.hparams.target_vocab_size
+        word_ids = new_hyp_pos % self.hparams.target_vocab_size
+        new_hyp_scores = new_hyp_scores[new_hyp_pos]
+
+        new_hypothesis = []
+        for prev_hyp_id, word_id, hyp_score in zip(prev_hyp_ids, word_ids, new_hyp_scores):
+          prev_hyp = active_hyp[int(prev_hyp_id)]
+          hyp = Hyp(y=prev_hyp.y+[int(word_id)], score=hyp_score)
+          if word_id == self.hparams.eos_id:
+            completed_hyp.append(hyp)
+            completed_hyp_scores.append(hyp_score)
+          else:
+            new_hypothesis.append(hyp)
+        active_hyp = new_hypothesis
+      if len(completed_hyp) == 0:
+        completed_hyp.append(active_hyp[0])
+        completed_hyp_scores = [0.0]
+      ranked_hypothesis = sorted(zip(completed_hyp, completed_hyp_scores), key=lambda x:x[1], reverse=True)
+      h = [hyp.y for hyp, score in ranked_hypothesis]
+      s = [score for hyp, score in ranked_hypothesis]
+      all_hyp.append(h)
+      all_scores.append(s)
+    return all_hyp, all_scores     
+
+  def translate_v1(self, x_train_batch, x_mask_batch, x_pos_emb_indices_batch, beam_size, max_len):
     batch_size = x_train_batch.size(0)
     all_hyp, all_scores = [], []
     for i in range(batch_size):
