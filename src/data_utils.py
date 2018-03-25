@@ -272,7 +272,10 @@ class DataLoader(object):
 
     assert vocab_size is not None
     # first, sample the number of words to corrupt for each sentence
-    logits = torch.arange(max_len).mul_(-1).unsqueeze(0).expand_as(
+    logits = torch.arange(max_len)
+    if self.hparams.cuda:
+      logits = logits.cuda()
+    logits = logits.mul_(-1).unsqueeze(0).expand_as(
       padded_sentences).contiguous().masked_fill_(mask, -self.hparams.inf)
     logits = Variable(logits, volatile=True)
     if self.hparams.cuda:
@@ -291,13 +294,16 @@ class DataLoader(object):
         mask, 0)
     corrupt_pos = torch.bernoulli(corrupt_pos, out=corrupt_pos)
     total_words = int(corrupt_pos.sum())
-
     # sample the corrupts, which will be added to padded_sentences
-    corrupt_val = torch.LongTensor(total_words).random_(0, vocab_size-1)
-    corrupts = torch.zeros(batch_size, max_len).long().masked_scatter_(
-      corrupt_pos.byte(), corrupt_val)
+    corrupt_val = torch.LongTensor(total_words)
+    corrupt_val = corrupt_val.random_(0, vocab_size-1)
+    corrupts = torch.zeros(batch_size, max_len)
     if self.hparams.cuda:
-      corrupts = corrupts.cuda()
+      corrupt_val = corrupt_val.long().cuda()
+      corrupts = corrupts.long().cuda()
+      corrupt_pos = corrupt_pos.byte().cuda()
+
+    corrupts = corrupts.masked_scatter_(corrupt_pos, corrupt_val)
 
     sample_sentences = padded_sentences.add(Variable(corrupts)).remainder_(
       vocab_size).masked_fill_(Variable(mask), pad_id)

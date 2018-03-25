@@ -336,7 +336,7 @@ def train():
     cur_attempt = 0
     lr = hparams.lr_adam
 
-  ppl_thresh = 8.0
+  ppl_thresh = 15.0
   set_patience = args.patience >= 0
   # train loop
   print("-" * 80)
@@ -367,11 +367,19 @@ def train():
 
       # forward pass
       optim.zero_grad()
-      logits = model.forward(
-        x_train, x_mask, x_pos_emb_indices,
-        y_train[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous())
+      if hparams.raml:
+        logits = model.forward(
+          x_train, x_mask, x_pos_emb_indices,
+          y_train_raml[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous())
+      else:
+        logits = model.forward(
+          x_train, x_mask, x_pos_emb_indices,
+          y_train[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous())
       logits = logits.view(-1, hparams.target_vocab_size)
-      labels = y_train[:, 1:].contiguous().view(-1)
+      if hparams.raml:
+        labels = y_train_raml[:, 1:].contiguous().view(-1)
+      else:
+        labels = y_train[:, 1:].contiguous().view(-1)
       tr_loss, tr_acc = get_performance(crit, logits, labels, hparams)
       total_loss += tr_loss.data[0]
       total_corrects += tr_acc.data[0]
