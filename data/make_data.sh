@@ -19,21 +19,23 @@ mkdir -p ${output_path}
 
 # puctuation normalization
 #for file in train dev2010 tst2014 
-#  do 
-#  for lan in en de
-#    do
-#      $PUNC_NORM -l $lan < $RAW_DIR$file.$lan > $OUT_DIR$file.norm.$lan
-#    done
-#  done
+for file in tst2013 
+  do 
+  for lan in en de
+    do
+      $PUNC_NORM -l $lan < $RAW_DIR$file.$lan > $OUT_DIR$file.norm.$lan
+    done
+  done
 
 # tokenizer
 #for file in train dev2010 tst2014
-#  do
-#  for lan in en de
-#    do
-#      $TOKENIZER -l $lan < $OUT_DIR$file.norm.$lan > $OUT_DIR$file.tok.$lan
-#    done
-#  done
+for file in tst2013
+  do
+  for lan in en de
+    do
+      $TOKENIZER -l $lan < $OUT_DIR$file.norm.$lan > $OUT_DIR$file.tok.$lan
+    done
+  done
 
 # clean corpus; only clean training corpus
 #$CLEAN $OUT_DIR"train.tok" en de $OUT_DIR"train.clean" 1 80
@@ -51,23 +53,24 @@ mkdir -p ${output_path}
 #  done
 
 # dev test data
-#for file in dev2010 tst2014
-#  do
-#  for lan in en de
-#    do
-#      $TRUECASE_APPLY -model $OUT_DIR"truecase.model."$lan < $OUT_DIR$file.tok.$lan > $OUT_DIR$file.truecase.$lan
-#    done
-#  done
+for file in tst2013
+  do
+  for lan in en de
+    do
+      $TRUECASE_APPLY -model $OUT_DIR"truecase.model."$lan < $OUT_DIR$file.tok.$lan > $OUT_DIR$file.truecase.$lan
+    done
+  done
 
 # train bpe
-spm_train \
-  --input="${OUT_DIR}train.truecase.en,${OUT_DIR}train.truecase.de" \
-  --model_prefix="${output_path}/shared_${vocab_size}" \
-  --vocab_size=${vocab_size} \
-  --model_type="unigram"
+#spm_train \
+#  --input="${OUT_DIR}train.truecase.en,${OUT_DIR}train.truecase.de" \
+#  --model_prefix="${output_path}/shared_${vocab_size}" \
+#  --vocab_size=${vocab_size} \
+#  --model_type="unigram"
 
 # apply bpe
-for file in train dev2010 tst2014
+#for file in train dev2010 tst2014
+for file in tst2013
   do
   for lan in en de
     do
