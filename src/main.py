@@ -89,6 +89,8 @@ add_argument(parser, "n_heads", type="int", default=2 ,
              help="number of attention heads")
 add_argument(parser, "batch_size", type="int", default=32,
              help="")
+add_argument(parser, "valid_batch_size", type="int", default=20,
+             help="")
 add_argument(parser, "batcher", type="str", default="sent",
              help=("sent|word. Batch either by number of words or "
                    "number of sentences"))
@@ -144,7 +146,7 @@ args = parser.parse_args()
 
 def eval(model, data, crit, step, hparams, eval_bleu=False,
          valid_batch_size=20):
-  print("Eval at step {0}. valid_batch_size={1}".format(step, valid_batch_size))
+  print("Eval at step {0}. valid_batch_size={1}".format(step, args.valid_batch_size))
 
   model.eval()
   data.reset_valid()
@@ -163,7 +165,7 @@ def eval(model, data, crit, step, hparams, eval_bleu=False,
     # next batch
     ((x_valid, x_mask, x_pos_emb_indices, x_count),
      (y_valid, y_mask, y_pos_emb_indices, y_count),
-     batch_size, end_of_epoch) = data.next_valid(valid_batch_size=valid_batch_size)
+     batch_size, end_of_epoch) = data.next_valid(valid_batch_size=args.valid_batch_size)
 
     # do this since you shift y_valid[:, 1:] and y_valid[:, :-1]
     y_count -= batch_size
@@ -191,11 +193,11 @@ def eval(model, data, crit, step, hparams, eval_bleu=False,
     # BLEU eval
     if eval_bleu:
       if args.non_batch_translate:
-        print("non-batched translate...")
+        #print("non-batched translate...")
         all_hyps, all_scores = model.translate(
           x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)        
       else:
-        print("batched translate...")
+        #print("batched translate...")
         all_hyps, all_scores = model.translate_batch(
           x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)
       filtered_tokens = set([hparams.bos_id, hparams.eos_id])
@@ -444,7 +446,7 @@ def train():
       # eval
       if step % args.eval_every == 0:
         val_ppl, val_bleu = eval(model, data, crit, step, hparams,
-                                 best_val_ppl < ppl_thresh, valid_batch_size=20)
+                                 best_val_ppl < ppl_thresh, valid_batch_size=args.valid_batch_size)
 
         # determine whether to update best_val_ppl or best_val_bleu
         based_on_bleu = args.eval_bleu and (best_val_ppl < ppl_thresh)
@@ -488,7 +490,7 @@ def train():
     if stop:
       print("Reach {0} steps. Stop training".format(step))
       val_ppl, val_bleu = eval(model, data, crit, step, hparams,
-                               best_val_ppl<ppl_thresh, valid_batch_size=20)
+                               best_val_ppl<ppl_thresh, valid_batch_size=args.valid_batch_size)
       if args.eval_bleu and not val_bleu is None:
         save = val_bleu > best_val_bleu
       else:

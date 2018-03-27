@@ -81,11 +81,11 @@ while not end_of_epoch:
 
   # The normal, correct way:
   if args.non_batch_translate:
-    print("non batched translate...")
+    #print("non batched translate...")
     all_hyps, all_scores = model.translate(
       x_test, x_mask, x_pos_emb_indices, hparams.beam_size, hparams.max_len)
   else:
-    print("batched translate...")
+    #print("batched translate...")
     all_hyps, all_scores = model.translate_batch(
       x_test, x_mask, x_pos_emb_indices, hparams.beam_size, hparams.max_len)
 
