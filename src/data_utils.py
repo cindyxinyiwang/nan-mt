@@ -280,7 +280,7 @@ class DataLoader(object):
     logits = Variable(logits, volatile=True)
     if self.hparams.cuda:
       logits = logits.cuda()
-    probs = self.softmax(logits)
+    probs = self.softmax(logits.div_(self.hparams.raml_tau))
     num_words = torch.distributions.Categorical(probs).sample()
 
     # sample the indices
@@ -292,17 +292,16 @@ class DataLoader(object):
     corrupt_pos = num_words.data.float().div_(lengths).unsqueeze(
       1).expand_as(padded_sentences).contiguous().masked_fill_(
         mask, 0)
-    corrupt_pos = torch.bernoulli(corrupt_pos, out=corrupt_pos)
+    corrupt_pos = torch.bernoulli(corrupt_pos, out=corrupt_pos).byte()
     total_words = int(corrupt_pos.sum())
     # sample the corrupts, which will be added to padded_sentences
     corrupt_val = torch.LongTensor(total_words)
     corrupt_val = corrupt_val.random_(0, vocab_size-1)
-    corrupts = torch.zeros(batch_size, max_len)
+    corrupts = torch.zeros(batch_size, max_len).long()
     if self.hparams.cuda:
       corrupt_val = corrupt_val.long().cuda()
-      corrupts = corrupts.long().cuda()
-      corrupt_pos = corrupt_pos.byte().cuda()
-
+      corrupts = corrupts.cuda()
+      corrupt_pos = corrupt_pos.cuda()
     corrupts = corrupts.masked_scatter_(corrupt_pos, corrupt_val)
 
     sample_sentences = padded_sentences.add(Variable(corrupts)).remainder_(

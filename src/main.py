@@ -26,6 +26,8 @@ from models import *
 
 parser = argparse.ArgumentParser(description="Neural MT")
 
+add_argument(parser, "cuda", type="bool", default=False,
+             help="GPU or not")
 add_argument(parser, "load_model", type="bool", default=False,
              help="load an existing model")
 add_argument(parser, "reset_output_dir", type="bool", default=False,
@@ -42,16 +44,12 @@ add_argument(parser, "eval_bleu", type="bool", default=False,
              help="if calculate BLEU score for dev set")
 add_argument(parser, "beam_size", type="int", default=5,
              help="beam size for dev BLEU")
-
-add_argument(parser, "cuda", type="bool", default=False,
-             help="GPU or not")
-
 add_argument(parser, "max_len", type="int", default=300,
              help="maximum len considered on the target side")
-add_argument(parser, "non_batch_translate", type="bool", default=False, help="do not use batched beam search")
+add_argument(parser, "non_batch_translate", type="bool", default=False,
+             help="do not use batched beam search")
 add_argument(parser, "n_train_sents", type="int", default=None,
              help="max number of training sentences to load")
-
 add_argument(parser, "data_path", type="str", default=None,
              help="path to all data")
 add_argument(parser, "source_train", type="str", default=None,
@@ -102,13 +100,12 @@ add_argument(parser, "optim_switch", type="int", default=None,
              help="Switch from adam to SGD")
 add_argument(parser, "pos_emb_size", type="int", default=None,
              help="Number of positional embedding steps. None means sinusoid")
-
 add_argument(parser, "raml", type="bool", default=False,
              help="Train using RAML")
-
+add_argument(parser, "raml_tau", type="float", default=1.0,
+             help="Temperature parameter of RAML")
 add_argument(parser, "share_emb_and_softmax", type="bool", default=True,
              help="share embedding and softmax")
-
 add_argument(parser, "dropout", type="float", default=0.1,
              help="probability of dropping")
 add_argument(parser, "label_smoothing", type="float", default=None,
@@ -135,7 +132,6 @@ add_argument(parser, "init_type", type="str", default="uniform",
 add_argument(parser, "loss_norm", type="str", default="sent",
              help=("sent|word. normalize loss in a minibatch by "
                   "number of words or number of sentences"))
-
 add_argument(parser, "patience", type="int", default=-1,
              help=("how many more steps to take before stop. "
                    "Ignore n_train_step if patience is set"))
@@ -146,7 +142,8 @@ args = parser.parse_args()
 
 def eval(model, data, crit, step, hparams, eval_bleu=False,
          valid_batch_size=20):
-  print("Eval at step {0}. valid_batch_size={1}".format(step, args.valid_batch_size))
+  print("Eval at step {0}. valid_batch_size={1}".format(
+    step, args.valid_batch_size))
 
   model.eval()
   data.reset_valid()
@@ -165,7 +162,8 @@ def eval(model, data, crit, step, hparams, eval_bleu=False,
     # next batch
     ((x_valid, x_mask, x_pos_emb_indices, x_count),
      (y_valid, y_mask, y_pos_emb_indices, y_count),
-     batch_size, end_of_epoch) = data.next_valid(valid_batch_size=args.valid_batch_size)
+     batch_size, end_of_epoch) = data.next_valid(
+       valid_batch_size=args.valid_batch_size)
 
     # do this since you shift y_valid[:, 1:] and y_valid[:, :-1]
     y_count -= batch_size
@@ -193,18 +191,17 @@ def eval(model, data, crit, step, hparams, eval_bleu=False,
     # BLEU eval
     if eval_bleu:
       if args.non_batch_translate:
-        #print("non-batched translate...")
         all_hyps, all_scores = model.translate(
           x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)        
       else:
-        #print("batched translate...")
         all_hyps, all_scores = model.translate_batch(
           x_valid, x_mask, x_pos_emb_indices, args.beam_size, args.max_len)
       filtered_tokens = set([hparams.bos_id, hparams.eos_id])
       for h in all_hyps:
         h_best = h[0]
-        h_best_words = map(lambda wi: data.target_index_to_word[wi],
-                           filter(lambda wi: wi not in filtered_tokens, h_best))
+        h_best_words = map(
+          lambda wi: data.target_index_to_word[wi],
+          filter(lambda wi: wi not in filtered_tokens, h_best))
         line = ''.join(h_best_words)
         line = line.replace('▁', ' ').strip()
         out_file.write(line + '\n')
@@ -274,7 +271,8 @@ def train():
       loss_norm=args.loss_norm,
       init_type=args.init_type,
       pos_emb_size=args.pos_emb_size,
-      raml=args.raml
+      raml=args.raml,
+      raml_tau=args.raml_tau,
     )
   data = DataLoader(hparams=hparams)
   hparams.add_param("source_vocab_size", data.source_vocab_size)
@@ -338,11 +336,11 @@ def train():
     cur_attempt = 0
     lr = hparams.lr_adam
 
-  ppl_thresh = 15.0
   set_patience = args.patience >= 0
   # train loop
   print("-" * 80)
   print("Start training")
+  ppl_thresh = 7.00
   start_time = time.time()
   actual_start_time = time.time()
   target_words, total_loss, total_corrects = 0, 0, 0
