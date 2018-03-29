@@ -280,7 +280,7 @@ class DataLoader(object):
     logits = Variable(logits, volatile=True)
     if self.hparams.cuda:
       logits = logits.cuda()
-    probs = self.softmax(logits.div_(self.hparams.raml_tau))
+    probs = self.softmax(logits.mul_(self.hparams.raml_tau))
     num_words = torch.distributions.Categorical(probs).sample()
 
     # sample the indices
