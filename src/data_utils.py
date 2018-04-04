@@ -73,7 +73,7 @@ class DataLoader(object):
       self.valid_size = len(self.x_valid)
       self.reset_valid()
 
-    if self.hparams.raml:
+    if self.hparams.raml_source or self.hparams.raml_target:
       self.softmax = torch.nn.Softmax(dim=-1)
 
   def reset_train(self):
@@ -200,9 +200,15 @@ class DataLoader(object):
     batch_size = len(x_train)
 
     # pad data
-    x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
-      sentences=x_train, pad_id=self.pad_id)
-    if self.hparams.raml:
+    if self.hparams.raml_source:
+      x_train_raml, x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
+        sentences=x_train, pad_id=self.pad_id, raml=True,
+        vocab_size=self.hparams.source_vocab_size)
+    else:
+      x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
+        sentences=x_train, pad_id=self.pad_id)
+
+    if self.hparams.raml_target:
       y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
         sentences=y_train, pad_id=self.pad_id, raml=True,
         vocab_size=self.hparams.target_vocab_size)
@@ -214,14 +220,24 @@ class DataLoader(object):
     if self.train_index > self.n_train_batches - 1:
       self.reset_train()
 
-    if self.hparams.raml:
+    if self.hparams.raml_source and self.hparams.raml_target:
+      return ((x_train_raml, x_train, x_mask, x_pos_emb_indices, x_count),
+              (y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count),
+              batch_size)
+
+    if self.hparams.raml_source:
+      return ((x_train_raml, x_train, x_mask, x_pos_emb_indices, x_count),
+              (y_train, y_mask, y_pos_emb_indices, y_count),
+              batch_size)
+
+    if self.hparams.raml_target:
       return ((x_train, x_mask, x_pos_emb_indices, x_count),
               (y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count),
               batch_size)
-    else:
-      return ((x_train, x_mask, x_pos_emb_indices, x_count),
-              (y_train, y_mask, y_pos_emb_indices, y_count),
-              batch_size)
+
+    return ((x_train, x_mask, x_pos_emb_indices, x_count),
+            (y_train, y_mask, y_pos_emb_indices, y_count),
+            batch_size)
 
   def _pad(self, sentences, pad_id, volatile=False,
            raml=False, vocab_size=None):

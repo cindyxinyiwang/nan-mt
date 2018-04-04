@@ -4,8 +4,8 @@ export PYTHONPATH="$(pwd)"
 export CUDA_VISIBLE_DEVICES="0"
 
 python3.6 src/main.py \
-  --clean_mem_every=5 \
-  --output_dir="outputs_exp8_v3" \
+  --clean_mem_every=2 \
+  --output_dir="outputs_exp8_v4" \
   --log_every=100 \
   --eval_every=2000 \
   --reset_output_dir \
@@ -22,7 +22,7 @@ python3.6 src/main.py \
   --target_test="tst2014.de" \
   --share_emb_and_softmax \
   --cuda \
-  --batch_size=5000 \
+  --batch_size=3500 \
   --batcher="word" \
   --loss_norm="sent" \
   --n_train_sents=250000 \
@@ -34,17 +34,18 @@ python3.6 src/main.py \
   --d_k=64 \
   --d_v=64 \
   --n_heads=3 \
-  --n_train_steps=250000 \
+  --n_train_steps=300000 \
   --n_warm_ups=2000 \
   --dropout=0.25 \
   --lr_adam=0.001 \
   --lr_sgd=0.05 \
-  --optim_switch=200000 \
+  --optim_switch=300000 \
   --optim="adam" \
   --lr_dec=1.1 \
   --init_range=0.04 \
   --grad_bound=5.0 \
   --raml \
   --raml_tau=0.8 \
+  --label_smoothing=0.1 \
   "$@"
 

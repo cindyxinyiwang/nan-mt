@@ -12,7 +12,9 @@ import time
 
 import numpy as np
 
-DATA_PATH = "data/en-de"
+SRC = "en"
+TGT = "zh"
+DATA_PATH = "data/raw/{0}-{1}".format(SRC, TGT)
 
 def _strip_tags(inp_file, out_file):
   """Remove tags for IWLST data."""
@@ -28,7 +30,7 @@ def _strip_tags(inp_file, out_file):
   with open(out_file, "w") as fout:
     fout.write(text)
 
-def _align(x_file, y_file):
+def _align(x_file, y_file, length_limit=None):
   x_file = os.path.join(DATA_PATH, x_file)
   y_file = os.path.join(DATA_PATH, y_file)
   print("Aligning '{0}' into '{1}'".format(x_file, y_file))
@@ -56,6 +58,13 @@ def _align(x_file, y_file):
     if x_line == y_line:
       continue
 
+    # if one of the lines is too long, skip both of them
+    x_toks = x_line.split(" ")
+    y_toks = y_line.split(" ")
+    if (length_limit is not None and
+        max(len(x_toks), len(y_toks)) > length_limit):
+      continue
+
     x_aligned.append(x_line)
     y_aligned.append(y_line)
 
@@ -66,40 +75,21 @@ def _align(x_file, y_file):
     fout.write("\n".join(y_aligned))
 
 def main():
-  print("-" * 80)
-  _strip_tags("train.tags.en-de.en", "train.en")
-  _strip_tags("train.tags.en-de.de", "train.de")
-  _align("train.en", "train.de")
+  length_limit = 10
 
   print("-" * 80)
-  _strip_tags("IWSLT16.TED.dev2010.en-de.de.xml", "dev2010.de") 
-  _strip_tags("IWSLT16.TED.dev2010.en-de.en.xml", "dev2010.en") 
-  _align("dev2010.en", "dev2010.de") 
+  _strip_tags("train.tags.{0}-{1}.{0}".format(SRC, TGT), "train.{0}".format(SRC))
+  _strip_tags("train.tags.{0}-{1}.{1}".format(SRC, TGT), "train.{0}".format(TGT))
+  _align("train.{0}".format(SRC), "train.{0}".format(TGT),
+         length_limit=length_limit)
 
   print("-" * 80)
-  _strip_tags("IWSLT16.TED.tst2010.en-de.de.xml", "tst2010.de") 
-  _strip_tags("IWSLT16.TED.tst2010.en-de.en.xml", "tst2010.en") 
-  _align("tst2010.en", "tst2010.de") 
-
-  print("-" * 80)
-  _strip_tags("IWSLT16.TED.tst2011.en-de.de.xml", "tst2011.de") 
-  _strip_tags("IWSLT16.TED.tst2011.en-de.en.xml", "tst2011.en") 
-  _align("tst2011.en", "tst2011.de") 
-
-  print("-" * 80)
-  _strip_tags("IWSLT16.TED.tst2012.en-de.de.xml", "tst2012.de") 
-  _strip_tags("IWSLT16.TED.tst2012.en-de.en.xml", "tst2012.en") 
-  _align("tst2012.en", "tst2012.de") 
-
-  print("-" * 80)
-  _strip_tags("IWSLT16.TED.tst2013.en-de.de.xml", "tst2013.de") 
-  _strip_tags("IWSLT16.TED.tst2013.en-de.en.xml", "tst2013.en") 
-  _align("tst2013.en", "tst2013.de") 
-
-  print("-" * 80)
-  _strip_tags("IWSLT16.TED.tst2014.en-de.de.xml", "tst2014.de") 
-  _strip_tags("IWSLT16.TED.tst2014.en-de.en.xml", "tst2014.en") 
-  _align("tst2014.en", "tst2014.de") 
+  _strip_tags("IWSLT14.TED.dev2010.{0}-{1}.{0}.xml".format(SRC, TGT),
+              "dev2010.{0}".format(SRC)) 
+  _strip_tags("IWSLT14.TED.dev2010.{0}-{1}.{1}.xml".format(SRC, TGT),
+              "dev2010.{0}".format(TGT)) 
+  _align("dev2010.{0}".format(SRC), "dev2010.{0}".format(TGT),
+         length_limit=length_limit) 
 
 
 if __name__ == "__main__":

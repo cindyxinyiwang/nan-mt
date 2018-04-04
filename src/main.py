@@ -100,8 +100,10 @@ add_argument(parser, "optim_switch", type="int", default=None,
              help="Switch from adam to SGD")
 add_argument(parser, "pos_emb_size", type="int", default=None,
              help="Number of positional embedding steps. None means sinusoid")
-add_argument(parser, "raml", type="bool", default=False,
-             help="Train using RAML")
+add_argument(parser, "raml_source", type="bool", default=False,
+             help="Sample a corrupted source sentence during training")
+add_argument(parser, "raml_target", type="bool", default=False,
+             help="Sample a corrupted target sentence during training")
 add_argument(parser, "raml_tau", type="float", default=1.0,
              help="Temperature parameter of RAML")
 add_argument(parser, "share_emb_and_softmax", type="bool", default=True,
@@ -271,7 +273,8 @@ def train():
       loss_norm=args.loss_norm,
       init_type=args.init_type,
       pos_emb_size=args.pos_emb_size,
-      raml=args.raml,
+      raml_source=args.raml_source,
+      raml_target=args.raml_target,
       raml_tau=args.raml_tau,
     )
   data = DataLoader(hparams=hparams)
@@ -340,7 +343,7 @@ def train():
   # train loop
   print("-" * 80)
   print("Start training")
-  ppl_thresh = 7.00
+  ppl_thresh = 6.10
   start_time = time.time()
   actual_start_time = time.time()
   target_words, total_loss, total_corrects = 0, 0, 0
@@ -351,7 +354,15 @@ def train():
     model.train()
     while True:
       # next batch
-      if hparams.raml:
+      if hparams.raml_source and hparams.raml_target:
+        ((x_train_raml, x_train, x_mask, x_pos_emb_indices, x_count),
+         (y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count),
+         batch_size) = data.next_train()
+      elif hparams.raml_source:
+        ((x_train_raml, x_train, x_mask, x_pos_emb_indices, x_count),
+         (y_train, y_mask, y_pos_emb_indices, y_count),
+         batch_size) = data.next_train()
+      elif hparams.raml_target:
         ((x_train, x_mask, x_pos_emb_indices, x_count),
          (y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count),
          batch_size) = data.next_train()
@@ -367,16 +378,27 @@ def train():
 
       # forward pass
       optim.zero_grad()
-      if hparams.raml:
+      if hparams.raml_source and hparams.raml_target:
+        logits = model.forward(
+          x_train_raml, x_mask, x_pos_emb_indices,
+          y_train_raml[:, :-1], y_mask[:, :-1],
+          y_pos_emb_indices[:, :-1].contiguous())
+      elif hparams.raml_source:
+        logits = model.forward(
+          x_train_raml, x_mask, x_pos_emb_indices,
+          y_train[:, :-1], y_mask[:, :-1],
+          y_pos_emb_indices[:, :-1].contiguous())
+      elif hparams.raml_target:
         logits = model.forward(
           x_train, x_mask, x_pos_emb_indices,
-          y_train_raml[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous())
+          y_train_raml[:, :-1], y_mask[:, :-1],
+          y_pos_emb_indices[:, :-1].contiguous())
       else:
         logits = model.forward(
           x_train, x_mask, x_pos_emb_indices,
           y_train[:, :-1], y_mask[:, :-1], y_pos_emb_indices[:, :-1].contiguous())
       logits = logits.view(-1, hparams.target_vocab_size)
-      if hparams.raml:
+      if hparams.raml_target:
         labels = y_train_raml[:, 1:].contiguous().view(-1)
       else:
         labels = y_train[:, 1:].contiguous().view(-1)
