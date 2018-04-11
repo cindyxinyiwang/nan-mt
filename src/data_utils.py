@@ -50,6 +50,9 @@ class DataLoader(object):
     assert (self.source_word_to_index[self.hparams.eos] ==
             self.target_word_to_index[self.hparams.eos])
 
+    if self.hparams.raml_source or self.hparams.raml_target:
+      self.softmax = torch.nn.Softmax(dim=-1)
+
     if self.decode:
       self.x_test, self.y_test = self._build_parallel(
         self.hparams.source_test, self.hparams.target_test, is_training=False)
@@ -72,9 +75,6 @@ class DataLoader(object):
         self.hparams.source_valid, self.hparams.target_valid, is_training=False)
       self.valid_size = len(self.x_valid)
       self.reset_valid()
-
-    if self.hparams.raml_source or self.hparams.raml_target:
-      self.softmax = torch.nn.Softmax(dim=-1)
 
   def reset_train(self):
     """Shuffle training data. Prepare the batching scheme if necessary."""
@@ -115,7 +115,7 @@ class DataLoader(object):
   def reset_test(self):
     self.test_index = 0
 
-  def next_test(self, test_batch_size=1):
+  def next_test(self, test_batch_size=1, raml=False):
     end_of_epoch = False
     start_index = self.test_index
     end_index = min(start_index + test_batch_size, self.test_size)
@@ -124,8 +124,14 @@ class DataLoader(object):
     # pad data
     x_test = self.x_test[start_index: end_index]
     y_test = self.y_test[start_index: end_index]
-    x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
-      sentences=x_test, pad_id=self.pad_id, volatile=True)
+    if raml:
+      x_test_raml, x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
+        sentences=x_test, pad_id=self.pad_id, raml=True,
+        vocab_size=self.hparams.source_vocab_size, volatile=True)
+    else:
+      x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
+        sentences=x_test, pad_id=self.pad_id, volatile=True)
+
     y_test, y_mask, y_pos_emb_indices, y_count = self._pad(
       sentences=y_test, pad_id=self.pad_id, volatile=True)
 
@@ -135,9 +141,14 @@ class DataLoader(object):
     else:
       self.test_index += batch_size
 
-    return ((x_test, x_mask, x_pos_emb_indices, x_count),
-            (y_test, y_mask, y_pos_emb_indices, y_count),
-            batch_size, end_of_epoch)
+    if raml:
+      return ((x_test_raml, x_test, x_mask, x_pos_emb_indices, x_count),
+              (y_test, y_mask, y_pos_emb_indices, y_count),
+              batch_size, end_of_epoch)
+    else:
+      return ((x_test, x_mask, x_pos_emb_indices, x_count),
+              (y_test, y_mask, y_pos_emb_indices, y_count),
+              batch_size, end_of_epoch)
 
   def next_valid(self, valid_batch_size=20):
     """Retrieves a sentence of testing examples.

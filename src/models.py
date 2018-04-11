@@ -175,17 +175,23 @@ class Transformer(nn.Module):
     params = self.parameters()
     return params
   
-  def translate(self, x_train_batch, x_mask_batch, x_pos_emb_indices_batch, beam_size, max_len):
+  def translate(self, x_train_batch, x_mask_batch, x_pos_emb_indices_batch,
+                beam_size, max_len):
+
     class Hyp(object):
       def __init__(self, state=None, y=None, ctx_tm1=None, score=None):
         self.state = state
         self.y = y 
         self.ctx_tm1 = ctx_tm1
         self.score = score
+
     batch_size = x_train_batch.size(0)
     all_hyp, all_scores = [], []
     for i in range(batch_size): 
-      x_train, x_mask, x_pos_emb_indices = x_train_batch[i, :].unsqueeze(0), x_mask_batch[i, :].unsqueeze(0), x_pos_emb_indices_batch[i, :].unsqueeze(0)
+      x_train = x_train_batch[i, :].unsqueeze(0)
+      x_mask = x_mask_batch[i, :].unsqueeze(0)
+      x_pos_emb_indices = x_pos_emb_indices_batch[i, :].unsqueeze(0)
+
       # translate one sentence
       enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
       len_dec_seq = 0
@@ -197,15 +203,18 @@ class Transformer(nn.Module):
         length += 1
         new_hyp_score_list = []
         for i, hyp in enumerate(active_hyp):
-          y_partial = Variable(torch.LongTensor(hyp.y).unsqueeze(0), volatile=True)
+          y_partial = Variable(
+            torch.LongTensor(hyp.y).unsqueeze(0), volatile=True)
           y_mask = torch.ByteTensor([0] * length).unsqueeze(0)
-          y_partial_pos = Variable(torch.arange(1, length+1).unsqueeze(0), volatile=True)
+          y_partial_pos = Variable(
+            torch.arange(1, length+1).unsqueeze(0), volatile=True)
           if self.hparams.cuda:
             y_partial = y_partial.cuda()
             y_partial_pos = y_partial_pos.cuda()
             y_mask = y_mask.cuda()
-          dec_output = self.decoder(enc_output, x_mask, y_partial, y_mask, y_partial_pos)
-          dec_output = dec_output[:,-1,:]
+          dec_output = self.decoder(
+            enc_output, x_mask, y_partial, y_mask, y_partial_pos)
+          dec_output = dec_output[:, -1, :]
           logits = self.w_logit(dec_output)
           probs = torch.nn.functional.softmax(logits, dim=1)
           new_hyp_scores = hyp.score + probs.data
@@ -218,7 +227,8 @@ class Transformer(nn.Module):
         new_hyp_scores = new_hyp_scores[new_hyp_pos]
 
         new_hypothesis = []
-        for prev_hyp_id, word_id, hyp_score in zip(prev_hyp_ids, word_ids, new_hyp_scores):
+        for prev_hyp_id, word_id, hyp_score in zip(
+            prev_hyp_ids, word_ids, new_hyp_scores):
           prev_hyp = active_hyp[int(prev_hyp_id)]
           hyp = Hyp(y=prev_hyp.y+[int(word_id)], score=hyp_score)
           if word_id == self.hparams.eos_id:
@@ -230,18 +240,25 @@ class Transformer(nn.Module):
       if len(completed_hyp) == 0:
         completed_hyp.append(active_hyp[0])
         completed_hyp_scores = [0.0]
-      ranked_hypothesis = sorted(zip(completed_hyp, completed_hyp_scores), key=lambda x:x[1], reverse=True)
+      ranked_hypothesis = sorted(
+        zip(completed_hyp, completed_hyp_scores),
+        key=lambda x:x[1],
+        reverse=True)
       h = [hyp.y for hyp, score in ranked_hypothesis]
       s = [score for hyp, score in ranked_hypothesis]
       all_hyp.append(h)
       all_scores.append(s)
     return all_hyp, all_scores     
 
-  def translate_v1(self, x_train_batch, x_mask_batch, x_pos_emb_indices_batch, beam_size, max_len):
+  def translate_v1(self, x_train_batch, x_mask_batch, x_pos_emb_indices_batch,
+                   beam_size, max_len):
     batch_size = x_train_batch.size(0)
     all_hyp, all_scores = [], []
     for i in range(batch_size):
-      x_train, x_mask, x_pos_emb_indices = x_train_batch[i, :].unsqueeze(0), x_mask_batch[i, :].unsqueeze(0), x_pos_emb_indices_batch[i, :].unsqueeze(0)
+      x_train = x_train_batch[i, :].unsqueeze(0)
+      x_mask = x_mask_batch[i, :].unsqueeze(0)
+      x_pos_emb_indices = x_pos_emb_indices_batch[i, :].unsqueeze(0)
+
       # translate one sentence
       enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
       len_dec_seq = 0
@@ -254,20 +271,21 @@ class Transformer(nn.Module):
       while len(completed_hypothesis) < beam_size and len_dec_seq < max_len:
         len_dec_seq += 1
         hyp_num = len(hypothesis)
-
-        exp_enc_output = enc_output.expand(hyp_num, enc_output.size(1), enc_output.size(2))
+        exp_enc_output = enc_output.expand(
+          hyp_num, enc_output.size(1), enc_output.size(2))
         exp_x_mask = x_mask.expand(hyp_num, x_mask.size(1))
         # (n_remain_sents * beam, seq_len)
 
         y_partial = torch.LongTensor(hypothesis).view(-1, len_dec_seq)
-
         y_partial = Variable(y_partial, volatile=True)
-        y_mask = torch.ByteTensor([([0] * len_dec_seq) for _ in range(hyp_num)])
 
+        y_mask = torch.ByteTensor([([0] * len_dec_seq) for _ in range(hyp_num)])
         y_partial_pos = torch.arange(1, len_dec_seq+1).unsqueeze(0)
+
         # size: (n_remain_sents * beam, seq_len)
         y_partial_pos = y_partial_pos.repeat(hyp_num, 1)
-        y_partial_pos = Variable(torch.FloatTensor(y_partial_pos), volatile=True)
+        y_partial_pos = Variable(
+          torch.FloatTensor(y_partial_pos), volatile=True)
         if self.hparams.cuda:
           y_partial = y_partial.cuda()
           y_partial_pos = y_partial_pos.cuda()
@@ -284,15 +302,20 @@ class Transformer(nn.Module):
         probs = torch.nn.functional.softmax(logits, dim=1)
 
         live_hyp_num = beam_size - len(completed_hypothesis)
-        new_hyp_scores = (hyp_scores.unsqueeze(1).expand_as(probs) + probs).view(-1)
-        top_new_hyp_scores, top_new_hyp_pos = torch.topk(new_hyp_scores, k=live_hyp_num)
+        new_hyp_scores = (hyp_scores.unsqueeze(1).expand_as(probs) +
+                          probs).view(-1)
+        top_new_hyp_scores, top_new_hyp_pos = torch.topk(
+          new_hyp_scores, k=live_hyp_num)
         prev_hyp_ids = top_new_hyp_pos / self.hparams.target_vocab_size
         word_ids = top_new_hyp_pos % self.hparams.target_vocab_size
 
         new_hypothesis = []
         live_hyp_ids = []
         new_hyp_scores = []
-        for prev_hyp_id, word_id, new_hyp_score in zip(prev_hyp_ids.cpu().data, word_ids.cpu().data, top_new_hyp_scores.cpu().data):
+        for prev_hyp_id, word_id, new_hyp_score in zip(
+            prev_hyp_ids.cpu().data,
+            word_ids.cpu().data,
+            top_new_hyp_scores.cpu().data):
           hyp_trg_words = hypothesis[prev_hyp_id] + [word_id]
           if word_id == self.hparams.eos_id:
             completed_hypothesis.append(hyp_trg_words)
@@ -313,14 +336,19 @@ class Transformer(nn.Module):
       if len(completed_hypothesis) == 0:
         completed_hypothesis = [hypothesis[0]]
         completed_hypothesis_scores = [0.0]
-      ranked_hypothesis = sorted(zip(completed_hypothesis, completed_hypothesis_scores), key=lambda x:x[1], reverse=True)
+      ranked_hypothesis = sorted(
+        zip(completed_hypothesis, completed_hypothesis_scores),
+        key=lambda x:x[1],
+        reverse=True)
       h = [hyp for hyp, score in ranked_hypothesis]
       s = [score for hyp, score in ranked_hypothesis]
       all_hyp.append(h)
       all_scores.append(s)
     return all_hyp, all_scores
 
-  def translate_batch(self, x_train, x_mask, x_pos_emb_indices, beam_size, max_len):
+  # TODO(hyhieu): source corruption
+  def translate_batch(self, x_train, x_mask, x_pos_emb_indices,
+                      beam_size, max_len):
     """
 
     Return:
@@ -341,15 +369,18 @@ class Transformer(nn.Module):
     trg_vocab_size = self.hparams.target_vocab_size
 
     beams = [Beam(beam_size, self.hparams) for _ in range(batch_size)]
-    beam_to_inst = {beam_idx: inst_idx for inst_idx, beam_idx in enumerate(range(batch_size))}
+    beam_to_inst = {beam_idx: inst_idx
+                    for inst_idx, beam_idx in enumerate(range(batch_size))}
     n_remain_sents = batch_size
     for i in range(max_len):
       len_dec_seq = i+1 
       # (n_remain_sents * beam, seq_len)
-      y_partial = torch.stack([b.get_partial_y() for b in beams if not b.done]).view(-1, len_dec_seq)
+      y_partial = torch.stack(
+        [b.get_partial_y() for b in beams if not b.done]).view(-1, len_dec_seq)
 
       y_partial = Variable(y_partial, volatile=True)
-      y_mask = torch.ByteTensor([([0] * len_dec_seq) for _ in range(n_remain_sents * beam_size)])
+      y_mask = torch.ByteTensor(
+        [([0] * len_dec_seq) for _ in range(n_remain_sents * beam_size)])
 
       y_partial_pos = torch.arange(1, len_dec_seq+1).unsqueeze(0)
       # size: (n_remain_sents * beam, seq_len)

@@ -465,8 +465,9 @@ def train():
 
       # eval
       if step % args.eval_every == 0:
-        val_ppl, val_bleu = eval(model, data, crit, step, hparams,
-                                 best_val_ppl < ppl_thresh, valid_batch_size=args.valid_batch_size)
+        val_ppl, val_bleu = eval(
+          model, data, crit, step, hparams, best_val_ppl < ppl_thresh,
+          valid_batch_size=args.valid_batch_size)
 
         # determine whether to update best_val_ppl or best_val_bleu
         based_on_bleu = args.eval_bleu and (best_val_ppl < ppl_thresh)
@@ -509,8 +510,9 @@ def train():
       stop = True
     if stop:
       print("Reach {0} steps. Stop training".format(step))
-      val_ppl, val_bleu = eval(model, data, crit, step, hparams,
-                               best_val_ppl<ppl_thresh, valid_batch_size=args.valid_batch_size)
+      val_ppl, val_bleu = eval(
+        model, data, crit, step, hparams, best_val_ppl<ppl_thresh,
+        valid_batch_size=args.valid_batch_size)
       if args.eval_bleu and not val_bleu is None:
         save = val_bleu > best_val_bleu
       else:
@@ -521,6 +523,7 @@ def train():
         save_checkpoint([step, best_val_ppl, best_val_bleu, cur_attempt, lr],
                         model, optim, hparams, args.output_dir)
       break
+
 
 def main():
   random.seed(args.seed)
@@ -544,6 +547,7 @@ def main():
   sys.stdout = Logger(log_file)
 
   train()
+
 
 if __name__ == "__main__":
   main()

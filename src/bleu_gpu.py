@@ -106,8 +106,14 @@ def main(output_dir, hyp_file, ref_file):
   extra_mask = torch.eq(ref.data, hparams.eos_id)
   ref_mask = ref_mask | extra_mask
 
-  ngram_cov_list = [None, NgramConv(2, hparams.cuda), NgramConv(3, hparams.cuda), NgramConv(4, hparams.cuda)]
-  print("bleu score: ", bleu(hyp.data, ref.data, hyp_mask, ref_mask, ngram_cov_list, hparams.cuda))
+  ngram_cov_list = [
+    None,
+    NgramConv(2, hparams.cuda),
+    NgramConv(3, hparams.cuda),
+    NgramConv(4, hparams.cuda)]
+  print(
+    "bleu score: ",
+    bleu(hyp.data, ref.data, hyp_mask, ref_mask, ngram_cov_list, hparams.cuda))
 
 if __name__ == "__main__":
   #hyp = torch.LongTensor( [[1, 4, 5, 3, 2, 3], [2, 4, 5, 3, 0, 0]] )
@@ -118,3 +124,4 @@ if __name__ == "__main__":
   #b = bleu(hyp, ref, hyp_mask, ref_mask, ngram_cov_list)
   #print(b)
   main("outputs_exp6_v1", "trans-head32", "ref-head32")
+

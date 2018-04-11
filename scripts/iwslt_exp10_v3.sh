@@ -22,15 +22,15 @@ python3.6 src/main.py \
   --target_test="tst2014.de" \
   --share_emb_and_softmax \
   --cuda \
-  --batch_size=3000 \
+  --batch_size=4500 \
   --batcher="word" \
   --loss_norm="sent" \
   --n_train_sents=250000 \
   --max_len=1000 \
-  --d_word_vec=512 \
-  --d_model=512 \
-  --d_inner=768 \
-  --n_layers=6 \
+  --d_word_vec=288 \
+  --d_model=288 \
+  --d_inner=507 \
+  --n_layers=5 \
   --d_k=64 \
   --d_v=64 \
   --n_heads=8 \

@@ -6,7 +6,7 @@ export CUDA_VISIBLE_DEVICES="0"
 # just modify the path to the model
 
 python3.6 src/translate.py \
-  --model_dir="outputs_exp8_v4" \
+  --model_dir="outputs_exp10_v3" \
   --data_path="data/clean_piece_37k_shared/en-de/" \
   --source_vocab="vocab.en" \
   --target_vocab="vocab.de" \

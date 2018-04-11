@@ -26,21 +26,36 @@ class TranslationHparams(Iwslt16EnDeBpe32SharedParams):
 
 parser = argparse.ArgumentParser(description="Neural MT translator")
 
-add_argument(parser, "cuda", type="bool", default=False, help="GPU or not")
-add_argument(parser, "data_path", type="str", default=None, help="path to all data")
-add_argument(parser, "model_dir", type="str", default="outputs", help="root directory of saved model")
-add_argument(parser, "source_test", type="str", default=None, help="name of source test file")
-add_argument(parser, "target_test", type="str", default=None, help="name of target test file")
-add_argument(parser, "beam_size", type="int", default=None, help="beam size")
-add_argument(parser, "max_len", type="int", default=300, help="maximum len considered on the target side")
-add_argument(parser, "non_batch_translate", type="bool", default=False, help="use non-batched translation")
+add_argument(parser, "cuda", type="bool", default=False,
+             help="GPU or not")
+add_argument(parser, "data_path", type="str", default=None,
+             help="path to all data")
+add_argument(parser, "model_dir", type="str", default="outputs",
+             help="root directory of saved model")
+add_argument(parser, "source_test", type="str", default=None,
+             help="name of source test file")
+add_argument(parser, "target_test", type="str", default=None,
+             help="name of target test file")
+add_argument(parser, "beam_size", type="int", default=None,
+             help="beam size")
+add_argument(parser, "max_len", type="int", default=300,
+             help="maximum len considered on the target side")
+add_argument(parser, "non_batch_translate", type="bool", default=False,
+             help="use non-batched translation")
 add_argument(parser, "batch_size", type="int", default=32, help="")
 add_argument(parser, "merge_bpe", type="bool", default=True, help="")
-add_argument(parser, "source_vocab", type="str", default=None, help="name of source vocab file")
-add_argument(parser, "target_vocab", type="str", default=None, help="name of target vocab file")
-add_argument(parser, "n_train_sents", type="int", default=None, help="max number of training sentences to load")
-add_argument(parser, "out_file", type="str", default="trans", help="output file for hypothesis")
-
+add_argument(parser, "source_vocab", type="str", default=None,
+             help="name of source vocab file")
+add_argument(parser, "target_vocab", type="str", default=None,
+             help="name of target vocab file")
+add_argument(parser, "n_train_sents", type="int", default=None,
+             help="max number of training sentences to load")
+add_argument(parser, "out_file", type="str", default="trans",
+             help="output file for hypothesis")
+add_argument(parser, "raml_tau", type="float", default=1.0,
+             help="Temperature parameter of RAML")
+add_argument(parser, "raml_source", type="bool", default=False,
+             help="Sample a corrupted source sentence")
 
 args = parser.parse_args()
 
@@ -63,19 +78,36 @@ hparams = TranslationHparams(
   n_train_sents=args.n_train_sents,
   merge_bpe=args.merge_bpe,
   out_file=out_file,
+  raml_source=args.raml_source,
+  raml_tau=args.raml_tau,
 )
 
-hparams.add_param("filtered_tokens", set([model.hparams.pad_id, model.hparams.eos_id, model.hparams.bos_id]))
-model.hparams.cuda = hparams.cuda
 data = DataLoader(hparams=hparams, decode=True)
+hparams.add_param("source_vocab_size", data.source_vocab_size)
+hparams.add_param("target_vocab_size", data.target_vocab_size)
+hparams.add_param("pad_id", data.pad_id)
+hparams.add_param("unk_id", data.unk_id)
+hparams.add_param("bos_id", data.bos_id)
+hparams.add_param("eos_id", data.eos_id)
+hparams.add_param(
+  "filtered_tokens",
+  set([model.hparams.pad_id, model.hparams.eos_id, model.hparams.bos_id]))
+model.hparams.cuda = hparams.cuda
 
 out_file = open(hparams.out_file, 'w', encoding='utf-8')
 end_of_epoch = False
 num_sentences = 0
 while not end_of_epoch:
-  ((x_test, x_mask, x_pos_emb_indices, x_count),
-   (y_test, y_mask, y_pos_emb_indices, y_count),
-   batch_size, end_of_epoch) = data.next_test(test_batch_size=hparams.batch_size)
+  if hparams.raml_source:
+    ((x_test_raml, x_test, x_mask, x_pos_emb_indices, x_count),
+     (y_test, y_mask, y_pos_emb_indices, y_count),
+     batch_size, end_of_epoch) = data.next_test(
+       test_batch_size=hparams.batch_size, raml=True)
+  else:
+    ((x_test, x_mask, x_pos_emb_indices, x_count),
+     (y_test, y_mask, y_pos_emb_indices, y_count),
+     batch_size, end_of_epoch) = data.next_test(
+       test_batch_size=hparams.batch_size)
 
   num_sentences += batch_size
 
@@ -86,8 +118,13 @@ while not end_of_epoch:
       x_test, x_mask, x_pos_emb_indices, hparams.beam_size, hparams.max_len)
   else:
     #print("batched translate...")
-    all_hyps, all_scores = model.translate_batch(
-      x_test, x_mask, x_pos_emb_indices, hparams.beam_size, hparams.max_len)
+    if hparams.raml_source:
+      all_hyps, all_scores = model.translate_batch(
+        x_test_raml, x_mask, x_pos_emb_indices, hparams.beam_size,
+        hparams.max_len)
+    else:
+      all_hyps, all_scores = model.translate_batch(
+        x_test, x_mask, x_pos_emb_indices, hparams.beam_size, hparams.max_len)
 
   # For debugging:
   # model.debug_translate_batch(
