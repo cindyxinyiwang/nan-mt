@@ -3,6 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 import argparse
+import itertools
 import random
 import shutil
 import os
@@ -50,7 +51,8 @@ class DataLoader(object):
     assert (self.source_word_to_index[self.hparams.eos] ==
             self.target_word_to_index[self.hparams.eos])
 
-    if self.hparams.raml_source or self.hparams.raml_target:
+    if (self.hparams.raml_source or (hasattr(self.hparams, "raml_target")
+                                     and self.hparams.raml_target)):
       self.softmax = torch.nn.Softmax(dim=-1)
 
     if self.decode:
@@ -125,6 +127,8 @@ class DataLoader(object):
     x_test = self.x_test[start_index: end_index]
     y_test = self.y_test[start_index: end_index]
     if raml:
+      x_test = [sent for _ in range(self.hparams.n_corrupts)
+                for sent in x_test]
       x_test_raml, x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_test, pad_id=self.pad_id, raml=True,
         vocab_size=self.hparams.source_vocab_size, volatile=True)
@@ -315,12 +319,11 @@ class DataLoader(object):
     if self.hparams.cuda:
       lengths = lengths.cuda()
 
-    # something's wrong here!!! Samples don't make sense
     corrupt_pos = num_words.data.float().div_(lengths).unsqueeze(
-      1).expand_as(padded_sentences).contiguous().masked_fill_(
-        mask, 0)
+      1).expand_as(padded_sentences).contiguous().masked_fill_(mask, 0)
     corrupt_pos = torch.bernoulli(corrupt_pos, out=corrupt_pos).byte()
     total_words = int(corrupt_pos.sum())
+
     # sample the corrupts, which will be added to padded_sentences
     corrupt_val = torch.LongTensor(total_words)
     corrupt_val = corrupt_val.random_(0, vocab_size-1)

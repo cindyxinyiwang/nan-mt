@@ -349,17 +349,19 @@ class Transformer(nn.Module):
   # TODO(hyhieu): source corruption
   def translate_batch(self, x_train, x_mask, x_pos_emb_indices,
                       beam_size, max_len):
-    """
+    """Translates a batch of sentences.
 
     Return:
-      all_hyp: [batch_size, n_best] of hypothesis
-      all_scores: [batch_size, n_best]
+      all_hyp: [batch_size, n_best] of hypothesis.
+      all_scores: [batch_size, n_best].
     """
 
-    # (batch_size, src_seq_len, d_model)
+    # [batch_size, src_seq_len, d_model]
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
+    # print(enc_output.size())
+    # sys.exit(0)
 
-    # (batch_size * beam, src_seq_len, d_model)
+    # [batch_size * beam, src_seq_len, d_model]
     enc_output = Variable(enc_output.data.repeat(1, beam_size, 1).view(
       enc_output.size(0)*beam_size, enc_output.size(1), enc_output.size(2)))
     x_mask = x_mask.repeat(1, beam_size).view(x_mask.size(0)*beam_size,

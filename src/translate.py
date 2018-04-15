@@ -56,6 +56,8 @@ add_argument(parser, "raml_tau", type="float", default=1.0,
              help="Temperature parameter of RAML")
 add_argument(parser, "raml_source", type="bool", default=False,
              help="Sample a corrupted source sentence")
+add_argument(parser, "n_corrupts", type="int", default=0,
+             help="Number of source corruptions")
 
 args = parser.parse_args()
 
@@ -80,6 +82,7 @@ hparams = TranslationHparams(
   out_file=out_file,
   raml_source=args.raml_source,
   raml_tau=args.raml_tau,
+  n_corrupts=args.n_corrupts,
 )
 
 data = DataLoader(hparams=hparams, decode=True)
@@ -135,8 +138,9 @@ while not end_of_epoch:
   for h in all_hyps:
     #print(h)
     h_best = h[0]
-    h_best_words = map(lambda wi: data.target_index_to_word[wi],
-                       filter(lambda wi: wi not in hparams.filtered_tokens, h_best))
+    h_best_words = map(
+      lambda wi: data.target_index_to_word[wi],
+      filter(lambda wi: wi not in hparams.filtered_tokens, h_best))
     if hparams.merge_bpe:
       line = ''.join(h_best_words)
       line = line.replace('▁', ' ')

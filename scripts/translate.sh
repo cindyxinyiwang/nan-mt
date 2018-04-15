@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export PYTHONPATH="$(pwd)"
-export CUDA_VISIBLE_DEVICES="0"
+export CUDA_VISIBLE_DEVICES="2"
 
 # just modify the path to the model
 
@@ -15,8 +15,11 @@ python3.6 src/translate.py \
   --merge_bpe \
   --batch_size=32 \
   --beam_size=4 \
-  --max_len=500 \
+  --max_len=600 \
   --n_train_sents=10000 \
   --cuda \
+  --no_raml_source \
+  --out_file="trans" \
+  --n_corrupts=5 \
   "$@"
 
