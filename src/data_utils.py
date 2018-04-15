@@ -331,7 +331,7 @@ class DataLoader(object):
       corrupt_val = corrupt_val.long().cuda()
       corrupts = corrupts.cuda()
       corrupt_pos = corrupt_pos.cuda()
-    #corrupts = corrupts.masked_scatter_(corrupt_pos, corrupt_val)
+    corrupts = corrupts.masked_scatter_(corrupt_pos, corrupt_val)
 
     sample_sentences = padded_sentences.add(Variable(corrupts)).remainder_(
       vocab_size).masked_fill_(Variable(mask), pad_id)

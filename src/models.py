@@ -582,9 +582,9 @@ def advcance_ens_beam(hparams, word_scores, ens_beam_list, step):
   word_scores: (n_corrupts, beam_size, trg_vocab_size)
   """
   n_corrupts, beam_size, trg_vocab_size = word_scores.size()
-  word_scores = word_scores[0]
-  #word_scores = torch.sum(word_scores, dim=0)
-  #word_scores.div_(n_corrupts)
+  #word_scores = word_scores[0]
+  word_scores = torch.sum(word_scores, dim=0)
+  word_scores.div_(n_corrupts)
 
   beam = ens_beam_list[0]
   if len(beam.prev_ks) > 0:
