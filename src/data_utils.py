@@ -127,8 +127,7 @@ class DataLoader(object):
     x_test = self.x_test[start_index: end_index]
     y_test = self.y_test[start_index: end_index]
     if raml:
-      x_test = [sent for _ in range(self.hparams.n_corrupts)
-                for sent in x_test]
+      x_test = [sent for sent in x_test for _ in range(self.hparams.n_corrupts)]
       x_test_raml, x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_test, pad_id=self.pad_id, raml=True,
         vocab_size=self.hparams.source_vocab_size, volatile=True)
@@ -332,7 +331,7 @@ class DataLoader(object):
       corrupt_val = corrupt_val.long().cuda()
       corrupts = corrupts.cuda()
       corrupt_pos = corrupt_pos.cuda()
-    corrupts = corrupts.masked_scatter_(corrupt_pos, corrupt_val)
+    #corrupts = corrupts.masked_scatter_(corrupt_pos, corrupt_val)
 
     sample_sentences = padded_sentences.add(Variable(corrupts)).remainder_(
       vocab_size).masked_fill_(Variable(mask), pad_id)

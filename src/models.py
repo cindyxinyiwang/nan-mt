@@ -348,18 +348,21 @@ class Transformer(nn.Module):
 
   # TODO(hyhieu): source corruption
   def translate_batch(self, x_train, x_mask, x_pos_emb_indices,
-                      beam_size, max_len):
+                      beam_size, max_len, raml_source=False, n_corrupts=0):
     """Translates a batch of sentences.
 
     Return:
       all_hyp: [batch_size, n_best] of hypothesis.
       all_scores: [batch_size, n_best].
     """
-
+    #print(x_train)
+    #print(x_mask)
+    #print(x_pos_emb_indices)
+    #print(n_corrupts)
+    #print(raml_source)
+    #exit(0)
     # [batch_size, src_seq_len, d_model]
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
-    # print(enc_output.size())
-    # sys.exit(0)
 
     # [batch_size * beam, src_seq_len, d_model]
     enc_output = Variable(enc_output.data.repeat(1, beam_size, 1).view(
@@ -379,7 +382,7 @@ class Transformer(nn.Module):
       # (n_remain_sents * beam, seq_len)
       y_partial = torch.stack(
         [b.get_partial_y() for b in beams if not b.done]).view(-1, len_dec_seq)
-
+      #print(y_partial)
       y_partial = Variable(y_partial, volatile=True)
       y_mask = torch.ByteTensor(
         [([0] * len_dec_seq) for _ in range(n_remain_sents * beam_size)])
@@ -405,19 +408,43 @@ class Transformer(nn.Module):
       logits = self.w_logit(dec_output)
       log_probs = torch.nn.functional.log_softmax(logits, dim=1)
       log_probs = log_probs.view(n_remain_sents, beam_size, trg_vocab_size)
-
+      #print(log_probs.data)
       active_beam_idx_list = []
-      for beam_idx in range(batch_size):
-        if beams[beam_idx].done:
-          continue
-        inst_idx = beam_to_inst[beam_idx]
-        if not beams[beam_idx].advance(log_probs.data[inst_idx], step=i):
-          active_beam_idx_list += [beam_idx]
+      if raml_source:
+        for sent_idx in range(int(batch_size / n_corrupts)):
+          beam_start_idx = n_corrupts * sent_idx
+          beam_end_idx = n_corrupts * (sent_idx + 1)
+          ens_beam_list = beams[beam_start_idx:beam_end_idx]
+          if ens_beam_list[0].done:
+            for b in ens_beam_list:
+              assert b.done
+            continue
+          else:
+            for b in ens_beam_list:
+              assert not b.done
+          inst_start_idx = beam_to_inst[beam_start_idx]
+          inst_list = []
+          for k in range(beam_start_idx, beam_end_idx):
+            inst_list.append(beam_to_inst[k])
+          if not advcance_ens_beam(self.hparams, 
+                  log_probs.data[inst_list,:,:], 
+                  ens_beam_list, 
+                  step=i):
+            active_beam_idx_list += [k for k in range(beam_start_idx, beam_end_idx)]
+      else:
+        for beam_idx in range(batch_size):
+          if beams[beam_idx].done:
+            continue
+          inst_idx = beam_to_inst[beam_idx]
+          if not beams[beam_idx].advance(log_probs.data[inst_idx], step=i):
+            active_beam_idx_list += [beam_idx]
 
       if not active_beam_idx_list: 
         break
 
       active_inst_idx_list = torch.LongTensor([beam_to_inst[k] for k in active_beam_idx_list])
+      #print("active_beam_idx", active_beam_idx_list)
+      #print("active_instidx", active_inst_idx_list)
       if self.hparams.cuda:
         active_inst_idx_list = active_inst_idx_list.cuda()
 
@@ -431,14 +458,31 @@ class Transformer(nn.Module):
 
     all_hyp, all_scores = [], []
     n_best = 1
-    for beam in beams:
-      scores, idxs = torch.sort(beam.scores, dim=0, descending=True)
-      all_scores += [scores[:n_best]]
-      hyps = [beam.get_y(i) for i in idxs[:n_best]]
+    if raml_source:
+      for sent_idx in range(int(batch_size / n_corrupts)):
+        beam_start_idx = n_corrupts * sent_idx
+        beam = beams[beam_start_idx]
+        scores, idxs = torch.sort(beam.scores, dim=0, descending=True)
+        all_scores += [scores[:n_best]]
+        hyps = [beam.get_y(i) for i in idxs[:n_best]]
+        #for i in range(1, n_corrupts):
+        #  b = beams[beam_start_idx+i]
+        #  h = b.get_y(idxs[0])
+        #  print(h)
+        all_hyp.append(hyps)
+        all_scores.append(scores)
+        #print(hyps)
+        #print(scores)
+        #print(beam.all_scores)
+    else:
+      for beam in beams:
+        scores, idxs = torch.sort(beam.scores, dim=0, descending=True)
+        all_scores += [scores[:n_best]]
+        hyps = [beam.get_y(i) for i in idxs[:n_best]]
 
-      #hyps, scores = beam.get_hyp(n_best)
-      all_hyp.append(hyps)
-      all_scores.append(scores)
+        #hyps, scores = beam.get_hyp(n_best)
+        all_hyp.append(hyps)
+        all_scores.append(scores)
     return all_hyp, all_scores
     
   def debug_translate_batch(self,
@@ -532,6 +576,43 @@ def select_active_enc_mask(enc_mask, active_inst_idx_list, n_remain_sents, src_s
   active_enc_mask = active_enc_mask.view(-1, src_seq_len).contiguous()
   return active_enc_mask
 
+def advcance_ens_beam(hparams, word_scores, ens_beam_list, step):
+  """Add word to the beam.
+
+  word_scores: (n_corrupts, beam_size, trg_vocab_size)
+  """
+  n_corrupts, beam_size, trg_vocab_size = word_scores.size()
+  word_scores = word_scores[0]
+  #word_scores = torch.sum(word_scores, dim=0)
+  #word_scores.div_(n_corrupts)
+
+  beam = ens_beam_list[0]
+  if len(beam.prev_ks) > 0:
+    beam_score = beam.scores.unsqueeze(1).expand_as(word_scores) + word_scores
+  else:
+    # for the first step, all rows in word_scores are the same
+    beam_score = word_scores[0]
+  flat_beam_score = beam_score.contiguous().view(-1)
+  best_scores, best_scores_id = flat_beam_score.topk(beam.size, dim=0,
+                                                     largest=True,
+                                                     sorted=True)
+  prev_k = best_scores_id / trg_vocab_size
+  next_y = best_scores_id % trg_vocab_size
+  for b in ens_beam_list:
+    b.all_scores.append(b.scores)
+    b.scores = best_scores
+    b.prev_ks.append(prev_k)
+    b.next_ys.append(next_y)
+
+  if beam.next_ys[-1][0] == hparams.eos_id:
+    # self.active_hyp_size -= 1
+    # self.finished.append((self.get_y(0), self.scores[0]))
+    # self.done = (self.active_hyp_size == 0)
+    for b in ens_beam_list:
+      b.done = True
+  return beam.done
+
+ 
 class PolyNorm(object):
   def __init__(self, m=1., norm_search=True):
     self.m = m 

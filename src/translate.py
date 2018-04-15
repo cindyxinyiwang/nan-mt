@@ -124,7 +124,7 @@ while not end_of_epoch:
     if hparams.raml_source:
       all_hyps, all_scores = model.translate_batch(
         x_test_raml, x_mask, x_pos_emb_indices, hparams.beam_size,
-        hparams.max_len)
+        hparams.max_len, raml_source=args.raml_source, n_corrupts=args.n_corrupts)
     else:
       all_hyps, all_scores = model.translate_batch(
         x_test, x_mask, x_pos_emb_indices, hparams.beam_size, hparams.max_len)
