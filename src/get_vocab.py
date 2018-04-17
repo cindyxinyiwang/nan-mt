@@ -3,7 +3,6 @@ from __future__ import division
 from __future__ import print_function
 
 import argparse
-import cPickle as pickle
 import os
 import re
 import shutil
@@ -12,7 +11,7 @@ import time
 
 import numpy as np
 
-DATA_PATH = "data/bpe_32k_shared/en-de"
+DATA_PATH = "data/raw/de-en"
 INP_NAMES = ["train.en", "train.de"]
 OUT_NAMES = ["vocab.en", "vocab.de"]
 
@@ -46,8 +45,8 @@ def main():
     sys.stdout.flush()
 
     log_string = ""
-    for word, idx in vocab.iteritems():
-      log_string += "{0}~~{1}\n".format(word, idx)
+    for word, idx in vocab.items():
+      log_string += "{0}▁{1}\n".format(word, idx)
 
     out_name = os.path.join(DATA_PATH, out_name)
     print("Saving vocab to '{0}'".format(out_name))

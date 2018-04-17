@@ -388,8 +388,8 @@ class DataLoader(object):
         target_index = self.target_word_to_index[target_token]
         target_indices.append(target_index)
 
-      assert source_indices[-1] == self.eos_id
-      assert target_indices[-1] == self.eos_id
+      source_indices.append(self.eos_id)
+      target_indices.append(self.eos_id)
 
       source_lens.append(len(source_indices))
       source_data.append(source_indices)
@@ -429,7 +429,7 @@ class DataLoader(object):
       line = line.strip()
       if not line:
         continue
-      word_index = line.split("~~")
+      word_index = line.split("▁")
       if len(word_index) != 2:
         print("Weird line: '{0}'. split_len={1}".format(line, len(word_index)))
         continue
