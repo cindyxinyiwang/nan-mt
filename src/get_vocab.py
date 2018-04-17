@@ -11,6 +11,7 @@ import time
 
 import numpy as np
 
+THRESHOLD = 3  # words that appear less than THRESHOLD times are <unk>
 DATA_PATH = "data/raw/de-en"
 INP_NAMES = ["train.en", "train.de"]
 OUT_NAMES = ["vocab.en", "vocab.de"]
@@ -27,6 +28,7 @@ def main():
       "<s>": 2,
       "</s>": 3,
     }
+    word_counts = {}
     num_lines = 0
     for line in lines:
       line = line.strip()
@@ -37,6 +39,9 @@ def main():
         if token not in vocab:
           index = len(vocab)
           vocab[token] = index
+          word_counts[token] = 1
+        else:
+          word_counts[token] += 1
       num_lines += 1
       if num_lines % 50000 == 0:
         print("Read {0:>6d} lines".format(num_lines))
@@ -46,6 +51,8 @@ def main():
 
     log_string = ""
     for word, idx in vocab.items():
+      if word in word_counts and word_counts[word] < THRESHOLD:
+        continue
       log_string += "{0}▁{1}\n".format(word, idx)
 
     out_name = os.path.join(DATA_PATH, out_name)
