@@ -50,10 +50,12 @@ def main():
     sys.stdout.flush()
 
     log_string = ""
+    i = 0
     for word, idx in vocab.items():
       if word in word_counts and word_counts[word] < THRESHOLD:
         continue
-      log_string += "{0}▁{1}\n".format(word, idx)
+      log_string += "{0}▁{1}\n".format(word, i)
+      i += 1
 
     out_name = os.path.join(DATA_PATH, out_name)
     print("Saving vocab to '{0}'".format(out_name))
