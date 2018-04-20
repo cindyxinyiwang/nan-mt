@@ -130,7 +130,7 @@ class DataLoader(object):
       x_test = [sent for sent in x_test for _ in range(self.hparams.n_corrupts)]
       x_test_raml, x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_test, pad_id=self.pad_id, raml=True,
-        vocab_size=self.hparams.source_vocab_size, volatile=True)
+        vocab_size=self.hparams.source_vocab_size, volatile=True, pad_corrupt=self.hparams.src_pad_corrupt)
     else:
       x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_test, pad_id=self.pad_id, volatile=True)
@@ -217,7 +217,7 @@ class DataLoader(object):
     if self.hparams.raml_source:
       x_train_raml, x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_train, pad_id=self.pad_id, raml=True,
-        vocab_size=self.hparams.source_vocab_size)
+        vocab_size=self.hparams.source_vocab_size, pad_corrupt=self.hparams.src_pad_corrupt)
     else:
       x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_train, pad_id=self.pad_id)
@@ -225,7 +225,7 @@ class DataLoader(object):
     if self.hparams.raml_target:
       y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
         sentences=y_train, pad_id=self.pad_id, raml=True,
-        vocab_size=self.hparams.target_vocab_size)
+        vocab_size=self.hparams.target_vocab_size, pad_corrupt=self.hparams.trg_pad_corrupt)
     else:
       y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
         sentences=y_train, pad_id=self.pad_id)
@@ -254,7 +254,7 @@ class DataLoader(object):
             batch_size)
 
   def _pad(self, sentences, pad_id, volatile=False,
-           raml=False, vocab_size=None):
+           raml=False, vocab_size=None, pad_corrupt=False):
     """Pad all instances in [data] to the longest length.
 
     Args:
@@ -325,7 +325,10 @@ class DataLoader(object):
 
     # sample the corrupts, which will be added to padded_sentences
     corrupt_val = torch.LongTensor(total_words)
-    corrupt_val = corrupt_val.random_(0, vocab_size-1)
+    if pad_corrupt:
+      corrupt_val.fill_(self.hparams.pad_id)
+    else:
+      corrupt_val = corrupt_val.random_(0, vocab_size-1)
     corrupts = torch.zeros(batch_size, max_len).long()
     if self.hparams.cuda:
       corrupt_val = corrupt_val.long().cuda()

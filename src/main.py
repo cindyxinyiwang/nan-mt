@@ -44,6 +44,8 @@ add_argument(parser, "eval_bleu", type="bool", default=False,
              help="if calculate BLEU score for dev set")
 add_argument(parser, "beam_size", type="int", default=5,
              help="beam size for dev BLEU")
+add_argument(parser, "ppl_thresh", type="float", default=6.1,
+             help="threshold for start evaluating on bleu")
 add_argument(parser, "max_len", type="int", default=300,
              help="maximum len considered on the target side")
 add_argument(parser, "non_batch_translate", type="bool", default=False,
@@ -104,6 +106,10 @@ add_argument(parser, "raml_source", type="bool", default=False,
              help="Sample a corrupted source sentence during training")
 add_argument(parser, "raml_target", type="bool", default=False,
              help="Sample a corrupted target sentence during training")
+add_argument(parser, "src_pad_corrupt", type="bool", default=False,
+             help="Use pad id as token for corrupted source sentence")
+add_argument(parser, "trg_pad_corrupt", type="bool", default=False,
+             help="Use pad id as token for corrupted target sentence")
 add_argument(parser, "raml_tau", type="float", default=1.0,
              help="Temperature parameter of RAML")
 add_argument(parser, "share_emb_and_softmax", type="bool", default=True,
@@ -204,8 +210,9 @@ def eval(model, data, crit, step, hparams, eval_bleu=False,
         h_best_words = map(
           lambda wi: data.target_index_to_word[wi],
           filter(lambda wi: wi not in filtered_tokens, h_best))
-        line = ''.join(h_best_words)
-        line = line.replace('▁', ' ').strip()
+        line = ' '.join(h_best_words)
+        #line = ''.join(h_best_words)
+        #line = line.replace('▁', ' ').strip()
         out_file.write(line + '\n')
     if end_of_epoch:
       break
@@ -276,6 +283,8 @@ def train():
       raml_source=args.raml_source,
       raml_target=args.raml_target,
       raml_tau=args.raml_tau,
+      src_pad_corrupt=args.src_pad_corrupt,
+      trg_pad_corrupt=args.trg_pad_corrupt,
     )
   data = DataLoader(hparams=hparams)
   hparams.add_param("source_vocab_size", data.source_vocab_size)
@@ -343,7 +352,7 @@ def train():
   # train loop
   print("-" * 80)
   print("Start training")
-  ppl_thresh = 6.10
+  ppl_thresh = args.ppl_thresh
   start_time = time.time()
   actual_start_time = time.time()
   target_words, total_loss, total_corrects = 0, 0, 0
