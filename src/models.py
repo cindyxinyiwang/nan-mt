@@ -128,6 +128,54 @@ class Decoder(nn.Module):
                              y_attn_mask=y_attn_mask, x_attn_mask=x_attn_mask)
     return dec_output
 
+  def forward_corrupt(self, x_states, x_mask, y_train, y_mask, y_pos_emb_indices, n_corrupts):
+    """Performs a forward pass.
+
+    Args:
+      x_states: tensor of size [batch_size*n_corrupt, max_len, d_model], input
+        attention memory.
+      x_mask: tensor of size [batch_size*n_corrupt, max_len]. input mask.
+      y_train: Torch Tensor of size [batch_size, max_len]
+      y_mask: Torch Tensor of size [batch_size, max_len]. 1 means to ignore a
+        position.
+      y_pos_emb_indices: used to compute positional embeddings.
+
+    Returns:
+      y_states: tensor of size [batch_size, max_len, d_model], the highest
+        output layer.
+    """
+
+    batch_size_x, x_len = x_mask.size()
+    batch_size, y_len = y_mask.size()
+    #print(batch_size_x, batch_size, n_corrupts)
+    #print(x_states.size())
+    #print(x_mask.size())
+    #print(y_train.size())
+    #print(y_mask.size())
+    #exit(0)
+    assert batch_size_x == batch_size * n_corrupts
+
+    # [batch_size, x_len, d_word_vec]
+    pos_emb = self.pos_emb(y_train)
+    word_emb = self.word_emb(y_train) * self.emb_scale
+    dec_input = word_emb + pos_emb
+
+    # [batch_size, 1, y_len] -> [batch_size, y_len, y_len]
+    y_time_mask = get_attn_subsequent_mask(y_train, pad_id=self.hparams.pad_id)
+    y_attn_mask = y_mask.unsqueeze(1).expand(-1, y_len, -1).contiguous()
+    y_attn_mask = y_attn_mask | y_time_mask
+
+    # [batch_size_x, 1, x_len] -> [batch_size_x, y_len, x_len]
+    x_attn_mask = x_mask.unsqueeze(1).expand(-1, y_len, -1).contiguous()
+
+    dec_output = self.dropout(dec_input)
+    for dec_layer in self.layer_stack:
+      dec_output = dec_layer(dec_output, x_states,
+                             y_attn_mask=y_attn_mask, x_attn_mask=x_attn_mask, 
+                             n_corrupts=n_corrupts)
+    return dec_output
+
+
 class Transformer(nn.Module):
   def __init__(self, hparams, init_type="uniform", *args, **kwargs):
     super(Transformer, self).__init__()
@@ -346,6 +394,107 @@ class Transformer(nn.Module):
       all_scores.append(s)
     return all_hyp, all_scores
 
+  def translate_batch_corrupt(self, x_train, x_mask, x_pos_emb_indices,
+                      beam_size, max_len, raml_source=True, n_corrupts=0):
+    """Translates a batch of sentences.
+
+    Return:
+      all_hyp: [batch_size, n_best] of hypothesis.
+      all_scores: [batch_size, n_best].
+    """
+    #print(x_train)
+    #print(x_mask)
+    #print(x_pos_emb_indices)
+    #print(n_corrupts)
+    #print(raml_source)
+    #exit(0)
+    # [batch_size, src_seq_len, d_model]
+    assert n_corrupts > 0
+    enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
+    enc_output = Variable(enc_output.data.repeat(1, beam_size, 1).view(
+      enc_output.size(0)*beam_size, enc_output.size(1), enc_output.size(2)))
+    x_mask = x_mask.repeat(1, beam_size).view(x_mask.size(0)*beam_size,
+                                              x_mask.size(1))
+
+    batch_size, src_seq_len = x_train.size()
+    batch_size = int(batch_size / n_corrupts)
+    trg_vocab_size = self.hparams.target_vocab_size
+
+    beams = [Beam(beam_size, self.hparams) for _ in range(batch_size)]
+    beam_to_inst = {beam_idx: inst_idx
+                    for inst_idx, beam_idx in enumerate(range(batch_size))}
+    n_remain_sents = batch_size * n_corrupts
+    for i in range(max_len):
+      len_dec_seq = i+1 
+      # (n_remain_sents * beam, seq_len)
+      y_partial = torch.stack(
+        [b.get_partial_y() for b in beams if not b.done]).view(-1, len_dec_seq)
+      #print(y_partial)
+      y_partial = Variable(y_partial, volatile=True)
+      y_mask = torch.ByteTensor(
+        [([0] * len_dec_seq) for _ in range(y_partial.size(0))])
+
+      y_partial_pos = torch.arange(1, len_dec_seq+1).unsqueeze(0)
+      # size: (n_remain_sents * beam, seq_len)
+      y_partial_pos = y_partial_pos.repeat(y_partial.size(0), 1)
+      y_partial_pos = Variable(torch.FloatTensor(y_partial_pos), volatile=True)
+
+      if self.hparams.cuda:
+        y_partial = y_partial.cuda()
+        y_partial_pos = y_partial_pos.cuda()
+        y_mask = y_mask.cuda()
+
+        enc_output = enc_output.cuda()
+        x_mask = x_mask.cuda()
+      dec_output = self.decoder.forward_corrupt(
+        enc_output, x_mask, y_partial, y_mask, y_partial_pos, n_corrupts)
+      # select the dec output for next word
+      dec_output = dec_output[:, -1, :]
+      logits = self.w_logit(dec_output)
+      log_probs = torch.nn.functional.log_softmax(logits, dim=1)
+      log_probs = log_probs.view(int(n_remain_sents/n_corrupts), beam_size, trg_vocab_size)
+      active_beam_idx_list = []
+      for beam_idx in range(batch_size):
+        if beams[beam_idx].done:
+          continue
+        inst_idx = beam_to_inst[beam_idx]
+        if not beams[beam_idx].advance(log_probs.data[inst_idx], step=i):
+          active_beam_idx_list += [beam_idx]
+
+      if not active_beam_idx_list: 
+        break
+
+      active_inst_idx_list = []
+      for k in active_beam_idx_list:
+        inst_idx = beam_to_inst[k]
+        active_inst_idx_list.extend([i for i in range(n_corrupts*inst_idx, n_corrupts*(inst_idx+1))])
+      active_inst_idx_list = torch.LongTensor(active_inst_idx_list)
+      #print("active_beam_idx", active_beam_idx_list)
+      #print("active_instidx", active_inst_idx_list)
+      #print(enc_output.size())
+      if self.hparams.cuda:
+        active_inst_idx_list = active_inst_idx_list.cuda()
+
+      beam_to_inst = {beam_idx: inst_idx for inst_idx, beam_idx in enumerate(active_beam_idx_list)}
+      
+      enc_output = select_active_enc_info(enc_output, active_inst_idx_list,
+                                          n_remain_sents, src_seq_len, self.hparams.d_model)
+      x_mask = select_active_enc_mask(x_mask, active_inst_idx_list, n_remain_sents, src_seq_len)
+
+      n_remain_sents = len(active_inst_idx_list)
+
+    all_hyp, all_scores = [], []
+    n_best = 1
+    for beam in beams:
+      scores, idxs = torch.sort(beam.scores, dim=0, descending=True)
+      all_scores += [scores[:n_best]]
+      hyps = [beam.get_y(i) for i in idxs[:n_best]]
+
+      #hyps, scores = beam.get_hyp(n_best)
+      all_hyp.append(hyps)
+      all_scores.append(scores)
+    return all_hyp, all_scores
+ 
   # TODO(hyhieu): source corruption
   def translate_batch(self, x_train, x_mask, x_pos_emb_indices,
                       beam_size, max_len, raml_source=False, n_corrupts=0):
@@ -363,7 +512,18 @@ class Transformer(nn.Module):
     #exit(0)
     # [batch_size, src_seq_len, d_model]
     enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
-
+    #if raml_source:
+    #  batch_size = int(enc_output.size(0) / n_corrupts)
+    #  ave_enc_list = []
+    #  x_mask_list = []
+    #  x_pos_emb_list = []
+    #  for i in range(batch_size):
+    #    ave_enc_list.append(torch.sum(enc_output[i*n_corrupts:(i+1)*n_corrupts,:], dim=0).div_(n_corrupts).unsqueeze(0))
+    #    x_mask_list.append(x_mask[i,:].unsqueeze(0))
+    #    x_pos_emb_list.append(x_pos_emb_indices[i,:].unsqueeze(0))
+    #  enc_output = torch.cat(ave_enc_list, dim=0)
+    #  x_mask = torch.cat(x_mask_list, dim=0)
+    #  x_pos_emb = torch.cat(x_pos_emb_list, dim=0)
     # [batch_size * beam, src_seq_len, d_model]
     enc_output = Variable(enc_output.data.repeat(1, beam_size, 1).view(
       enc_output.size(0)*beam_size, enc_output.size(1), enc_output.size(2)))
@@ -371,6 +531,9 @@ class Transformer(nn.Module):
                                               x_mask.size(1))
 
     batch_size, src_seq_len = x_train.size()
+    #if raml_source:
+    #  batch_size = int(batch_size / n_corrupts)
+    #  raml_source = False
     trg_vocab_size = self.hparams.target_vocab_size
 
     beams = [Beam(beam_size, self.hparams) for _ in range(batch_size)]
@@ -399,39 +562,42 @@ class Transformer(nn.Module):
 
         enc_output = enc_output.cuda()
         x_mask = x_mask.cuda()
-
+      
+      #print(enc_output.size())
+      #print(x_mask.size())
+      #print(y_partial.size())
+      #print(n_remain_sents)
+      #print(batch_size)
       dec_output = self.decoder(
         enc_output, x_mask, y_partial, y_mask, y_partial_pos)
-
       # select the dec output for next word
       dec_output = dec_output[:, -1, :]
       logits = self.w_logit(dec_output)
-      log_probs = torch.nn.functional.log_softmax(logits, dim=1)
-      log_probs = log_probs.view(n_remain_sents, beam_size, trg_vocab_size)
-      #print(log_probs.data)
-      active_beam_idx_list = []
       if raml_source:
+        #logits = logits.view(n_remain_sents, beam_size, trg_vocab_size)
+        log_probs = torch.nn.functional.log_softmax(logits, dim=1)
+        log_probs = log_probs.view(n_remain_sents, beam_size, trg_vocab_size)
+        active_beam_idx_list = []
         for sent_idx in range(int(batch_size / n_corrupts)):
           beam_start_idx = n_corrupts * sent_idx
           beam_end_idx = n_corrupts * (sent_idx + 1)
           ens_beam_list = beams[beam_start_idx:beam_end_idx]
           if ens_beam_list[0].done:
-            for b in ens_beam_list:
-              assert b.done
             continue
-          else:
-            for b in ens_beam_list:
-              assert not b.done
           inst_start_idx = beam_to_inst[beam_start_idx]
           inst_list = []
           for k in range(beam_start_idx, beam_end_idx):
             inst_list.append(beam_to_inst[k])
-          if not advcance_ens_beam(self.hparams, 
+          if not advcance_ens_beam(self.hparams,
+          #        logits[inst_list,:,:],
                   log_probs.data[inst_list,:,:], 
                   ens_beam_list, 
                   step=i):
             active_beam_idx_list += [k for k in range(beam_start_idx, beam_end_idx)]
       else:
+        log_probs = torch.nn.functional.log_softmax(logits, dim=1)
+        log_probs = log_probs.view(n_remain_sents, beam_size, trg_vocab_size)
+        active_beam_idx_list = []
         for beam_idx in range(batch_size):
           if beams[beam_idx].done:
             continue
@@ -582,10 +748,10 @@ def advcance_ens_beam(hparams, word_scores, ens_beam_list, step):
   word_scores: (n_corrupts, beam_size, trg_vocab_size)
   """
   n_corrupts, beam_size, trg_vocab_size = word_scores.size()
-  #word_scores = word_scores[0]
   word_scores = torch.sum(word_scores, dim=0)
   word_scores.div_(n_corrupts)
-
+  
+  #word_scores = torch.nn.functional.log_softmax(word_scores, dim=1).data
   beam = ens_beam_list[0]
   if len(beam.prev_ks) > 0:
     beam_score = beam.scores.unsqueeze(1).expand_as(word_scores) + word_scores

@@ -274,7 +274,7 @@ class DecoderLayer(nn.Module):
     self.x_attn = MultiHeadAttn(hparams)
     self.pos_ffn = PositionwiseFF(hparams)
 
-  def forward(self, dec_input, enc_output, y_attn_mask=None, x_attn_mask=None):
+  def forward(self, dec_input, enc_output, y_attn_mask=None, x_attn_mask=None, n_corrupts=0):
     """Decoder.
 
     Args:
@@ -283,7 +283,18 @@ class DecoderLayer(nn.Module):
     """
 
     output = self.y_attn(dec_input, dec_input, dec_input, attn_mask=y_attn_mask)
+    batch_size = dec_input.size(0)
+    if n_corrupts > 0:
+      #print(output)
+      output = output.repeat(1, 1, n_corrupts).view(batch_size*n_corrupts, -1, self.hparams.d_model)
+      #print(output)
     output = self.x_attn(output, enc_output, enc_output, attn_mask=x_attn_mask)
     output = self.pos_ffn(output)
+    if n_corrupts > 0:
+      output = output.view(-1, n_corrupts, self.hparams.d_model)
+      #print(output)
+      output = torch.sum(output, dim=1).div_(n_corrupts).view(batch_size, -1, self.hparams.d_model)
+      #print(output)
+    #exit(0)
     return output
 

@@ -58,11 +58,16 @@ add_argument(parser, "raml_source", type="bool", default=False,
              help="Sample a corrupted source sentence")
 add_argument(parser, "n_corrupts", type="int", default=0,
              help="Number of source corruptions")
+add_argument(parser, "src_pad_corrupt", type="bool", default=False,              
+             help="Use pad id as token for corrupted source sentence") 
 
 args = parser.parse_args()
 
 model_file_name = os.path.join(args.model_dir, "model.pt")
-model = torch.load(model_file_name)
+if not args.cuda:
+  model = torch.load(model_file_name, map_location=lambda storage, loc: storage)
+else:
+  model = torch.load(model_file_name)
 model.eval()
 
 out_file = os.path.join(args.model_dir, args.out_file)
@@ -83,6 +88,7 @@ hparams = TranslationHparams(
   raml_source=args.raml_source,
   raml_tau=args.raml_tau,
   n_corrupts=args.n_corrupts,
+  src_pad_corrupt=args.src_pad_corrupt,
 )
 
 data = DataLoader(hparams=hparams, decode=True)
@@ -122,6 +128,9 @@ while not end_of_epoch:
   else:
     #print("batched translate...")
     if hparams.raml_source:
+      #all_hyps, all_scores = model.translate_batch_corrupt(
+      #  x_test_raml, x_mask, x_pos_emb_indices, hparams.beam_size,
+      #  hparams.max_len, raml_source=args.raml_source, n_corrupts=args.n_corrupts)
       all_hyps, all_scores = model.translate_batch(
         x_test_raml, x_mask, x_pos_emb_indices, hparams.beam_size,
         hparams.max_len, raml_source=args.raml_source, n_corrupts=args.n_corrupts)

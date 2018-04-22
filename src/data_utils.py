@@ -326,7 +326,7 @@ class DataLoader(object):
     # sample the corrupts, which will be added to padded_sentences
     corrupt_val = torch.LongTensor(total_words)
     if pad_corrupt:
-      corrupt_val.fill_(self.hparams.pad_id)
+      corrupt_val.fill_(self.hparams.pad_id + vocab_size)
     else:
       corrupt_val = corrupt_val.random_(0, vocab_size-1)
     corrupts = torch.zeros(batch_size, max_len).long()
