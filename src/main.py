@@ -112,6 +112,16 @@ add_argument(parser, "trg_pad_corrupt", type="bool", default=False,
              help="Use pad id as token for corrupted target sentence")
 add_argument(parser, "raml_tau", type="float", default=1.0,
              help="Temperature parameter of RAML")
+add_argument(parser, "dist_corrupt", type="bool", default=False,
+             help="Use distance of word vector to select corrupted words")
+add_argument(parser, "dist_corrupt_tau", type="float", default=20.0,
+             help="Temperature parameter of corrupting by distance")
+add_argument(parser, "glove_emb_file", type="str", default=None,
+             help="Path to the word embedding file for raml corruption")
+add_argument(parser, "glove_emb_dim", type="int", default=None,
+             help="word embed dimension of the glove emb")
+add_argument(parser, "max_glove_vocab_size", type="int", default=None,
+             help="maximum number of glove vocab to load")
 add_argument(parser, "share_emb_and_softmax", type="bool", default=True,
              help="share embedding and softmax")
 add_argument(parser, "dropout", type="float", default=0.1,
@@ -285,6 +295,11 @@ def train():
       raml_tau=args.raml_tau,
       src_pad_corrupt=args.src_pad_corrupt,
       trg_pad_corrupt=args.trg_pad_corrupt,
+      dist_corrupt=args.dist_corrupt,
+      dist_corrupt_tau=args.dist_corrupt_tau,
+      glove_emb_file=args.glove_emb_file,
+      glove_emb_dim=args.glove_emb_dim,
+      max_glove_vocab_size=args.max_glove_vocab_size,
     )
   data = DataLoader(hparams=hparams)
   hparams.add_param("source_vocab_size", data.source_vocab_size)

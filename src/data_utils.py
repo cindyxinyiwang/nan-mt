@@ -9,6 +9,7 @@ import shutil
 import os
 import sys
 import time
+import gc 
 
 import torch
 import torch.nn as nn
@@ -55,6 +56,41 @@ class DataLoader(object):
                                      and self.hparams.raml_target)):
       self.softmax = torch.nn.Softmax(dim=-1)
 
+    if self.hparams.dist_corrupt:
+      assert self.hparams.glove_emb_file is not None
+      print("Reading GloVe from '{0}'".format(self.hparams.glove_emb_file))
+      num_lines = 0
+      vocab_size = 0
+      #glove = {UNK: np.zeros(300, dtype=np.float32)}
+      self.glove = torch.zeros(self.source_vocab_size, self.hparams.glove_emb_dim)
+      with open(self.hparams.glove_emb_file, "r") as finp:
+        for line in finp:
+          # print(line)
+          line = line.strip()
+          if not line:
+            continue
+
+          tokens = line.split(" ")
+          word = tokens[0]
+          num_lines += 1
+          if word not in self.source_word_to_index:
+            continue
+          vec = [float(v.strip()) for v in tokens[1:] if v.strip()]
+          wid = self.source_word_to_index[word]
+          self.glove[wid] = torch.FloatTensor(vec)
+
+          vocab_size += 1
+
+          if num_lines % 1000 == 0:
+            print("Read {0:>8d} lines, vocab_size={1}".format(num_lines,
+                                                              vocab_size))
+            gc.collect()
+          if self.hparams.max_glove_vocab_size is not None and num_lines >= self.hparams.max_glove_vocab_size:
+            break
+        print("Read {0:>8d} lines, vocab_size={1}".format(num_lines,
+                                                          vocab_size))
+      if self.hparams.cuda:
+        self.glove = self.glove.cuda()
     if self.decode:
       self.x_test, self.y_test = self._build_parallel(
         self.hparams.source_test, self.hparams.target_test, is_training=False)
@@ -217,7 +253,9 @@ class DataLoader(object):
     if self.hparams.raml_source:
       x_train_raml, x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_train, pad_id=self.pad_id, raml=True,
-        vocab_size=self.hparams.source_vocab_size, pad_corrupt=self.hparams.src_pad_corrupt)
+        vocab_size=self.hparams.source_vocab_size, 
+        pad_corrupt=self.hparams.src_pad_corrupt,
+        dist_corrupt=self.hparams.dist_corrupt)
     else:
       x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_train, pad_id=self.pad_id)
@@ -254,7 +292,8 @@ class DataLoader(object):
             batch_size)
 
   def _pad(self, sentences, pad_id, volatile=False,
-           raml=False, vocab_size=None, pad_corrupt=False):
+           raml=False, vocab_size=None, pad_corrupt=False, 
+           dist_corrupt=False):
     """Pad all instances in [data] to the longest length.
 
     Args:
@@ -323,22 +362,69 @@ class DataLoader(object):
     corrupt_pos = torch.bernoulli(corrupt_pos, out=corrupt_pos).byte()
     total_words = int(corrupt_pos.sum())
 
-    # sample the corrupts, which will be added to padded_sentences
-    corrupt_val = torch.LongTensor(total_words)
-    if pad_corrupt:
-      corrupt_val.fill_(self.hparams.pad_id + vocab_size)
+    if dist_corrupt:
+      # sample words according to distance
+      words_to_corrupt = padded_sentences.data.masked_select(corrupt_pos)
+      # (num_words, dim)
+      words_emb_to_corrupt = torch.index_select(self.glove, dim=0, index=words_to_corrupt)
+      # (num_words, num_vocab)
+      w12 = torch.mm(words_emb_to_corrupt, self.glove.permute(1, 0))
+      # (num_words, 1)
+      w1 = torch.norm(words_emb_to_corrupt, 2, dim=1, keepdim=True)
+      # (num_vocab, 1)
+      w2 = torch.norm(self.glove, 2, dim=1, keepdim=True)
+      # (num_words, num_vocab)
+      distance = w12 / (torch.mm(w1, w2.permute(1, 0))).clamp(min=1e-8)
+      distance = Variable(distance)
+      if self.hparams.cuda:
+        distance = distance.cuda()
+      # mask out the original words
+      add = torch.arange(total_words).long()*vocab_size
+      if self.hparams.cuda:
+        add = add.cuda()
+      corrupt_mask_index = (words_to_corrupt + add) 
+      distance = distance.view(-1)
+      distance.data.index_fill_(0, corrupt_mask_index, -self.hparams.inf)
+      distance = distance.view(total_words, -1)
+      # mask out bos, eos, 
+      #distance.data.index_fill_(1, torch.LongTensor([self.hparams.bos_id, self.hparams.eos_id]), -self.hparams.inf)
+      probs = torch.nn.functional.softmax(distance.mul_(self.hparams.dist_corrupt_tau), dim=1)
+      corrupt_val = torch.distributions.Categorical(probs).sample().view(-1)
+      #_, corrupt_val = torch.topk(probs, 1)
+
+      if self.hparams.cuda:
+        corrupt_val = corrupt_val.long().cuda()
+        corrupt_pos = corrupt_pos.cuda()
+      sample_sentences = padded_sentences.masked_scatter(Variable(corrupt_pos), corrupt_val)
     else:
-      corrupt_val = corrupt_val.random_(0, vocab_size-1)
-    corrupts = torch.zeros(batch_size, max_len).long()
-    if self.hparams.cuda:
-      corrupt_val = corrupt_val.long().cuda()
-      corrupts = corrupts.cuda()
-      corrupt_pos = corrupt_pos.cuda()
-    corrupts = corrupts.masked_scatter_(corrupt_pos, corrupt_val)
+      # sample the corrupts, which will be added to padded_sentences
+      corrupt_val = torch.LongTensor(total_words)
+      if pad_corrupt:
+        corrupt_val.fill_(self.hparams.pad_id + vocab_size)
+      else:
+        corrupt_val = corrupt_val.random_(1, vocab_size)
+      corrupts = torch.zeros(batch_size, max_len).long()
+      if self.hparams.cuda:
+        corrupt_val = corrupt_val.long().cuda()
+        corrupts = corrupts.cuda()
+        corrupt_pos = corrupt_pos.cuda()
+      corrupts = corrupts.masked_scatter_(corrupt_pos, corrupt_val)
 
-    sample_sentences = padded_sentences.add(Variable(corrupts)).remainder_(
-      vocab_size).masked_fill_(Variable(mask), pad_id)
+      sample_sentences = padded_sentences.add(Variable(corrupts)).remainder_(
+        vocab_size).masked_fill_(Variable(mask), pad_id)
+    #if dist_corrupt:
+    #  print(sample_sentences)
+    #  print(corrupt_val)
+    #  print(words_to_corrupt)
+    #  print(padded_sentences)
+    #  print(corrupt_pos)
+    #  corrupt_val = corrupt_val.data.view(-1).cpu().numpy()
+    #  words_to_corrupt = words_to_corrupt.cpu().numpy()
 
+    #  for c, w in zip(corrupt_val, words_to_corrupt):
+    #    print("corrupt", self.source_index_to_word[c])
+    #    print("orig", self.source_index_to_word[w])
+    #  exit(0)
     return sample_sentences, padded_sentences, mask, pos_emb_indices, sum_len
 
   def _build_parallel(self, source_file, target_file, is_training, sort=False):
