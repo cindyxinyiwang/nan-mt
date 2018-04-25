@@ -112,6 +112,8 @@ add_argument(parser, "trg_pad_corrupt", type="bool", default=False,
              help="Use pad id as token for corrupted target sentence")
 add_argument(parser, "raml_tau", type="float", default=1.0,
              help="Temperature parameter of RAML")
+add_argument(parser, "raml_src_tau", type="float", default=None,
+             help="Temperature parameter of RAML on source")
 add_argument(parser, "dist_corrupt", type="bool", default=False,
              help="Use distance of word vector to select corrupted words")
 add_argument(parser, "dist_corrupt_tau", type="float", default=20.0,
@@ -157,6 +159,8 @@ add_argument(parser, "seed", type="int", default=19920206,
              help="random seed")
 args = parser.parse_args()
 
+if args.raml_src_tau is None:
+  args.raml_src_tau = args.raml_tau
 
 def eval(model, data, crit, step, hparams, eval_bleu=False,
          valid_batch_size=20):
@@ -293,6 +297,7 @@ def train():
       raml_source=args.raml_source,
       raml_target=args.raml_target,
       raml_tau=args.raml_tau,
+      raml_src_tau=args.raml_src_tau,
       src_pad_corrupt=args.src_pad_corrupt,
       trg_pad_corrupt=args.trg_pad_corrupt,
       dist_corrupt=args.dist_corrupt,

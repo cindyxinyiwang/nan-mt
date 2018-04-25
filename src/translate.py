@@ -52,14 +52,26 @@ add_argument(parser, "n_train_sents", type="int", default=None,
              help="max number of training sentences to load")
 add_argument(parser, "out_file", type="str", default="trans",
              help="output file for hypothesis")
-add_argument(parser, "raml_tau", type="float", default=1.0,
+add_argument(parser, "raml_src_tau", type="float", default=1.0,
              help="Temperature parameter of RAML")
 add_argument(parser, "raml_source", type="bool", default=False,
              help="Sample a corrupted source sentence")
 add_argument(parser, "n_corrupts", type="int", default=0,
              help="Number of source corruptions")
+add_argument(parser, "n_cleans", type="int", default=0,
+             help="Number of cleaned sentences in source corruptions")
 add_argument(parser, "src_pad_corrupt", type="bool", default=False,              
              help="Use pad id as token for corrupted source sentence") 
+add_argument(parser, "dist_corrupt", type="bool", default=False,
+             help="Use distance of word vector to select corrupted words")
+add_argument(parser, "dist_corrupt_tau", type="float", default=20.0,
+             help="Temperature parameter of corrupting by distance")
+add_argument(parser, "glove_emb_file", type="str", default=None,
+             help="Path to the word embedding file for raml corruption")
+add_argument(parser, "glove_emb_dim", type="int", default=None,
+             help="word embed dimension of the glove emb")
+add_argument(parser, "max_glove_vocab_size", type="int", default=None,
+             help="maximum number of glove vocab to load")
 
 args = parser.parse_args()
 
@@ -86,8 +98,14 @@ hparams = TranslationHparams(
   merge_bpe=args.merge_bpe,
   out_file=out_file,
   raml_source=args.raml_source,
-  raml_tau=args.raml_tau,
+  raml_src_tau=args.raml_src_tau,
   n_corrupts=args.n_corrupts,
+  n_cleans=args.n_cleans,
+  dist_corrupt=args.dist_corrupt,
+  dist_corrupt_tau=args.dist_corrupt_tau,
+  glove_emb_file=args.glove_emb_file,
+  glove_emb_dim=args.glove_emb_dim,
+  max_glove_vocab_size=args.max_glove_vocab_size,
   src_pad_corrupt=args.src_pad_corrupt,
 )
 

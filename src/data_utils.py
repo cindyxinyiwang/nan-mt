@@ -164,9 +164,17 @@ class DataLoader(object):
     y_test = self.y_test[start_index: end_index]
     if raml:
       x_test = [sent for sent in x_test for _ in range(self.hparams.n_corrupts)]
+      no_corrupt_mask = [0] * (self.hparams.n_corrupts-self.hparams.n_cleans) + [1] * self.hparams.n_cleans
+      no_corrupt_mask = no_corrupt_mask * batch_size
+      no_corrupt_mask = torch.ByteTensor(no_corrupt_mask).unsqueeze(1).byte()
+      if self.hparams.cuda:
+        no_corrupt_mask = no_corrupt_mask.cuda()
       x_test_raml, x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_test, pad_id=self.pad_id, raml=True,
-        vocab_size=self.hparams.source_vocab_size, volatile=True, pad_corrupt=self.hparams.src_pad_corrupt)
+        vocab_size=self.hparams.source_vocab_size, volatile=True, 
+        pad_corrupt=self.hparams.src_pad_corrupt, 
+        dist_corrupt=self.hparams.dist_corrupt,
+        no_corrupt_mask=no_corrupt_mask, raml_tau=self.hparams.raml_src_tau)
     else:
       x_test, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_test, pad_id=self.pad_id, volatile=True)
@@ -253,6 +261,7 @@ class DataLoader(object):
     if self.hparams.raml_source:
       x_train_raml, x_train, x_mask, x_pos_emb_indices, x_count = self._pad(
         sentences=x_train, pad_id=self.pad_id, raml=True,
+        raml_tau=self.hparams.raml_src_tau,
         vocab_size=self.hparams.source_vocab_size, 
         pad_corrupt=self.hparams.src_pad_corrupt,
         dist_corrupt=self.hparams.dist_corrupt)
@@ -263,7 +272,9 @@ class DataLoader(object):
     if self.hparams.raml_target:
       y_train_raml, y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
         sentences=y_train, pad_id=self.pad_id, raml=True,
-        vocab_size=self.hparams.target_vocab_size, pad_corrupt=self.hparams.trg_pad_corrupt)
+        raml_tau=self.hparams.raml_tau,
+        vocab_size=self.hparams.target_vocab_size, 
+        pad_corrupt=self.hparams.trg_pad_corrupt)
     else:
       y_train, y_mask, y_pos_emb_indices, y_count = self._pad(
         sentences=y_train, pad_id=self.pad_id)
@@ -292,8 +303,8 @@ class DataLoader(object):
             batch_size)
 
   def _pad(self, sentences, pad_id, volatile=False,
-           raml=False, vocab_size=None, pad_corrupt=False, 
-           dist_corrupt=False):
+           raml=False, raml_tau=1., vocab_size=None, pad_corrupt=False, 
+           dist_corrupt=False, no_corrupt_mask=None):
     """Pad all instances in [data] to the longest length.
 
     Args:
@@ -309,6 +320,10 @@ class DataLoader(object):
         to the exp payoff distribution, ie. exp(-HammingDist(s, sents)).
       vocab_size: if raml is True, vocab_size has to be specified for negative
         sampling.
+      dist_corrupt: if is set to True, sample corrupt words based on word 
+        embedding distance.
+      no_corrupt_mask: [batch_size, 1] if is set, then 1 means not to corrupt 
+        the sentence.
     """
 
     batch_size = len(sentences)
@@ -349,7 +364,7 @@ class DataLoader(object):
     logits = Variable(logits, volatile=True)
     if self.hparams.cuda:
       logits = logits.cuda()
-    probs = self.softmax(logits.mul_(self.hparams.raml_tau))
+    probs = self.softmax(logits.mul_(raml_tau))
     num_words = torch.distributions.Categorical(probs).sample()
 
     # sample the indices
@@ -359,9 +374,12 @@ class DataLoader(object):
 
     corrupt_pos = num_words.data.float().div_(lengths).unsqueeze(
       1).expand_as(padded_sentences).contiguous().masked_fill_(mask, 0)
+    if no_corrupt_mask is not None:
+      corrupt_pos.masked_fill_(no_corrupt_mask, 0)
     corrupt_pos = torch.bernoulli(corrupt_pos, out=corrupt_pos).byte()
     total_words = int(corrupt_pos.sum())
-
+    if total_words == 0:
+      return padded_sentences, padded_sentences, mask, pos_emb_indices, sum_len
     if dist_corrupt:
       # sample words according to distance
       words_to_corrupt = padded_sentences.data.masked_select(corrupt_pos)
