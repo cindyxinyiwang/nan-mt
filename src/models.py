@@ -242,7 +242,6 @@ class Transformer(nn.Module):
 
       # translate one sentence
       enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
-      len_dec_seq = 0
       completed_hyp = []
       completed_hyp_scores = []
       active_hyp = [Hyp(y=[self.hparams.bos_id], score=0.)]
@@ -264,12 +263,13 @@ class Transformer(nn.Module):
             enc_output, x_mask, y_partial, y_mask, y_partial_pos)
           dec_output = dec_output[:, -1, :]
           logits = self.w_logit(dec_output)
-          probs = torch.nn.functional.softmax(logits, dim=1)
+          probs = torch.nn.functional.log_softmax(logits, dim=1)
           new_hyp_scores = hyp.score + probs.data
           new_hyp_score_list.append(new_hyp_scores)
         live_hyp_num = beam_size - len(completed_hyp)
         new_hyp_scores = np.concatenate(new_hyp_score_list).flatten()
         new_hyp_pos = (-new_hyp_scores).argsort()[:live_hyp_num]
+        #new_hyp_pos = (-new_hyp_scores).argsort()[:beam_size]
         prev_hyp_ids = new_hyp_pos / self.hparams.target_vocab_size
         word_ids = new_hyp_pos % self.hparams.target_vocab_size
         new_hyp_scores = new_hyp_scores[new_hyp_pos]
@@ -297,102 +297,6 @@ class Transformer(nn.Module):
       all_hyp.append(h)
       all_scores.append(s)
     return all_hyp, all_scores     
-
-  def translate_v1(self, x_train_batch, x_mask_batch, x_pos_emb_indices_batch,
-                   beam_size, max_len):
-    batch_size = x_train_batch.size(0)
-    all_hyp, all_scores = [], []
-    for i in range(batch_size):
-      x_train = x_train_batch[i, :].unsqueeze(0)
-      x_mask = x_mask_batch[i, :].unsqueeze(0)
-      x_pos_emb_indices = x_pos_emb_indices_batch[i, :].unsqueeze(0)
-
-      # translate one sentence
-      enc_output = self.encoder(x_train, x_mask, x_pos_emb_indices)
-      len_dec_seq = 0
-      hypothesis = [[self.hparams.bos_id]]
-      completed_hypothesis = []
-      completed_hypothesis_scores = []
-      hyp_scores = Variable(torch.zeros(1), volatile=True)
-      if self.hparams.cuda:
-        hyp_scores = hyp_scores.cuda()
-      while len(completed_hypothesis) < beam_size and len_dec_seq < max_len:
-        len_dec_seq += 1
-        hyp_num = len(hypothesis)
-        exp_enc_output = enc_output.expand(
-          hyp_num, enc_output.size(1), enc_output.size(2))
-        exp_x_mask = x_mask.expand(hyp_num, x_mask.size(1))
-        # (n_remain_sents * beam, seq_len)
-
-        y_partial = torch.LongTensor(hypothesis).view(-1, len_dec_seq)
-        y_partial = Variable(y_partial, volatile=True)
-
-        y_mask = torch.ByteTensor([([0] * len_dec_seq) for _ in range(hyp_num)])
-        y_partial_pos = torch.arange(1, len_dec_seq+1).unsqueeze(0)
-
-        # size: (n_remain_sents * beam, seq_len)
-        y_partial_pos = y_partial_pos.repeat(hyp_num, 1)
-        y_partial_pos = Variable(
-          torch.FloatTensor(y_partial_pos), volatile=True)
-        if self.hparams.cuda:
-          y_partial = y_partial.cuda()
-          y_partial_pos = y_partial_pos.cuda()
-          y_mask = y_mask.cuda()
-
-          exp_enc_output = exp_enc_output.cuda()
-          exp_x_mask = exp_x_mask.cuda()
-        dec_output = self.decoder(
-          exp_enc_output, exp_x_mask, y_partial, y_mask, y_partial_pos)
-
-        # select the dec output for next word
-        dec_output = dec_output[:, -1, :]
-        logits = self.w_logit(dec_output)
-        probs = torch.nn.functional.softmax(logits, dim=1)
-
-        live_hyp_num = beam_size - len(completed_hypothesis)
-        new_hyp_scores = (hyp_scores.unsqueeze(1).expand_as(probs) +
-                          probs).view(-1)
-        top_new_hyp_scores, top_new_hyp_pos = torch.topk(
-          new_hyp_scores, k=live_hyp_num)
-        prev_hyp_ids = top_new_hyp_pos / self.hparams.target_vocab_size
-        word_ids = top_new_hyp_pos % self.hparams.target_vocab_size
-
-        new_hypothesis = []
-        live_hyp_ids = []
-        new_hyp_scores = []
-        for prev_hyp_id, word_id, new_hyp_score in zip(
-            prev_hyp_ids.cpu().data,
-            word_ids.cpu().data,
-            top_new_hyp_scores.cpu().data):
-          hyp_trg_words = hypothesis[prev_hyp_id] + [word_id]
-          if word_id == self.hparams.eos_id:
-            completed_hypothesis.append(hyp_trg_words)
-            completed_hypothesis_scores.append(new_hyp_scores)
-          else:
-            new_hypothesis.append(hyp_trg_words)
-            live_hyp_ids.append(prev_hyp_id)
-            new_hyp_scores.append(new_hyp_score)
-        if len(completed_hypothesis) == beam_size: break
-        live_hyp_ids = torch.LongTensor(live_hyp_ids)
-        if self.hparams.cuda:
-          live_hyp_ids = live_hyp_ids.cuda()
-        hyp_scores = Variable(torch.FloatTensor(new_hyp_scores), volatile=True)
-        if self.hparams.cuda:
-          hyp_scores = hyp_scores.cuda()
-        hypothesis = new_hypothesis
-
-      if len(completed_hypothesis) == 0:
-        completed_hypothesis = [hypothesis[0]]
-        completed_hypothesis_scores = [0.0]
-      ranked_hypothesis = sorted(
-        zip(completed_hypothesis, completed_hypothesis_scores),
-        key=lambda x:x[1],
-        reverse=True)
-      h = [hyp for hyp, score in ranked_hypothesis]
-      s = [score for hyp, score in ranked_hypothesis]
-      all_hyp.append(h)
-      all_scores.append(s)
-    return all_hyp, all_scores
 
   def translate_batch_corrupt(self, x_train, x_mask, x_pos_emb_indices,
                       beam_size, max_len, raml_source=True, n_corrupts=0):
@@ -818,15 +722,15 @@ class Beam(object):
 
     self.prev_ks = []
 
-    self.next_ys = [self.tt.LongTensor(size).fill_(hparams.bos_id)]
+    self.next_ys = [self.tt.LongTensor(size).fill_(hparams.pad_id)]
     self.next_ys[0][0] = hparams.bos_id 
 
     self.active_hyp_size = size 
     self.active_beam_idx = [i for i in range(size)]
     self.finished = []
 
-    self.len_norm = PolyNorm()
-    #self.len_norm = None
+    #self.len_norm = PolyNorm()
+    self.len_norm = None
 
   def advance(self, word_scores, step=0):
     """Add word to the beam.
@@ -862,7 +766,6 @@ class Beam(object):
       # self.active_hyp_size -= 1
       # self.finished.append((self.get_y(0), self.scores[0]))
       # self.done = (self.active_hyp_size == 0)
-
       self.done = True
     return self.done
 
@@ -888,7 +791,8 @@ class Beam(object):
     return hyp[::-1]
 
   def get_hyp(self, n=1):
-    if len(self.finished) < self.size:
+    #if len(self.finished) < self.size:
+    if len(self.finished) == 0:
       _, keys = torch.sort(self.scores, dim=0, descending=True)
       for k in keys[:(self.size-len(self.finished))]:
         self.finished.append((self.get_y(k), self.scores[k]))

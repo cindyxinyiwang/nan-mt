@@ -78,7 +78,8 @@ class DataLoader(object):
           vec = [float(v.strip()) for v in tokens[1:] if v.strip()]
           wid = self.source_word_to_index[word]
           self.glove[wid] = torch.FloatTensor(vec)
-
+          #print(wid, word)
+          #print(self.glove[wid])
           vocab_size += 1
 
           if num_lines % 1000 == 0:
@@ -341,7 +342,13 @@ class DataLoader(object):
       [i+1 for i in range(len(sentence))] + ([0] * (max_len - len(sentence)))
       for sentence in sentences
     ]
-
+    if raml:
+      raml_mask = [
+        [1] + ([0] * (len(sentence)-2)) + ([1] * (max_len-len(sentence)+1))
+        for sentence in sentences]
+      raml_mask = torch.ByteTensor(raml_mask)
+      if self.hparams.cuda:
+        raml_mask = raml_mask.cuda()
     padded_sentences = Variable(torch.LongTensor(padded_sentences))
     mask = torch.ByteTensor(mask)
     pos_emb_indices = Variable(torch.FloatTensor(pos_emb_indices))
@@ -372,8 +379,9 @@ class DataLoader(object):
     if self.hparams.cuda:
       lengths = lengths.cuda()
 
-    corrupt_pos = num_words.data.float().div_(lengths).unsqueeze(
-      1).expand_as(padded_sentences).contiguous().masked_fill_(mask, 0)
+    # mask out bos, eos
+    corrupt_pos = num_words.data.float().div_(lengths-2).unsqueeze(
+      1).expand_as(padded_sentences).contiguous().masked_fill_(raml_mask, 0)
     if no_corrupt_mask is not None:
       corrupt_pos.masked_fill_(no_corrupt_mask, 0)
     corrupt_pos = torch.bernoulli(corrupt_pos, out=corrupt_pos).byte()
@@ -392,7 +400,7 @@ class DataLoader(object):
       # (num_vocab, 1)
       w2 = torch.norm(self.glove, 2, dim=1, keepdim=True)
       # (num_words, num_vocab)
-      distance = w12 / (torch.mm(w1, w2.permute(1, 0))).clamp(min=1e-8)
+      distance = w12 / ((torch.mm(w1, w2.permute(1, 0))).clamp(min=1e-8))
       distance = Variable(distance)
       if self.hparams.cuda:
         distance = distance.cuda()
@@ -404,8 +412,6 @@ class DataLoader(object):
       distance = distance.view(-1)
       distance.data.index_fill_(0, corrupt_mask_index, -self.hparams.inf)
       distance = distance.view(total_words, -1)
-      # mask out bos, eos, 
-      #distance.data.index_fill_(1, torch.LongTensor([self.hparams.bos_id, self.hparams.eos_id]), -self.hparams.inf)
       probs = torch.nn.functional.softmax(distance.mul_(self.hparams.dist_corrupt_tau), dim=1)
       corrupt_val = torch.distributions.Categorical(probs).sample().view(-1)
       #_, corrupt_val = torch.topk(probs, 1)

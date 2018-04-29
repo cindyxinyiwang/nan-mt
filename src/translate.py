@@ -72,6 +72,8 @@ add_argument(parser, "glove_emb_dim", type="int", default=None,
              help="word embed dimension of the glove emb")
 add_argument(parser, "max_glove_vocab_size", type="int", default=None,
              help="maximum number of glove vocab to load")
+add_argument(parser, "get_ppl", type="bool", default=False,
+             help="Whether to calculate ppl for translation")
 
 args = parser.parse_args()
 
@@ -83,6 +85,9 @@ else:
 model.eval()
 
 out_file = os.path.join(args.model_dir, args.out_file)
+log_file = os.path.join(args.model_dir, args.out_file + ".log")
+print("Logging to {}".format(log_file))
+sys.stdout = Logger(log_file)
 
 hparams = TranslationHparams(
   data_path=args.data_path,
@@ -124,6 +129,10 @@ model.hparams.cuda = hparams.cuda
 out_file = open(hparams.out_file, 'w', encoding='utf-8')
 end_of_epoch = False
 num_sentences = 0
+test_words = 0
+test_loss = 0
+if args.get_ppl:
+  crit = get_criterion(hparams)
 while not end_of_epoch:
   if hparams.raml_source:
     ((x_test_raml, x_test, x_mask, x_pos_emb_indices, x_count),
@@ -137,7 +146,17 @@ while not end_of_epoch:
        test_batch_size=hparams.batch_size)
 
   num_sentences += batch_size
-
+  y_count -= batch_size
+  test_words += y_count
+  if args.get_ppl:
+    logits = model.forward(
+            x_test, x_mask, x_pos_emb_indices,
+            y_test[:,:-1], y_mask[:,:-1], y_pos_emb_indices[:,:-1].contiguous(),
+            label_smoothing=False)
+    logits = logits.view(-1, hparams.target_vocab_size)
+    labels = y_test[:,1:].contiguous().view(-1)
+    t_loss, t_acc = get_performance(crit, logits, labels, hparams)
+    test_loss += t_loss.data[0]
   # The normal, correct way:
   if args.non_batch_translate:
     #print("non batched translate...")
@@ -180,5 +199,8 @@ while not end_of_epoch:
   print("Translated {0} sentences".format(num_sentences))
   sys.stdout.flush()
 
+if args.get_ppl:
+  ppl = np.exp(test_loss / test_words)
+  print("PPL: {}".format(ppl))
 out_file.close()
 
