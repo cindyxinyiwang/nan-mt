@@ -12,6 +12,7 @@ import time
 import subprocess
 import re
 import random
+from collections import deque
 
 import numpy as np
 
@@ -157,6 +158,10 @@ add_argument(parser, "patience", type="int", default=-1,
                    "Ignore n_train_step if patience is set"))
 add_argument(parser, "seed", type="int", default=19920206,
              help="random seed")
+add_argument(parser, "save_nbest", type="int", default=1,
+             help="save the n best checkpoint")
+add_argument(parser, "checkpoint", type="int", default=0,
+             help="save the n recent checkpoint")
 args = parser.parse_args()
 
 if args.raml_src_tau is None:
@@ -352,11 +357,19 @@ def train():
     optim.load_state_dict(optimizer_state)
     try:
       extra_file_name = os.path.join(args.output_dir, "extra.pt")
-      (step,
-       best_val_ppl,
-       best_val_bleu,
-       cur_attempt,
-       lr) = torch.load(extra_file_name)
+      if args.checkpoint > 0:
+        (step,
+         best_val_ppl,
+         best_val_bleu,
+         cur_attempt,
+         lr,
+         checkpoint_queue) = torch.load(extra_file_name)
+      else:
+        (step,
+         best_val_ppl,
+         best_val_bleu,
+         cur_attempt,
+         lr) = torch.load(extra_file_name)
     except:
       raise RuntimeError("Cannot load checkpoint!")
   else:
@@ -367,7 +380,18 @@ def train():
     best_val_bleu = 0
     cur_attempt = 0
     lr = hparams.lr_adam
-
+    if args.checkpoint > 0:
+      checkpoint_queue = deque(["checkpoint_" + str(i) for i in range(args.checkpoint)])
+  if not type(best_val_ppl) == dict:
+    best_val_ppl = {}
+    best_val_bleu = {}
+    if args.save_nbest > 1:
+      for  i in range(args.save_nbest):
+        best_val_ppl['model'+str(i)] = 1e10
+        best_val_bleu['model'+str(i)] = 0
+    else:
+      best_val_ppl['model'] = 1e10
+      best_val_bleu['model'] = 0
   set_patience = args.patience >= 0
   # train loop
   print("-" * 80)
@@ -495,32 +519,40 @@ def train():
       # eval
       if step % args.eval_every == 0:
         val_ppl, val_bleu = eval(
-          model, data, crit, step, hparams, best_val_ppl < ppl_thresh,
+          model, data, crit, step, hparams, min(best_val_ppl.values()) < ppl_thresh,
           valid_batch_size=args.valid_batch_size)
 
         # determine whether to update best_val_ppl or best_val_bleu
-        based_on_bleu = args.eval_bleu and (best_val_ppl < ppl_thresh)
+        based_on_bleu = args.eval_bleu and (min(best_val_ppl.values()) < ppl_thresh)
         if based_on_bleu:
-          if best_val_bleu <= val_bleu:
-            best_val_bleu = val_bleu
+          if min(best_val_bleu.values()) <= val_bleu:
+            save_model_name = min(best_val_bleu, key=best_val_bleu.get)
+            best_val_bleu[save_model_name] = val_bleu
             save = True
           else:
             save = False
         else:
-          if best_val_ppl >= val_ppl:
-            best_val_ppl = val_ppl
+          if max(best_val_ppl.values()) >= val_ppl:
+            save_model_name = max(best_val_ppl, key=best_val_ppl.get)
+            best_val_ppl[save_model_name] = val_ppl
             save = True
           else:
             save = False
-
+        if args.checkpoint > 0:
+          cur_name = checkpoint_queue.popleft()
+          checkpoint_queue.append(cur_name)
+          print("Saving checkpoint to {}".format(cur_name))
+          torch.save(model, os.path.join(args.output_dir, cur_name))
         if save:
-          save_checkpoint([step, best_val_ppl, best_val_bleu, cur_attempt, lr],
-                          model, optim, hparams, args.output_dir)
+          save_extra = [step, best_val_ppl, best_val_bleu, cur_attempt, lr]
+          if args.checkpoint > 0:
+            save_extra.append(cur_name)
+          save_checkpoint(save_extra,
+                          model, optim, hparams, args.output_dir, save_model_name)
           cur_attempt = 0
         else:
           lr /= hparams.lr_dec
           cur_attempt += 1
-
         actual_start_time = time.time()
         target_words = 0
         total_loss = 0
@@ -539,18 +571,25 @@ def train():
       stop = True
     if stop:
       print("Reach {0} steps. Stop training".format(step))
-      val_ppl, val_bleu = eval(
-        model, data, crit, step, hparams, best_val_ppl<ppl_thresh,
-        valid_batch_size=args.valid_batch_size)
-      if args.eval_bleu and not val_bleu is None:
-        save = val_bleu > best_val_bleu
+      based_on_bleu = args.eval_bleu and (min(best_val_ppl.values()) < ppl_thresh)
+      if based_on_bleu:
+        if min(best_val_bleu.values()) <= val_bleu:
+          save_model_name = min(best_val_bleu, key=best_val_bleu.get)
+          best_val_bleu[save_model_name] = val_bleu
+          save = True
+        else:
+          save = False
       else:
-        save = val_ppl < best_val_ppl
-      if not val_bleu is None and val_bleu > best_val_bleu:
-        best_val_bleu = val_bleu
+        if max(best_val_ppl) >= val_ppl:
+          save_model_name = max(best_val_ppl, key=best_val_ppl.get)
+          best_val_ppl[save_model_name] = val_ppl
+          save = True
+        else:
+          save = False
+
       if save:
         save_checkpoint([step, best_val_ppl, best_val_bleu, cur_attempt, lr],
-                        model, optim, hparams, args.output_dir)
+                        model, optim, hparams, args.output_dir, save_model_name)
       break
 
 

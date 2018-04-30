@@ -74,7 +74,6 @@ add_argument(parser, "max_glove_vocab_size", type="int", default=None,
              help="maximum number of glove vocab to load")
 add_argument(parser, "get_ppl", type="bool", default=False,
              help="Whether to calculate ppl for translation")
-
 args = parser.parse_args()
 
 model_file_name = os.path.join(args.model_dir, "model.pt")
